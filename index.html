@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METRO MITRA | Minimalist Planner</title>
+    <title>NammaRide | Minimalist Planner</title>
 
     <meta name="description" content="Minimalist guide to the Bengaluru Metro. Plan your journey and track live routes.">
     <meta name="theme-color" content="#1E3A8A">
@@ -18,14 +18,14 @@
     
     <style>
         :root {
-            --primary-color: #4F46E5; /* Indigo 600 */
-            --background-color: #0F172A; /* Slate 900 */
+            --primary-color: #4F46E5; 
+            --background-color: #0F172A; 
         }
         
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--background-color); 
-            /* CHANGE: Updated to local file path for user image */
+            
             background-image: url('./vidhan bengaluru.jpg'); 
             background-size: cover;
             background-position: center;
@@ -33,16 +33,14 @@
             position: relative;
         }
 
-        /* Dark overlay for readability over the background image */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background-color: rgba(15, 23, 42, 0.95); /* Semi-transparent background color */
+            background-color: rgba(15, 23, 42, 0.95); 
             z-index: -1;
         }
 
-        /* Simplified, clean scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(79, 148, 205, 0.6); border-radius: 2px; }
@@ -51,7 +49,6 @@
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Minimalist track line for route */
         .route-line { width: 2px; position: absolute; left: 10px; top: 0; bottom: 0; z-index: 0; }
         #train-marker { transition: top 0.5s linear; }
         .station-pulse { animation: pulse 1s ease-out; }
@@ -71,9 +68,10 @@
             <header class="p-4 border-b border-slate-700/60 bg-slate-900/80 backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-2">
                     <h1 class="text-xl font-bold text-gray-100 tracking-wider flex items-center gap-2">
-                        <img src="./logo.png" alt="Metro Mitra Logo" class="h-7 w-auto mr-1">
+                        
+<img src="./logo.png" alt="Metro Mitra Logo" class="h-7 w-auto mr-1">
                         <i data-lucide="route" class="w-6 h-6 text-indigo-400"></i>
-                        <span data-lang-key="appName">METRO MITRA</span>
+                        <span data-lang-key="appName">NammaRide</span>
                     </h1>
                     <p id="live-clock" class="text-sm text-gray-400 font-mono tracking-wider"></p>
                 </div>
@@ -140,7 +138,7 @@
     </div>
 
     <script type="module">
-        // --- CONFIGURATION & STATE ---
+
         const CONFIG = {
             DWELL_TIME_SECONDS: 25, INTERCHANGE_TIME_MINUTES: 5, FIRST_TRAIN_HOUR: 5, LAST_TRAIN_HOUR: 23,
             TIMETABLE: { weekday: { peak: 4, off_peak: 8 }, weekend: { peak: 6, off_peak: 10 } }
@@ -149,10 +147,9 @@
         let simulationState = { isActive: false, journeyId: null, timeline: [], startTime: 0, animationFrameId: null, lastStationIndex: -1, locationWatcherId: null, lastLocationUpdateTime: 0 };
         let currentJourney = null;
 
-        // --- MULTI-LANGUAGE TRANSLATIONS ---
         const translations = {
             en: {
-                appName: "METRO MITRA", planYourTrip: "Plan Your Trip", selectStationsHint: "Select stations to see the fastest route.", startLiveJourney: "Start Live Journey",
+                appName: "NammaRide", planYourTrip: "Plan Your Trip", selectStationsHint: "Select stations to see the fastest route.", startLiveJourney: "Start Live Journey",
                 disclaimer: "Disclaimer: Timings and fare are estimates, please confirm at stations.",
                 nextTrain: "Next Train", totalTime: "Total Time", estFare: "Est. Fare", minutes: "min", now: "Now",
                 hr: "hr", route: "Route", interchange: "Interchange", stops: "Stop(s)",
@@ -166,7 +163,7 @@
                 feedbackPrompt: "For feedback, use:",
             },
             hi: {
-                appName: "मेट्रो मित्र", planYourTrip: "अपनी यात्रा की योजना बनाएं", selectStationsHint: "सबसे तेज़ रूट देखने के लिए स्टेशन चुनें।", startLiveJourney: "लाइव यात्रा शुरू करें",
+                appName: "नम्मा राइड", planYourTrip: "अपनी यात्रा की योजना बनाएं", selectStationsHint: "सबसे तेज़ रूट देखने के लिए स्टेशन चुनें।", startLiveJourney: "लाइव यात्रा शुरू करें",
                 disclaimer: "अस्वीकरण: समय और किराया अनुमानित हैं, कृपया स्टेशनों पर पुष्टि करें।",
                 nextTrain: "अगली ट्रेन", totalTime: "कुल समय", estFare: "अनुमानित किराया", minutes: "मिनट", now: "अभी",
                 hr: "घंटा", route: "रूट", interchange: "इंटरचेंज", stops: "स्टॉप",
@@ -180,7 +177,7 @@
                 feedbackPrompt: "फीडबैक के लिए उपयोग करें:",
             },
             kn: {
-                appName: "ಮೆಟ್ರೋ ಮಿತ್ರ", planYourTrip: "ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಯೋಜಿಸಿ", selectStationsHint: "ವೇಗದ ಮಾರ್ಗವನ್ನು ನೋಡಲು ನಿಲ್ದಾಣಗಳನ್ನು ಆರಿಸಿ.", startLiveJourney: "ಲೈವ್ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ",
+                appName: "ನಮ್ಮ ರೈಡ್", planYourTrip: "ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಯೋಜಿಸಿ", selectStationsHint: "ವೇಗದ ಮಾರ್ಗವನ್ನು ನೋಡಲು ನಿಲ್ದಾಣಗಳನ್ನು ಆರಿಸಿ.", startLiveJourney: "ಲೈವ್ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ",
                 disclaimer: "ಹಕ್ಕುತ್ಯಾಗ: ಸಮಯ ಮತ್ತು ದರ ಅಂದಾಜು, ದಯವಿಟ್ಟು ನಿಲ್ದಾಣಗಳಲ್ಲಿ ದೃಢೀಕರಿಸಿ.",
                 nextTrain: "ಮುಂದಿನ ರೈಲು", totalTime: "ಒಟ್ಟು ಸಮಯ", estFare: "ಅಂದಾಜು ದರ", minutes: "ನಿಮಿಷ", now: "ಈಗ",
                 hr: "ಗಂಟೆ", route: "ಮಾರ್ಗ", interchange: "ಇಂಟರ್ಚೇಂಜ್", stops: "ನಿಲುಗಡೆಗಳು",
@@ -195,7 +192,6 @@
             }
         };
 
-        // --- GLOBAL TRANSLATION DATA AND FUNCTIONS ---
         const stationTranslations = {
             "Whitefield (Kadugodi)": { "hi": "व्हाइटफील्ड (काडुगोडी)", "kn": "ವೈಟ್‌ಫೀಲ್ಡ್ (ಕಾಡುಗೋಡಿ)" },
             "Hopefarm Channasandra": { "hi": "होपफार्म चन्नासंद्रा", "kn": "ಹೋಪ್‌ಫಾರ್ಮ್ ಚನ್ನಸಂದ್ರ" },
@@ -277,33 +273,33 @@
             "Huskur Road": { "hi": "हुस्कुर रोड", "kn": "ಹುಸ್ಕೂರು ರಸ್ತೆ" },
             "Hebbagodi": { "hi": "हेब्बागौड़ी", "kn": "ಹೆಬ್ಬಗೋಡಿ" },
             "Bommasandra": { "hi": "बोम्मासन्द्रा", "kn": "ಬೊಮ್ಮಸಂದ್ರ" },
-            // Line Names - Must be included for interchange text and dropdown group labels
+            // Line Names 
             "Purple Line": { "hi": "पर्पल लाइन", "kn": "ನೇರಳೆ ಮಾರ್ಗ" },
             "Green Line": { "hi": "ग्रीन लाइन", "kn": "ಹಸಿರು ಮಾರ್ಗ" },
             "Yellow Line": { "hi": "येलो लाइन", "kn": "ಹಳದಿ ಮಾರ್ಗ" },
         };
         
-        const lineNameMap = { // Mapping English line names to keys for lookup
+        const lineNameMap = { 
             "Purple Line": "Purple Line",
             "Green Line": "Green Line",
             "Yellow Line": "Yellow Line"
         };
 
         function T_STATION(stationName) {
-            // Check if the station name is one of the line names
+            
             if (lineNameMap[stationName] && currentLang !== 'en') {
                 return stationTranslations[stationName][currentLang] || stationName;
             }
             
-            // For regular station names, use the existing logic
+
             if (currentLang !== 'en' && stationTranslations[stationName] && stationTranslations[stationName][currentLang]) {
                 return stationTranslations[stationName][currentLang];
             }
-            return stationName; // Fallback to English
+            return stationName;
         }
 
 
-        // --- DATA (English names maintained for lookup IDs, translations handled by T_STATION) ---
+        //  DATA (English names maintained for lookup IDs, translations handled by T_STATION) 
         const metroData = {
             purple: { name: "Purple Line", color: "#8B5CF6", stations: [
                 { id: "P01", name: "Whitefield (Kadugodi)", lat: 12.9904, lon: 77.7615, timeToNext: 110, distanceToNext: 2.1, platforms: { forward: 2, backward: 1 } },
@@ -395,9 +391,9 @@
             ] }
         };
 
-        // --- CORE LOGIC (Kept original calculation functions) ---
+        
         function getCurrentSimulatedDate() { return new Date(); }
-        function precomputeJourneyData() { /* ... original logic ... */
+        function precomputeJourneyData() { 
             for (const lineKey in metroData) {
                 const line = metroData[lineKey];
                 line.stations.forEach((s, index) => {
@@ -543,14 +539,13 @@
                     }
                     const arrivalTime = currentTime;
                     const departureTime = currentTime; 
-                    // Use T_STATION to translate name for the timeline (used for Next Stop display)
+                
                     timeline.push({ stationId: station.id, stationName: T_STATION(station.name), arrivalTime, departureTime });
                 });
             });
             return timeline;
         }
 
-        // --- UI & UTILITY FUNCTIONS (Modified for the SPA structure) ---
         let currentLang = localStorage.getItem('appLang') || 'en';
 
         function T(key) { return translations[currentLang][key] || translations['en'][key]; }
@@ -562,10 +557,9 @@
                 el.textContent = T(el.getAttribute('data-lang-key'));
             });
             
-            // FIX: RE-POPULATE DROPDOWNS ON LANGUAGE CHANGE
+
             populateDropdowns();
 
-            // Re-render journey result to update dynamic content
             if (!simulationState.isActive) handleJourneyUpdate();
             lucide.createIcons();
         }
@@ -577,7 +571,6 @@
             document.querySelector('.max-w-lg').classList.toggle('h-full', viewId === 'map-view');
             document.querySelector('.max-w-lg').classList.toggle('sm:h-auto', viewId === 'planner-view');
             
-            // FIX: Correctly manage language selector visibility/interaction
             const langSelector = document.getElementById('language-selector');
             langSelector.disabled = viewId === 'map-view';
             langSelector.classList.toggle('opacity-50', viewId === 'map-view');
@@ -596,7 +589,6 @@
             const startSelect = document.getElementById('start-station'); 
             const endSelect = document.getElementById('end-station');
             
-            // Store current selections before clearing
             const savedStart = startSelect.value;
             const savedEnd = endSelect.value;
             
@@ -606,13 +598,13 @@
             ['purple', 'green', 'yellow'].forEach(lineKey => {
                 const line = metroData[lineKey]; 
                 const optgroup = document.createElement('optgroup');
-                // Use T_STATION for line name translation in the dropdown header
+                
                 optgroup.label = T_STATION(line.name); 
                 
                 line.stations.forEach(station => {
                     const option = document.createElement('option'); 
                     option.value = station.id; 
-                    // Use T_STATION for station name translation in the option
+                    
                     option.textContent = T_STATION(station.name); 
                     optgroup.appendChild(option);
                 });
@@ -620,11 +612,9 @@
                 endSelect.appendChild(optgroup.cloneNode(true));
             });
             
-            // Restore selections, falling back to a default if necessary
             startSelect.value = savedStart || 'P20';
             endSelect.value = savedEnd || 'G24';
-            
-            // If saved values were not set, ensure default selection is displayed
+        
             if (!savedStart) startSelect.options[0].selected = true;
             if (!savedEnd) endSelect.options[0].selected = true;
         }
@@ -707,7 +697,7 @@
                 let nextPartLineName = '';
                 let nextPartJourneyDirectionName = '';
                 if(nextPart) {
-                     // Translate line and direction names for the interchange block
+                     
                      nextPartLineName = T_STATION(nextPart.stations[0].lineName);
                      nextPartJourneyDirectionName = nextPart.journeyDirectionName;
                 }
@@ -754,7 +744,6 @@
         function renderStation(station, details, overallStationIndex) {
             const { isStart, isEnd, isInterchange, startPlatform, journeyDirectionName, departureTime, arrivalTime, interchangeDetails } = details;
             
-            // Get translated station name
             const translatedStationName = T_STATION(station.name);
             
             let platformInfo = '', timeLabel = '', timeValue = '';
@@ -810,7 +799,6 @@
             displayJourneyResult(journey); 
         }
 
-        // Keep original Location/Simulation handlers (requestLocationAndStart, handleLocationUpdate, handleLocationError, updateSimulation)
         function requestLocationAndStart(journey) {
             if (!journey) return;
             const startSim = (useLiveLocation) => startSimulation(journey, useLiveLocation);
@@ -956,11 +944,11 @@
             }
         }
         
-        // --- INITIALIZATION ---
+       
         function initializeApp() {
-            // Language setup first
+            
             document.getElementById('language-selector').value = currentLang;
-            // setLanguage now calls populateDropdowns
+           
             setLanguage(currentLang); 
             
             document.getElementById('language-selector').addEventListener('change', (e) => {
@@ -968,7 +956,6 @@
             });
 
             precomputeJourneyData(); 
-            // populateDropdowns is now called inside setLanguage
             
             const startSelect = document.getElementById('start-station'); 
             const endSelect = document.getElementById('end-station'); 
