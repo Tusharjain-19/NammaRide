@@ -86,12 +86,12 @@ function precomputeJourneyData() {
             // Add connection to the Previous station
             if (index > 0) {
                 const prev = line.stations[index - 1];
-                precomputedData.graph[station.id].push({ node: prev.id, weight: prev.timeToNext, line: lineKey });
+                precomputedData.graph[station.id].push({ node: prev.id, weight: prev.timeToNext, distance: prev.distanceToNext, line: lineKey });
             }
             // Add connection to the Next station
             if (index < line.stations.length - 1) {
                 const next = line.stations[index + 1];
-                precomputedData.graph[station.id].push({ node: next.id, weight: station.timeToNext, line: lineKey });
+                precomputedData.graph[station.id].push({ node: next.id, weight: station.timeToNext, distance: station.distanceToNext, line: lineKey });
             }
 
             // Handle Interchanges (connecting lines)
@@ -101,7 +101,7 @@ function precomputeJourneyData() {
                         const match = metroData[otherLineKey].stations.find(s => s.interchangeId === station.interchangeId);
                         if (match) {
                             // Add a "virtual" walking edge between the two platforms
-                            precomputedData.graph[station.id].push({ node: match.id, weight: CONFIG.INTERCHANGE_TIME_MINUTES * 60, line: 'interchange' });
+                            precomputedData.graph[station.id].push({ node: match.id, weight: CONFIG.INTERCHANGE_TIME_MINUTES * 60, distance: 0, line: 'interchange' });
                         }
                     }
                 });
@@ -128,7 +128,7 @@ function calculateJourney(startId, endId) {
             const newCost = cost + neighbor.weight;
             if (newCost < distances[neighbor.node]) {
                 distances[neighbor.node] = newCost;
-                previous[neighbor.node] = { id: currentId, line: neighbor.line };
+                previous[neighbor.node] = { id: currentId, line: neighbor.line, distance: neighbor.distance };
                 queue.push({ id: neighbor.node, cost: newCost });
             }
         });
@@ -138,9 +138,15 @@ function calculateJourney(startId, endId) {
 
     // Reconstruct path
     const path = []; let curr = endId;
+    let totalDistanceKm = 0;
     while (curr) {
         path.unshift(curr);
-        curr = previous[curr] ? previous[curr].id : null;
+        if (previous[curr]) {
+            totalDistanceKm += (previous[curr].distance || 0);
+            curr = previous[curr] ? previous[curr].id : null;
+        } else {
+            curr = null;
+        }
     }
 
     // Build Journey Object
@@ -206,25 +212,109 @@ function calculateJourney(startId, endId) {
         }
     }
 
+    // Calculate Fare using strict Distance Slabs logic
+    const departureTime = getDepartureTime();
+    const fareDetails = calculateMetroFare(totalDistanceKm, departureTime, 'TOKEN');
+
     return {
         id: `${startId}-${endId}`,
         parts: parts,
         totalTime: distances[endId],
-        fare: calculateFare(distances[endId]), // Mock fare based on time/distance
-        departureTime: getDepartureTime()
+        fare: fareDetails.finalFare,
+        baseFare: fareDetails.baseFare,
+        distanceKm: totalDistanceKm.toFixed(2),
+        fareDetails: fareDetails,
+        departureTime: departureTime
     };
 }
 
-function calculateFare(activeTimeSeconds) {
-    // Rough estimate
-    const stops = Math.floor(activeTimeSeconds / 120);
-    const dist = stops * 1.5;
-    if (dist <= 2) return 10;
-    if (dist <= 5) return 20;
-    if (dist <= 12) return 30;
-    if (dist <= 24) return 40;
-    return 50 + Math.floor((dist - 24) / 10) * 10;
+const FARE_SLABS = [
+    { max: 2.00, fare: 10 },
+    { max: 4.00, fare: 20 },
+    { max: 6.00, fare: 30 },
+    { max: 8.00, fare: 40 },
+    { max: 10.00, fare: 50 },
+    { max: 15.00, fare: 60 },
+    { max: 15.00, fare: 60 }, // Duplicate check/safety or just overlap logic
+    { max: 20.00, fare: 70 },
+    { max: 25.00, fare: 80 },
+    { max: Infinity, fare: 90 }
+];
+
+function calculateMetroFare(distanceKm, travelTime = new Date(), ticketType = 'TOKEN') {
+    // 1. Determine Base Fare from Slabs
+    let baseFare = 90;
+
+    // BMRCL Rule: Base fare strictly based on distance slab
+    // Using Find to get the first slab that fits
+    const slab = FARE_SLABS.find(s => distanceKm <= s.max);
+    if (slab) baseFare = slab.fare;
+
+    // Hard Cap Rule: > 25km is 90
+    if (distanceKm > 25.00) baseFare = 90;
+
+    // Minimum logic (0-2km is 10) handled by first slab.
+
+    // 2. Apply Discounts
+    let discountPercent = 0;
+    const typeUpper = ticketType.toUpperCase();
+
+    if (typeUpper === 'CARD' || typeUpper === 'QR' || typeUpper === 'NCMC') {
+        // Standard Smart Card Discount: 5%
+        discountPercent = 5;
+
+        // Check Time-Based Rules (Feb 2025)
+        const day = travelTime.getDay(); // 0 = Sunday
+        const hour = travelTime.getHours();
+        const min = travelTime.getMinutes();
+        const timeVal = hour + min / 60;
+
+        // Holidays (Sundays & General) -> Flat 10%
+        // Simplified holiday check (Sundays + common fixed dates)
+        const isHoliday = (day === 0) || isFixedHoliday(travelTime);
+
+        if (isHoliday) {
+            discountPercent = 10;
+        } else {
+            // Weekday Logic
+            // Peak: 08:00–12:00, 16:00–21:00 -> 5% (No extra)
+            // Off-Peak: Start–08:00, 12:00–16:00, 21:00–End -> 10%
+
+            // Ranges for Off-Peak:
+            // < 8.0
+            // >= 12.0 AND < 16.0
+            // >= 21.0
+
+            if (timeVal < 8.0 || (timeVal >= 12.0 && timeVal < 16.0) || timeVal >= 21.0) {
+                discountPercent = 10;
+            }
+        }
+    }
+
+    // "Token users get NO discount."
+    if (typeUpper === 'TOKEN') discountPercent = 0;
+
+    let discountAmount = baseFare * (discountPercent / 100);
+    // Rounding Rule: Nearest whole rupee
+    let finalFare = Math.round(baseFare - discountAmount);
+
+    return {
+        baseFare: baseFare,
+        finalFare: finalFare,
+        appliedDiscount: Math.round(discountAmount)
+    };
 }
+
+function isFixedHoliday(date) {
+    const d = date.getDate();
+    const m = date.getMonth() + 1; // 1-12
+    // Fixed Holidays: Jan 26, Aug 15, Oct 2
+    if ((d === 26 && m === 1) || (d === 15 && m === 8) || (d === 2 && m === 10)) return true;
+    return false;
+}
+
+// Deprecated: Old time-based calculation removed.
+// function calculateFare(activeTimeSeconds) { ... }
 
 function getDepartureTime() {
     const now = new Date();
