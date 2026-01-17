@@ -58,13 +58,19 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
             const nextLine = nextNode.lineColor; // e.g., #2ECC71
 
             // Purple (#9B59B6 or #8B5CF6) <-> Green (#2ECC71 or #22C55E)
+            // Yellow (#FBBF24 or #F1C40F or #EAB308)
             const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6';
             const isGreen = (c) => c === '#2ECC71' || c === '#22C55E';
+            const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308';
 
             if (isPurple(currentLine) && isGreen(nextLine)) {
                 interchangeClass = 'interchange-purple-green';
             } else if (isGreen(currentLine) && isPurple(nextLine)) {
                 interchangeClass = 'interchange-green-purple';
+            } else if (isGreen(currentLine) && isYellow(nextLine)) {
+                interchangeClass = 'interchange-green-yellow';
+            } else if (isYellow(currentLine) && isGreen(nextLine)) {
+                interchangeClass = 'interchange-yellow-green';
             }
         }
 

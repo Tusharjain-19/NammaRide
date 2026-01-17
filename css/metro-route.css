@@ -126,9 +126,23 @@
     /* Separation ring */
 }
 
+/* Dual-Line Interchange Node (Green <-> Yellow) */
+.station-item.interchange-green-yellow .station-dot,
+.station-item.interchange-yellow-green .station-dot {
+    background: conic-gradient(var(--line-green) 0deg 180deg, var(--line-yellow) 180deg 360deg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px var(--bg-color);
+    /* Separation ring */
+}
+
 /* Inner hole for split ring effect */
 .station-item.interchange-purple-green .station-dot::after,
-.station-item.interchange-green-purple .station-dot::after {
+.station-item.interchange-green-purple .station-dot::after,
+.station-item.interchange-green-yellow .station-dot::after,
+.station-item.interchange-yellow-green .station-dot::after {
     content: '';
     width: 14px;
     height: 14px;
@@ -144,6 +158,14 @@
 
 .station-item.interchange-green-purple .interchange-info {
     border-left-color: var(--line-purple);
+}
+
+.station-item.interchange-green-yellow .interchange-info {
+    border-left-color: var(--line-yellow);
+}
+
+.station-item.interchange-yellow-green .interchange-info {
+    border-left-color: var(--line-green);
 }
 
 .station-name {
