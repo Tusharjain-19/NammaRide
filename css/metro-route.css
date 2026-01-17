@@ -1,0 +1,221 @@
+/* Timeline / Route Container */
+.route-timeline {
+    position: relative;
+    padding: 0 1.5rem;
+    /* Space for the line */
+    padding-bottom: 4rem;
+    /* Bottom spacing */
+    margin-top: 1rem;
+    list-style: none;
+}
+
+.station-item {
+    position: relative;
+    padding-left: 2rem;
+    /* Space for dot */
+    padding-bottom: 2rem;
+    /* Spacing between stations */
+}
+
+.station-item:last-child {
+    padding-bottom: 0;
+    border-left-color: transparent;
+}
+
+/* The Line Segment */
+.station-item::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    /* Align center of 16px dot: 8px center. Line width 2px. Left = 8 - 1 = 7px */
+    top: 24px;
+    /* Start below the dot */
+    bottom: -8px;
+    /* Extend to next dot */
+    width: 2px;
+    background-color: var(--line-default);
+    z-index: 0;
+}
+
+/* Line Colors */
+.line-purple .station-item::before {
+    background-color: var(--line-purple);
+}
+
+.line-green .station-item::before {
+    background-color: var(--line-green);
+}
+
+.line-yellow .station-item::before {
+    background-color: var(--line-yellow);
+}
+
+/* The Dot */
+.station-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--bg-color);
+    /* Cutout effect */
+    border: 3px solid var(--line-default);
+    z-index: 10;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.line-purple .station-dot {
+    border-color: var(--line-purple);
+}
+
+.line-green .station-dot {
+    border-color: var(--line-green);
+}
+
+.line-yellow .station-dot {
+    border-color: var(--line-yellow);
+}
+
+/* Station States */
+.station-item.completed .station-dot {
+    background-color: var(--line-default);
+    /* Solid muted */
+    border-color: var(--line-default);
+    opacity: 0.6;
+}
+
+.station-item.completed .station-content {
+    opacity: 0.6;
+}
+
+.station-item.current .station-dot {
+    width: 20px;
+    height: 20px;
+    left: -2px;
+    /* Center adjustment */
+    top: -2px;
+    background-color: var(--bg-color);
+    border-width: 4px;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    /* Subtle ring */
+}
+
+/* Interchange Node */
+.station-item.interchange .station-dot {
+    width: 24px;
+    height: 24px;
+    left: -4px;
+    top: -4px;
+    border-width: 4px;
+    background-color: #fff;
+    /* Default interchange */
+    z-index: 20;
+}
+
+/* Dual-Line Interchange Node (Purple <-> Green) */
+.station-item.interchange-purple-green .station-dot,
+.station-item.interchange-green-purple .station-dot {
+    background: conic-gradient(var(--line-purple) 0deg 180deg, var(--line-green) 180deg 360deg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px var(--bg-color);
+    /* Separation ring */
+}
+
+/* Inner hole for split ring effect */
+.station-item.interchange-purple-green .station-dot::after,
+.station-item.interchange-green-purple .station-dot::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    background-color: var(--bg-color);
+    border-radius: 50%;
+    display: block;
+}
+
+/* Fix interchange info border color for specific transition */
+.station-item.interchange-purple-green .interchange-info {
+    border-left-color: var(--line-green);
+}
+
+.station-item.interchange-green-purple .interchange-info {
+    border-left-color: var(--line-purple);
+}
+
+.station-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.station-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+/* Inline Interchange Styles (New) */
+.interchange-info {
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+    border-left: 2px solid var(--line-yellow);
+    /* Default accent */
+    margin-left: 2px;
+    /* Align with text */
+    padding-left: 8px;
+}
+
+.line-purple .interchange-info {
+    border-left-color: var(--line-purple);
+}
+
+.line-green .interchange-info {
+    border-left-color: var(--line-green);
+}
+
+.line-yellow .interchange-info {
+    border-left-color: var(--line-yellow);
+}
+
+.interchange-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.interchange-meta {
+    font-size: 0.75rem;
+    color: #64748B;
+    /* Slate 500 */
+    margin-top: 2px;
+    margin-left: 1.35rem;
+    /* Align under text */
+}
+
+.station-pulse {
+    animation: pulse 1s ease-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}

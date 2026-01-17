@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NammaRide - Metro Navigation</title>
+
+    <!-- CSS Structure -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/metro-route.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- External Libs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#151e2e', 900: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Main Module -->
+    <script type="module" src="js/main.js" defer></script>
+</head>
+
+<body>
+
+    <div id="app-container" class="app-container">
+
+        <div class="w-full flex-grow flex flex-col relative overflow-hidden">
+
+            <header class="app-header flex justify-between items-center bg-slate-900/90 border-b border-slate-800">
+                <h1 class="text-lg font-bold text-gray-100 tracking-wider flex items-center gap-2">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="text-indigo-500">
+                        <path d="M4 7h10a3 3 0 0 1 0 6H10a3 3 0 0 0 0 6h10" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="4" cy="7" r="2" fill="currentColor" />
+                        <circle cx="10" cy="13" r="2" fill="currentColor" />
+                        <circle cx="20" cy="19" r="2" fill="currentColor" />
+                    </svg>
+                    <span data-lang-key="appName">NammaRide</span>
+                </h1>
+
+                <div class="flex items-center gap-3">
+                    <p id="live-clock"
+                        class="text-xs text-indigo-300 font-mono font-medium bg-slate-800/50 px-2 py-1 rounded"></p>
+                    <div class="relative">
+                        <select id="language-selector"
+                            class="appearance-none bg-slate-800 text-gray-300 text-xs py-1 px-2 pr-6 rounded border border-slate-700 focus:outline-none focus:border-indigo-500">
+                            <option value="en">EN</option>
+                            <option value="hi">HI</option>
+                            <option value="kn">KN</option>
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1 text-gray-400">
+                            <svg class="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="planner-view"
+                class="p-6 flex flex-col items-center justify-center flex-grow transition-opacity duration-300">
+                <div class="w-full">
+                    <h2 class="text-lg font-bold mb-4 text-indigo-300 text-center tracking-wide"
+                        data-lang-key="planYourTrip">Plan Your Trip</h2>
+
+                    <!-- Compact Inputs Block -->
+                    <div id="planner-controls" class="flex flex-col gap-2 mb-6 relative">
+                        <!-- Origin -->
+                        <div class="relative z-20">
+                            <div id="start-station-dropdown" class="w-full"></div>
+                            <input type="hidden" id="start-station" value="">
+                        </div>
+
+                        <!-- Swap Button Overlapping -->
+                        <div
+                            class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center z-30 pointer-events-none">
+                            <button id="swap-stations"
+                                class="swap-btn pointer-events-auto transform transition-transform active:rotate-180 bg-slate-800 border-slate-600"
+                                title="Swap Stations">
+                                <i data-lucide="arrow-down-up" class="w-4 h-4 text-gray-400"></i>
+                            </button>
+                        </div>
+
+                        <!-- Destination -->
+                        <div class="relative z-10 pt-1">
+                            <div id="end-station-dropdown" class="w-full"></div>
+                            <input type="hidden" id="end-station" value="">
+                        </div>
+                    </div>
+
+                    <div id="journey-summary-container"
+                        class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/30 animate-fade-in mb-6">
+                        <div id="journey-summary" class="text-center text-sm text-gray-400 font-medium"
+                            data-lang-key="selectStationsHint">Select stations to see the fastest route.</div>
+                    </div>
+
+                    <div id="board-train-btn-container" class="mt-auto">
+                        <button id="board-train-btn" class="btn-primary hidden">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span data-lang-key="startLiveJourney">Start Live Journey</span>
+                        </button>
+                        <p class="text-center text-[10px] text-gray-500 mt-3" data-lang-key="disclaimer">Disclaimer:
+                            Timings and fare are estimates.</p>
+                        <p class="text-center text-[10px] text-gray-600 mt-1" data-lang-key="nonOfficialDisclaimer">This
+                            is not an official BMRCL website.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="map-view" class="hidden flex-grow overflow-y-auto custom-scrollbar bg-slate-900/40 relative">
+                <div id="simulation-status"
+                    class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 p-3 shadow-md">
+                </div>
+
+                <ul id="route-list" class="route-timeline mt-4"></ul>
+
+            </section>
+
+        </div>
+        <div id="toast"
+            class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded shadow-lg text-sm opacity-0 transition-opacity duration-300 z-50 border border-slate-700">
+        </div>
+    </div>
+
+</body>
+
+</html>
