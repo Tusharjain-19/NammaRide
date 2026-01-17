@@ -19,6 +19,25 @@
     position: relative;
 }
 
+@media (max-width: 600px) {
+    .app-container {
+        max-width: 100%;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border-radius: 0;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    body {
+        align-items: flex-start;
+        background-color: #0F172A;
+    }
+}
+
 /* Ensure body centers the app */
 body {
     display: flex;
