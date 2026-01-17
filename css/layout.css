@@ -25,16 +25,29 @@
         width: 100%;
         height: 100vh;
         height: 100dvh;
-        max-height: none;
-        border-radius: 0;
-        margin: 0;
-        box-shadow: none;
-        border: none;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        position: fixed;
+        /* Force fixed to viewport to avoid scroll/margin issues */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
     }
 
-    body {
-        align-items: flex-start;
+    body,
+    html {
+        margin: 0;
+        padding: 0;
         background-color: #0F172A;
+        /* Match bg to hide gaps */
+        height: 100%;
+        overflow: hidden;
+        /* Let app-container handle scroll */
     }
 }
 
