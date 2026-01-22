@@ -174,6 +174,7 @@ export const stationTranslations = {
     "Sir M. Visveswaraya Stn., Central College": { "hi": "सर एम. विश्वेश्वरैया स्टेशन, सेंट्रल कॉलेज", "kn": "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ ನಿಲ್ದಾಣ, ಸೆಂಟ್ರಲ್ ಕಾಲೇಜು" },
     "Nadaprabhu Kempegowda Stn., Majestic": { "hi": "नाडप्रभु केम्पेगौड़ा स्टेशन, मेजेस्टिक", "kn": "ನಾಡಪ್ರಭು ಕೆಂಪೇಗೌಡ ನಿ., ಮೆಜೆಸ್ಟಿಕ್" },
     "Krantivira Sangolli Rayanna Railway Station": { "hi": "क्रांतिवीरा संगोली रायन्ना रेलवे स्टेशन", "kn": "ಕ್ರಾಂತಿವೀರ ಸಂಗೊಳ್ಳಿ ರಾಯಣ್ಣ ರೈಲ್ವೆ ನಿಲ್ದಾಣ" },
+    "KSR City Railway Station": { "hi": "क्रांतिवीरा संगोली रायन्ना रेलवे स्टेशन", "kn": "ಕ್ರಾಂತಿವೀರ ಸಂಗೊಳ್ಳಿ ರಾಯಣ್ಣ ರೈಲ್ವೆ ನಿಲ್ದಾಣ" },
     "Magadi Road": { "hi": "मगदी रोड", "kn": "ಮಾಗಡಿ ರಸ್ತೆ" },
     "Sri Balagangadharanatha Swamiji Stn., Hosahalli": { "hi": "श्री बालगांगाधरनाथ स्वामीजी स्टेशन, होसहल्ली", "kn": "ಶ್ರೀ ಬಾಲಗಂಗಾಧರನಾಥ ಸ್ವಾಮೀಜಿ ನಿಲ್ದಾಣ, ಹೊಸಹಳ್ಳಿ" },
     "Vijayanagar": { "hi": "विजयनगर", "kn": "ವಿಜಯನಗರ" },
