@@ -1,0 +1,39 @@
+# robots.txt for NammaRide - Bengaluru Metro Journey Planner
+# Optimized for SEO and search engine crawlers
+
+User-agent: *
+Allow: /
+
+# Disallow sensitive/private paths (if any in future)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /js/
+Disallow: /css/
+
+# Allow important static assets
+Allow: /assets/
+Allow: /logo.png
+Allow: /NammaRide.apk
+
+# Sitemap location
+Sitemap: https://nammaride.site/sitemap.xml
+
+# Crawl delay (optional, prevents aggressive crawling)
+Crawl-delay: 1
+
+# Additional search engine specific rules
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /assets/
+Allow: /logo.png
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
