@@ -4,68 +4,12 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     
-    <!-- Home / Journey Planner (Highest Priority) -->
+    <!-- Home / Main App (Single Page Application) -->
     <url>
         <loc>https://nammaride.site/</loc>
-        <lastmod>2026-02-02</lastmod>
+        <lastmod>2026-02-07</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
-    </url>
-    
-    <!-- Journey Planning View -->
-    <url>
-        <loc>https://nammaride.site/plan</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    
-    <!-- Live Journey Tracking -->
-    <url>
-        <loc>https://nammaride.site/live</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <!-- Route Details -->
-    <url>
-        <loc>https://nammaride.site/route</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <!-- About NammaRide -->
-    <url>
-        <loc>https://nammaride.site/about</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    
-    <!-- Privacy Policy -->
-    <url>
-        <loc>https://nammaride.site/privacy</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
-    </url>
-    
-    <!-- Terms of Use -->
-    <url>
-        <loc>https://nammaride.site/terms</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
-    </url>
-    
-    <!-- APK Download -->
-    <url>
-        <loc>https://nammaride.site/download</loc>
-        <lastmod>2026-02-02</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
     </url>
     
 </urlset>
