@@ -11,8 +11,25 @@ import { metroData, stationTranslations } from '../data/stations.js';
 let currentLangGetter = () => 'en';
 let T_fn = (k) => k;
 let T_STATION_fn = (n) => n;
+let currentLang = 'en';
+
+const viewCache = {
+    stations: { lang: '', html: '' },
+    timings: { lang: '', html: '' },
+    safety: { lang: '', html: '' },
+    explore: { lang: '', html: '' }
+};
 
 export function initSections(getLang, T, T_STATION) {
+    const newLang = getLang();
+    if (newLang !== currentLang) {
+        // Clear cache if language changes
+        Object.keys(viewCache).forEach(k => {
+            viewCache[k].lang = '';
+            viewCache[k].html = '';
+        });
+    }
+    currentLang = newLang;
     currentLangGetter = getLang;
     T_fn = T;
     T_STATION_fn = T_STATION;
@@ -65,6 +82,14 @@ export function renderStationsList(container) {
         { key: 'yellow', name: 'Yellow Line', color: '#FBBF24' }
     ];
 
+    const l = lang();
+    if (viewCache.stations.lang === l && viewCache.stations.html) {
+        container.innerHTML = viewCache.stations.html;
+        attachStationsEvents(container);
+        if (window.lucide) window.lucide.createIcons();
+        return;
+    }
+
     let html = `<div class="section-header">
         <h2 class="section-title" data-lang-key="stations">${T_fn('stations') || 'Stations'}</h2>
         <p class="section-subtitle">All Namma Metro stations • Tap for details</p>
@@ -102,7 +127,7 @@ export function renderStationsList(container) {
                 </div>
                 <div class="station-card-info">
                     <div class="station-card-name">${translatedName}</div>
-                    ${knName && lang() === 'en' ? `<div class="station-card-sub">${knName}</div>` : ''}
+                    ${knName && l === 'en' ? `<div class="station-card-sub">${knName}</div>` : ''}
                     <div class="station-card-type flex items-center gap-1"><i data-lucide="${station.type === 'Elevated' ? 'arrow-up-circle' : 'arrow-down-circle'}" class="w-3 h-3 text-secondary"></i> ${station.type}</div>
                 </div>
                 <i data-lucide="chevron-right" class="w-4 h-4 text-secondary"></i>
@@ -114,9 +139,14 @@ export function renderStationsList(container) {
 
     html += `</div>`; // end stations-list-content
     container.innerHTML = html;
-    if (window.lucide) window.lucide.createIcons();
+    viewCache.stations.lang = l;
+    viewCache.stations.html = html;
 
-    // Attach search and filter events
+    if (window.lucide) window.lucide.createIcons();
+    attachStationsEvents(container);
+}
+
+function attachStationsEvents(container) {
     const searchInput = container.querySelector('#stations-search');
     const filterBtns = container.querySelectorAll('.line-filter-btn');
     let currentFilter = 'all';
@@ -147,12 +177,13 @@ export function renderStationsList(container) {
                 b.classList.remove('active', 'opacity-100');
                 b.classList.add('opacity-70');
             });
-            e.target.classList.add('active', 'opacity-100');
-            e.target.classList.remove('opacity-70');
-            currentFilter = e.target.dataset.line;
+            e.currentTarget.classList.add('active', 'opacity-100');
+            e.currentTarget.classList.remove('opacity-70');
+            currentFilter = e.currentTarget.dataset.line;
             filterStations();
         });
     });
+}
 }
 
 // ═══════════════════════════════════════
@@ -279,6 +310,14 @@ export function renderStationDetail(container, stationId) {
 // TIMINGS VIEW
 // ═══════════════════════════════════════
 export function renderTimings(container) {
+    const l = lang();
+    if (viewCache.timings.lang === l && viewCache.timings.html) {
+        container.innerHTML = viewCache.timings.html;
+        attachTimingsEvents(container);
+        if (window.lucide) window.lucide.createIcons();
+        return;
+    }
+
     let html = `<div class="section-header">
         <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
         <p class="section-subtitle">Bengaluru Metro schedule (2025-26)</p>
@@ -357,9 +396,14 @@ export function renderTimings(container) {
     });
 
     container.innerHTML = html;
-    if (window.lucide) window.lucide.createIcons();
+    viewCache.timings.lang = l;
+    viewCache.timings.html = html;
 
-    // Attach Tab Switch events
+    if (window.lucide) window.lucide.createIcons();
+    attachTimingsEvents(container);
+}
+
+function attachTimingsEvents(container) {
     container.querySelectorAll('.timing-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const line = btn.dataset.line;
@@ -382,6 +426,12 @@ export function renderTimings(container) {
 // ═══════════════════════════════════════
 export function renderSafety(container) {
     const l = lang();
+    if (viewCache.safety.lang === l && viewCache.safety.html) {
+        container.innerHTML = viewCache.safety.html;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+    }
+
     let html = `<div class="section-header">
         <h2 class="section-title">${T_fn('safetyHelp') || 'Safety & Help'}</h2>
         <p class="section-subtitle">${T_fn('safetySub') || 'Emergency contacts & useful info'}</p>
@@ -402,6 +452,8 @@ export function renderSafety(container) {
 
     html += `</div>`;
     container.innerHTML = html;
+    viewCache.safety.lang = l;
+    viewCache.safety.html = html;
     if (window.lucide) window.lucide.createIcons();
 }
 
@@ -409,6 +461,14 @@ export function renderSafety(container) {
 // EXPLORE VIEW (Station list with attraction counts)
 // ═══════════════════════════════════════
 export function renderExplore(container) {
+    const l = lang();
+    if (viewCache.explore.lang === l && viewCache.explore.html) {
+        container.innerHTML = viewCache.explore.html;
+        attachExploreEvents(container);
+        if (window.lucide) window.lucide.createIcons();
+        return;
+    }
+
     let html = `<div class="section-header">
         <h2 class="section-title">${T_fn('exploreJaipur')?.replace('Jaipur', 'Bengaluru') || 'Explore Bengaluru'}</h2>
         <p class="section-subtitle">${T_fn('exploreSub') || 'Tap a station to discover nearby places'}</p>
@@ -488,9 +548,14 @@ export function renderExplore(container) {
 
     html += `</div>`; // end explore-list-content
     container.innerHTML = html;
-    if (window.lucide) window.lucide.createIcons();
+    viewCache.explore.lang = l;
+    viewCache.explore.html = html;
 
-    // Attach search and filter events
+    if (window.lucide) window.lucide.createIcons();
+    attachExploreEvents(container);
+}
+
+function attachExploreEvents(container) {
     const searchInput = container.querySelector('#explore-search');
     const filterBtns = container.querySelectorAll('.explore-cat-btn');
     const lineBtns = container.querySelectorAll('.explore-line-btn');
@@ -501,10 +566,8 @@ export function renderExplore(container) {
         const term = searchInput ? searchInput.value.toLowerCase().trim() : '';
         const cat = currentCategory;
         const line = currentLine;
-        
         const searchWords = term.split(/\s+/).filter(w => w.length > 0);
 
-        // Category to potential type mapping
         const catMap = {
             'hospital': ['hospital'],
             'heritage': ['heritage', 'temple', 'church', 'mosque', 'museum', 'library', 'cultural', 'shrine', 'monument', 'scenic', 'tourist'],
@@ -519,21 +582,13 @@ export function renderExplore(container) {
         container.querySelectorAll('.js-explore-item').forEach(el => {
             const searchTerm = el.dataset.searchTerm;
             const itemLines = el.dataset.lines.split(' ');
-            
-            // Multi-word search
             const matchesSearch = searchWords.length === 0 || searchWords.every(word => searchTerm.includes(word));
-            
             let matchesCat = cat === 'all';
             let matchesLine = line === 'all' || itemLines.includes(line);
-            
-            if (!matchesCat && catMap[cat]) {
-                matchesCat = catMap[cat].some(keyword => searchTerm.includes(keyword.toLowerCase()));
-            }
-            
+            if (!matchesCat && catMap[cat]) matchesCat = catMap[cat].some(keyword => searchTerm.includes(keyword.toLowerCase()));
             el.style.display = matchesSearch && matchesCat && matchesLine ? 'flex' : 'none';
         });
         
-        // Update section labels visibility
         container.querySelectorAll('.explore-section-label').forEach(label => {
             let next = label.nextElementSibling;
             let hasVisible = false;
@@ -544,7 +599,6 @@ export function renderExplore(container) {
             label.style.display = hasVisible ? 'flex' : 'none';
         });
 
-        // Show "No results" if nothing found
         const anyVisible = Array.from(container.querySelectorAll('.js-explore-item')).some(el => el.style.display !== 'none');
         let emptyMsg = container.querySelector('#explore-empty-msg');
         if (!anyVisible) {

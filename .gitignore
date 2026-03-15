@@ -1,0 +1,8 @@
+# Exclude mobile folder as requested
+mobile/
+
+# IDE files
+.vscode/
+
+# Node modules if any
+node_modules/
