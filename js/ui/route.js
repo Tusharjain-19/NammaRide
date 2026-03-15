@@ -97,7 +97,7 @@ function renderStationItem(node, details, index) {
 
     let metaInfo = '';
     if (isStart) {
-        metaInfo = `<div class="info-strip">${T('boardAt')} ${T('platform')} ${node.part.startPlatform} <span class="text-xs opacity-75">(${T('towards')} ${node.part.journeyDirectionName})</span></div>`;
+        metaInfo = `<div class="info-strip text-secondary bg-card-subtle">${T('boardAt')} ${T('platform')} ${node.part.startPlatform} <span class="text-[10px] opacity-75">(${T('towards')} ${node.part.journeyDirectionName})</span></div>`;
     } else if (isInterchange && nextPartDetails) {
         // Explicit Platform & Direction
         const lineName = T_STATION(nextPartDetails.stations[0].lineName);
@@ -106,20 +106,20 @@ function renderStationItem(node, details, index) {
 
         metaInfo = `
             <div class="interchange-info">
-                <div class="interchange-row text-white font-medium">
-                     <i data-lucide="arrow-right-left" class="w-3.5 h-3.5 text-gray-400"></i>
+                <div class="interchange-row text-primary font-medium">
+                     <i data-lucide="arrow-right-left" class="w-3.5 h-3.5 text-secondary"></i>
                      <span>${T('changeTo')} ${lineName}</span>
                 </div>
                 <div class="interchange-meta flex flex-col gap-1 mt-1">
-                    <div class="flex items-center gap-1.5 text-xs text-gray-300">
-                        <span class="bg-indigo-900/50 border border-indigo-700/50 px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide text-indigo-200">${T('platform')} ${platform}</span>
-                        <span>${T('towards')} <span class="text-white">${direction}</span></span>
+                    <div class="flex items-center gap-1.5 text-xs text-secondary">
+                        <span class="bg-card-subtle border border-subtle px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide text-primary">${T('platform')} ${platform}</span>
+                        <span>${T('towards')} <span class="text-primary">${direction}</span></span>
                     </div>
-                    <div class="text-[10px] text-gray-500 pl-0.5">~5 ${T('walkTime')}</div>
+                    <div class="text-[10px] text-secondary opacity-70 pl-0.5">~5 ${T('walkTime')}</div>
                 </div>
             </div>`;
     } else if (isEnd) {
-        metaInfo = `<div class="station-meta">${T('arrive')} ${formatTime(details.arrivalTime)}</div>`;
+        metaInfo = `<div class="station-meta text-secondary">${T('arrive')} ${formatTime(details.arrivalTime)}</div>`;
     }
 
     return `

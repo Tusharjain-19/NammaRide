@@ -1,0 +1,826 @@
+/* ============================================================
+   NammaRide — Sections CSS
+   Bottom Nav + Stations + Timings + Safety + Explore Views
+   ============================================================ */
+
+/* ─── Bottom Navigation ─── */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding: 0.4rem 0 0.6rem;
+    flex-shrink: 0;
+    z-index: 50;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.3rem 0.5rem;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+    border-radius: 0.5rem;
+    min-width: 3.5rem;
+}
+
+.nav-item:hover { color: var(--text-primary); }
+
+.nav-item.active {
+    color: var(--accent-color);
+}
+
+body.light-mode .nav-item.active {
+    color: var(--accent-color);
+}
+
+/* ─── Section Views Common ─── */
+.section-view {
+    padding: 1rem 1rem 1.5rem;
+    background: var(--bg-color);
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.section-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ─── Station List ─── */
+.line-group {
+    margin-bottom: 1.25rem;
+}
+
+.line-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    background: var(--bg-card);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.line-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.line-name-text {
+    flex-grow: 1;
+}
+
+.station-count-badge {
+    background: var(--bg-card-hover);
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 1rem;
+    font-weight: 600;
+}
+
+.stations-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.station-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.station-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+}
+
+.station-card:active {
+    transform: scale(0.98);
+}
+
+.station-code-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.25rem 0.4rem;
+    border-radius: 0.35rem;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+}
+
+.station-card-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.station-card-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.station-card-sub {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+}
+
+.station-card-type {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+/* ─── Station Detail ─── */
+.detail-back {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+}
+
+.detail-back:hover { opacity: 0.8; }
+
+.station-detail-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.station-detail-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.station-detail-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.station-detail-kn {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+}
+
+.station-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: var(--bg-card-hover);
+    color: var(--text-secondary);
+}
+
+.station-type-badge.elevated {
+    background: rgba(79, 70, 229, 0.1);
+    color: #818CF8;
+}
+
+.station-type-badge.underground {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ADE80;
+}
+
+/* Detail Sections */
+.detail-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+
+.detail-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.detail-section-sub {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.6rem;
+}
+
+.facilities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.facility-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.55rem;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.connectivity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.connectivity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    background: var(--bg-card-hover);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+}
+
+.travel-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.travel-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.8rem;
+}
+
+.travel-info-item:last-child { border-bottom: none; }
+
+.travel-info-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.travel-info-value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ─── Timings ─── */
+.timing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.timing-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timing-line-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.timing-route {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+}
+
+.timing-stations {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-top: 0.1rem;
+}
+
+.timing-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* Timing Tabs */
+.timing-tabs {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timing-tab-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.timing-tab-btn.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+/* Day Schedule */
+.timing-day-schedule {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.timing-table-wrapper {
+    overflow: hidden;
+    border-radius: 0.75rem;
+}
+
+.timing-table-header {
+    padding: 2px 0;
+}
+
+.sub-heading {
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+/* Notes */
+.timing-notes {
+    transition: background-color 0.3s;
+}
+
+.timing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.timing-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.hidden { display: none; }
+
+/* ─── Safety ─── */
+.safety-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.safety-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.safety-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+}
+
+.safety-card:active { transform: scale(0.98); }
+
+.safety-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.15);
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+body.light-mode .safety-icon-wrap {
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.safety-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.safety-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.safety-number {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.safety-badge {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: #4ADE80;
+    background: rgba(34, 197, 94, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    white-space: nowrap;
+}
+
+/* ─── Explore ─── */
+.explore-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.3rem 0;
+    margin-bottom: 0.5rem;
+}
+
+.explore-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.explore-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+}
+
+.explore-card:active { transform: scale(0.98); }
+
+.explore-card-content { flex-grow: 1; min-width: 0; }
+
+.explore-card-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.explore-card-kn {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+}
+
+.explore-card-action {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    margin-top: 0.3rem;
+}
+
+.explore-count-badge {
+    background: var(--accent-color);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Explore Filter Bar */
+#explore-category-filters::-webkit-scrollbar {
+    display: none;
+}
+
+#explore-category-filters {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.explore-cat-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.explore-cat-btn.active {
+    transform: scale(1.02);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+/* Explore Station Header */
+.explore-station-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.explore-station-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.explore-station-kn {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+.explore-station-count {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+}
+
+.no-places {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.no-places i { margin-bottom: 0.5rem; }
+
+/* Place Card */
+.place-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.place-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+}
+
+.place-card:active { transform: scale(0.98); }
+
+.place-card-content { flex-grow: 1; min-width: 0; }
+
+.place-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.place-name-kn {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+}
+
+.place-type {
+    font-size: 0.65rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.2rem;
+}
+
+.place-distance {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.place-distance span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Place Detail */
+.place-detail-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.place-detail-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.place-detail-kn {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+.place-detail-type {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--accent-color);
+    border-radius: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.place-detail-body {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.place-detail-desc {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.place-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.place-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-card-hover);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
+
+.place-info-item i {
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.maps-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--accent-color);
+    color: white;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.maps-link-btn:hover {
+    background: var(--accent-hover);
+}
+
+/* ─── Light Mode Overrides ─── */
+body.light-mode .section-view { background: var(--bg-color); }
+body.light-mode .station-card-name,
+body.light-mode .station-detail-name,
+body.light-mode .timing-line-name,
+body.light-mode .safety-name,
+body.light-mode .explore-card-name,
+body.light-mode .place-name,
+body.light-mode .place-detail-name,
+body.light-mode .place-detail-desc,
+body.light-mode .detail-section-title,
+body.light-mode .travel-info-value,
+body.light-mode .timing-value,
+body.light-mode .timing-day-label,
+body.light-mode .facility-chip,
+body.light-mode .connectivity-item,
+body.light-mode .place-info-item,
+body.light-mode .section-title {
+    color: #0F172A !important;
+}
+
+body.light-mode .explore-station-name {
+    color: #0F172A !important;
+}
+
+body.light-mode .station-type-badge.elevated {
+    background: rgba(79, 70, 229, 0.08);
+    color: #4F46E5;
+}
+
+body.light-mode .station-type-badge.underground {
+    background: rgba(34, 197, 94, 0.08);
+    color: #16A34A;
+}

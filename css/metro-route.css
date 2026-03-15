@@ -98,7 +98,7 @@
     top: -2px;
     background-color: var(--bg-color);
     border-width: 4px;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px var(--border-subtle);
     /* Subtle ring */
 }
 
@@ -109,7 +109,7 @@
     left: -4px;
     top: -4px;
     border-width: 4px;
-    background-color: #fff;
+    background-color: var(--bg-card);
     /* Default interchange */
     z-index: 20;
 }
@@ -214,7 +214,7 @@
 
 .interchange-meta {
     font-size: 0.75rem;
-    color: #64748B;
+    color: var(--text-secondary);
     /* Slate 500 */
     margin-top: 2px;
     margin-left: 1.35rem;
@@ -228,16 +228,16 @@
 @keyframes pulse {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        box-shadow: 0 0 0 0 var(--border-subtle);
     }
 
     50% {
         transform: scale(1.2);
-        box-shadow: 0 0 5px 10px rgba(255, 255, 255, 0);
+        box-shadow: 0 0 5px 10px transparent;
     }
 
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        box-shadow: 0 0 0 0 transparent;
     }
-}
+}

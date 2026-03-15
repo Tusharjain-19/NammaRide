@@ -53,7 +53,7 @@ export class CustomDropdown {
                 <div class="dropdown-trigger" id="trigger-${this.container.id}" tabindex="0">
                     <span class="flex items-center">
                         <span class="trigger-dots" id="dots-${this.container.id}"></span>
-                        <span id="selected-${this.container.id}">${this.placeholder}</span>
+                        <span id="selected-${this.container.id}" class="text-primary font-medium">${this.placeholder}</span>
                     </span>
                     <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                 </div>
@@ -125,8 +125,8 @@ export class CustomDropdown {
         if (station) {
             this.selectedValue = station.id;
             const displayName = window.T_STATION ? window.T_STATION(station.name) : station.name;
-            document.getElementById(`selected-${this.container.id}`).textContent = displayName;
-            document.getElementById(`selected-${this.container.id}`).className = "text-white font-medium";
+            document.getElementById(`selected-${this.container.id}`).innerHTML = displayName;
+            document.getElementById(`selected-${this.container.id}`).className = "text-primary font-medium";
 
             // Update trigger dots
             const dotsContainer = document.getElementById(`dots-${this.container.id}`);

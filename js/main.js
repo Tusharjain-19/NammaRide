@@ -1,16 +1,66 @@
 import { metroData, translations, stationTranslations, lineNameMap } from './data/stations.js';
+import { stationsMeta } from './data/stationsMeta.js';
 import { CustomDropdown } from './ui/dropdown.js';
 import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
 import { calculateFare } from './logic/pricing.js';
+import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 
 // --- App Configuration & State ---
 export const CONFIG = { INTERCHANGE_TIME_MINUTES: 5, AVERAGE_SPEED_KMPH: 35 };
 let currentLang = localStorage.getItem('appLang') || 'en';
 let startDropdown, endDropdown;
 let currentJourney = null;
+let activeView = 'plan';
 
 // Tracks the status of the live journey simulation
 const simulationState = { isActive: false, journeyId: null, startTime: null, lastLocationUpdateTime: 0, locationWatcherId: null, timeline: [], animationFrameId: null, lastStationIndex: -1 };
+
+// --- Theme Management ---
+function getLineColor(lineName) {
+    if (lineName === 'Purple Line') return '#8B5CF6';
+    if (lineName === 'Green Line') return '#22C55E';
+    if (lineName === 'Yellow Line') return '#FBBF24';
+    return '#6366F1';
+}
+
+function initTheme() {
+    const theme = localStorage.getItem('appTheme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    applyTheme(theme);
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    });
+}
+
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-mode');
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+    } else {
+        document.body.classList.remove('light-mode');
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+    }
+    localStorage.setItem('appTheme', theme);
+
+    // Update theme toggle icons
+    const darkIcon = document.querySelector('.dark-icon');
+    const lightIcon = document.querySelector('.light-icon');
+    if (darkIcon && lightIcon) {
+        if (theme === 'light') {
+            darkIcon.classList.add('hidden');
+            lightIcon.classList.remove('hidden');
+        } else {
+            darkIcon.classList.remove('hidden');
+            lightIcon.classList.add('hidden');
+        }
+    }
+
+    if (window.lucide) window.lucide.createIcons();
+}
 
 // Cache for station lookup and routing graph
 const precomputedData = { stations: {}, graph: {} };
@@ -27,6 +77,37 @@ export function formatTime(date) { return date.toLocaleTimeString('en-US', { hou
 window.T_STATION = T_STATION;
 window.CONFIG = CONFIG;
 
+// --- Navigation Helpers for Sections ---
+window.showStationDetail = function(stationId) {
+    const container = document.getElementById('stations-view');
+    renderStationDetail(container, stationId);
+    container.scrollTop = 0;
+};
+
+window.showStationsList = function() {
+    const container = document.getElementById('stations-view');
+    renderStationsList(container);
+    container.scrollTop = 0;
+};
+
+window.showExplore = function() {
+    const container = document.getElementById('explore-view');
+    renderExplore(container);
+    container.scrollTop = 0;
+};
+
+window.showExploreStation = function(stationName) {
+    const container = document.getElementById('explore-view');
+    renderExploreStation(container, stationName);
+    container.scrollTop = 0;
+};
+
+window.showPlaceDetail = function(stationName, placeId) {
+    const container = document.getElementById('explore-view');
+    renderPlaceDetail(container, stationName, placeId);
+    container.scrollTop = 0;
+};
+
 // --- Core Logic ---
 
 function setLanguage(lang) {
@@ -37,38 +118,39 @@ function setLanguage(lang) {
         const key = elem.getAttribute('data-lang-key');
         if (translations[lang][key]) {
             if (elem.tagName === 'INPUT' && elem.getAttribute('placeholder')) elem.setAttribute('placeholder', translations[lang][key]);
-            else elem.innerText = translations[lang][key];
+            else elem.innerHTML = translations[lang][key];
         }
     });
 
     if (startDropdown) startDropdown.refreshTranslations();
     if (endDropdown) endDropdown.refreshTranslations();
 
+    // Refresh active section view
+    refreshActiveView();
+
     // Refresh journey view if active
     if (currentJourney) {
         displayJourneyResult(currentJourney);
 
-        // If in map view/simulation mode, refresh that too
         if (simulationState.isActive) {
             renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
 
-            // Refresh Header
             const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
             const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
             const totalMinutes = currentJourney.totalTime ? Math.ceil(currentJourney.totalTime / 60) : 0;
 
             const simStatus = document.getElementById('simulation-status');
             simStatus.innerHTML = `
-                <div class="w-full flex justify-between items-start bg-slate-900/50 p-1 -mx-1 rounded-lg">
+                <div class="w-full flex justify-between items-start bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm">
                     <div class="flex flex-col gap-0.5">
-                        <p class="font-bold text-white text-sm flex items-center gap-2">
+                        <p class="font-bold text-primary text-sm flex items-center gap-2">
                             <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400"></i>
                             ${T('liveJourney') || 'Live Journey'}
                         </p>
-                        <p class="text-xs text-gray-200 font-medium">${T('towards')} ${destinationName}</p>
-                        <p class="text-[10px] text-gray-500">${totalMinutes} ${T('minRemaining')}</p>
+                        <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
+                        <p class="text-[10px] text-secondary opacity-70">${totalMinutes} ${T('minRemaining')}</p>
                     </div>
-                    <button id="exit-journey-btn" class="bg-slate-800 border border-slate-700 text-gray-400 font-medium px-3 py-1.5 rounded-md text-xs hover:bg-slate-700 hover:text-white transition-colors mt-0.5">${T('exitJourney')}</button>
+                    <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-indigo-400 transition-colors mt-0.5">${T('exitJourney')}</button>
                 </div>`;
             document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
             if (window.lucide) window.lucide.createIcons();
@@ -76,32 +158,34 @@ function setLanguage(lang) {
     }
 }
 
+function refreshActiveView() {
+    if (activeView === 'stations') renderStationsList(document.getElementById('stations-view'));
+    else if (activeView === 'timings') renderTimings(document.getElementById('timings-view'));
+    else if (activeView === 'safety') renderSafety(document.getElementById('safety-view'));
+    else if (activeView === 'explore') renderExplore(document.getElementById('explore-view'));
+}
+
 function precomputeJourneyData() {
     Object.keys(metroData).forEach(lineKey => {
         const line = metroData[lineKey];
         line.stations.forEach((station, index) => {
-            // Save station info with its line color and index for easy access later
             precomputedData.stations[station.id] = { ...station, lineKey, color: line.color, lineName: line.name, index };
             if (!precomputedData.graph[station.id]) precomputedData.graph[station.id] = [];
 
-            // Add connection to the Previous station
             if (index > 0) {
                 const prev = line.stations[index - 1];
                 precomputedData.graph[station.id].push({ node: prev.id, weight: prev.timeToNext, distance: prev.distanceToNext, line: lineKey });
             }
-            // Add connection to the Next station
             if (index < line.stations.length - 1) {
                 const next = line.stations[index + 1];
                 precomputedData.graph[station.id].push({ node: next.id, weight: station.timeToNext, distance: station.distanceToNext, line: lineKey });
             }
 
-            // Handle Interchanges (connecting lines)
             if (station.interchangeId) {
                 Object.keys(metroData).forEach(otherLineKey => {
                     if (otherLineKey !== lineKey) {
                         const match = metroData[otherLineKey].stations.find(s => s.interchangeId === station.interchangeId);
                         if (match) {
-                            // Add a "virtual" walking edge between the two platforms
                             precomputedData.graph[station.id].push({ node: match.id, weight: CONFIG.INTERCHANGE_TIME_MINUTES * 60, distance: 0, line: 'interchange' });
                         }
                     }
@@ -112,7 +196,6 @@ function precomputeJourneyData() {
 }
 
 function calculateJourney(startId, endId) {
-    // We use Dijkstra's Algorithm to find the fastest path
     const distances = {}; const previous = {}; const queue = [];
     Object.keys(precomputedData.stations).forEach(id => { distances[id] = Infinity; });
     distances[startId] = 0;
@@ -137,7 +220,6 @@ function calculateJourney(startId, endId) {
 
     if (distances[endId] === Infinity) return null;
 
-    // Reconstruct path
     const path = []; let curr = endId;
     let totalDistanceKm = 0;
     while (curr) {
@@ -145,12 +227,9 @@ function calculateJourney(startId, endId) {
         if (previous[curr]) {
             totalDistanceKm += (previous[curr].distance || 0);
             curr = previous[curr] ? previous[curr].id : null;
-        } else {
-            curr = null;
-        }
+        } else { curr = null; }
     }
 
-    // Build Journey Object
     const parts = [];
     let currentPart = null;
 
@@ -161,82 +240,49 @@ function calculateJourney(startId, endId) {
 
         let lineOfTravel = null;
         if (nextStationId) {
-            // Find edge to get line
             const edge = precomputedData.graph[stationId].find(e => e.node === nextStationId);
             lineOfTravel = edge ? edge.line : stationData.lineKey;
         } else if (currentPart) {
-            lineOfTravel = currentPart.stations[0].lineKey; // Last station inherits previous line
+            lineOfTravel = currentPart.stations[0].lineKey;
         }
 
-        // Handle interchange edge (virtual walk)
         if (lineOfTravel === 'interchange') {
-            // Finish current part
-            if (currentPart) {
-                currentPart.stations.push(stationData);
-                // Don't add 'interchange' station to new part yet, the NEXT loop iteration will act as start of new part
-            }
+            if (currentPart) { currentPart.stations.push(stationData); }
             continue;
         }
 
         if (!currentPart || currentPart.stations[0].lineKey !== lineOfTravel) {
-            // Start new part
-            // If checking previous part ended, current node is start of new part
-            // But if we just walked interchange, this node is start.
-
-            // Heuristic for direction
-            let direction = 'forward'; // Default
+            let direction = 'forward';
             if (nextStationId) {
                 const currentIdx = stationData.index;
                 const nextData = precomputedData.stations[nextStationId];
                 if (nextData && nextData.lineKey === lineOfTravel && nextData.index < currentIdx) direction = 'backward';
             }
-
-            // Get platforms
             const platform = (stationData.platforms) ? (stationData.platforms[direction] || 1) : 1;
-
-            // Determine journey direction name (Terminal station of line in that direction)
             let termName = "Terminus";
             if (metroData[lineOfTravel]) {
                 const lineStns = metroData[lineOfTravel].stations;
                 termName = direction === 'forward' ? lineStns[lineStns.length - 1].name : lineStns[0].name;
             }
-
-            currentPart = {
-                stations: [stationData],
-                totalTime: 0,
-                startPlatform: platform,
-                journeyDirectionName: T_STATION(termName)
-            };
+            currentPart = { stations: [stationData], totalTime: 0, startPlatform: platform, journeyDirectionName: T_STATION(termName) };
             parts.push(currentPart);
         } else {
             currentPart.stations.push(stationData);
         }
     }
 
-    // Calculate Fare using strict Distance Slabs logic
     const departureTime = getDepartureTime();
     const fareDetails = calculateFare(totalDistanceKm, departureTime, 'TOKEN');
 
     return {
-        id: `${startId}-${endId}`,
-        parts: parts,
-        totalTime: distances[endId],
-        fare: fareDetails.finalFare,
-        baseFare: fareDetails.baseFare,
-        distanceKm: totalDistanceKm.toFixed(2),
-        fareDetails: fareDetails,
-        departureTime: departureTime
+        id: `${startId}-${endId}`, parts: parts, totalTime: distances[endId],
+        fare: fareDetails.finalFare, baseFare: fareDetails.baseFare,
+        distanceKm: totalDistanceKm.toFixed(2), fareDetails: fareDetails, departureTime: departureTime
     };
 }
 
-
-
-// Deprecated: Old time-based calculation removed.
-// function calculateFare(activeTimeSeconds) { ... }
-
 function getDepartureTime() {
     const now = new Date();
-    // Round to next 5 min
     const coeff = 1000 * 60 * 5;
     return new Date(Math.ceil(now.getTime() / coeff) * coeff);
 }
@@ -248,13 +294,12 @@ function displayJourneyResult(journey) {
 
     if (!journey) {
         summaryText.textContent = T('selectStationsHint');
-        summaryText.className = "text-center text-sm text-gray-400";
+        summaryText.className = "text-center text-sm text-secondary";
         boardBtn.classList.add('hidden');
         return;
     }
 
     currentJourney = journey;
-
     summaryText.className = "text-left";
     let formattedTime = Math.ceil(journey.totalTime / 60) + " " + T('minutes');
     if (journey.totalTime > 3600) {
@@ -266,34 +311,52 @@ function displayJourneyResult(journey) {
     summaryText.innerHTML = `
         <div class="flex justify-between items-end mb-2">
             <div>
-                <p class="text-xs text-gray-400 uppercase tracking-wide font-bold">${T('totalTime')}</p>
-                <p class="text-2xl font-bold text-white">${formattedTime}</p>
+                <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
+                <p class="text-2xl font-bold text-primary">${formattedTime}</p>
             </div>
             <div class="text-right">
-                <p class="text-xs text-gray-400 uppercase tracking-wide font-bold">${T('estFare')}</p>
+                <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
                 <p class="text-2xl font-bold text-green-400">₹${journey.fare}</p>
             </div>
         </div>
-        <div class="flex items-center gap-2 text-xs text-indigo-300 bg-indigo-900/30 p-2 rounded border border-indigo-500/30">
+        <div class="flex items-center gap-2 text-xs text-[var(--accent-color)] bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
             <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-            <span>${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
+            <span class="font-medium">${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
         </div>
     `;
 
     boardBtn.classList.remove('hidden');
-
-    // Auto-scroll to summary on mobile
     if (window.innerWidth < 640) {
         boardBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-
     if (window.lucide) window.lucide.createIcons();
 }
 
 function switchView(viewId) {
-    document.getElementById('planner-view').classList.add('hidden');
-    document.getElementById('map-view').classList.add('hidden');
-    document.getElementById(viewId).classList.remove('hidden');
+    // Hide all views
+    const allViews = ['planner-view', 'map-view', 'stations-view', 'timings-view', 'explore-view', 'safety-view'];
+    allViews.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = 'none';
+            el.classList.add('hidden');
+        }
+    });
+
+    const target = document.getElementById(viewId);
+    if (target) {
+        target.style.display = 'flex';
+        target.style.flexDirection = 'column';
+        target.classList.remove('hidden');
+    }
+
+    // Hide bottom nav during simulation
+    const bottomNav = document.getElementById('bottom-nav');
+    if (viewId === 'map-view') {
+        bottomNav.style.display = 'none';
+    } else {
+        bottomNav.style.display = 'flex';
+    }
 
     if (viewId === 'planner-view') {
         simulationState.isActive = false;
@@ -301,85 +364,99 @@ function switchView(viewId) {
     }
 }
 
-// --- Simulation Logic ---
+// --- Bottom Navigation ---
+function initBottomNav() {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const view = item.dataset.view;
+            navigateToView(view);
+        });
+    });
+}
 
+function navigateToView(view) {
+    activeView = view;
+
+    // Update active nav state
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const activeBtn = document.querySelector(`.nav-item[data-view="${view}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Show the correct view
+    if (view === 'plan') {
+        switchView('planner-view');
+    } else if (view === 'stations') {
+        switchView('stations-view');
+        renderStationsList(document.getElementById('stations-view'));
+    } else if (view === 'timings') {
+        switchView('timings-view');
+        renderTimings(document.getElementById('timings-view'));
+    } else if (view === 'explore') {
+        switchView('explore-view');
+        renderExplore(document.getElementById('explore-view'));
+    } else if (view === 'safety') {
+        switchView('safety-view');
+        renderSafety(document.getElementById('safety-view'));
+    }
+}
+
+// --- Simulation Logic ---
 function generateTimeline(journey) {
-    // Convert parts to linear timeline
     const timeline = [];
-    let currentTime = 0; // seconds from start
+    let currentTime = 0;
 
     journey.parts.forEach(part => {
         part.stations.forEach((s, i) => {
-            // departureTime = arrival + dwell
             const isLast = i === part.stations.length - 1;
-
-            // Time to next?
             let travelTime = 0;
             if (!isLast) {
                 const nextS = part.stations[i + 1];
-                // find edge
-                const weight = Math.abs(nextS.timeToNext || 90); // default
+                const weight = Math.abs(nextS.timeToNext || 90);
                 travelTime = weight;
             }
-
             timeline.push({
-                stationId: s.id,
-                stationName: T_STATION(s.name),
-                arrivalTime: currentTime,
-                departureTime: currentTime + 30, // 30s dwell
-                color: s.color,
-                lat: s.lat,
-                lon: s.lon
+                stationId: s.id, stationName: T_STATION(s.name),
+                arrivalTime: currentTime, departureTime: currentTime + 30,
+                color: s.color, lat: s.lat, lon: s.lon
             });
-
             currentTime += (travelTime + 30);
         });
-
-        // Add interchange walking time if not last part
         currentTime += (CONFIG.INTERCHANGE_TIME_MINUTES * 60);
     });
     return timeline;
 }
 
-// Live tracking algorithm removed. Static view only.
-
 function startSimulation(journey, useLiveLocation, startTimeOverride) {
     if (!journey) return;
     switchView('map-view');
 
-    // Set state primarily for navigation/back-button logic, but no active tracking
     simulationState.isActive = true;
     simulationState.journeyId = journey.id;
-    // No timeline generation needed for static view unless used for simulation, 
-    // but renderLiveRoute needs structure. We keep data, but stop "live" updates.
     simulationState.timeline = generateTimeline(journey);
 
     sessionStorage.setItem('activeJourney', JSON.stringify(journey));
 
-    // Render the static route list
     renderLiveRoute(journey, document.getElementById('route-list'), simulationState);
 
-    // Static Header
-    // Get destination from the last station of the last part
     const lastPart = journey.parts[journey.parts.length - 1];
     const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
     const totalMinutes = journey.totalTime ? Math.ceil(journey.totalTime / 60) : 0;
 
     const simStatus = document.getElementById('simulation-status');
     simStatus.innerHTML = `
-        <div class="w-full flex justify-between items-start bg-slate-900/50 p-1 -mx-1 rounded-lg">
+        <div class="w-full flex justify-between items-start bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm my-2">
             <div class="flex flex-col gap-0.5">
-                <p class="font-bold text-white text-sm flex items-center gap-2">
+                <p class="font-bold text-primary text-sm flex items-center gap-2">
                     <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400"></i>
                     ${T('liveJourney') || 'Live Journey'}
                 </p>
-                <p class="text-xs text-gray-200 font-medium">${T('towards')} ${destinationName}</p>
-                <p class="text-[10px] text-gray-500">${totalMinutes} ${T('minRemaining')}</p>
+                <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
+                <p class="text-[10px] text-secondary opacity-70">${totalMinutes} ${T('minRemaining')}</p>
             </div>
-            <button id="exit-journey-btn" class="bg-slate-800 border border-slate-700 text-gray-400 font-medium px-3 py-1.5 rounded-md text-xs hover:bg-slate-700 hover:text-white transition-colors mt-0.5">${T('exitJourney')}</button>
+            <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-indigo-400 transition-colors mt-0.5">${T('exitJourney')}</button>
         </div>`;
     document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
-
     if (window.lucide) window.lucide.createIcons();
 }
 
@@ -389,7 +466,7 @@ function stopSimulation() {
     if (simulationState.locationWatcherId) navigator.geolocation.clearWatch(simulationState.locationWatcherId);
     sessionStorage.removeItem('activeJourney');
     sessionStorage.removeItem('simulationState');
-    switchView('planner-view');
+    navigateToView('plan');
 }
 
 function handleJourneyUpdate() {
@@ -401,7 +478,20 @@ function handleJourneyUpdate() {
     }
 }
 
+// Calculate distance between two coordinates in km
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
 function initializeApp() {
+    // Initialize sections module with translation helpers
+    initSections(() => currentLang, T, T_STATION);
+
     startDropdown = new CustomDropdown('start-station-dropdown', 'Select Start Station', 'start', (val) => {
         document.getElementById('start-station').value = val;
         handleJourneyUpdate();
@@ -429,8 +519,122 @@ function initializeApp() {
     });
 
     document.getElementById('board-train-btn').addEventListener('click', () => {
-        if (currentJourney) startSimulation(currentJourney, false); // Simulation mode
+        if (currentJourney) startSimulation(currentJourney, false);
     });
+
+    const findNearestBtn = document.getElementById('find-nearest-btn');
+    if (findNearestBtn) {
+        findNearestBtn.addEventListener('click', () => {
+            const subtitleEl = document.getElementById('find-nearest-subtitle');
+            const iconWrap = findNearestBtn.querySelector('.w-12.h-12');
+            const iconSvg = findNearestBtn.querySelector('svg');
+            const originalText = subtitleEl ? subtitleEl.innerText : '';
+            
+            if (subtitleEl) subtitleEl.innerText = T('findingNearest') || 'Locating you...';
+            if (iconWrap) iconWrap.classList.add('animate-pulse', 'ring-4', 'ring-indigo-500/30');
+            if (iconSvg) iconSvg.classList.add('animate-bounce');
+            
+            if (navigator.geolocation) {
+                // High accuracy can be slow, but it's "best"
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
+                        if (iconSvg) iconSvg.classList.remove('animate-bounce');
+                        
+                        const { latitude, longitude } = position.coords;
+                        
+                        let nearest = null;
+                        let minDistance = Infinity;
+                        
+                        stationsMeta.forEach(station => {
+                            // FIX: Access nested location property
+                            const loc = station.location || station; 
+                            if (loc.lat && loc.lon) {
+                                const dist = getDistanceFromLatLonInKm(latitude, longitude, loc.lat, loc.lon);
+                                if (dist < minDistance) {
+                                    minDistance = dist;
+                                    nearest = station;
+                                }
+                            }
+                        });
+                        
+                        if (nearest) {
+                            startDropdown.selectById(nearest.id);
+                            const translatedName = T_STATION(nearest.name);
+                            const distStr = minDistance < 1 ? `${(minDistance * 1000).toFixed(0)}m` : `${minDistance.toFixed(1)}km`;
+                            
+                            if (subtitleEl) subtitleEl.innerText = `At ${translatedName} (${distStr})`;
+                            setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 5000);
+
+                            // Top Toast
+                            const toast = document.getElementById('nearest-toast');
+                            const toastText = document.getElementById('nearest-toast-text');
+                            if (toast && toastText) {
+                                toastText.innerHTML = `<span class="text-indigo-400 font-bold">Nearest:</span> ${translatedName} <span class="opacity-60 text-[11px] ml-1">(${distStr})</span>`;
+                                toast.classList.remove('-translate-y-[150%]', 'opacity-0');
+                                toast.classList.add('translate-y-0', 'opacity-100');
+                                setTimeout(() => {
+                                    toast.classList.remove('translate-y-0', 'opacity-100');
+                                    toast.classList.add('-translate-y-[150%]', 'opacity-0');
+                                }, 4000);
+                            }
+
+                            // Modal
+                            const modal = document.getElementById('nearest-modal');
+                            const modalContent = document.getElementById('nearest-modal-content');
+                            if (modal && modalContent) {
+                                const stationNameEl = document.getElementById('nearest-modal-station-name');
+                                const distanceEl = document.getElementById('nearest-modal-distance');
+                                const lineBadge = `<span class="inline-block w-2.5 h-2.5 rounded-full mr-2" style="background:${getLineColor(nearest.line)}"></span>`;
+                                
+                                if (stationNameEl) stationNameEl.innerHTML = `${lineBadge}${translatedName}`;
+                                if (distanceEl) distanceEl.innerText = `~${distStr} away • ${nearest.line}`;
+                                
+                                modal.classList.remove('opacity-0', 'pointer-events-none');
+                                modalContent.classList.remove('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
+                                modalContent.classList.add('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
+
+                                const closeModal = () => {
+                                    modal.classList.add('opacity-0', 'pointer-events-none');
+                                    modalContent.classList.remove('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
+                                    modalContent.classList.add('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
+                                };
+
+                                document.getElementById('nearest-modal-close').onclick = closeModal;
+                                document.getElementById('nearest-modal-cancel').onclick = closeModal;
+                                document.getElementById('nearest-modal-maps').onclick = () => {
+                                    const loc = nearest.location || nearest;
+                                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lon}`, '_blank');
+                                    closeModal();
+                                };
+                                if (window.lucide) window.lucide.createIcons();
+                            }
+                        }
+                    },
+                    (error) => {
+                        console.error('Geolocation Error:', error);
+                        if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
+                        if (iconSvg) iconSvg.classList.remove('animate-bounce');
+                        
+                        let errorMsg = 'Location access denied.';
+                        if (error.code === 3) errorMsg = 'GPS Timeout. Try again.';
+                        else if (error.code === 2) errorMsg = 'Position unavailable.';
+                        
+                        if (subtitleEl) subtitleEl.innerText = errorMsg;
+                        setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 3500);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            } else {
+                if (iconWrap) iconWrap.classList.remove('animate-pulse', 'bg-indigo-500/30');
+                if (subtitleEl) subtitleEl.innerText = 'GPS not supported.';
+                setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 3000);
+            }
+        });
+    }
+
+    // Init bottom nav
+    initBottomNav();
 
     // Restore state
     const savedJourneyJSON = sessionStorage.getItem('activeJourney');
@@ -453,6 +657,8 @@ function initializeApp() {
     setInterval(() => {
         document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
     }, 1000);
+
+    initTheme();
 
     if (window.lucide) window.lucide.createIcons();
 }
