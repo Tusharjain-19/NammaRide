@@ -75,6 +75,7 @@ export function formatTime(date) { return date.toLocaleTimeString('en-US', { hou
 
 // Allow global access for dropdowns
 window.T_STATION = T_STATION;
+window.T = T;
 window.CONFIG = CONFIG;
 
 // --- Navigation Helpers for Sections ---
@@ -492,12 +493,12 @@ function initializeApp() {
     // Initialize sections module with translation helpers
     initSections(() => currentLang, T, T_STATION);
 
-    startDropdown = new CustomDropdown('start-station-dropdown', 'Select Start Station', 'start', (val) => {
+    startDropdown = new CustomDropdown('start-station-dropdown', 'enterStart', 'start', (val) => {
         document.getElementById('start-station').value = val;
         handleJourneyUpdate();
     });
 
-    endDropdown = new CustomDropdown('end-station-dropdown', 'Select Destination', 'end', (val) => {
+    endDropdown = new CustomDropdown('end-station-dropdown', 'enterEnd', 'end', (val) => {
         document.getElementById('end-station').value = val;
         handleJourneyUpdate();
     });

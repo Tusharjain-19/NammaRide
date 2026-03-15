@@ -1,9 +1,9 @@
 import { metroData, translations, stationTranslations } from '../data/stations.js';
 
 export class CustomDropdown {
-    constructor(containerId, placeholder, type, onChangeCallback) {
+    constructor(containerId, placeholderKey, type, onChangeCallback) {
         this.container = document.getElementById(containerId);
-        this.placeholder = placeholder;
+        this.placeholderKey = placeholderKey;
         this.type = type; // "start" or "end"
         this.onChange = onChangeCallback;
         this.stations = [];
@@ -48,18 +48,21 @@ export class CustomDropdown {
     }
 
     render() {
+        const placeholder = window.T ? window.T(this.placeholderKey) : this.placeholderKey;
         this.container.innerHTML = `
-            <div class="custom-dropdown">
-                <div class="dropdown-trigger" id="trigger-${this.container.id}" tabindex="0">
-                    <span class="flex items-center">
-                        <span class="trigger-dots" id="dots-${this.container.id}"></span>
-                        <span id="selected-${this.container.id}" class="text-primary font-medium">${this.placeholder}</span>
+            <div class="custom-dropdown border border-subtle bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div class="dropdown-trigger flex items-center justify-between px-4 py-3 cursor-pointer" id="trigger-${this.container.id}" tabindex="0">
+                    <span class="flex items-center gap-3">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-accent-color opacity-80"></i>
+                        <span class="trigger-dots hidden" id="dots-${this.container.id}"></span>
+                        <span id="selected-${this.container.id}" class="text-primary font-medium text-sm">${placeholder}</span>
                     </span>
-                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-secondary opacity-50"></i>
                 </div>
                 <div class="dropdown-menu custom-scrollbar" id="menu-${this.container.id}">
-                    <div class="search-container">
-                        <input type="text" class="search-input" placeholder="Search station..." id="search-${this.container.id}">
+                    <div class="search-container p-3 border-b border-subtle">
+                        <input type="text" class="search-input w-full bg-input border border-subtle rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-color/20" 
+                               placeholder="${window.T ? window.T('navPlan') + '...' : 'Search station...'}" id="search-${this.container.id}">
                     </div>
                     <div class="station-list" id="list-${this.container.id}">
                         <!-- Options injected here -->
@@ -130,12 +133,15 @@ export class CustomDropdown {
 
             // Update trigger dots
             const dotsContainer = document.getElementById(`dots-${this.container.id}`);
+            dotsContainer.classList.remove('hidden');
             dotsContainer.innerHTML = station.lines.map(color =>
                 `<span class="trigger-dot" style="background-color: ${color}"></span>`
             ).join('');
 
             // Highlight in list if open
             this.renderOptions();
+
+            if (window.lucide) window.lucide.createIcons();
 
             this.close();
             if (this.onChange) this.onChange(station.id);
@@ -178,9 +184,22 @@ export class CustomDropdown {
     }
 
     refreshTranslations() {
-        // Update selected text
-        if (this.selectedValue) this.select(this.selectedValue);
-        // Refresh options if open
+        // Update selected text if no selection made yet
+        if (!this.selectedValue) {
+            const placeholder = window.T ? window.T(this.placeholderKey) : this.placeholderKey;
+            document.getElementById(`selected-${this.container.id}`).innerText = placeholder;
+        } else {
+            // Update selected station name to new language
+            this.select(this.selectedValue);
+        }
+        
+        // Update search placeholder
+        const searchInput = document.getElementById(`search-${this.container.id}`);
+        if (searchInput) {
+            searchInput.placeholder = window.T ? window.T('navPlan') + '...' : 'Search station...';
+        }
+
+        // Refresh options inside list
         this.renderOptions();
     }
 

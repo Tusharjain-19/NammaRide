@@ -101,6 +101,8 @@ export const metroData = {
 export const translations = {
     en: {
         appName: "NammaRide", planYourTrip: "Where to go today?", selectStationsHint: "Select stations to see the fastest route.", startLiveJourney: "Start Live Journey",
+        enterStart: "Enter starting station", enterEnd: "Where are you going?",
+        iamAt: "I am at...", locateNavigate: "Find nearest station & navigate",
         disclaimer: "Disclaimer: Timings and fare are estimates, please confirm at stations.",
         nextTrain: "Next Train", totalTime: "Total Time", estFare: "Est. Fare", minutes: "min", now: "Now",
         hr: "hr", route: "Route", interchange: "Interchange", stops: "Stop(s)",
@@ -139,6 +141,8 @@ export const translations = {
     },
     hi: {
         appName: "NammaRide", planYourTrip: "आज कहाँ जाना है?", selectStationsHint: "सबसे तेज़ रूट देखने के लिए स्टेशन चुनें।", startLiveJourney: "लाइव यात्रा शुरू करें",
+        enterStart: "प्रारंभिक स्टेशन दर्ज करें", enterEnd: "आप कहाँ जा रहे हैं?",
+        iamAt: "मैं यहाँ हूँ...", locateNavigate: "निकटतम स्टेशन खोजें और नेविगेट करें",
         disclaimer: "अस्वीकरण: समय और किराया अनुमानित हैं, कृपया स्टेशनों पर पुष्टि करें।",
         nextTrain: "अगली ट्रेन", totalTime: "कुल समय", estFare: "अनुमानित किराया", minutes: "मिनट", now: "अभी",
         hr: "घंटा", route: "रूट", interchange: "इंटरचेंज", stops: "स्टॉप",
@@ -173,6 +177,8 @@ export const translations = {
     },
     kn: {
         appName: "NammaRide", planYourTrip: "ಇಂದು ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು?", selectStationsHint: "ವೇಗದ ಮಾರ್ಗವನ್ನು ನೋಡಲು ನಿಲ್ದಾಣಗಳನ್ನು ಆರಿಸಿ.", startLiveJourney: "ಲೈವ್ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ",
+        enterStart: "ಪ್ರಾರಂಭಿಕ ನಿಲ್ದಾಣವನ್ನು ನಮೂದಿಸಿ", enterEnd: "ನೀವು ಎಲ್ಲಿಗೆ ಹೋಗುತ್ತಿದ್ದೀರಿ?",
+        iamAt: "ನಾನು ಇಲ್ಲಿದ್ದೇನೆ...", locateNavigate: "ಹತ್ತಿರದ ನಿಲ್ದಾಣವನ್ನು ಹುಡುಕಿ ಮತ್ತು ನ್ಯಾವಿಗೇಟ್ ಮಾಡಿ",
         disclaimer: "ಹಕ್ಕುತ್ಯಾಗ: ಸಮಯ ಮತ್ತು ದರ ಅಂದಾಜು, ದಯವಿಟ್ಟು ನಿಲ್ದಾಣಗಳಲ್ಲಿ ದೃಢೀಕರಿಸಿ.",
         nextTrain: "ಮುಂದಿನ ರೈಲು", totalTime: "ಒಟ್ಟು ಸಮಯ", estFare: "ಅಂದಾಜು ದರ", minutes: "ನಿಮಿಷ", now: "ಈಗ",
         hr: "ಗಂಟೆ", route: "ಮಾರ್ಗ", interchange: "ಇಂಟರ್ಚೇಂಜ್", stops: "ನಿಲುಗಡೆಗಳು",
