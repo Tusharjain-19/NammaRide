@@ -1,5 +1,4 @@
 import { metroData, translations, stationTranslations } from '../data/stations.js';
-import { T, T_STATION } from '../utils/helpers.js';
 
 export class CustomDropdown {
     constructor(containerId, placeholderKey, type, onChangeCallback) {
@@ -49,7 +48,7 @@ export class CustomDropdown {
     }
 
     render() {
-        const placeholder = T(this.placeholderKey);
+        const placeholder = window.T ? window.T(this.placeholderKey) : this.placeholderKey;
         this.container.innerHTML = `
             <div class="custom-dropdown border border-subtle bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <div class="dropdown-trigger flex items-center justify-between px-4 py-3 cursor-pointer" id="trigger-${this.container.id}" tabindex="0">
@@ -63,7 +62,7 @@ export class CustomDropdown {
                 <div class="dropdown-menu custom-scrollbar" id="menu-${this.container.id}">
                     <div class="search-container p-3 border-b border-subtle">
                         <input type="text" class="search-input w-full bg-input border border-subtle rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-color/20" 
-                               placeholder="${T('navPlan')}..." id="search-${this.container.id}">
+                               placeholder="${window.T ? window.T('navPlan') + '...' : 'Search station...'}" id="search-${this.container.id}">
                     </div>
                     <div class="station-list" id="list-${this.container.id}">
                         <!-- Options injected here -->
@@ -87,7 +86,7 @@ export class CustomDropdown {
             ).join('');
 
             // Translate name if T func exists, else raw
-            const displayName = T_STATION(station.name);
+            const displayName = window.T_STATION ? window.T_STATION(station.name) : station.name;
             const isSelected = this.selectedValue === station.id ? 'selected' : '';
 
             return `
@@ -128,7 +127,7 @@ export class CustomDropdown {
 
         if (station) {
             this.selectedValue = station.id;
-            const displayName = T_STATION(station.name);
+            const displayName = window.T_STATION ? window.T_STATION(station.name) : station.name;
             document.getElementById(`selected-${this.container.id}`).innerHTML = displayName;
             document.getElementById(`selected-${this.container.id}`).className = "text-primary font-medium";
 
@@ -178,7 +177,7 @@ export class CustomDropdown {
         const lowerQuery = query.toLowerCase();
         this.filteredStations = this.stations.filter(s => {
             const rawName = s.name.toLowerCase();
-            const translatedName = T_STATION(s.name).toLowerCase();
+            const translatedName = window.T_STATION ? window.T_STATION(s.name).toLowerCase() : '';
             return rawName.includes(lowerQuery) || translatedName.includes(lowerQuery);
         });
         this.renderOptions();
@@ -187,7 +186,7 @@ export class CustomDropdown {
     refreshTranslations() {
         // Update selected text if no selection made yet
         if (!this.selectedValue) {
-            const placeholder = T(this.placeholderKey);
+            const placeholder = window.T ? window.T(this.placeholderKey) : this.placeholderKey;
             document.getElementById(`selected-${this.container.id}`).innerText = placeholder;
         } else {
             // Update selected station name to new language
@@ -197,7 +196,7 @@ export class CustomDropdown {
         // Update search placeholder
         const searchInput = document.getElementById(`search-${this.container.id}`);
         if (searchInput) {
-            searchInput.placeholder = T('navPlan') + '...';
+            searchInput.placeholder = window.T ? window.T('navPlan') + '...' : 'Search station...';
         }
 
         // Refresh options inside list
