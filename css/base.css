@@ -46,7 +46,7 @@ body {
     -webkit-font-smoothing: antialiased;
     transition: background-color var(--transition-speed), color var(--transition-speed);
 
-    background-image: url('../assets/images/vidhana_soudha.jpg');
+    background-image: url('/assets/images/vidhana_soudha.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
