@@ -1,5 +1,4 @@
-import { metroData, translations, stationTranslations } from '../data/stations.js';
-import { T, T_STATION, CONFIG, formatTime } from '../main.js';
+import { T, T_STATION, CONFIG, formatTime } from '../utils/helpers.js';
 
 export function renderLiveRoute(journey, routeListElement, simulationState) {
     let routeHtml = '';
