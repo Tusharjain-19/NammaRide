@@ -184,7 +184,6 @@ function attachStationsEvents(container) {
         });
     });
 }
-}
 
 // ═══════════════════════════════════════
 // STATION DETAIL VIEW

@@ -4,10 +4,10 @@ import { CustomDropdown } from './ui/dropdown.js';
 import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
 import { calculateFare } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
+import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 
-// --- App Configuration & State ---
-export const CONFIG = { INTERCHANGE_TIME_MINUTES: 5, AVERAGE_SPEED_KMPH: 35 };
-let currentLang = localStorage.getItem('appLang') || 'en';
+// --- App State ---
+let currentLang = getCurrentLang();
 let startDropdown, endDropdown;
 let currentJourney = null;
 let activeView = 'plan';
@@ -65,13 +65,7 @@ function applyTheme(theme) {
 // Cache for station lookup and routing graph
 const precomputedData = { stations: {}, graph: {} };
 
-// --- Translation Helpers ---
-export function T(key) { return translations[currentLang][key] || key; }
-export function T_STATION(name) {
-    if (lineNameMap[name]) { const k = lineNameMap[name]; return (stationTranslations[k] && stationTranslations[k][currentLang]) ? stationTranslations[k][currentLang] : name; }
-    return (stationTranslations[name] && stationTranslations[name][currentLang]) ? stationTranslations[name][currentLang] : name;
-}
-export function formatTime(date) { return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }); }
+// --- Translation Helpers (imported from utils/helpers.js) ---
 
 // Allow global access for dropdowns
 window.T_STATION = T_STATION;
@@ -112,8 +106,9 @@ window.showPlaceDetail = function(stationName, placeId) {
 // --- Core Logic ---
 
 function setLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('appLang', lang);
+    if (!translations[lang]) lang = 'en';
+    setCurrentLang(lang);
+    currentLang = getCurrentLang();
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-lang-key]').forEach(elem => {
         const key = elem.getAttribute('data-lang-key');
