@@ -34,7 +34,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "Anytime",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "vivanta_bengaluru_wh",
@@ -88,7 +88,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9940,77.7600",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "whitefield_lake_park",
@@ -160,7 +160,7 @@ export const stationPlaces = {
       "entry_fee": "Free (charity)",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9806,77.7248",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "kadugodi_tree_park",
@@ -252,7 +252,7 @@ export const stationPlaces = {
       "entry_fee": "N/A",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "sri_sathya_sai_hospi",
@@ -270,7 +270,7 @@ export const stationPlaces = {
       "entry_fee": "Varies",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9806,77.7248",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "sri_sathya_sai_super_specialty",
@@ -288,7 +288,7 @@ export const stationPlaces = {
       "entry_fee": "Free (charity)",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9806,77.7248",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "itpl_it_park",
@@ -400,7 +400,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9975,77.6705",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "rmz_infinity",
@@ -474,7 +474,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9910,77.6520",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "baiyappanahalli_satellite_rail",
@@ -492,7 +492,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9912,77.6510",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "ramamurthy_nagar_commercial_ar",
@@ -564,7 +564,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=12.9910,77.6528",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Swami Vivekananda Road": [
@@ -694,7 +694,7 @@ export const stationPlaces = {
       "entry_fee": "N/A",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "100_feet_road_restau",
@@ -838,7 +838,7 @@ export const stationPlaces = {
       "entry_fee": "Paid",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9800,77.6452",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     }
   ],
   "Trinity": [
@@ -1004,7 +1004,7 @@ export const stationPlaces = {
       "entry_fee": "N/A",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "brigade_road",
@@ -1186,7 +1186,7 @@ export const stationPlaces = {
       "entry_fee": "Ticketed",
       "best_time": "Match Days",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1540747913346-19e3adca174f?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/stadium.jpg"
     },
     {
       "id": "m_chinnaswamy_stadiu",
@@ -1534,7 +1534,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9783,77.5694",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "kempegowda_bus_stati",
@@ -1552,7 +1552,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9775,77.5725",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "kempegowda_bus_station__majest",
@@ -1570,7 +1570,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9769,77.5723",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "ksr_bangalore_city_railway_sta",
@@ -1588,7 +1588,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9772,77.5726",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "majestic_cinema_hub",
@@ -1734,7 +1734,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=12.9780,77.5540",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "mysore_road_textile_market",
@@ -1772,7 +1772,7 @@ export const stationPlaces = {
       "entry_fee": "N/A",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "vijayanagar_market",
@@ -1844,7 +1844,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=12.9615,77.5375",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "vijayanagar_4th_stage_market",
@@ -1938,7 +1938,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "Anytime",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "mysuru_road_bus_term",
@@ -1956,7 +1956,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9440,77.5210",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "satellite_bus_station__mysuru_",
@@ -1974,7 +1974,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=12.9445,77.5220",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Sri Balagangadharanatha Swamiji Stn., Hosahalli": [
@@ -2158,7 +2158,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24/7",
       "maps_link": "https://maps.google.com/?q=13.0580,77.4750",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "madavara_lake",
@@ -2212,7 +2212,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=13.0575,77.4730",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Chikkabidarakallu": [
@@ -2250,7 +2250,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "Anytime",
       "maps_link": "https://maps.google.com/?q=13.0530,77.4890",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "mallasandra_fort",
@@ -2434,7 +2434,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=13.0485,77.5005",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "nageswara_temple__na",
@@ -2508,7 +2508,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "jarkabandi_forest",
@@ -2598,7 +2598,7 @@ export const stationPlaces = {
       "entry_fee": "Nominal",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=13.0425,77.5150",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "dasarahalli_fruit___",
@@ -2636,7 +2636,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "bharat_electronics_l",
@@ -2770,7 +2770,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "yeshwanthpur_market",
@@ -3248,7 +3248,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Jayaprakash Nagar": [
@@ -3408,7 +3408,7 @@ export const stationPlaces = {
       "entry_fee": "N/A",
       "best_time": "24/7",
       "maps_link": "https://google.com/maps",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "vega_city",
@@ -3444,7 +3444,7 @@ export const stationPlaces = {
       "entry_fee": "Varies",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9167,77.6001",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     }
   ],
   "BTM Layout": [
@@ -3520,7 +3520,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9110,77.6264",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Electronic City": [
@@ -3594,7 +3594,7 @@ export const stationPlaces = {
       "entry_fee": "Varies",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.8455,77.6720",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     }
   ],
   "Bommasandra": [
@@ -3614,7 +3614,7 @@ export const stationPlaces = {
       "entry_fee": "Varies",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.8200,77.6850",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     }
   ],
   "Ragigudda": [
@@ -3674,7 +3674,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9900,77.7480",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "channasandra_lake",
@@ -3764,7 +3764,7 @@ export const stationPlaces = {
       "entry_fee": "Paid",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9878,77.7450",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     }
   ],
   "Kadugodi Tree Park": [
@@ -3820,7 +3820,7 @@ export const stationPlaces = {
       "entry_fee": "Free (charity)",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9806,77.7248",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "kadugodi_daily_market",
@@ -4022,7 +4022,7 @@ export const stationPlaces = {
       "entry_fee": "Nominal",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9758,77.7165",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "sri_venkateswara_temple__nallu",
@@ -4468,7 +4468,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9760,77.5685",
-      "image": "https://images.unsplash.com/photo-1506501139174-099022df5260?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/train.jpg"
     },
     {
       "id": "shivajinagar_commercial_area",
@@ -4504,7 +4504,7 @@ export const stationPlaces = {
       "entry_fee": "Nominal",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9748,77.5718",
-      "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/hospital.jpg"
     },
     {
       "id": "devaiah_park",
@@ -4732,7 +4732,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9034,77.4878",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "kengeri_ksrtc_bus_station",
@@ -4750,7 +4750,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "5 AM – 11 PM",
       "maps_link": "https://maps.google.com/?q=12.9030,77.4870",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     }
   ],
   "Kengeri": [
@@ -4808,7 +4808,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "24 hours",
       "maps_link": "https://maps.google.com/?q=12.9055,77.4615",
-      "image": "https://images.unsplash.com/photo-1544621424-4b23501ce779?auto=format&fit=crop&q=80&w=800"
+      "image": "assets/images/bus.jpg"
     },
     {
       "id": "challaghatta_lake_pa",
