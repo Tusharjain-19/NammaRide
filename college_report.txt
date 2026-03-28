@@ -1,0 +1,51 @@
+College/University places:
+  Name: Central College Campus
+  Type: University
+  Image: unknown
+
+  Name: Bangalore University (Central College)
+  Type: University
+  Image: unknown
+
+  Name: Maharani's College, Bangalore
+  Type: University
+  Image: unknown
+
+  Name: Bangalore University
+  Type: University
+  Image: unknown
+
+  Name: Bangalore University (Jnana Bharathi Campus)
+  Type: University
+  Image: unknown
+
+  Name: Bangalore University (Jnanabharathi Campus)
+  Type: University
+  Image: unknown
+
+  Name: National College, Basavanagudi
+  Type: College
+  Image: unknown
+
+  Name: BMS College of Engineering (BMSCE)
+  Type: College
+  Image: unknown
+
+  Name: RV College of Engineering
+  Type: University
+  Image: unknown
+
+  Name: RV Road Local Market
+  Type: Market
+  Image: unknown
+
+  Name: Infosys Campus (ECP)
+  Type: IT Hub
+  Image: unknown
+
+  Name: Infosys SEZ Campus
+  Type: IT Hub
+  Image: unknown
+
+
+Places with type College or University: 9

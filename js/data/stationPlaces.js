@@ -1424,7 +1424,7 @@ export const stationPlaces = {
       "entry_fee": "Free (campus access)",
       "best_time": "8 AM - 6 PM",
       "maps_link": "https://maps.google.com/?q=12.9745,77.5835",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/Bangalore University.jpg"
     },
     {
       "id": "bangalore_university__central_",
@@ -1442,7 +1442,7 @@ export const stationPlaces = {
       "entry_fee": "Restricted",
       "best_time": "9 AM – 5 PM (Mon–Sat)",
       "maps_link": "https://maps.google.com/?q=12.9740,77.5820",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/Bangalore University.jpg"
     },
     {
       "id": "visvesvaraya_industrial___tech",
@@ -1918,7 +1918,7 @@ export const stationPlaces = {
       "entry_fee": "Restricted",
       "best_time": "8 AM – 5 PM (Mon–Sat)",
       "maps_link": "https://maps.google.com/?q=12.9205,77.5010",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/Bangalore University.jpg"
     }
   ],
   "Mysuru Road": [
@@ -3058,7 +3058,7 @@ export const stationPlaces = {
       "entry_fee": "Restricted",
       "best_time": "College hours",
       "maps_link": "https://maps.google.com/?q=12.9416,77.5658",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/BMSCE.jpg"
     },
     {
       "id": "bull_temple",
@@ -3192,7 +3192,7 @@ export const stationPlaces = {
       "entry_fee": "Registration Req",
       "best_time": "Semesters",
       "maps_link": "https://google.com/maps",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/RV college.jpg"
     },
     {
       "id": "rv_road_local_market",
