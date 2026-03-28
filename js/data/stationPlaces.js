@@ -1882,7 +1882,7 @@ export const stationPlaces = {
       "entry_fee": "Free",
       "best_time": "Morning",
       "maps_link": "https://google.com/maps",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/Bangalore University.jpg"
     },
     {
       "id": "bangalore_university",
@@ -1900,7 +1900,7 @@ export const stationPlaces = {
       "entry_fee": "Free (campus access)",
       "best_time": "8 AM - 6 PM",
       "maps_link": "https://maps.google.com/?q=12.9215,77.5015",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/Bangalore University.jpg"
     },
     {
       "id": "bangalore_university__jnanabha",
@@ -3040,7 +3040,7 @@ export const stationPlaces = {
       "entry_fee": "Restricted",
       "best_time": "College hours",
       "maps_link": "https://maps.google.com/?q=12.9497,77.5732",
-      "image": "assets/images/temple.jpg"
+      "image": "assets/images/national college.jpg"
     },
     {
       "id": "bms_college_of_engineering",
