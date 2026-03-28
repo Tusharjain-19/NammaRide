@@ -1,5 +1,6 @@
-# Exclude mobile folder as requested
-mobile/
+# Exclude binaries but include screenshots in mobile/
+mobile/*.apk
+mobile/*.aab
 
 # IDE files
 .vscode/
