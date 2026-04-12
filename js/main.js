@@ -654,29 +654,35 @@ function initializeApp() {
         document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
     }, 1000);
 
-    // --- Prevent Pull-to-Refresh JS Fix ---
+    // --- Optimized Prevent Pull-to-Refresh JS Fix ---
     let touchStartYear = 0;
-    document.addEventListener('touchstart', (e) => {
-        touchStartYear = e.touches[0].pageY;
-    }, { passive: false });
-
-    document.addEventListener('touchmove', (e) => {
-        const touchMoveYear = e.touches[0].pageY;
-        const diff = touchMoveYear - touchStartYear;
-        
-        // Find the active scrollable view
+    
+    // Only use non-passive for the scroller containers
+    const scrollFix = (e) => {
         const activeSection = document.querySelector('.section-view:not(.hidden)');
-        
-        if (activeSection && activeSection.scrollTop <= 0 && diff > 0) {
-            // User is at the top and trying to pull down - prevent refresh
-            if (e.cancelable) e.preventDefault();
+        if (!activeSection) return;
+
+        if (e.type === 'touchstart') {
+            touchStartYear = e.touches[0].pageY;
+        } else if (e.type === 'touchmove') {
+            const touchMoveYear = e.touches[0].pageY;
+            const diff = touchMoveYear - touchStartYear;
+            
+            // If at the top and pulling down, or at bottom and pulling up
+            if ((activeSection.scrollTop <= 0 && diff > 0) || 
+                (activeSection.scrollTop + activeSection.offsetHeight >= activeSection.scrollHeight && diff < 0)) {
+                if (e.cancelable) e.preventDefault();
+            }
         }
-    }, { passive: false });
+    };
+
+    document.addEventListener('touchstart', scrollFix, { passive: false });
+    document.addEventListener('touchmove', scrollFix, { passive: false });
 
     initTheme();
-
     if (window.lucide) window.lucide.createIcons();
 }
+
 
 
 // Start
