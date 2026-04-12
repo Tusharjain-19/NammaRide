@@ -111,13 +111,23 @@ body.light-mode .bg-slate-800\/50, body.light-mode .bg-slate-800\/40, body.light
 }
 
 * {
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(99, 102, 241, 0.1); 
 }
 
 .custom-scrollbar {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
 }
+
+button, a, .nav-item, .dropdown-trigger, .station-option, .explore-cat-btn, .explore-line-btn {
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+
 
 
 .light-icon, .dark-icon {

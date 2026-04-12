@@ -209,3 +209,23 @@ body {
 }
 
 /* Tighter spacing */
+
+/* Instant Interaction Feedback */
+button:active, 
+.nav-item:active, 
+.station-option:active, 
+.dropdown-trigger:active, 
+.explore-cat-btn:active, 
+.explore-line-btn:active,
+.swap-btn:active {
+    opacity: 0.6;
+    transform: scale(0.95);
+    transition: none !important; /* Forces instant visual response */
+}
+
+/* Increase touch targets for mobile */
+@media (max-width: 600px) {
+    button, .nav-item, .dropdown-trigger {
+        min-height: 44px; /* Apple/Google recommended min touch target */
+    }
+}
