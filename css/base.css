@@ -37,21 +37,30 @@ body.light-mode {
 }
 
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    overscroll-behavior: none; /* Strictly disable browser pull-to-refresh */
+}
+
+
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
     font-family: var(--font-family);
-    margin: 0;
-    padding: 0;
     -webkit-font-smoothing: antialiased;
     transition: background-color var(--transition-speed), color var(--transition-speed);
 
     background-image: url('../assets/images/vidhana_soudha.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: scroll; /* Changed from fixed for better performance */
     position: relative;
+    overscroll-behavior-y: none; /* Prevent browser pull-to-refresh */
 }
+
 
 body::before {
     content: "";
@@ -100,6 +109,16 @@ body.light-mode .bg-slate-800\/50, body.light-mode .bg-slate-800\/40, body.light
 .app-container, .app-header, .dropdown-trigger, .dropdown-menu, .search-input, .station-option, .btn-primary, .swap-btn, .info-strip {
     transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.custom-scrollbar {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
 
 .light-icon, .dark-icon {
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;

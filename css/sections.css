@@ -48,8 +48,22 @@ body.light-mode .nav-item.active {
     padding: 1rem 1rem 1.5rem;
     background: var(--bg-color);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
+    scroll-behavior: smooth;
+    overscroll-behavior-y: none; /* Block scroll chaining to prevent refresh */
+    touch-action: pan-y; /* Optimize for vertical scrolling */
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
+
+
+
+/* Ensure all views inside section behave correctly */
+.section-view > * {
+    flex-shrink: 0;
+}
+
 
 .section-header {
     margin-bottom: 1rem;
@@ -583,7 +597,9 @@ body.light-mode .safety-icon-wrap {
 #explore-category-filters {
     -ms-overflow-style: none;
     scrollbar-width: none;
+    touch-action: pan-x; /* Explicitly allow horizontal panning */
 }
+
 
 .explore-cat-btn {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
