@@ -161,17 +161,27 @@ export class CustomDropdown {
     open() {
         this.isOpen = true;
         const menu = document.getElementById(`menu-${this.container.id}`);
-        menu.classList.add('open');
-        document.getElementById(`search-${this.container.id}`).focus();
+        if (menu) menu.classList.add('open');
+        this.container.classList.add('dropdown-open');
+        if (this.container.parentElement) {
+            this.container.parentElement.classList.add('dropdown-open');
+        }
+        const searchInput = document.getElementById(`search-${this.container.id}`);
+        if (searchInput) searchInput.focus();
 
         // Reset search
-        document.getElementById(`search-${this.container.id}`).value = '';
+        if (searchInput) searchInput.value = '';
         this.filter('');
     }
 
     close() {
         this.isOpen = false;
-        document.getElementById(`menu-${this.container.id}`).classList.remove('open');
+        const menu = document.getElementById(`menu-${this.container.id}`);
+        if (menu) menu.classList.remove('open');
+        this.container.classList.remove('dropdown-open');
+        if (this.container.parentElement) {
+            this.container.parentElement.classList.remove('dropdown-open');
+        }
     }
 
     filter(query) {

@@ -13,9 +13,9 @@
     --accent-hover: #059669;
     --accent-light: #34D399;
 
-    /* Glassy Dropdown Colors */
-    --bg-dropdown: rgba(18, 18, 22, 0.95);
-    --bg-dropdown-hover: rgba(32, 32, 38, 0.98);
+    /* Solid Opaque Dropdown Colors per design.md */
+    --bg-dropdown: #141E2D;
+    --bg-dropdown-hover: #1E293B;
     --dropdown-border: rgba(255, 255, 255, 0.15);
 
     --glass-blur: blur(16px) saturate(180%);
@@ -48,9 +48,9 @@ body.light-mode {
     --header-bg: rgba(255, 255, 255, 0.6);
     --header-border: rgba(255, 255, 255, 0.8);
 
-    --bg-dropdown: rgba(255, 255, 255, 0.95);
-    --bg-dropdown-hover: rgba(255, 255, 255, 1);
-    --dropdown-border: rgba(200, 200, 200, 0.8);
+    --bg-dropdown: #FFFFFF;
+    --bg-dropdown-hover: #F1F5F9;
+    --dropdown-border: rgba(203, 213, 225, 0.9);
 
     --line-default: rgba(0, 0, 0, 0.15);
     --accent-color: #059669;
