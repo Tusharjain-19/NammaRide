@@ -657,13 +657,6 @@ function attachExploreEvents(container) {
             filterExplore();
         });
     });
-            const clickedBtn = e.currentTarget;
-            clickedBtn.classList.add('active');
-            clickedBtn.style.transform = 'scale(1.05)';
-            currentLine = clickedBtn.dataset.line;
-            filterExplore();
-        });
-    });
 }
 
 

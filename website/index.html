@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="assets/images/logo_app.png">
 
     <!-- SEO & Metadata -->
     <title>NammaRide — Bengaluru Metro Route Planner, Fares & Timings</title>
@@ -167,12 +169,25 @@
             <img src="assets/images/logo_app.png" alt="NammaRide Logo" class="w-24 h-24 object-contain mb-5" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
             <h1 class="text-3xl font-black tracking-tighter mb-1" style="color: var(--text-primary);">NammaRide</h1>
             <p class="text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[9px] mb-10">Bengaluru Metro</p>
-            <div class="w-28 h-[3px] rounded-full overflow-hidden" style="background: var(--border-color);">
-                <div class="h-full rounded-full" style="background: linear-gradient(90deg, #10B981, #34D399); animation: splash-progress 0.5s ease-out forwards;"></div>
+            <div class="splash-dots">
+                <span class="splash-dot dot-purple"></span>
+                <span class="splash-dot dot-green"></span>
+                <span class="splash-dot dot-yellow"></span>
             </div>
         </div>
         <style>
-            @keyframes splash-progress { from { width: 0%; } to { width: 100%; } }
+            .splash-dots { display: flex; align-items: center; gap: 6px; height: 20px; }
+            .splash-dot {
+                width: 8px; height: 8px; border-radius: 50%;
+                animation: dotPulse 1.2s ease-in-out infinite;
+            }
+            .dot-purple { background: #A855F7; box-shadow: 0 0 8px rgba(168,85,247,0.6); animation-delay: 0s; }
+            .dot-green  { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.6); animation-delay: 0.2s; }
+            .dot-yellow { background: #EAB308; box-shadow: 0 0 8px rgba(234,179,8,0.6); animation-delay: 0.4s; }
+            @keyframes dotPulse {
+                0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+                40% { transform: scale(1.2); opacity: 1; }
+            }
         </style>
 
         <div class="w-full flex-grow flex flex-col relative overflow-hidden">
