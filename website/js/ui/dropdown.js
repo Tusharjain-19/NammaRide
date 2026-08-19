@@ -51,7 +51,7 @@ export class CustomDropdown {
     render() {
         const placeholder = T(this.placeholderKey);
         this.container.innerHTML = `
-            <div class="custom-dropdown border border-subtle bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <div class="custom-dropdown">
                 <div class="dropdown-trigger flex items-center justify-between px-4 py-3 cursor-pointer" id="trigger-${this.container.id}" tabindex="0">
                     <span class="flex items-center gap-3">
                         <i data-lucide="map-pin" class="w-5 h-5 text-accent-color opacity-80"></i>
