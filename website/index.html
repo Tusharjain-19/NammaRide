@@ -282,18 +282,26 @@
                         <i data-lucide="sun" class="w-4 h-4 light-icon hidden"></i>
                     </button>
 
-                    <div class="relative">
-                        <select id="language-selector"
-                            class="appearance-none bg-card-subtle text-secondary text-xs py-1 px-2 pr-6 rounded border border-subtle focus:outline-none focus:border-emerald-500">
-                            <option value="en">EN</option>
-                            <option value="hi">HI</option>
-                            <option value="kn">KN</option>
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1 text-secondary">
-                            <svg class="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                            </svg>
+                    <div class="relative" id="lang-dropdown-container">
+                        <button id="lang-btn" class="bg-card-subtle text-secondary font-bold text-xs py-1.5 px-3 rounded-lg border border-subtle focus:outline-none flex items-center gap-1.5 hover:bg-card-hover transition-colors shadow-sm">
+                            <span id="current-lang-text">EN</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <div id="lang-menu" class="absolute right-0 mt-2 w-28 bg-card backdrop-blur-2xl border border-subtle rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.4)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-[100] overflow-hidden">
+                            <button class="lang-option w-full text-left px-4 py-3 text-sm font-semibold text-secondary hover:text-primary hover:bg-card-hover transition-colors flex items-center justify-between" data-lang="en">
+                                English
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 hidden indicator"></div>
+                            </button>
+                            <div class="h-[1px] w-full bg-border-color"></div>
+                            <button class="lang-option w-full text-left px-4 py-3 text-sm font-semibold text-secondary hover:text-primary hover:bg-card-hover transition-colors flex items-center justify-between" data-lang="hi">
+                                हिन्दी
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 hidden indicator"></div>
+                            </button>
+                            <div class="h-[1px] w-full bg-border-color"></div>
+                            <button class="lang-option w-full text-left px-4 py-3 text-sm font-semibold text-secondary hover:text-primary hover:bg-card-hover transition-colors flex items-center justify-between" data-lang="kn">
+                                ಕನ್ನಡ
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 hidden indicator"></div>
+                            </button>
                         </div>
                     </div>
                 </div>

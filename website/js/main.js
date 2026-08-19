@@ -949,18 +949,64 @@ function initializeApp() {
         handleJourneyUpdate();
     });
 
-    const langSelect = document.getElementById('language-selector');
-    if (langSelect) {
-        langSelect.value = currentLang;
-        langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
-    }
+    const langBtn = document.getElementById('lang-btn');
+    const langMenu = document.getElementById('lang-menu');
+    const langOptions = document.querySelectorAll('.lang-option');
+    const currentLangText = document.getElementById('current-lang-text');
 
-    const navLanguageBtn = document.getElementById('nav-language');
-    if (navLanguageBtn) {
-        navLanguageBtn.addEventListener('click', () => {
-            const newLang = getCurrentLang() === 'en' ? 'kn' : 'en';
-            setLanguage(newLang);
-            if (langSelect) langSelect.value = newLang;
+    if (langBtn && langMenu) {
+        // Toggle menu
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = !langMenu.classList.contains('opacity-0');
+            if (isOpen) {
+                langMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                langMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            } else {
+                langMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+                langMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+        });
+
+        // Handle selection
+        langOptions.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newLang = opt.getAttribute('data-lang');
+                
+                // Update active visual state
+                langOptions.forEach(o => o.querySelector('.indicator').classList.add('hidden'));
+                opt.querySelector('.indicator').classList.remove('hidden');
+                
+                // Update button text
+                if (newLang === 'en') currentLangText.textContent = 'EN';
+                else if (newLang === 'hi') currentLangText.textContent = 'HI';
+                else if (newLang === 'kn') currentLangText.textContent = 'KN';
+
+                setLanguage(newLang);
+                
+                // Close menu
+                langMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                langMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!langBtn.contains(e.target) && !langMenu.contains(e.target)) {
+                langMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                langMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+        });
+
+        // Initialize active visual state
+        langOptions.forEach(opt => {
+            if (opt.getAttribute('data-lang') === currentLang) {
+                opt.querySelector('.indicator').classList.remove('hidden');
+                if (currentLang === 'en') currentLangText.textContent = 'EN';
+                else if (currentLang === 'hi') currentLangText.textContent = 'HI';
+                else if (currentLang === 'kn') currentLangText.textContent = 'KN';
+            }
         });
     }
 
