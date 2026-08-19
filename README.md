@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="assets/images/logo_app.png" alt="NammaRide Logo" width="100" />
+  <img src="assets/logo_app.png" alt="NammaRide Logo" width="120" />
 </p>
 
 <h1 align="center">NammaRide</h1>
 
 <p align="center">
-  <strong>The Ultimate Companion for Bengaluru's Namma Metro commuters.</strong>
+  <strong>The Ultimate Companion for Bengaluru's Namma Metro Commuters 🚇</strong>
 </p>
 
 <p align="center">
@@ -17,53 +17,54 @@
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5" />
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" />
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS" />
-  <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel" />
+  <img src="https://img.shields.io/badge/PWA-5A0FC8?style=flat-square&logo=pwa&logoColor=white" alt="PWA" />
 </p>
 
 ---
 
-## 📖 About
+## 📖 About NammaRide
 
-**NammaRide** is a high-performance, offline-first web application designed to simplify commuting on Bengaluru's Namma Metro. Unlike generic navigation tools, NammaRide provides deterministic journey planning and live tracking that works even when GPS signals fail in deep underground stations.
+**NammaRide** is a high-performance, offline-first web application engineered to simplify commuting on Bengaluru's Namma Metro. Unlike generic navigation tools that lose signal underground, NammaRide provides deterministic journey planning and live tracking that works seamlessly even when you are deep underground without network coverage.
 
-Built with a focus on speed, accessibility, and utility, it serves as a one-stop solution for fare calculation, train timings, and discovering the city through the metro network.
+Built with an obsessive focus on speed, accessibility, and utility, NammaRide serves as a one-stop digital assistant for fare calculations, train timings, interactive mapping, and discovering the city through the metro network. 
 
 ---
 
-## 🖼️ Gallery
+## 🖼️ App Gallery
 
 <p align="center">
-  <img src="mobile/ss1.png" width="30%" alt="Splash" />
-  <img src="mobile/ss2.png" width="30%" alt="Home" />
-  <img src="mobile/ss3.png" width="30%" alt="Planner" />
+  <img src="assets/screenshots/ss1.png" width="30%" alt="Splash" />
+  <img src="assets/screenshots/ss2.png" width="30%" alt="Home" />
+  <img src="assets/screenshots/ss3.png" width="30%" alt="Planner" />
 </p>
 <p align="center">
-  <img src="mobile/ss4.png" width="30%" alt="Route" />
-  <img src="mobile/ss5.png" width="30%" alt="Live" />
-  <img src="mobile/ss6.png" width="30%" alt="Details" />
+  <img src="assets/screenshots/ss4.png" width="30%" alt="Route" />
+  <img src="assets/screenshots/ss5.png" width="30%" alt="Live Tracking" />
+  <img src="assets/screenshots/ss6.png" width="30%" alt="Station Details" />
 </p>
 
 <details>
 <summary><b>📸 See More Screenshots</b></summary>
+<br>
 <p align="center">
-  <img src="mobile/ss7.png" width="24%" />
-  <img src="mobile/ss8.png" width="24%" />
-  <img src="mobile/ss9.png" width="24%" />
-  <img src="mobile/ss10.png" width="24%" />
+  <img src="assets/screenshots/ss7.png" width="24%" />
+  <img src="assets/screenshots/ss8.png" width="24%" />
+  <img src="assets/screenshots/ss9.png" width="24%" />
+  <img src="assets/screenshots/ss10.png" width="24%" />
 </p>
 </details>
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- 🗺️ **Journey Planner**: Intelligent multi-line routing with interchange assistance at Majestic.
-- 🕒 **Live Tracking**: Time-based simulation to track your progress between stations.
-- 💰 **Fare Calculator**: Instant estimates for Token and Smart Card users.
-- 📍 **Smart Locate**: Find and navigate to the nearest metro station using real-time GPS.
-- 🏛️ **City Explore**: Discover 230+ landmarks including Soudha, IT parks, and lakes.
-- 🌍 **Trilingual**: Seamless experience in **English**, **Kannada (ಕನ್ನಡ)**, and **Hindi (ಹಿन्दी)**.
-- 📱 **PWA Optimized**: Add to home screen for a native app feel and lightning-fast loads.
+- 🗺️ **Intelligent Journey Planner**: Multi-line routing with interchange assistance at Majestic & RV Road.
+- 🕒 **Live Journey Tracking**: Time-based simulation to track your progress between stations, 100% offline.
+- 💰 **Fare Calculator**: Instant cost estimates for Token, Smart Card, and QR Ticket users.
+- 📍 **Smart Locate**: Find and navigate to the absolute nearest metro station using real-time GPS.
+- 🏛️ **City Explorer**: Discover 230+ landmarks including Vidhana Soudha, IT parks, malls, and lakes.
+- 🌍 **Trilingual Support**: Seamless experience tailored in **English**, **Kannada (ಕನ್ನಡ)**, and **Hindi (ಹಿन्दी)**.
+- 📱 **PWA Optimized**: Installable directly to your home screen for a lightning-fast, native-app feel.
 
 ---
 
@@ -76,35 +77,37 @@ This application is **NOT affiliated with, endorsed by, or connected to BMRCL (B
 **Commercial use of this project, its source code, or its datasets is strictly prohibited.**
 - You may use this project for **educational purposes** or **personal use** only.
 - You are not permitted to sell, rent, or bundle this application with any paid service.
-- You may not use the "NammaRide" branding or its assets for profit-making ventures.
 
 ### 🛡️ Safety & Reliability
 - Always refer to official BMRCL displays and announcements for safety protocols and real-time train updates.
 - Under no circumstances should this application be relied upon for emergency navigation.
-- The developer is not responsible for any missed trains, financial losses, or inconveniences caused by the use of this data.
 
 ---
 
-## 🛠️ Performance & Tech
+## 🛠️ Performance & Tech Stack
 
-- **Core**: Vanilla ES6 JavaScript (No heavy frameworks for maximum performance).
-- **Styling**: Specialized CSS system with dark mode and smooth animations.
-- **Offline**: Service worker implementation for reliable performance in tunnels.
-- **TWA ready**: Packaged for seamless Play Store deployment.
+- **Core**: Vanilla ES6 JavaScript (Zero heavy frameworks for maximum performance and instant load).
+- **Styling**: Custom CSS design system featuring true dark mode, glassmorphism, and smooth transitions.
+- **Offline Reliability**: Robust Service Worker caching for seamless performance in metro tunnels.
+- **TWA Ready**: Designed as a Progressive Web App (PWA), perfectly packaged for Play Store deployment.
 
 ---
 
-## 🚀 Local Installation
+## 🚀 Quick Start (Local Setup)
 
 ```bash
 # Clone the repository
 git clone https://github.com/Tusharjain-19/NammaRide.git
 
-# Navigate to the project
+# Navigate to the project directory
 cd NammaRide
 
-# No build step required! Simply open index.html or use a local server
-# Example: python -m http.server 3000
+# Run the app locally (No build step required!)
+# Using Python:
+python -m http.server 3000
+
+# Or using Node:
+npx serve .
 ```
 
 ---
