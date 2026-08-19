@@ -733,24 +733,39 @@ function updateSimulationUI() {
     }
 
     simStatus.innerHTML = `
-        <div class="w-full flex flex-col bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm my-2 gap-2">
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col gap-0.5">
-                    <p class="font-bold text-primary text-sm flex items-center gap-2">
-                        <span class="gps-signal-dot ${gpsClass}" title="${gpsTitle}"></span>
-                        <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400 animate-pulse"></i>
-                        ${T('liveJourney') || 'Live Journey'}
-                    </p>
-                    <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
-                    <p class="text-[10px] text-secondary opacity-70">${remainingMinutes} ${T('minRemaining')}</p>
+        <div class="live-tracking-panel w-full flex flex-col p-4 rounded-2xl border border-subtle shadow-lg gap-3">
+            <div class="flex justify-between items-center border-b border-subtle pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <i data-lucide="activity" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider font-extrabold text-secondary opacity-65">${T('liveJourney') || 'Live Journey'}</span>
+                        <h4 class="font-bold text-sm text-primary leading-tight">${T('towards')} ${destinationName}</h4>
+                    </div>
                 </div>
+                
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-card-subtle border border-subtle text-[10px] font-bold text-secondary">
+                        <span class="gps-signal-dot ${gpsClass}"></span>
+                        <span>${gpsTitle.split(':')[1] || gpsTitle}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2 text-primary font-bold text-sm bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                    <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+                    <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
+                </div>
+                
                 <div class="flex gap-2">
                     ${showManualFinish ? `
-                        <button id="manual-finish-btn" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 font-bold px-3 py-1.5 rounded-md text-xs transition-colors">
+                        <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-md shadow-emerald-500/20">
                             ${T('finishJourney') || 'Finish'}
                         </button>
                     ` : ''}
-                    <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-red-400 transition-colors">${T('exitJourney')}</button>
+                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 border border-subtle font-bold px-3 py-1.5 rounded-lg text-xs transition-colors">${T('exitJourney')}</button>
                 </div>
             </div>
             ${gpsWarningHtml}

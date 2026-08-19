@@ -1548,3 +1548,12 @@ body.light-mode .journey-complete-card {
     }
 }
 
+.live-tracking-panel {
+    background: rgba(18, 18, 22, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+body.light-mode .live-tracking-panel {
+    background: rgba(255, 255, 255, 0.9);
+}
+
