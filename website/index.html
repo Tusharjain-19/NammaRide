@@ -162,33 +162,34 @@
 
 <body>
 
-    <div id="app-container" class="app-container">
-
-        <!-- PREMIUM FIXED LOADING SCREEN -->
-        <div id="splash-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500 ease-out" style="background: var(--bg-color);">
-            <div class="relative flex flex-col items-center">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.3)] animate-pulse">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 36px; height: 36px;" class="text-emerald-400">
-                        <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                        <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
-                        <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                        <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                        <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                        <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                        <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
-                        <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <h1 class="text-2xl font-extrabold tracking-tight mb-1 text-primary">NammaRide</h1>
-                <p class="text-emerald-400 font-bold tracking-[0.2em] uppercase text-[10px] mb-8 opacity-90">Bengaluru Transit</p>
-                <div class="splash-dots">
-                    <span class="splash-dot dot-purple"></span>
-                    <span class="splash-dot dot-green"></span>
-                    <span class="splash-dot dot-yellow"></span>
-                </div>
+    <!-- PREMIUM FIXED LOADING SCREEN (outside app-container to cover full viewport) -->
+    <div id="splash-screen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000000;transition:opacity 0.5s ease-out;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:64px;height:64px;border-radius:16px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 30px rgba(16,185,129,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px;color:#34D399;">
+                    <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                    <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                    <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                    <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.025em;margin-bottom:4px;color:#F8FAFC;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">NammaRide</h1>
+            <p style="color:#34D399;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-size:10px;margin-bottom:32px;opacity:0.9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">Bengaluru Transit</p>
+            <div class="splash-dots">
+                <span class="splash-dot dot-purple"></span>
+                <span class="splash-dot dot-green"></span>
+                <span class="splash-dot dot-yellow"></span>
             </div>
         </div>
+    </div>
+
+    <div id="app-container" class="app-container">
+
         <style>
             img { max-width: 100%; }
             .splash-dots { display: flex; align-items: center; justify-content: center; gap: 12px; height: 32px; }
