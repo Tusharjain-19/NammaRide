@@ -447,6 +447,12 @@ body.light-mode .nav-item.active {
     border-bottom-color: var(--accent-light);
 }
 
+.timing-tab-btn:hover:not(.active) {
+    color: var(--text-primary);
+    background-color: var(--bg-card-hover);
+    border-radius: 4px 4px 0 0;
+}
+
 /* Day Schedule */
 .timing-day-schedule {
     animation: fadeIn 0.3s ease-out;
@@ -480,9 +486,17 @@ body.light-mode .nav-item.active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.25rem 0;
+    padding: 0.35rem 0.5rem;
     font-size: 0.75rem;
     color: var(--text-secondary);
+    border-radius: 0.25rem;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: default;
+}
+
+.timing-row:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
 }
 
 .timing-value {
