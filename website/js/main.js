@@ -5,6 +5,9 @@ import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
 import { calculateFare } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
+import { inject } from "@vercel/analytics";
+
+inject();
 
 // --- App State ---
 let currentLang = getCurrentLang();
