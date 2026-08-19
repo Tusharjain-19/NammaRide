@@ -617,7 +617,7 @@ function initializeApp() {
 
     const findNearestBtn = document.getElementById('find-nearest-btn');
     if (findNearestBtn) {
-        findNearestBtn.addEventListener('click', () => {
+        findNearestBtn.addEventListener('click', async () => {
             const subtitleEl = document.getElementById('find-nearest-subtitle');
             const iconWrap = findNearestBtn.querySelector('.w-12.h-12');
             const iconSvg = findNearestBtn.querySelector('svg');
@@ -627,101 +627,113 @@ function initializeApp() {
             if (iconWrap) iconWrap.classList.add('animate-pulse', 'ring-4', 'ring-indigo-500/30');
             if (iconSvg) iconSvg.classList.add('animate-bounce');
             
-            if (navigator.geolocation) {
-                // High accuracy can be slow, but it's "best"
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
-                        if (iconSvg) iconSvg.classList.remove('animate-bounce');
-                        
-                        const { latitude, longitude } = position.coords;
-                        
-                        let nearest = null;
-                        let minDistance = Infinity;
-                        
-                        stationsMeta.forEach(station => {
-                            // FIX: Access nested location property
-                            const loc = station.location || station; 
-                            if (loc.lat && loc.lon) {
-                                const dist = getDistanceFromLatLonInKm(latitude, longitude, loc.lat, loc.lon);
-                                if (dist < minDistance) {
-                                    minDistance = dist;
-                                    nearest = station;
-                                }
-                            }
-                        });
-                        
-                        if (nearest) {
-                            startDropdown.selectById(nearest.id);
-                            const translatedName = T_STATION(nearest.name);
-                            const distStr = minDistance < 1 ? `${(minDistance * 1000).toFixed(0)}m` : `${minDistance.toFixed(1)}km`;
-                            
-                            if (subtitleEl) subtitleEl.innerText = `At ${translatedName} (${distStr})`;
-                            setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 5000);
+            try {
+                let latitude, longitude;
+                
+                // Capacitor Native Permissions Check
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Geolocation) {
+                    const Geo = window.Capacitor.Plugins.Geolocation;
+                    let permission = await Geo.checkPermissions();
+                    if (permission.location !== 'granted') {
+                        permission = await Geo.requestPermissions();
+                        if (permission.location !== 'granted') throw new Error("Location access denied.");
+                    }
+                    const position = await Geo.getCurrentPosition({ enableHighAccuracy: true });
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                } else if (navigator.geolocation) {
+                    // Browser Fallback
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+                    });
+                    latitude = pos.coords.latitude;
+                    longitude = pos.coords.longitude;
+                } else {
+                    throw new Error("GPS not supported.");
+                }
 
-                            // Top Toast
-                            const toast = document.getElementById('nearest-toast');
-                            const toastText = document.getElementById('nearest-toast-text');
-                            if (toast && toastText) {
-                                toastText.innerHTML = `<span class="text-indigo-400 font-bold">Nearest:</span> ${translatedName} <span class="opacity-60 text-[11px] ml-1">(${distStr})</span>`;
-                                toast.classList.remove('-translate-y-[150%]', 'opacity-0');
-                                toast.classList.add('translate-y-0', 'opacity-100');
-                                setTimeout(() => {
-                                    toast.classList.remove('translate-y-0', 'opacity-100');
-                                    toast.classList.add('-translate-y-[150%]', 'opacity-0');
-                                }, 4000);
-                            }
-
-                            // Modal
-                            const modal = document.getElementById('nearest-modal');
-                            const modalContent = document.getElementById('nearest-modal-content');
-                            if (modal && modalContent) {
-                                const stationNameEl = document.getElementById('nearest-modal-station-name');
-                                const distanceEl = document.getElementById('nearest-modal-distance');
-                                const lineBadge = `<span class="inline-block w-2.5 h-2.5 rounded-full mr-2" style="background:${getLineColor(nearest.line)}"></span>`;
-                                
-                                if (stationNameEl) stationNameEl.innerHTML = `${lineBadge}${translatedName}`;
-                                if (distanceEl) distanceEl.innerText = `~${distStr} away • ${nearest.line}`;
-                                
-                                modal.classList.remove('opacity-0', 'pointer-events-none');
-                                modalContent.classList.remove('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
-                                modalContent.classList.add('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
-
-                                const closeModal = () => {
-                                    modal.classList.add('opacity-0', 'pointer-events-none');
-                                    modalContent.classList.remove('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
-                                    modalContent.classList.add('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
-                                };
-
-                                document.getElementById('nearest-modal-close').onclick = closeModal;
-                                document.getElementById('nearest-modal-cancel').onclick = closeModal;
-                                document.getElementById('nearest-modal-maps').onclick = () => {
-                                    const loc = nearest.location || nearest;
-                                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lon}`, '_blank');
-                                    closeModal();
-                                };
-                                if (window.lucide) window.lucide.createIcons();
-                            }
+                if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
+                if (iconSvg) iconSvg.classList.remove('animate-bounce');
+                
+                let nearest = null;
+                let minDistance = Infinity;
+                
+                stationsMeta.forEach(station => {
+                    const loc = station.location || station; 
+                    if (loc.lat && loc.lon) {
+                        const dist = getDistanceFromLatLonInKm(latitude, longitude, loc.lat, loc.lon);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            nearest = station;
                         }
-                    },
-                    (error) => {
-                        console.error('Geolocation Error:', error);
-                        if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
-                        if (iconSvg) iconSvg.classList.remove('animate-bounce');
+                    }
+                });
+                
+                if (nearest) {
+                    startDropdown.selectById(nearest.id);
+                    const translatedName = T_STATION(nearest.name);
+                    const distStr = minDistance < 1 ? `${(minDistance * 1000).toFixed(0)}m` : `${minDistance.toFixed(1)}km`;
+                    
+                    if (subtitleEl) subtitleEl.innerText = `At ${translatedName} (${distStr})`;
+                    setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 5000);
+
+                    // Top Toast
+                    const toast = document.getElementById('nearest-toast');
+                    const toastText = document.getElementById('nearest-toast-text');
+                    if (toast && toastText) {
+                        toastText.innerHTML = `<span class="text-indigo-400 font-bold">Nearest:</span> ${translatedName} <span class="opacity-60 text-[11px] ml-1">(${distStr})</span>`;
+                        toast.classList.remove('-translate-y-[150%]', 'opacity-0');
+                        toast.classList.add('translate-y-0', 'opacity-100');
+                        setTimeout(() => {
+                            toast.classList.remove('translate-y-0', 'opacity-100');
+                            toast.classList.add('-translate-y-[150%]', 'opacity-0');
+                        }, 4000);
+                    }
+
+                    // Modal
+                    const modal = document.getElementById('nearest-modal');
+                    const modalContent = document.getElementById('nearest-modal-content');
+                    if (modal && modalContent) {
+                        const stationNameEl = document.getElementById('nearest-modal-station-name');
+                        const distanceEl = document.getElementById('nearest-modal-distance');
+                        const lineBadge = `<span class="inline-block w-2.5 h-2.5 rounded-full mr-2" style="background:${getLineColor(nearest.line)}"></span>`;
                         
-                        let errorMsg = 'Location access denied.';
-                        if (error.code === 3) errorMsg = 'GPS Timeout. Try again.';
-                        else if (error.code === 2) errorMsg = 'Position unavailable.';
+                        if (stationNameEl) stationNameEl.innerHTML = `${lineBadge}${translatedName}`;
+                        if (distanceEl) distanceEl.innerText = `~${distStr} away • ${nearest.line}`;
                         
-                        if (subtitleEl) subtitleEl.innerText = errorMsg;
-                        setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 3500);
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            } else {
-                if (iconWrap) iconWrap.classList.remove('animate-pulse', 'bg-indigo-500/30');
-                if (subtitleEl) subtitleEl.innerText = 'GPS not supported.';
-                setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 3000);
+                        modal.classList.remove('opacity-0', 'pointer-events-none');
+                        modalContent.classList.remove('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
+                        modalContent.classList.add('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
+
+                        const closeModal = () => {
+                            modal.classList.add('opacity-0', 'pointer-events-none');
+                            modalContent.classList.remove('translate-y-0', 'sm:scale-100', 'opacity-100', 'pointer-events-auto');
+                            modalContent.classList.add('translate-y-10', 'sm:scale-95', 'opacity-0', 'pointer-events-none');
+                        };
+
+                        document.getElementById('nearest-modal-close').onclick = closeModal;
+                        document.getElementById('nearest-modal-cancel').onclick = closeModal;
+                        document.getElementById('nearest-modal-maps').onclick = () => {
+                            const loc = nearest.location || nearest;
+                            window.open(`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lon}`, '_blank');
+                            closeModal();
+                        };
+                        if (window.lucide) window.lucide.createIcons();
+                    }
+                }
+
+            } catch (error) {
+                console.error('Geolocation Error:', error);
+                if (iconWrap) iconWrap.classList.remove('animate-pulse', 'ring-4', 'ring-indigo-500/30');
+                if (iconSvg) iconSvg.classList.remove('animate-bounce');
+                
+                let errorMsg = 'Location access denied.';
+                if (error.code === 3 || error.message?.includes('Timeout')) errorMsg = 'GPS Timeout. Try again.';
+                else if (error.code === 2 || error.message?.includes('unavailable')) errorMsg = 'Position unavailable.';
+                else if (error.message) errorMsg = error.message;
+                
+                if (subtitleEl) subtitleEl.innerText = errorMsg;
+                setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 3500);
             }
         });
     }
