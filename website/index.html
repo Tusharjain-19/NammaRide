@@ -164,15 +164,19 @@
 
     <div id="app-container" class="app-container">
 
-        <!-- PREMIUM SPLASH SCREEN -->
-        <div id="splash-screen" class="absolute inset-0 z-[200] flex flex-col items-center justify-center transition-opacity duration-500 ease-out" style="background: var(--bg-color);">
-            <img src="assets/images/logo_app.png" alt="NammaRide Logo" class="w-24 h-24 object-contain mb-5" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
-            <h1 class="text-3xl font-black tracking-tighter mb-1" style="color: var(--text-primary);">NammaRide</h1>
-            <p class="text-emerald-500 font-semibold tracking-[0.2em] uppercase text-[9px] mb-10">Bengaluru Metro</p>
-            <div class="splash-dots">
-                <span class="splash-dot dot-purple"></span>
-                <span class="splash-dot dot-green"></span>
-                <span class="splash-dot dot-yellow"></span>
+        <!-- PREMIUM FIXED LOADING SCREEN -->
+        <div id="splash-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500 ease-out" style="background: var(--bg-color);">
+            <div class="relative flex flex-col items-center">
+                <div class="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.25)] animate-pulse">
+                    <img src="assets/images/logo_app.png" alt="NammaRide Logo" class="w-12 h-12 object-contain">
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight mb-1 text-primary">NammaRide</h1>
+                <p class="text-emerald-400 font-bold tracking-[0.2em] uppercase text-[10px] mb-8 opacity-90">Bengaluru Transit</p>
+                <div class="splash-dots">
+                    <span class="splash-dot dot-purple"></span>
+                    <span class="splash-dot dot-green"></span>
+                    <span class="splash-dot dot-yellow"></span>
+                </div>
             </div>
         </div>
         <style>
@@ -399,11 +403,8 @@
                 <i data-lucide="map-pin" class="w-5 h-5"></i>
                 <span data-lang-key="navStations">Stations</span>
             </button>
-            <button class="nav-item group" data-view="timings" id="nav-timings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 transition-transform group-active:scale-95 group-hover:text-emerald-400">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                </svg>
+            <button class="nav-item" data-view="timings" id="nav-timings">
+                <i data-lucide="clock" class="w-5 h-5"></i>
                 <span data-lang-key="navTimings">Timings</span>
             </button>
             <button class="nav-item" data-view="explore" id="nav-explore">
