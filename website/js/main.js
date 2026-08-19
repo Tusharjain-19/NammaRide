@@ -5,6 +5,7 @@ import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
 import { calculateFare } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
+import { stationPlaces } from './data/stationPlaces.js';
 import { inject } from "@vercel/analytics";
 
 inject();
@@ -841,7 +842,154 @@ function initializeApp() {
     }, 300);
 }
 
+// --- Nearby Attractions Bottom Sheet and Modals for Live Journey ---
+window.showNearbyAttractions = function(stationName) {
+    const attractions = stationPlaces[stationName] || [];
+    if (attractions.length === 0) return;
 
+    // Remove existing if any
+    const existing = document.getElementById('nearby-attractions-sheet');
+    if (existing) existing.remove();
+
+    // Create container
+    const sheetOverlay = document.createElement('div');
+    sheetOverlay.id = 'nearby-attractions-sheet';
+    sheetOverlay.className = 'nearby-sheet-overlay active';
+
+    const lang = getCurrentLang();
+    const scrollCardsHtml = attractions.map((p, idx) => {
+        const name = lang === 'kn' ? (p.nameKn || p.name) : (lang === 'hi' && p.nameHi ? p.nameHi : p.name);
+        const type = p.type ? p.type.toUpperCase() : 'ATTRACTION';
+        const dist = p.distance_km ? `${p.distance_km} km` : '';
+        const walk = p.walk_time_min ? `${p.walk_time_min} min walk` : '';
+        const desc = p.description || p.summary || 'Discover this amazing place near the station.';
+        const mapsLink = p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Bengaluru')}`;
+        const image = p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=240&h=160&sig=${p.id.length + idx}`;
+
+        return `
+            <div class="nearby-card-item">
+                <div class="nearby-card-image-wrap">
+                    <img src="${image}" alt="${name}">
+                    <span class="nearby-card-badge">${type}</span>
+                </div>
+                <div class="nearby-card-body">
+                    <h4 class="nearby-card-title">${name}</h4>
+                    <div class="nearby-card-meta">
+                        ${dist ? `<span><i data-lucide="navigation" class="w-3 h-3 text-pink-500"></i> ${dist}</span>` : ''}
+                        ${walk ? `<span><i data-lucide="footprints" class="w-3 h-3 text-pink-500"></i> ${walk}</span>` : ''}
+                    </div>
+                    <p class="nearby-card-desc">${desc}</p>
+                    <div class="nearby-card-actions">
+                        <button class="nearby-btn-action navigate" onclick="window.open('${mapsLink}', '_blank')">
+                            <i data-lucide="map-pin" class="w-3 h-3"></i>
+                            Navigate
+                        </button>
+                        <button class="nearby-btn-action details" onclick="window.showNearbyPlaceDetail('${stationName.replace(/'/g, "\\'")}', '${p.id}')">
+                            <i data-lucide="info" class="w-3 h-3"></i>
+                            Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    sheetOverlay.innerHTML = `
+        <div class="nearby-sheet-container animate-slide-up">
+            <div class="nearby-sheet-header">
+                <h3>Nearby Attractions - ${T_STATION(stationName)}</h3>
+                <button class="nearby-sheet-close" onclick="window.closeNearbyAttractions()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="nearby-cards-scroll">
+                ${scrollCardsHtml}
+            </div>
+        </div>
+    `;
+
+    // Add click handler to backdrop to close
+    sheetOverlay.addEventListener('click', function(e) {
+        if (e.target === sheetOverlay) {
+            window.closeNearbyAttractions();
+        }
+    });
+
+    const appContainer = document.getElementById('app-container') || document.body;
+    appContainer.appendChild(sheetOverlay);
+    if (window.lucide) window.lucide.createIcons();
+};
+
+window.closeNearbyAttractions = function() {
+    const sheet = document.getElementById('nearby-attractions-sheet');
+    if (sheet) {
+        sheet.classList.remove('active');
+        sheet.classList.add('closing');
+        setTimeout(() => sheet.remove(), 300);
+    }
+};
+
+window.showNearbyPlaceDetail = function(stationName, placeId) {
+    const places = stationPlaces[stationName] || [];
+    const p = places.find(a => a.id === placeId);
+    if (!p) return;
+
+    const lang = getCurrentLang();
+    const name = lang === 'kn' ? (p.nameKn || p.name) : (lang === 'hi' && p.nameHi ? p.nameHi : p.name);
+    const desc = p.description || p.summary || 'Discover this amazing place near the station.';
+    const distText = p.distance_km ? `${p.distance_km} km from station` : '';
+    const walkText = p.walk_time_min ? `${p.walk_time_min} min walk` : '';
+    const driveText = p.approx_drive_time_min ? `~${p.approx_drive_time_min} min by auto/cab` : '';
+    const mapsLink = p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Bengaluru')}`;
+    const image = p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=800&h=400&sig=${p.id.length}`;
+
+    // Remove existing if any
+    const existing = document.getElementById('nearby-detail-modal');
+    if (existing) existing.remove();
+
+    const detailModal = document.createElement('div');
+    detailModal.id = 'nearby-detail-modal';
+    detailModal.className = 'nearby-detail-overlay active';
+    detailModal.innerHTML = `
+        <div class="nearby-detail-container animate-fade-in-scale">
+            <button class="nearby-detail-close" onclick="document.getElementById('nearby-detail-modal').remove()">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="nearby-detail-image-wrap">
+                <img src="${image}" alt="${name}">
+                <div class="nearby-detail-image-gradient"></div>
+                <div class="nearby-detail-title-wrap">
+                    <h3>${name}</h3>
+                    <span class="nearby-detail-badge">${p.type ? p.type.toUpperCase() : 'ATTRACTION'}</span>
+                </div>
+            </div>
+            <div class="nearby-detail-body">
+                <p class="nearby-detail-desc">${desc}</p>
+                <div class="nearby-detail-info-grid">
+                    ${distText ? `<div class="nearby-detail-info-item"><i data-lucide="navigation" class="w-4 h-4"></i><span>${distText}</span></div>` : ''}
+                    ${walkText ? `<div class="nearby-detail-info-item"><i data-lucide="footprints" class="w-4 h-4"></i><span>${walkText}</span></div>` : ''}
+                    ${driveText ? `<div class="nearby-detail-info-item"><i data-lucide="car" class="w-4 h-4"></i><span>${driveText}</span></div>` : ''}
+                    ${p.entry_fee ? `<div class="nearby-detail-info-item"><i data-lucide="ticket" class="w-4 h-4"></i><span>Entry Fee: ${p.entry_fee}</span></div>` : ''}
+                    ${p.best_time ? `<div class="nearby-detail-info-item"><i data-lucide="clock" class="w-4 h-4"></i><span>Best Time: ${p.best_time}</span></div>` : ''}
+                </div>
+                <a href="${mapsLink}" target="_blank" rel="noopener" class="nearby-detail-maps-btn">
+                    <i data-lucide="map" class="w-4 h-4"></i> Open in Google Maps
+                </a>
+            </div>
+        </div>
+    `;
+
+    // Close detail modal on click outside its container
+    detailModal.addEventListener('click', function(e) {
+        if (e.target === detailModal) {
+            detailModal.remove();
+        }
+    });
+
+    const appContainer = document.getElementById('app-container') || document.body;
+    appContainer.appendChild(detailModal);
+    if (window.lucide) window.lucide.createIcons();
+};
 
 // Start Application
 if (document.readyState === 'loading') {
