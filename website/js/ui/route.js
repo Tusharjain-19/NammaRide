@@ -159,16 +159,21 @@ function createIcons() {
 export function updateRouteVisuals(simulationState) {
     if (!simulationState.isActive || !simulationState.timeline) return;
 
-    const elapsedTime = (Date.now() - simulationState.startTime) / 1000;
     const timeline = simulationState.timeline;
-
     let activeTimelineIndex = 0;
-    for (let i = 0; i < timeline.length; i++) {
-        if (elapsedTime >= timeline[i].arrivalTime) {
-            activeTimelineIndex = i;
-        } else {
-            break;
+
+    if (simulationState.useGPS && simulationState.currentStationIndex !== undefined && simulationState.currentStationIndex >= 0) {
+        activeTimelineIndex = simulationState.currentStationIndex;
+    } else {
+        const elapsedTime = (Date.now() - simulationState.startTime) / 1000;
+        for (let i = 0; i < timeline.length; i++) {
+            if (elapsedTime >= timeline[i].arrivalTime) {
+                activeTimelineIndex = i;
+            } else {
+                break;
+            }
         }
+        simulationState.currentStationIndex = activeTimelineIndex;
     }
 
     const currentStationId = timeline[activeTimelineIndex]?.stationId;
@@ -193,8 +198,9 @@ export function updateRouteVisuals(simulationState) {
 
     // Return status for header update
     const nextSt = timeline[activeTimelineIndex + 1]?.stationName;
+    const arrived = activeTimelineIndex >= timeline.length - 1;
     return {
         nextStationName: nextSt,
-        arrived: elapsedTime >= timeline[timeline.length - 1].arrivalTime
+        arrived: arrived
     };
 }

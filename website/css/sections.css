@@ -1430,3 +1430,121 @@ body.light-mode .nearby-detail-info-item {
     color: #334155;
 }
 
+/* ─── GPS Live Tracking & Celebration Styles ─── */
+.gps-signal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.gps-signal-dot.green {
+    background: #10B981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+.gps-signal-dot.yellow {
+    background: #F59E0B;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+.gps-signal-dot.red {
+    background: #EF4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+    animation: gps-pulse-anim 1.5s infinite;
+}
+@keyframes gps-pulse-anim {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+.gps-warning-banner {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #FBBF24;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+body.light-mode .gps-warning-banner {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #D97706;
+}
+
+.journey-complete-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.05) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: card-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    margin: 16px 0;
+    position: relative;
+    overflow: hidden;
+}
+body.light-mode .journey-complete-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.03) 100%);
+    border-color: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.05);
+}
+.celebration-checkmark-wrap {
+    width: 64px;
+    height: 64px;
+    background: rgba(16, 185, 129, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+    animation: checkmark-scale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.celebration-checkmark {
+    color: #10B981;
+    width: 32px;
+    height: 32px;
+}
+@keyframes card-slide-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+@keyframes checkmark-scale {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+.confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: confetti-fall-anim linear forwards;
+}
+@keyframes confetti-fall-anim {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(200px) rotate(360deg);
+        opacity: 0;
+    }
+}
+

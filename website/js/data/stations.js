@@ -123,6 +123,11 @@ export const translations = {
         whatsappBotSub: "Official BMRCL WhatsApp Bot (+91 81055 56677)",
         passengers: "Passenger(s)",
         totalFare: "Total Fare",
+        finishJourney: "Finish Journey",
+        gpsWeak: "GPS signal is weak. Manual override available.",
+        manualFinish: "Manual Finish",
+        exploreNearby: "Explore Nearby Attractions",
+        stationsPassed: "stations passed",
         // Navigation
         navPlan: "Plan", navStations: "Stations", navTimings: "Timings", navExplore: "Explore", navSafety: "Safety",
         // Section labels
@@ -179,7 +184,12 @@ export const translations = {
         typeTransit: "परಿವಹನ ಕೇಂದ್ರ", typeConvention: "सम्मेलन केंद्र", typeHeritage: "धरोहर स्थल",
         typeEV: "ईवी चार्जिंग", typeUniversity: "विश्वविद्यालय", typeHospital: "अस्पताल",
         typeMall: "मॉल", typeMuseum: "संग्रहालय", typeStadium: "स्टेडियम", typeMarket: "बाजार",
-        typePark: "पार्क", typeLake: "झील", typeIT: "आईटी हब"
+        typePark: "पार्क", typeLake: "झील", typeIT: "आईटी हब",
+        finishJourney: "यात्रा समाप्त करें",
+        gpsWeak: "GPS सिग्नल कमजोर है। मैन्युअल विकल्प उपलब्ध है।",
+        manualFinish: "मैन्युअल समाप्ति",
+        exploreNearby: "आसपास के आकर्षण देखें",
+        stationsPassed: "स्टेशन पार किए",
     },
     kn: {
         appName: "NammaRide", planYourTrip: "ಇಂದು ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು?", selectStationsHint: "ವೇಗದ ಮಾರ್ಗವನ್ನು ನೋಡಲು ನಿಲ್ದಾಣಗಳನ್ನು ಆರಿಸಿ.", startLiveJourney: "ಲೈವ್ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ",
@@ -208,6 +218,11 @@ export const translations = {
         stationFacilities: "ನಿಲ್ದಾಣ ಸೌಲಭ್ಯಗಳು", facilitiesSub: "ನಿಲ್ದಾಣದ ಒಳಗೆ ಲಭ್ಯವಿರುವ ಸೌಕರ್ಯಗಳು",
         connectivity: "ಸಂಪರ್ಕ", connectivitySub: "ಕಟ್ಟಡದ ಹೊರಗೆ ಸಾರಿಗೆ ಆಯ್ಕೆಗಳು",
         metroTravelInfo: "ಮೆಟ್ರೋ ಪ್ರಯಾಣ ಮಾಹಿತಿ", line: "ಮಾರ್ಗ", stationType: "ನಿಲ್ದಾಣ ಪ್ರಕಾರ",
+        finishJourney: "ಪ್ರಯಾಣ ಮುಗಿಸಿ",
+        gpsWeak: "GPS ಸಿಗ್ನಲ್ ದುರ್ಬಲವಾಗಿದೆ. ಹಸ್ತಚಾಲಿತ ಆಯ್ಕೆ ಲಭ್ಯವಿದೆ.",
+        manualFinish: "ಹಸ್ತಚಾಲಿತ ಮುಗಿಸಿ",
+        exploreNearby: "ಹತ್ತಿರದ ಪ್ರೇಕ್ಷಣೀಯ ಸ್ಥಳಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
+        stationsPassed: "ನಿಲ್ದಾಣಗಳನ್ನು ದಾಟಿದ್ದೀರಿ",
         platforms: "ವೇದಿಕೆಗಳು", opened: "ಆರಂಭ", operator: "ನಿರ್ವಾಹಕರು",
         elevated: "ಎತ್ತರಿಸಿದ", underground: "ಭೂಗತ",
         entryFee: "ಪ್ರವೇಶ ಶುಲ್ಕ", bestTime: "ಭೇಟಿ ನೀಡಲು ಉತ್ತಮ ಸಮಯ", openMaps: "ನಕ್ಷೆಯಲ್ಲಿ ತೆರೆಯಿರಿ",

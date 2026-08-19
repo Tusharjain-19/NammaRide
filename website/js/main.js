@@ -17,7 +17,20 @@ let currentJourney = null;
 let activeView = 'plan';
 
 // Tracks the status of the live journey simulation
-const simulationState = { isActive: false, journeyId: null, startTime: null, lastLocationUpdateTime: 0, locationWatcherId: null, timeline: [], animationFrameId: null, lastStationIndex: -1 };
+const simulationState = { 
+    isActive: false, 
+    journeyId: null, 
+    startTime: null, 
+    lastLocationUpdateTime: 0, 
+    locationWatcherId: null, 
+    timeline: [], 
+    animationFrameId: null, 
+    lastStationIndex: -1,
+    useGPS: false,
+    gpsAccuracy: null,
+    currentStationIndex: 0,
+    arrivedAtDestination: false
+};
 
 // --- Theme Management ---
 function getLineColor(lineName) {
@@ -565,36 +578,275 @@ function startSimulation(journey, useLiveLocation, startTimeOverride) {
     simulationState.isActive = true;
     simulationState.journeyId = journey.id;
     simulationState.timeline = generateTimeline(journey);
+    simulationState.startTime = startTimeOverride || Date.now();
+    simulationState.currentStationIndex = 0;
+    simulationState.arrivedAtDestination = false;
+    simulationState.gpsAccuracy = null;
+    simulationState.useGPS = false;
 
     sessionStorage.setItem('activeJourney', JSON.stringify(journey));
+    sessionStorage.setItem('simulationState', JSON.stringify({
+        isActive: simulationState.isActive,
+        journeyId: simulationState.journeyId,
+        startTime: simulationState.startTime,
+        useGPS: simulationState.useGPS
+    }));
 
     renderLiveRoute(journey, document.getElementById('route-list'), simulationState);
 
+    // Geolocation high-accuracy watch position
+    if (navigator.geolocation) {
+        simulationState.locationWatcherId = navigator.geolocation.watchPosition(
+            (position) => {
+                onGPSUpdate(position);
+            },
+            (error) => {
+                console.warn("GPS simulation watch error:", error);
+                simulationState.useGPS = false;
+                updateSimulationUI();
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        simulationState.useGPS = false;
+    }
+
+    // Animation loop heartbeat to keep times and views synchronized
+    if (simulationState.animationFrameId) cancelAnimationFrame(simulationState.animationFrameId);
+
+    function tick() {
+        if (!simulationState.isActive) return;
+        updateSimulationUI();
+        simulationState.animationFrameId = requestAnimationFrame(tick);
+    }
+    simulationState.animationFrameId = requestAnimationFrame(tick);
+}
+
+function onGPSUpdate(position) {
+    if (!simulationState.isActive) return;
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
+
+    simulationState.useGPS = true;
+    simulationState.gpsAccuracy = accuracy;
+
+    const timeline = simulationState.timeline;
+    let closestIndex = simulationState.currentStationIndex;
+    let minDistance = Infinity;
+
+    // Match closest next station coordinates
+    for (let i = simulationState.currentStationIndex; i < timeline.length; i++) {
+        const station = stationsMeta.find(s => s.id === timeline[i].stationId);
+        if (station) {
+            const loc = station.location || station;
+            if (loc.lat && loc.lon) {
+                const dist = getDistanceFromLatLonInKm(lat, lon, loc.lat, loc.lon);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = i;
+                }
+            }
+        }
+    }
+
+    // Auto arrival: if within 500m of destination
+    const destIndex = timeline.length - 1;
+    const destNode = timeline[destIndex];
+    const destStation = stationsMeta.find(s => s.id === destNode.stationId);
+    if (destStation) {
+        const loc = destStation.location || destStation;
+        if (loc.lat && loc.lon) {
+            const destDist = getDistanceFromLatLonInKm(lat, lon, loc.lat, loc.lon);
+            if (destDist <= 0.5) {
+                closestIndex = destIndex;
+            }
+        }
+    }
+
+    if (closestIndex > simulationState.currentStationIndex) {
+        simulationState.currentStationIndex = closestIndex;
+    }
+
+    updateSimulationUI();
+}
+
+function updateSimulationUI() {
+    if (!simulationState.isActive) return;
+
+    const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
+    if (!journey) return;
+
     const lastPart = journey.parts[journey.parts.length - 1];
     const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
-    const totalMinutes = journey.totalTime ? Math.ceil(journey.totalTime / 60) : 0;
+
+    const status = updateRouteVisuals(simulationState);
+
+    if (status.arrived && !simulationState.arrivedAtDestination) {
+        simulationState.arrivedAtDestination = true;
+        showJourneyComplete(destinationName);
+        return;
+    }
+
+    let remainingMinutes = 0;
+    const timeline = simulationState.timeline;
+    if (simulationState.useGPS) {
+        const stationsLeft = (timeline.length - 1) - simulationState.currentStationIndex;
+        remainingMinutes = Math.max(0, stationsLeft * 2);
+    } else {
+        const elapsedTime = (Date.now() - simulationState.startTime) / 1000;
+        const totalSeconds = journey.totalTime || 0;
+        remainingMinutes = Math.max(0, Math.ceil((totalSeconds - elapsedTime) / 60));
+    }
+
+    // GPS indicator color state
+    let gpsClass = 'red';
+    let gpsTitle = T('locationDenied') || 'GPS Off';
+
+    if (simulationState.useGPS && simulationState.gpsAccuracy !== null) {
+        if (simulationState.gpsAccuracy < 100) {
+            gpsClass = 'green';
+            gpsTitle = `GPS Signal: Good (${Math.round(simulationState.gpsAccuracy)}m)`;
+        } else if (simulationState.gpsAccuracy < 500) {
+            gpsClass = 'yellow';
+            gpsTitle = `GPS Signal: Fair (${Math.round(simulationState.gpsAccuracy)}m)`;
+        } else {
+            gpsClass = 'red';
+            gpsTitle = `GPS Signal: Weak (${Math.round(simulationState.gpsAccuracy)}m)`;
+        }
+    }
 
     const simStatus = document.getElementById('simulation-status');
-    simStatus.innerHTML = `
-        <div class="w-full flex justify-between items-start bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm my-2">
-            <div class="flex flex-col gap-0.5">
-                <p class="font-bold text-primary text-sm flex items-center gap-2">
-                    <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400"></i>
-                    ${T('liveJourney') || 'Live Journey'}
-                </p>
-                <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
-                <p class="text-[10px] text-secondary opacity-70">${totalMinutes} ${T('minRemaining')}</p>
+    if (!simStatus) return;
+
+    const showManualFinish = !simulationState.useGPS || (simulationState.gpsAccuracy !== null && simulationState.gpsAccuracy > 500);
+
+    let gpsWarningHtml = '';
+    if (showManualFinish) {
+        gpsWarningHtml = `
+            <div class="gps-warning-banner">
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500"></i>
+                <span>${T('gpsWeak') || 'GPS signal is weak. Manual override available.'}</span>
             </div>
-            <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-indigo-400 transition-colors mt-0.5">${T('exitJourney')}</button>
-        </div>`;
+        `;
+    }
+
+    simStatus.innerHTML = `
+        <div class="w-full flex flex-col bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm my-2 gap-2">
+            <div class="flex justify-between items-start">
+                <div class="flex flex-col gap-0.5">
+                    <p class="font-bold text-primary text-sm flex items-center gap-2">
+                        <span class="gps-signal-dot ${gpsClass}" title="${gpsTitle}"></span>
+                        <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400 animate-pulse"></i>
+                        ${T('liveJourney') || 'Live Journey'}
+                    </p>
+                    <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
+                    <p class="text-[10px] text-secondary opacity-70">${remainingMinutes} ${T('minRemaining')}</p>
+                </div>
+                <div class="flex gap-2">
+                    ${showManualFinish ? `
+                        <button id="manual-finish-btn" class="bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 font-bold px-3 py-1.5 rounded-md text-xs transition-colors">
+                            ${T('finishJourney') || 'Finish'}
+                        </button>
+                    ` : ''}
+                    <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-red-400 transition-colors">${T('exitJourney')}</button>
+                </div>
+            </div>
+            ${gpsWarningHtml}
+        </div>
+    `;
+
     document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
+    if (showManualFinish) {
+        document.getElementById('manual-finish-btn').addEventListener('click', () => {
+            simulationState.currentStationIndex = timeline.length - 1;
+            updateSimulationUI();
+        });
+    }
+
     if (window.lucide) window.lucide.createIcons();
+}
+
+function showJourneyComplete(destinationName) {
+    if (simulationState.locationWatcherId) {
+        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
+        simulationState.locationWatcherId = null;
+    }
+    if (simulationState.animationFrameId) {
+        cancelAnimationFrame(simulationState.animationFrameId);
+        simulationState.animationFrameId = null;
+    }
+
+    const simStatus = document.getElementById('simulation-status');
+    if (!simStatus) return;
+
+    const places = stationPlaces[destinationName] || [];
+    const hasExploreOption = places.length > 0;
+
+    simStatus.innerHTML = `
+        <div class="journey-complete-card">
+            <div class="confetti-container" id="celebration-confetti"></div>
+            <div class="celebration-checkmark-wrap">
+                <i data-lucide="check" class="celebration-checkmark"></i>
+            </div>
+            <h3 class="font-bold text-lg text-emerald-400 mb-1">${T('journeyComplete') || 'Journey Complete!'}</h3>
+            <p class="text-sm text-primary mb-4 font-medium">${T('youHaveArrived') || 'You have arrived!'} • ${destinationName}</p>
+            
+            <div class="flex justify-center gap-3 relative z-10">
+                ${hasExploreOption ? `
+                    <button id="explore-nearby-celebrate-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-emerald-500/20">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        ${T('exploreNearby') || 'Explore Nearby'}
+                    </button>
+                ` : ''}
+                <button id="done-celebrate-btn" class="bg-card-subtle border border-subtle text-primary font-bold px-4 py-2 rounded-lg text-xs hover:bg-hover transition-colors">
+                    Done
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('done-celebrate-btn').addEventListener('click', stopSimulation);
+    if (hasExploreOption) {
+        document.getElementById('explore-nearby-celebrate-btn').addEventListener('click', () => {
+            if (window.showNearbyAttractions) {
+                window.showNearbyAttractions(destinationName);
+            }
+        });
+    }
+
+    if (window.lucide) window.lucide.createIcons();
+    createConfettiEffect();
+}
+
+function createConfettiEffect() {
+    const container = document.getElementById('celebration-confetti');
+    if (!container) return;
+
+    const colors = ['#10B981', '#34D399', '#A855F7', '#C084FC', '#F59E0B', '#FBBF24'];
+    for (let i = 0; i < 40; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.top = `${-10 - Math.random() * 20}px`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = `${Math.random() * 1.5}s`;
+        piece.style.animationDuration = `${1.2 + Math.random() * 1.8}s`;
+        container.appendChild(piece);
+    }
 }
 
 function stopSimulation() {
     simulationState.isActive = false;
-    if (simulationState.animationFrameId) cancelAnimationFrame(simulationState.animationFrameId);
-    if (simulationState.locationWatcherId) navigator.geolocation.clearWatch(simulationState.locationWatcherId);
+    if (simulationState.animationFrameId) {
+        cancelAnimationFrame(simulationState.animationFrameId);
+        simulationState.animationFrameId = null;
+    }
+    if (simulationState.locationWatcherId) {
+        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
+        simulationState.locationWatcherId = null;
+    }
     sessionStorage.removeItem('activeJourney');
     sessionStorage.removeItem('simulationState');
     navigateToView('plan');
