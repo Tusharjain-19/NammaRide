@@ -720,24 +720,67 @@ function updateSimulationUI() {
     const simStatus = document.getElementById('simulation-status');
     if (!simStatus) return;
 
+    // Bind event delegation ONCE for bulletproof click handler support
+    if (!simStatus.dataset.listenersBound) {
+        simStatus.dataset.listenersBound = 'true';
+        simStatus.addEventListener('click', (e) => {
+            const finishBtn = e.target.closest('#manual-finish-btn');
+            const exitBtn = e.target.closest('#exit-journey-btn');
+            const doneBtn = e.target.closest('#done-celebrate-btn');
+            const exploreBtn = e.target.closest('#explore-nearby-celebrate-btn');
+
+            if (finishBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
+                const lastPart = journey?.parts[journey.parts.length - 1];
+                const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
+                simulationState.currentStationIndex = simulationState.timeline.length - 1;
+                simulationState.arrivedAtDestination = true;
+                showJourneyComplete(destinationName);
+            } else if (exitBtn || doneBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                stopSimulation();
+            } else if (exploreBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
+                const lastPart = journey?.parts[journey.parts.length - 1];
+                const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
+                if (window.showNearbyAttractions) {
+                    window.showNearbyAttractions(destinationName);
+                }
+            }
+        });
+    }
+
+    // Skip DOM recreation if values haven't changed
+    const stateKey = `${simulationState.currentStationIndex}_${remainingMinutes}_${gpsClass}_${destinationName}_${simulationState.arrivedAtDestination}`;
+    if (simStatus.dataset.lastStateKey === stateKey) {
+        return;
+    }
+    simStatus.dataset.lastStateKey = stateKey;
+
     const showManualFinish = !simulationState.useGPS || (simulationState.gpsAccuracy !== null && simulationState.gpsAccuracy > 500);
 
     let gpsWarningHtml = '';
     if (showManualFinish) {
         gpsWarningHtml = `
-            <div class="gps-warning-banner">
-                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500"></i>
+            <div class="gps-warning-banner py-1 px-2.5 mt-1 text-[10px]">
+                <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-500"></i>
                 <span>${T('gpsWeak') || 'GPS signal is weak. Manual override available.'}</span>
             </div>
         `;
     }
 
     simStatus.innerHTML = `
-        <div class="live-tracking-panel w-full flex flex-col p-4 rounded-2xl border border-subtle shadow-lg gap-3">
-            <div class="flex justify-between items-center border-b border-subtle pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400">
+        <div class="live-tracking-panel w-full flex flex-col p-2.5 px-3.5 rounded-xl border border-subtle shadow-md gap-1.5 my-1">
+            <div class="flex items-center justify-between gap-2">
+                <!-- Left: Train Icon + Trip Info -->
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400">
                             <rect x="4" y="3" width="16" height="13" rx="4" stroke="currentColor" stroke-width="2"/>
                             <rect x="6" y="5" width="12" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
                             <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5"/>
@@ -747,47 +790,31 @@ function updateSimulationUI() {
                             <path d="M17 16L20 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div>
-                        <span class="text-[10px] uppercase tracking-wider font-extrabold text-secondary opacity-65">${T('liveJourney') || 'Live Journey'}</span>
-                        <h4 class="font-bold text-sm text-primary leading-tight">${T('towards')} ${destinationName}</h4>
+                    <div class="flex flex-col min-w-0">
+                        <div class="flex items-center gap-1.5 leading-none">
+                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-emerald-400 truncate">${T('towards')} ${destinationName}</span>
+                            <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
+                        </div>
+                        <div class="flex items-center gap-1 text-xs font-bold text-primary mt-0.5">
+                            <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-2">
-                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-card-subtle border border-subtle text-[10px] font-bold text-secondary">
-                        <span class="gps-signal-dot ${gpsClass}"></span>
-                        <span>${gpsTitle.split(':')[1] || gpsTitle}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-2 text-primary font-bold text-sm bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
-                    <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
-                    <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
-                </div>
-                
-                <div class="flex gap-2">
-                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1">
+
+                <!-- Right: Action Buttons -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1">
                         <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                         <span>${T('finishJourney') || 'Finish'}</span>
                     </button>
-                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 border border-subtle font-bold px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1">
-                        <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
-                        <span>${T('exitJourney') || 'Exit'}</span>
+                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1.5 rounded-lg text-xs transition-colors flex items-center justify-center" title="${T('exitJourney') || 'Exit'}">
+                        <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
             ${gpsWarningHtml}
         </div>
     `;
-
-    document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
-    document.getElementById('manual-finish-btn').addEventListener('click', () => {
-        simulationState.currentStationIndex = timeline.length - 1;
-        simulationState.arrivedAtDestination = true;
-        showJourneyComplete(destinationName);
-    });
 
     if (window.lucide) window.lucide.createIcons();
 }

@@ -42,26 +42,22 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
     flatList.forEach((node, i) => {
         const nextNode = flatList[i + 1];
         // Line logic
-        // Purple -> #8B5CF6 / #9B59B6 check
-        let colorClass = 'line-default';
-        const color = nextNode ? nextNode.lineColor : node.lineColor;
+        const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6' || c === '#A855F7' || c === '#9333EA';
+        const isGreen = (c) => c === '#2ECC71' || c === '#22C55E' || c === '#10B981' || c === '#059669';
+        const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308' || c === '#F59E0B';
 
-        // Simple heuristic for class names based on color code
-        if (color === '#8B5CF6' || color === '#9B59B6') colorClass = 'line-purple';
-        else if (color === '#22C55E' || color === '#2ECC71') colorClass = 'line-green';
-        else if (color === '#FBBF24' || color === '#F1C40F') colorClass = 'line-yellow';
+        let colorClass = 'line-default';
+        const color = node.lineColor || (nextNode ? nextNode.lineColor : '');
+
+        if (isPurple(color)) colorClass = 'line-purple';
+        else if (isGreen(color)) colorClass = 'line-green';
+        else if (isYellow(color)) colorClass = 'line-yellow';
 
         // Check for specific interchange types (Purple <-> Green)
         let interchangeClass = '';
         if (node.isInterchange && nextNode) {
-            const currentLine = node.lineColor; // e.g., #9B59B6
-            const nextLine = nextNode.lineColor; // e.g., #2ECC71
-
-            // Purple (#9B59B6 or #8B5CF6) <-> Green (#2ECC71 or #22C55E)
-            // Yellow (#FBBF24 or #F1C40F or #EAB308)
-            const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6';
-            const isGreen = (c) => c === '#2ECC71' || c === '#22C55E';
-            const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308';
+            const currentLine = node.lineColor;
+            const nextLine = nextNode.lineColor;
 
             if (isPurple(currentLine) && isGreen(nextLine)) {
                 interchangeClass = 'interchange-purple-green';
