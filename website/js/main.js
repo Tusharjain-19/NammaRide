@@ -358,10 +358,10 @@ function displayJourneyResult(journey) {
                         <span class="text-xs font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
                         <span class="text-[11px] text-emerald-400 font-bold mt-0.5">₹${totalFareAmount}</span>
                     </div>
-                    <div class="flex items-center gap-3 bg-card-subtle px-2 py-1 rounded-full border border-subtle">
-                        <button id="p-minus-btn" class="w-7 h-7 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary transition-colors">-</button>
-                        <span class="font-bold text-sm text-primary min-w-[16px] text-center">${passengerCount}</span>
-                        <button id="p-plus-btn" class="w-7 h-7 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary transition-colors">+</button>
+                    <div class="flex items-center gap-4 bg-card-subtle px-3 py-1.5 rounded-full border border-subtle">
+                        <button id="p-minus-btn" class="w-8 h-8 shrink-0 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary font-bold text-lg transition-colors border border-subtle/50">-</button>
+                        <span class="font-bold text-base text-primary min-w-[20px] text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" class="w-8 h-8 shrink-0 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary font-bold text-lg transition-colors border border-subtle/50">+</button>
                     </div>
                 </div>
 
