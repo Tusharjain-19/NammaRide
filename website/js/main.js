@@ -787,16 +787,16 @@ function initializeApp() {
     initTheme();
     if (window.lucide) window.lucide.createIcons();
 
-    // Hide Splash Screen with smooth transition
+    // Hide Splash Screen fast
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) {
             splash.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 splash.style.display = 'none';
-            }, 800);
+            }, 500);
         }
-    }, 1200);
+    }, 300);
 }
 
 
