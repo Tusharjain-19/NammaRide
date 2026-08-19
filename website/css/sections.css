@@ -5,25 +5,26 @@
 
 /* ─── Bottom Navigation ─── */
 .bottom-nav {
-    position: relative;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
     background: var(--bg-card);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
     border: 1px solid var(--border-color);
     border-radius: 1.5rem;
-    margin: 0 1rem 1rem 1rem;
     padding: 0.4rem 0.4rem;
-    flex-shrink: 0;
     z-index: 50;
     box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color var(--transition-speed), border-color var(--transition-speed);
 }
 
 .bottom-nav.nav-hidden {
-    transform: translateY(160%);
+    transform: translateY(180%);
     opacity: 0;
     pointer-events: none;
 }
@@ -35,7 +36,7 @@
     bottom: 0.35rem;
     left: 0;
     width: 0;
-    background: rgba(16, 185, 129, 0.16);
+    background: rgba(16, 185, 129, 0.18);
     border: 1px solid rgba(16, 185, 129, 0.4);
     border-radius: 1rem;
     box-shadow: 0 0 16px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -92,7 +93,7 @@ body.light-mode .nav-item.active {
 
 /* ─── Section Views Common ─── */
 .section-view {
-    padding: 1rem 1rem 1.5rem;
+    padding: 1rem 1rem 5.5rem 1rem;
     background: transparent;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
