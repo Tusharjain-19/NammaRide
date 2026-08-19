@@ -600,8 +600,8 @@ body.light-mode .explore-line-btn.active {
     background: #10B981 !important;
     color: #FFFFFF !important;
     border-color: #10B981 !important;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
-    transform: scale(1.03);
+    box-shadow: none !important;
+    transform: scale(1.02);
 }
 
 .explore-line-btn[data-line="purple"].active,
@@ -609,7 +609,7 @@ body.light-mode .explore-line-btn[data-line="purple"].active {
     background: #A855F7 !important; 
     color: #FFFFFF !important; 
     border-color: #A855F7 !important;
-    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4) !important;
+    box-shadow: none !important;
 }
 
 .explore-line-btn[data-line="green"].active,
@@ -617,7 +617,7 @@ body.light-mode .explore-line-btn[data-line="green"].active {
     background: #10B981 !important; 
     color: #FFFFFF !important; 
     border-color: #10B981 !important;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+    box-shadow: none !important;
 }
 
 .explore-line-btn[data-line="yellow"].active,
@@ -625,7 +625,7 @@ body.light-mode .explore-line-btn[data-line="yellow"].active {
     background: #EAB308 !important; 
     color: #000000 !important; 
     border-color: #EAB308 !important;
-    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4) !important;
+    box-shadow: none !important;
 }
 
 body.light-mode .explore-cat-btn:not(.active),
@@ -633,7 +633,7 @@ body.light-mode .explore-line-btn:not(.active) {
     background: #FFFFFF;
     color: #334155;
     border-color: rgba(0, 0, 0, 0.12);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    box-shadow: none !important;
 }
 
 body.light-mode .explore-cat-btn:not(.active):hover,
