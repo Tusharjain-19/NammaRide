@@ -17,11 +17,5 @@
   "bugs": {
     "url": "https://github.com/Tusharjain-19/NammaRide/issues"
   },
-  "homepage": "https://github.com/Tusharjain-19/NammaRide#readme",
-  "dependencies": {
-    "@capacitor/android": "^8.5.0",
-    "@capacitor/cli": "^8.5.0",
-    "@capacitor/core": "^8.5.0",
-    "@capacitor/geolocation": "^8.2.2"
-  }
+  "homepage": "https://github.com/Tusharjain-19/NammaRide#readme"
 }
