@@ -421,7 +421,7 @@ function displayJourneyResult(journey) {
 
                 // Official BMRCL Chatbot WhatsApp command format
                 const waPhone = "918105556677";
-                const waMsg = `Book ticket from ${startClean} to ${endClean}`;
+                const waMsg = `Hi, I would like to book a ticket from ${startClean} to ${endClean} for ${passengerCount} person(s).`;
                 const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`;
                 
                 window.open(waUrl, '_blank');
