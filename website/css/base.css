@@ -22,7 +22,12 @@
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
     --glass-glow: 0 0 20px rgba(16, 185, 129, 0.25);
     
-    --bg-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12), transparent 45%), radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.08), transparent 40%), url('../assets/images/vidhana_soudha.jpg');
+    --bg-image: 
+        radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.28) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(234, 179, 8, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 80% 85%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+        url('../assets/images/vidhana_soudha.jpg');
 
     --line-purple: #A855F7;
     --line-green: #10B981;
@@ -37,16 +42,16 @@
 }
 
 body.light-mode {
-    --bg-color: #F8FAFC;
-    --bg-card: rgba(255, 255, 255, 0.55);
-    --bg-card-hover: rgba(255, 255, 255, 0.75);
-    --bg-input: rgba(255, 255, 255, 0.65);
+    --bg-color: #F0F4F8;
+    --bg-card: rgba(255, 255, 255, 0.65);
+    --bg-card-hover: rgba(255, 255, 255, 0.85);
+    --bg-input: rgba(255, 255, 255, 0.75);
     --text-primary: #0F172A;
     --text-secondary: #475569;
-    --border-color: rgba(255, 255, 255, 0.7);
-    --border-subtle: rgba(255, 255, 255, 0.4);
-    --header-bg: rgba(255, 255, 255, 0.6);
-    --header-border: rgba(255, 255, 255, 0.8);
+    --border-color: rgba(255, 255, 255, 0.8);
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --header-bg: rgba(240, 244, 248, 0.5);
+    --header-border: rgba(0, 0, 0, 0.08);
 
     --bg-dropdown: #FFFFFF;
     --bg-dropdown-hover: #F1F5F9;
@@ -59,7 +64,11 @@ body.light-mode {
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
     --glass-glow: 0 0 25px rgba(16, 185, 129, 0.25);
     
-    --bg-image: radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.25), transparent 60%), radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.25), transparent 60%), radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 70%), url('../assets/images/vidhana_soudha.jpg');
+    --bg-image: 
+        radial-gradient(circle at 10% 15%, rgba(16, 185, 129, 0.22) 0%, transparent 50%),
+        radial-gradient(circle at 90% 25%, rgba(168, 85, 247, 0.22) 0%, transparent 55%),
+        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.18) 0%, transparent 60%),
+        url('../assets/images/vidhana_soudha.jpg');
 }
 
 
@@ -82,7 +91,7 @@ body {
     background-image: var(--bg-image);
     background-size: cover;
     background-position: center;
-    background-attachment: scroll;
+    background-attachment: fixed;
     position: relative;
     overscroll-behavior-y: none;
 }
@@ -91,15 +100,16 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: var(--header-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 70%);
+    pointer-events: none;
     z-index: -1;
-    transition: background-color var(--transition-speed);
+    animation: ambientPulse 12s ease-in-out infinite alternate;
+}
+
+@keyframes ambientPulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
 }
 
 
