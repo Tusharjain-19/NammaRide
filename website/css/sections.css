@@ -595,31 +595,26 @@ body.light-mode .safety-icon-wrap {
 }
 
 .explore-line-btn.active {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--text-primary);
-    border-color: var(--border-color);
+    transform: scale(1.03);
 }
 
 .explore-line-btn[data-line="purple"].active { 
-    background: rgba(168, 85, 247, 0.2); 
-    color: #E9D5FF; 
-    border-color: rgba(168, 85, 247, 0.5);
-    box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
-    transform: scale(1.02);
+    background: #A855F7; 
+    color: #FFFFFF !important; 
+    border-color: #A855F7;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
 }
 .explore-line-btn[data-line="green"].active { 
-    background: rgba(16, 185, 129, 0.2); 
-    color: #A7F3D0; 
-    border-color: rgba(16, 185, 129, 0.5);
-    box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
-    transform: scale(1.02);
+    background: #10B981; 
+    color: #FFFFFF !important; 
+    border-color: #10B981;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
 }
 .explore-line-btn[data-line="yellow"].active { 
-    background: rgba(234, 179, 8, 0.2); 
-    color: #FDE68A; 
-    border-color: rgba(234, 179, 8, 0.5);
-    box-shadow: 0 0 14px rgba(234, 179, 8, 0.35);
-    transform: scale(1.02);
+    background: #EAB308; 
+    color: #000000 !important; 
+    border-color: #EAB308;
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
 }
 
 /* ─── Explore Section Glassmorphism ─── */
