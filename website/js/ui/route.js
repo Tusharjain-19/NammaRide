@@ -97,7 +97,7 @@ function renderStationItem(node, details, index) {
 
     const places = stationPlaces[station.name] || [];
     let nearbyBadge = '';
-    if (places.length > 0) {
+    if (isEnd && places.length > 0) {
         nearbyBadge = `
             <button class="nearby-explore-trigger flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold" onclick="window.showNearbyAttractions('${station.name.replace(/'/g, "\\'")}')">
                 <i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i>
