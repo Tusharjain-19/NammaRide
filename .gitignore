@@ -1,7 +1,5 @@
 # Mobile builds & app assets (Do not push to GitHub)
-mobile/
-*.apk
-*.aab
+# (Allowed mobile/new/release directory for APK/AAB distribution)
 
 # OS & IDE temporary files
 .DS_Store
