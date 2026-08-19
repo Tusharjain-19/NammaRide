@@ -363,6 +363,19 @@
         </div>
     </div>
 
+    <!-- Vercel Analytics Injection -->
+    <script type="importmap">
+    {
+        "imports": {
+            "@vercel/analytics": "https://esm.sh/@vercel/analytics"
+        }
+    }
+    </script>
+    <script type="module">
+        import { inject } from "@vercel/analytics";
+        inject();
+    </script>
+
 </body>
 
 </html>
