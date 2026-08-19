@@ -736,8 +736,18 @@ function updateSimulationUI() {
         <div class="live-tracking-panel w-full flex flex-col p-4 rounded-2xl border border-subtle shadow-lg gap-3">
             <div class="flex justify-between items-center border-b border-subtle pb-3">
                 <div class="flex items-center gap-2.5">
-                    <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        <i data-lucide="activity" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
+                    <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-emerald-400">
+                            <rect x="4" y="3" width="16" height="13" rx="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="M4 9H20" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9 3V6" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M15 3V6" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                            <circle cx="16" cy="12" r="1" fill="currentColor"/>
+                            <path d="M6 20L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M18 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 16V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
                     </div>
                     <div>
                         <span class="text-[10px] uppercase tracking-wider font-extrabold text-secondary opacity-65">${T('liveJourney') || 'Live Journey'}</span>
@@ -760,12 +770,14 @@ function updateSimulationUI() {
                 </div>
                 
                 <div class="flex gap-2">
-                    ${showManualFinish ? `
-                        <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-md shadow-emerald-500/20">
-                            ${T('finishJourney') || 'Finish'}
-                        </button>
-                    ` : ''}
-                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 border border-subtle font-bold px-3 py-1.5 rounded-lg text-xs transition-colors">${T('exitJourney')}</button>
+                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                        <span>${T('finishJourney') || 'Finish'}</span>
+                    </button>
+                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 border border-subtle font-bold px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1">
+                        <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
+                        <span>${T('exitJourney') || 'Exit'}</span>
+                    </button>
                 </div>
             </div>
             ${gpsWarningHtml}
@@ -773,12 +785,11 @@ function updateSimulationUI() {
     `;
 
     document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
-    if (showManualFinish) {
-        document.getElementById('manual-finish-btn').addEventListener('click', () => {
-            simulationState.currentStationIndex = timeline.length - 1;
-            updateSimulationUI();
-        });
-    }
+    document.getElementById('manual-finish-btn').addEventListener('click', () => {
+        simulationState.currentStationIndex = timeline.length - 1;
+        simulationState.arrivedAtDestination = true;
+        showJourneyComplete(destinationName);
+    });
 
     if (window.lucide) window.lucide.createIcons();
 }
