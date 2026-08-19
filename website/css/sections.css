@@ -1139,6 +1139,7 @@ body.light-mode .station-type-badge.underground {
     border: 1px solid rgba(255, 255, 255, 0.1);
     width: 2rem;
     height: 2rem;
+    flex-shrink: 0;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1160,6 +1161,9 @@ body.light-mode .station-type-badge.underground {
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
 }
 .nearby-cards-scroll::-webkit-scrollbar {
     display: none;
