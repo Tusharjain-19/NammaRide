@@ -8,7 +8,10 @@ import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from
 import { stationPlaces } from './data/stationPlaces.js';
 import { inject } from "@vercel/analytics";
 
-inject();
+// Only inject Vercel Analytics in production (not on localhost)
+if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    inject();
+}
 
 // --- App State ---
 let currentLang = getCurrentLang();
