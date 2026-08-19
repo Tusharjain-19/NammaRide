@@ -118,6 +118,10 @@ export const translations = {
         walkTime: "min walk",
         findingNearest: "Locating nearest station...",
         locationDenied: "Location access denied. Please enable GPS.",
+        bookQRTicket: "Book QR Ticket on WhatsApp",
+        whatsappBotSub: "Official BMRCL WhatsApp Bot (+91 81055 56677)",
+        passengers: "Passenger(s)",
+        totalFare: "Total Fare",
         // Navigation
         navPlan: "Plan", navStations: "Stations", navTimings: "Timings", navExplore: "Explore", navSafety: "Safety",
         // Section labels

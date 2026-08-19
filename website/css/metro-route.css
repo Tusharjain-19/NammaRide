@@ -27,27 +27,28 @@
     content: '';
     position: absolute;
     left: 7px;
-    /* Align center of 16px dot: 8px center. Line width 2px. Left = 8 - 1 = 7px */
     top: 24px;
-    /* Start below the dot */
     bottom: -8px;
-    /* Extend to next dot */
-    width: 2px;
+    width: 3px;
     background-color: var(--line-default);
     z-index: 0;
+    border-radius: 2px;
 }
 
 /* Line Colors */
 .line-purple .station-item::before {
     background-color: var(--line-purple);
+    box-shadow: 0 0 8px var(--line-purple);
 }
 
 .line-green .station-item::before {
     background-color: var(--line-green);
+    box-shadow: 0 0 8px var(--line-green);
 }
 
 .line-yellow .station-item::before {
     background-color: var(--line-yellow);
+    box-shadow: 0 0 8px var(--line-yellow);
 }
 
 /* The Dot */
@@ -59,7 +60,6 @@
     height: 16px;
     border-radius: 50%;
     background-color: var(--bg-color);
-    /* Cutout effect */
     border: 3px solid var(--line-default);
     z-index: 10;
     box-sizing: border-box;
@@ -68,22 +68,25 @@
 
 .line-purple .station-dot {
     border-color: var(--line-purple);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
 }
 
 .line-green .station-dot {
     border-color: var(--line-green);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
 .line-yellow .station-dot {
     border-color: var(--line-yellow);
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
 }
 
 /* Station States */
 .station-item.completed .station-dot {
     background-color: var(--line-default);
-    /* Solid muted */
     border-color: var(--line-default);
     opacity: 0.6;
+    box-shadow: none;
 }
 
 .station-item.completed .station-content {
@@ -91,27 +94,25 @@
 }
 
 .station-item.current .station-dot {
-    width: 20px;
-    height: 20px;
-    left: -2px;
-    /* Center adjustment */
-    top: -2px;
-    background-color: var(--bg-color);
+    width: 22px;
+    height: 22px;
+    left: -3px;
+    top: -3px;
+    background-color: var(--bg-card);
     border-width: 4px;
-    box-shadow: 0 0 0 4px var(--border-subtle);
-    /* Subtle ring */
+    box-shadow: 0 0 15px currentColor, 0 0 0 4px var(--border-subtle);
 }
 
 /* Interchange Node */
 .station-item.interchange .station-dot {
-    width: 24px;
-    height: 24px;
-    left: -4px;
-    top: -4px;
+    width: 26px;
+    height: 26px;
+    left: -5px;
+    top: -5px;
     border-width: 4px;
     background-color: var(--bg-card);
-    /* Default interchange */
     z-index: 20;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 /* Dual-Line Interchange Node (Purple <-> Green) */
@@ -122,8 +123,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 0 2px var(--bg-color);
-    /* Separation ring */
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4), 0 0 12px rgba(168, 85, 247, 0.4);
 }
 
 /* Dual-Line Interchange Node (Green <-> Yellow) */
@@ -134,8 +134,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 0 2px var(--bg-color);
-    /* Separation ring */
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4), 0 0 12px rgba(234, 179, 8, 0.4);
 }
 
 /* Inner hole for split ring effect */
@@ -186,10 +185,12 @@
     margin-top: 0.5rem;
     padding-left: 0.25rem;
     border-left: 2px solid var(--line-yellow);
-    /* Default accent */
     margin-left: 2px;
-    /* Align with text */
     padding-left: 8px;
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    border-radius: 0 8px 8px 0;
+    padding: 0.4rem 0.6rem;
 }
 
 .line-purple .interchange-info {
@@ -215,10 +216,8 @@
 .interchange-meta {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    /* Slate 500 */
     margin-top: 2px;
     margin-left: 1.35rem;
-    /* Align under text */
 }
 
 .station-pulse {
@@ -233,7 +232,7 @@
 
     50% {
         transform: scale(1.2);
-        box-shadow: 0 0 5px 10px transparent;
+        box-shadow: 0 0 10px 15px transparent;
     }
 
     100% {

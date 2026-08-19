@@ -8,72 +8,77 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: var(--bg-card);
+    background: var(--header-bg);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
     border-top: 1px solid var(--border-color);
     padding: 0.4rem 0 0.6rem;
     flex-shrink: 0;
     z-index: 50;
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.15rem;
-    padding: 0.6rem 0.75rem; /* Increased for better touch target */
-    border: none;
+    gap: 0.1rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid transparent;
     background: none;
     color: var(--text-secondary);
     font-size: 0.65rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0.75rem;
-    min-width: 4rem; /* Increased */
+    min-width: 3.2rem;
     touch-action: manipulation;
 }
 
 .nav-item:active {
-    transform: scale(0.9);
+    transform: scale(0.92);
     background-color: var(--bg-card-hover);
 }
 
-
-.nav-item:hover { color: var(--text-primary); }
+.nav-item:hover { 
+    color: var(--text-primary); 
+    background-color: rgba(255, 255, 255, 0.05);
+}
 
 .nav-item.active {
-    color: var(--accent-color);
+    color: var(--accent-light);
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 body.light-mode .nav-item.active {
     color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.15);
 }
 
 /* ─── Section Views Common ─── */
 .section-view {
     padding: 1rem 1rem 1.5rem;
-    background: var(--bg-color);
+    background: transparent;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
+    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    overscroll-behavior-y: none; /* Block scroll chaining to prevent refresh */
-    touch-action: pan-y; /* Optimize for vertical scrolling */
+    overscroll-behavior-y: none;
+    touch-action: pan-y;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    transform: translateZ(0); /* Force GPU acceleration */
+    transform: translateZ(0);
     will-change: scroll-position;
 }
-
-
-
 
 /* Ensure all views inside section behave correctly */
 .section-view > * {
     flex-shrink: 0;
 }
-
 
 .section-header {
     margin-bottom: 1rem;
@@ -102,13 +107,17 @@ body.light-mode .nav-item.active {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.6rem 0.85rem;
     margin-bottom: 0.5rem;
     background: var(--bg-card);
-    border-radius: 0.5rem;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 0.85rem;
     font-weight: 600;
     font-size: 0.85rem;
     color: var(--text-primary);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .line-dot {
@@ -116,6 +125,7 @@ body.light-mode .nav-item.active {
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
+    box-shadow: 0 0 8px currentColor;
 }
 
 .line-name-text {
@@ -129,6 +139,7 @@ body.light-mode .nav-item.active {
     padding: 0.15rem 0.5rem;
     border-radius: 1rem;
     font-weight: 600;
+    border: 1px solid var(--border-color);
 }
 
 .stations-grid {
@@ -141,17 +152,21 @@ body.light-mode .nav-item.active {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.65rem 0.75rem;
+    padding: 0.7rem 0.85rem;
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
+    border-radius: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .station-card:hover {
     background: var(--bg-card-hover);
-    border-color: var(--text-secondary);
+    border-color: var(--accent-light);
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), var(--glass-glow);
 }
 
 .station-card:active {
@@ -200,7 +215,7 @@ body.light-mode .nav-item.active {
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 0;
-    color: var(--accent-color);
+    color: var(--accent-light);
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
@@ -212,10 +227,13 @@ body.light-mode .nav-item.active {
 
 .station-detail-header {
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    border-radius: 1rem;
+    padding: 1.15rem;
     margin-bottom: 1rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .station-detail-line {
@@ -252,25 +270,31 @@ body.light-mode .nav-item.active {
     font-weight: 600;
     background: var(--bg-card-hover);
     color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .station-type-badge.elevated {
-    background: rgba(79, 70, 229, 0.1);
-    color: #818CF8;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 .station-type-badge.underground {
-    background: rgba(34, 197, 94, 0.1);
-    color: #4ADE80;
+    background: rgba(168, 85, 247, 0.15);
+    color: #C084FC;
+    border-color: rgba(168, 85, 247, 0.3);
 }
 
 /* Detail Sections */
 .detail-section {
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 0.85rem;
+    border-radius: 1rem;
+    padding: 1rem;
     margin-bottom: 0.75rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .detail-section-title {
@@ -299,13 +323,14 @@ body.light-mode .nav-item.active {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.3rem 0.55rem;
+    padding: 0.35rem 0.65rem;
     background: var(--bg-card-hover);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     font-size: 0.7rem;
     color: var(--text-primary);
     font-weight: 500;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .connectivity-list {
@@ -318,11 +343,12 @@ body.light-mode .nav-item.active {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.35rem 0.5rem;
+    padding: 0.4rem 0.6rem;
     background: var(--bg-card-hover);
     border-radius: 0.5rem;
     font-size: 0.75rem;
     color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
 }
 
 .travel-info-grid {
@@ -355,10 +381,13 @@ body.light-mode .nav-item.active {
 /* ─── Timings ─── */
 .timing-card {
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    border-radius: 1rem;
+    padding: 1.15rem;
     margin-bottom: 0.75rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .timing-card-header {
@@ -414,8 +443,8 @@ body.light-mode .nav-item.active {
 }
 
 .timing-tab-btn.active {
-    color: var(--accent-color);
-    border-bottom-color: var(--accent-color);
+    color: var(--accent-light);
+    border-bottom-color: var(--accent-light);
 }
 
 /* Day Schedule */
@@ -474,19 +503,24 @@ body.light-mode .nav-item.active {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem;
+    padding: 0.85rem 1rem;
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     color: inherit;
+    box-shadow: var(--glass-shadow);
 }
 
 .safety-card:hover {
     background: var(--bg-card-hover);
-    border-color: var(--text-secondary);
+    border-color: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), var(--glass-glow);
 }
 
 .safety-card:active { transform: scale(0.98); }
@@ -495,16 +529,18 @@ body.light-mode .nav-item.active {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: rgba(79, 70, 229, 0.15);
-    color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-light);
     flex-shrink: 0;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
 }
 
 body.light-mode .safety-icon-wrap {
-    background: rgba(79, 70, 229, 0.1);
+    background: rgba(16, 185, 129, 0.12);
 }
 
 .safety-info {
@@ -521,18 +557,19 @@ body.light-mode .safety-icon-wrap {
 .safety-number {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--accent-color);
+    color: var(--accent-light);
     font-variant-numeric: tabular-nums;
 }
 
 .safety-badge {
     font-size: 0.6rem;
     font-weight: 600;
-    color: #4ADE80;
-    background: rgba(34, 197, 94, 0.1);
+    color: #34D399;
+    background: rgba(16, 185, 129, 0.15);
     padding: 0.2rem 0.5rem;
     border-radius: 1rem;
     white-space: nowrap;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 /* ─── Explore ─── */
@@ -548,21 +585,26 @@ body.light-mode .safety-icon-wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.15rem 1rem; /* Better touch area */
+    padding: 1.15rem 1rem;
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     margin-bottom: 0.75rem;
     cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    content-visibility: auto; /* Significant performance boost for long lists */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    content-visibility: auto;
     contain-intrinsic-size: 0 80px;
+    box-shadow: var(--glass-shadow);
 }
 
 
 .explore-card:hover {
     background: var(--bg-card-hover);
-    border-color: var(--text-secondary);
+    border-color: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), var(--glass-glow);
 }
 
 .explore-card:active { transform: scale(0.98); }
@@ -587,12 +629,12 @@ body.light-mode .safety-icon-wrap {
     gap: 0.25rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--accent-color);
+    color: var(--accent-light);
     margin-top: 0.3rem;
 }
 
 .explore-count-badge {
-    background: var(--accent-color);
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
     color: white;
     font-size: 0.6rem;
     font-weight: 700;
@@ -600,6 +642,7 @@ body.light-mode .safety-icon-wrap {
     border-radius: 0.5rem;
     white-space: nowrap;
     flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
 /* Explore Filter Bar */
@@ -610,16 +653,22 @@ body.light-mode .safety-icon-wrap {
 #explore-category-filters {
     -ms-overflow-style: none;
     scrollbar-width: none;
-    touch-action: pan-x; /* Explicitly allow horizontal panning */
+    touch-action: pan-x;
 }
-
 
 .explore-cat-btn {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
 }
 
 .explore-cat-btn.active {
     transform: scale(1.02);
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--accent-light);
+    color: var(--text-primary);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -677,19 +726,24 @@ body.light-mode .safety-icon-wrap {
     gap: 1rem;
     padding: 1.15rem 1rem;
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     margin-bottom: 0.75rem;
     cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     content-visibility: auto;
     contain-intrinsic-size: 0 100px;
+    box-shadow: var(--glass-shadow);
 }
 
 
 .place-card:hover {
     background: var(--bg-card-hover);
-    border-color: var(--text-secondary);
+    border-color: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), var(--glass-glow);
 }
 
 .place-card:active { transform: scale(0.98); }
@@ -710,7 +764,7 @@ body.light-mode .safety-icon-wrap {
 
 .place-type {
     font-size: 0.65rem;
-    color: var(--accent-color);
+    color: var(--accent-light);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -734,10 +788,13 @@ body.light-mode .safety-icon-wrap {
 /* Place Detail */
 .place-detail-header {
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    border-radius: 1rem;
+    padding: 1.15rem;
     margin-bottom: 1rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .place-detail-name {
@@ -756,8 +813,9 @@ body.light-mode .safety-icon-wrap {
     display: inline-block;
     margin-top: 0.5rem;
     padding: 0.25rem 0.5rem;
-    background: rgba(79, 70, 229, 0.1);
-    color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-light);
+    border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 0.5rem;
     font-size: 0.7rem;
     font-weight: 600;
@@ -767,9 +825,12 @@ body.light-mode .safety-icon-wrap {
 
 .place-detail-body {
     background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    border-radius: 1rem;
+    padding: 1.15rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .place-detail-desc {
@@ -790,15 +851,16 @@ body.light-mode .safety-icon-wrap {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.45rem 0.65rem;
     background: var(--bg-card-hover);
     border-radius: 0.5rem;
     font-size: 0.8rem;
     color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
 }
 
 .place-info-item i {
-    color: var(--accent-color);
+    color: var(--accent-light);
     flex-shrink: 0;
 }
 
@@ -808,22 +870,26 @@ body.light-mode .safety-icon-wrap {
     justify-content: center;
     gap: 0.5rem;
     width: 100%;
-    padding: 0.75rem;
-    background: var(--accent-color);
+    padding: 0.85rem;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
     color: white;
     border-radius: 0.75rem;
     font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .maps-link-btn:hover {
-    background: var(--accent-hover);
+    background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
 }
 
 /* ─── Light Mode Overrides ─── */
-body.light-mode .section-view { background: var(--bg-color); }
+body.light-mode .section-view { background: transparent; }
 body.light-mode .station-card-name,
 body.light-mode .station-detail-name,
 body.light-mode .timing-line-name,
@@ -855,4 +921,25 @@ body.light-mode .station-type-badge.elevated {
 body.light-mode .station-type-badge.underground {
     background: rgba(34, 197, 94, 0.08);
     color: #16A34A;
+}
+
+/* ─── Responsive Multi-column Grid Adaptations (Tablet & Desktop) ─── */
+@media (min-width: 641px) {
+    .stations-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .safety-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .explore-places-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
 }

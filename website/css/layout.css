@@ -1,25 +1,25 @@
 /* Layout */
 .app-container {
     width: 100%;
-    max-width: 400px;
-    /* Mobile width constraint */
-    height: 90vh;
-    max-height: 850px;
+    max-width: 460px; /* Base Mobile Width */
+    height: 100vh;
+    height: 100dvh;
     margin: auto;
-    /* Center on page */
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
-    border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-subtle);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-    /* Deep shadow + subtle border */
+    background-color: var(--bg-card);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    transition: all var(--transition-speed);
     overflow: hidden;
-    /* Clip content */
     position: relative;
 }
 
-@media (max-width: 600px) {
+/* Mobile Screens */
+@media (max-width: 640px) {
     .app-container {
         max-width: 100%;
         width: 100%;
@@ -31,7 +31,6 @@
         border-radius: 0 !important;
         box-shadow: none !important;
         position: fixed;
-        /* Force fixed to viewport to avoid scroll/margin issues */
         top: 0;
         left: 0;
         right: 0;
@@ -40,31 +39,53 @@
         overscroll-behavior: none;
     }
 
-
-    body,
-    html {
+    body, html {
         margin: 0;
         padding: 0;
         background-color: var(--bg-color);
-        /* Match bg to hide gaps */
         height: 100%;
         overflow: hidden;
-        /* Let app-container handle scroll */
     }
 }
 
-/* Ensure body centers the app */
+/* Tablet Screens (641px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .app-container {
+        max-width: 640px;
+        height: 92vh;
+        max-height: 880px;
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Desktop & Ultra-wide Screens (>= 1025px) */
+@media (min-width: 1025px) {
+    .app-container {
+        max-width: 860px;
+        height: 90vh;
+        max-height: 920px;
+        border-radius: 28px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Ensure body centers the app seamlessly on larger screens */
 body {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    background-color: var(--bg-color);
 }
 
-/* Header */
+/* Glass Header */
 .app-header {
     background-color: var(--header-bg);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid var(--header-border);
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
     position: sticky;
@@ -72,13 +93,13 @@ body {
     z-index: 50;
     padding: 1rem 1.25rem;
     flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Utilities */
+/* Glass Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 10px; /* Increased from 8px for better touch target */
+    width: 8px;
 }
-
 
 .custom-scrollbar::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.02);
@@ -86,14 +107,14 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #6366f1; /* Solid Indigo for high visibility */
+    background: rgba(16, 185, 129, 0.5);
     border-radius: 10px;
-    border: 3px solid rgba(15, 23, 42, 0.8); /* Inset effect */
-    background-clip: content-box;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    background-clip: padding-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #4f46e5;
+    background: rgba(16, 185, 129, 0.8);
 }
 
 

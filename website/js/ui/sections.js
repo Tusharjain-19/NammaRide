@@ -319,60 +319,82 @@ export function renderTimings(container) {
 
     let html = `<div class="section-header">
         <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
-        <p class="section-subtitle">Bengaluru Metro schedule (2025-26)</p>
+        <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
     </div>`;
 
     Object.entries(timingsData).forEach(([key, line]) => {
+        const firstTrainStart = line.weekday?.firstTrain?.from_start || '05:00 AM';
+        const lastTrainEnd = line.weekday?.lastTrain?.from_end || '11:05 PM';
+        const peakFreq = line.weekday?.peakFrequency || '5-8 min';
+
         html += `<div class="timing-card" style="border-left: 3px solid ${line.color}">
             <div class="timing-card-header">
                 <span class="line-dot" style="background:${line.color}"></span>
-                <div>
+                <div class="flex-grow">
                     <h4 class="timing-line-name">${T_STATION_fn(line.name)}</h4>
                     <p class="timing-route">${line.route}</p>
                     <p class="timing-stations">${line.stations} stations</p>
                 </div>
+            </div>
+
+            <!-- First/Last Train Quick Summary Grid -->
+            <div class="grid grid-cols-3 gap-2 mt-3 mb-4">
+                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">First Train</div>
+                    <div class="text-xs font-extrabold text-emerald-400 mt-0.5">${firstTrainStart}</div>
+                </div>
+                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Last Train</div>
+                    <div class="text-xs font-extrabold text-amber-400 mt-0.5">${lastTrainEnd}</div>
+                </div>
+                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Peak Freq</div>
+                    <div class="text-xs font-extrabold text-indigo-400 mt-0.5">${peakFreq}</div>
+                </div>
             </div>`;
 
-        // Day Selection Tabs for this line
-        html += `<div class="timing-tabs flex gap-2 mt-4 px-1 overflow-x-auto pb-2 custom-scrollbar" id="tabs-${key}">`;
+        // Day Selection Tabs for this line (Consolidated)
+        html += `<div class="timing-tabs flex gap-2 px-1 overflow-x-auto pb-2 custom-scrollbar" id="tabs-${key}">`;
         Object.keys(line.schedules).forEach((dayKey, idx) => {
-            const dayTitle = line.schedules[dayKey].title.replace(' Timetable', '');
+            const dayTitle = line.schedules[dayKey].title;
             html += `<button class="timing-tab-btn ${idx === 0 ? 'active' : ''}" data-line="${key}" data-day="${dayKey}">${dayTitle}</button>`;
         });
         html += `</div>`;
 
         // Schedule Content (First day visible by default)
-        html += `<div class="timing-schedule-container" id="schedule-container-${key}">`;
+        html += `<div class="timing-schedule-container mt-2" id="schedule-container-${key}">`;
         Object.entries(line.schedules).forEach(([dayKey, schedule], idx) => {
+            const terminals = line.route.split(' ↔ ');
+            const termA = terminals[0] ? terminals[0].trim() : 'Terminal A';
+            const termB = terminals[1] ? terminals[1].trim() : 'Terminal B';
+
             html += `<div class="timing-day-schedule ${idx === 0 ? '' : 'hidden'}" id="schedule-${key}-${dayKey}">
                 <div class="timing-table-wrapper">
-                    <div class="timing-table-header mt-2" style="background:${line.color}15; border-bottom: 2px solid ${line.color}">
-                        <div class="flex items-center gap-2 p-2">
-                            <i data-lucide="clock" class="w-4 h-4" style="color:${line.color}"></i>
-                            <span class="font-bold text-sm" style="color:${line.color}">${schedule.title}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 p-3 bg-card-subtle rounded-b-xl border border-subtle border-t-0">
-                        <!-- From Start -->
+                    <div class="grid grid-cols-2 gap-3 p-3 bg-card-subtle rounded-xl border border-subtle">
+                        <!-- Direction A -->
                         <div>
-                            <div class="text-[10px] sub-heading uppercase font-bold text-secondary mb-2">From ${line.route.split(' ↔ ')[1].split('(')[0].trim()}</div>
-                            ${schedule.from_start.map(item => `
-                                <div class="flex justify-between items-center py-1.5 border-b border-subtle/50 text-[11px]">
-                                    <span class="text-primary font-medium">${item.range}</span>
-                                    <span class="text-secondary opacity-80">${item.frequency}</span>
-                                </div>
-                            `).join('')}
+                            <div class="text-[10px] sub-heading uppercase font-bold text-emerald-400 mb-2 truncate">From ${termB}</div>
+                            <div class="space-y-1.5">
+                                ${schedule.from_start.map(item => `
+                                    <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
+                                        <span class="text-primary font-semibold">${item.range}</span>
+                                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold text-[10px]">${item.frequency}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
-                        <!-- From End -->
+
+                        <!-- Direction B -->
                         <div>
-                            <div class="text-[10px] sub-heading uppercase font-bold text-secondary mb-2">From ${line.route.split(' ↔ ')[0].trim()}</div>
-                            ${schedule.from_end.map(item => `
-                                <div class="flex justify-between items-center py-1.5 border-b border-subtle/50 text-[11px]">
-                                    <span class="text-primary font-medium">${item.range}</span>
-                                    <span class="text-secondary opacity-80">${item.frequency}</span>
-                                </div>
-                            `).join('')}
+                            <div class="text-[10px] sub-heading uppercase font-bold text-indigo-400 mb-2 truncate">From ${termA}</div>
+                            <div class="space-y-1.5">
+                                ${schedule.from_end.map(item => `
+                                    <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
+                                        <span class="text-primary font-semibold">${item.range}</span>
+                                        <span class="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold text-[10px]">${item.frequency}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -382,8 +404,8 @@ export function renderTimings(container) {
 
         // Notes section for this line
         if (line.notes && line.notes.length) {
-            html += `<div class="timing-notes mt-4 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-                <div class="flex items-center gap-2 mb-2">
+            html += `<div class="timing-notes mt-3 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
+                <div class="flex items-center gap-2 mb-1.5">
                     <i data-lucide="info" class="w-3.5 h-3.5 text-amber-500"></i>
                     <span class="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Operational Notes</span>
                 </div>
@@ -419,6 +441,7 @@ function attachTimingsEvents(container) {
         });
     });
 }
+
 
 // ═══════════════════════════════════════
 // SAFETY VIEW
@@ -476,7 +499,7 @@ export function renderExplore(container) {
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="explore-category-filters">
-            <button class="explore-cat-btn active shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-pink-500/10 text-pink-500 border border-pink-500/20" data-cat="all">All Categories</button>
+            <button class="explore-cat-btn active shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" data-cat="all">All Categories</button>
             <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
             <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
             <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
@@ -487,9 +510,9 @@ export function renderExplore(container) {
         </div>
         <div class="flex gap-2 mt-2 overflow-x-auto pb-1 custom-scrollbar" id="explore-line-filters">
             <button class="explore-line-btn active shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-500/10 text-primary border border-subtle" data-line="all">All Lines</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/10 text-purple-600 border border-purple-500/20" data-line="purple">Purple Line</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-600 border border-green-500/20" data-line="green">Green Line</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-yellow-500/10 text-yellow-600 border border-yellow-500/20" data-line="yellow">Yellow Line</button>
+            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/10 text-purple-400 border border-purple-500/20" data-line="purple">Purple Line</button>
+            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 border border-green-500/20" data-line="green">Green Line</button>
+            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-yellow-500/10 text-yellow-400 border border-yellow-500/20" data-line="yellow">Yellow Line</button>
         </div>
     </div>
     <div id="explore-list-content">`;
@@ -530,7 +553,7 @@ export function renderExplore(container) {
     const withoutAttractions = allStations.filter(s => s.count === 0);
 
     if (withAttractions.length > 0) {
-        html += `<div class="explore-section-label flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-pink-500"></i> Stations with nearby places</div>`;
+        html += `<div class="explore-section-label flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i> Stations with nearby places</div>`;
         withAttractions.forEach(s => {
             const knName = stationsMeta.find(m => m.name === s.name)?.name_kn || '';
             html += renderExploreCard(s, knName, s.placesSearch, s.lines.join(' '));
@@ -619,11 +642,11 @@ function attachExploreEvents(container) {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             filterBtns.forEach(b => {
-                b.classList.remove('active', 'bg-pink-500/10', 'text-pink-500', 'border-pink-500/20');
+                b.classList.remove('active', 'bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
                 b.classList.add('bg-card-subtle', 'text-secondary', 'border-subtle');
             });
             const clickedBtn = e.currentTarget;
-            clickedBtn.classList.add('active', 'bg-pink-500/10', 'text-pink-500', 'border-pink-500/20');
+            clickedBtn.classList.add('active', 'bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
             clickedBtn.classList.remove('bg-card-subtle', 'text-secondary', 'border-subtle');
             currentCategory = clickedBtn.dataset.cat;
             filterExplore();
@@ -657,7 +680,7 @@ function renderExploreCard(s, knName, placesStr, lines) {
         ${s.count > 0 ? `
         <div class="relative w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 border border-subtle bg-slate-800">
             <img src="${s.image}" alt="${s.name}" class="w-full h-full object-cover">
-            <div class="absolute bottom-1 left-1.5 bg-pink-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${s.count} Places</div>
+            <div class="absolute bottom-1 left-1.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${s.count} Places</div>
         </div>
         ` : ''}
         <div class="explore-card-content ${s.count > 0 ? 'ml-3' : ''}">
@@ -665,7 +688,7 @@ function renderExploreCard(s, knName, placesStr, lines) {
             ${knName && l === 'en' ? `<div class="explore-card-kn">${knName}</div>` : ''}
             <div class="flex items-center gap-1.5 mt-1.5">
                 ${s.lines.map(lineKey => `<div class="w-1.5 h-1.5 rounded-full" style="background:${metroData[lineKey].color}"></div>`).join('')}
-                <div class="explore-card-action ml-1" style="${s.count > 0 ? 'color: #ec4899;' : ''}">
+                <div class="explore-card-action ml-1" style="${s.count > 0 ? 'color: #10B981;' : ''}">
                     ${s.count > 0 ? `Explore Nearby <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>` : `<span class="text-secondary text-[10px]">No places listed</span>`}
                 </div>
             </div>
@@ -763,7 +786,7 @@ export function renderPlaceDetail(container, stationName, placeId) {
         <div class="relative z-10 text-white">
             <h3 class="text-xl font-bold">${name}</h3>
             ${p.nameKn && l === 'en' ? `<p class="text-sm text-slate-300 mt-1">${p.nameKn}</p>` : ''}
-            <div class="inline-block mt-3 px-2 py-1 bg-pink-500/20 text-pink-300 border border-pink-500/30 font-bold tracking-wider rounded-md text-[10px] uppercase">${getLocalizedPlaceType(p)}</div>
+            <div class="inline-block mt-3 px-2 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold tracking-wider rounded-md text-[10px] uppercase">${getLocalizedPlaceType(p)}</div>
         </div>
     </div>
 

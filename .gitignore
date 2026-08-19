@@ -1,9 +1,13 @@
-# Exclude binaries but include screenshots in mobile/
-mobile/*.apk
-mobile/*.aab
+# Mobile builds & app assets (Do not push to GitHub)
+mobile/
+*.apk
+*.aab
 
-# IDE files
+# OS & IDE temporary files
+.DS_Store
+Thumbs.db
+.gemini/
+.idea/
 .vscode/
-
-# Node modules if any
 node_modules/
+*.log

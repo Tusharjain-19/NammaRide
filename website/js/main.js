@@ -283,6 +283,8 @@ function getDepartureTime() {
     return new Date(Math.ceil(now.getTime() / coeff) * coeff);
 }
 
+let passengerCount = 1;
+
 function displayJourneyResult(journey) {
     const summaryContainer = document.getElementById('journey-summary-container');
     const boardBtn = document.getElementById('board-train-btn');
@@ -304,28 +306,120 @@ function displayJourneyResult(journey) {
         formattedTime = `${h} ${T('hr')} ${m} ${T('minutes')}`;
     }
 
-    summaryText.innerHTML = `
-        <div class="flex justify-between items-end mb-2">
-            <div>
-                <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
-                <p class="text-2xl font-bold text-primary">${formattedTime}</p>
+    const firstStation = journey.parts[0]?.stations[0];
+    const lastPart = journey.parts[journey.parts.length - 1];
+    const lastStation = lastPart?.stations[lastPart.stations.length - 1];
+    const startName = firstStation ? T_STATION(firstStation.name) : '';
+    const endName = lastStation ? T_STATION(lastStation.name) : '';
+
+    const updateSummaryUI = () => {
+        const totalFareAmount = journey.fare * passengerCount;
+
+        summaryText.innerHTML = `
+            <div class="flex justify-between items-end mb-2">
+                <div>
+                    <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
+                    <p class="text-2xl font-bold text-primary">${formattedTime}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
+                    <p class="text-2xl font-bold text-emerald-400">₹${journey.fare} <span class="text-xs text-secondary opacity-70">/ person</span></p>
+                </div>
             </div>
-            <div class="text-right">
-                <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
-                <p class="text-2xl font-bold text-green-400">₹${journey.fare}</p>
+            <div class="flex items-center gap-2 text-xs text-[var(--accent-color)] bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span class="font-medium">${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
             </div>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-[var(--accent-color)] bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
-            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-            <span class="font-medium">${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
-        </div>
-    `;
+
+            <!-- WhatsApp Ticket Booking Card (Option 1 Focus) -->
+            <div class="whatsapp-booking-card">
+                <div class="passenger-counter-wrap">
+                    <div>
+                        <p class="text-xs font-bold text-primary">${T('passengers') || 'Passengers'}</p>
+                        <p class="text-[11px] text-emerald-400 font-semibold mt-0.5">${T('totalFare') || 'Total'}: ₹${totalFareAmount}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button id="p-minus-btn" class="passenger-btn" aria-label="Decrease Passengers">-</button>
+                        <span class="font-bold text-sm text-primary min-w-[20px] text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" class="passenger-btn" aria-label="Increase Passengers">+</button>
+                    </div>
+                </div>
+
+                <button id="whatsapp-book-btn" class="btn-whatsapp-qr">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    <span>${T('bookQRTicket') || 'Book QR Ticket on WhatsApp'}</span>
+                </button>
+                <div class="flex items-center justify-center gap-1.5 mt-2.5 text-[10px] text-emerald-400 font-medium">
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                    <span>Auto-fills ${startName} ➔ ${endName} (${passengerCount} ticket${passengerCount > 1 ? 's' : ''})</span>
+                </div>
+                <p class="text-[9px] text-center text-secondary opacity-70 mt-1.5">${T('whatsappBotSub') || 'Official BMRCL WhatsApp Bot (+91 81055 56677)'}</p>
+            </div>
+        `;
+
+        if (window.lucide) window.lucide.createIcons();
+
+        // Event listeners for passenger counter
+        const minusBtn = document.getElementById('p-minus-btn');
+        const plusBtn = document.getElementById('p-plus-btn');
+        const waBookBtn = document.getElementById('whatsapp-book-btn');
+
+        if (minusBtn) {
+            minusBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (passengerCount > 1) {
+                    passengerCount--;
+                    updateSummaryUI();
+                }
+            });
+        }
+
+        if (plusBtn) {
+            plusBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (passengerCount < 6) {
+                    passengerCount++;
+                    updateSummaryUI();
+                }
+            });
+        }
+
+        if (waBookBtn) {
+            waBookBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                const cleanStationName = (name) => {
+                    if (!name) return '';
+                    return name.replace(/\s*\([^)]*\)/g, '').trim();
+                };
+
+                const rawStart = firstStation ? firstStation.name : startName;
+                const rawEnd = lastStation ? lastStation.name : endName;
+                const startClean = cleanStationName(rawStart);
+                const endClean = cleanStationName(rawEnd);
+
+                // Auto-copy station details to clipboard as fallback helper
+                const copyText = `${startClean} to ${endClean}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(copyText).catch(err => console.log('Copy ignored:', err));
+                }
+
+                // Official BMRCL Chatbot WhatsApp command format
+                const waPhone = "918105556677";
+                const waMsg = `Book ticket from ${startClean} to ${endClean}`;
+                const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`;
+                
+                window.open(waUrl, '_blank');
+            });
+        }
+    };
+
+    updateSummaryUI();
 
     boardBtn.classList.remove('hidden');
     if (window.innerWidth < 640) {
         boardBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    if (window.lucide) window.lucide.createIcons();
 }
 
 function switchView(viewId) {
@@ -685,5 +779,9 @@ function initializeApp() {
 
 
 
-// Start
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Start Application
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
