@@ -1111,10 +1111,6 @@ function initializeApp() {
         switchView('planner-view');
     }
 
-    setInterval(() => {
-        document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-    }, 1000);
-
     // --- Optimized Prevent Pull-to-Refresh JS Fix ---
     let touchStartYear = 0;
     

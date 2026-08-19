@@ -126,8 +126,7 @@ h4,
     letter-spacing: -0.025em;
 }
 
-.font-mono,
-#live-clock {
+.font-mono {
     font-family: var(--font-mono);
 }
 
