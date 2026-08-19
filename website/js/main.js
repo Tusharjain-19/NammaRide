@@ -775,12 +775,12 @@ function updateSimulationUI() {
     }
 
     simStatus.innerHTML = `
-        <div class="live-tracking-panel w-full flex flex-col p-2.5 px-3.5 rounded-xl border border-subtle shadow-md gap-1.5 my-1">
+        <div class="live-tracking-panel w-full flex flex-col p-3 px-4 rounded-2xl shadow-lg gap-2">
             <div class="flex items-center justify-between gap-2">
                 <!-- Left: Train Icon + Trip Info -->
-                <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-emerald-400">
                             <rect x="4" y="3" width="16" height="13" rx="4" stroke="currentColor" stroke-width="2"/>
                             <rect x="6" y="5" width="12" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
                             <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5"/>
@@ -792,10 +792,10 @@ function updateSimulationUI() {
                     </div>
                     <div class="flex flex-col min-w-0">
                         <div class="flex items-center gap-1.5 leading-none">
-                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-emerald-400 truncate">${T('towards')} ${destinationName}</span>
+                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
                             <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
                         </div>
-                        <div class="flex items-center gap-1 text-xs font-bold text-primary mt-0.5">
+                        <div class="flex items-center gap-1 text-xs font-extrabold text-primary mt-1">
                             <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
                         </div>
                     </div>
@@ -803,11 +803,11 @@ function updateSimulationUI() {
 
                 <!-- Right: Action Buttons -->
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1">
+                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1">
                         <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                         <span>${T('finishJourney') || 'Finish'}</span>
                     </button>
-                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/10 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1.5 rounded-lg text-xs transition-colors flex items-center justify-center" title="${T('exitJourney') || 'Exit'}">
+                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1.5 rounded-xl text-xs transition-colors flex items-center justify-center" title="${T('exitJourney') || 'Exit'}">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
