@@ -27,7 +27,7 @@ function getLineColor(lineName) {
 }
 
 function initTheme() {
-    const theme = localStorage.getItem('appTheme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const theme = localStorage.getItem('appTheme') || 'dark';
     applyTheme(theme);
 
     document.getElementById('theme-toggle').addEventListener('click', () => {
@@ -334,29 +334,24 @@ function displayJourneyResult(journey) {
                 <span class="font-medium">${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
             </div>
 
-            <!-- WhatsApp Ticket Booking Card (Option 1 Focus) -->
-            <div class="whatsapp-booking-card">
-                <div class="passenger-counter-wrap">
-                    <div>
-                        <p class="text-xs font-bold text-primary">${T('passengers') || 'Passengers'}</p>
-                        <p class="text-[11px] text-emerald-400 font-semibold mt-0.5">${T('totalFare') || 'Total'}: ₹${totalFareAmount}</p>
+            <!-- WhatsApp Ticket Booking Card -->
+            <div class="whatsapp-booking-card p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
+                        <span class="text-[11px] text-emerald-400 font-bold mt-0.5">₹${totalFareAmount}</span>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button id="p-minus-btn" class="passenger-btn" aria-label="Decrease Passengers">-</button>
-                        <span class="font-bold text-sm text-primary min-w-[20px] text-center">${passengerCount}</span>
-                        <button id="p-plus-btn" class="passenger-btn" aria-label="Increase Passengers">+</button>
+                    <div class="flex items-center gap-3 bg-card-subtle px-2 py-1 rounded-full border border-subtle">
+                        <button id="p-minus-btn" class="w-7 h-7 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary transition-colors">-</button>
+                        <span class="font-bold text-sm text-primary min-w-[16px] text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" class="w-7 h-7 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary transition-colors">+</button>
                     </div>
                 </div>
 
-                <button id="whatsapp-book-btn" class="btn-whatsapp-qr">
-                    <i data-lucide="message-square" class="w-5 h-5"></i>
-                    <span>${T('bookQRTicket') || 'Book QR Ticket on WhatsApp'}</span>
+                <button id="whatsapp-book-btn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-[#25D366]/20 transition-transform active:scale-95">
+                    <img src="assets/whatsapp.svg" alt="WhatsApp" class="w-5 h-5">
+                    <span>Book Ticket</span>
                 </button>
-                <div class="flex items-center justify-center gap-1.5 mt-2.5 text-[10px] text-emerald-400 font-medium">
-                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-                    <span>Auto-fills ${startName} ➔ ${endName} (${passengerCount} ticket${passengerCount > 1 ? 's' : ''})</span>
-                </div>
-                <p class="text-[9px] text-center text-secondary opacity-70 mt-1.5">${T('whatsappBotSub') || 'Official BMRCL WhatsApp Bot (+91 81055 56677)'}</p>
             </div>
         `;
 
@@ -595,8 +590,21 @@ function initializeApp() {
         handleJourneyUpdate();
     });
 
-    document.getElementById('language-selector').value = currentLang;
-    document.getElementById('language-selector').addEventListener('change', (e) => setLanguage(e.target.value));
+    const langSelect = document.getElementById('language-selector');
+    if (langSelect) {
+        langSelect.value = currentLang;
+        langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+    }
+
+    const navLanguageBtn = document.getElementById('nav-language');
+    if (navLanguageBtn) {
+        navLanguageBtn.addEventListener('click', () => {
+            const newLang = getCurrentLang() === 'en' ? 'kn' : 'en';
+            setLanguage(newLang);
+            if (langSelect) langSelect.value = newLang;
+        });
+    }
+
     setLanguage(currentLang);
 
     precomputeJourneyData();

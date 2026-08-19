@@ -442,7 +442,6 @@ function attachTimingsEvents(container) {
     });
 }
 
-
 // ═══════════════════════════════════════
 // SAFETY VIEW
 // ═══════════════════════════════════════
@@ -499,20 +498,20 @@ export function renderExplore(container) {
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="explore-category-filters">
-            <button class="explore-cat-btn active shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" data-cat="all">All Categories</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> Shopping</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> Parks & Lakes</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="stadium"><i data-lucide="stadium" class="w-3 h-3"></i> Stadium</button>
-            <button class="explore-cat-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-card-subtle text-secondary border border-subtle flex items-center gap-1.5 transition-all opacity-80 hover:opacity-100" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
+            <button class="explore-cat-btn active" data-cat="all">All Categories</button>
+            <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
+            <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
+            <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
+            <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> Shopping</button>
+            <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> Parks & Lakes</button>
+            <button class="explore-cat-btn" data-cat="stadium"><i data-lucide="stadium" class="w-3 h-3"></i> Stadium</button>
+            <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
         </div>
         <div class="flex gap-2 mt-2 overflow-x-auto pb-1 custom-scrollbar" id="explore-line-filters">
-            <button class="explore-line-btn active shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-500/10 text-primary border border-subtle" data-line="all">All Lines</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/10 text-purple-400 border border-purple-500/20" data-line="purple">Purple Line</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 border border-green-500/20" data-line="green">Green Line</button>
-            <button class="explore-line-btn shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-yellow-500/10 text-yellow-400 border border-yellow-500/20" data-line="yellow">Yellow Line</button>
+            <button class="explore-line-btn active" data-line="all">All Lines</button>
+            <button class="explore-line-btn" data-line="purple">Purple Line</button>
+            <button class="explore-line-btn" data-line="green">Green Line</button>
+            <button class="explore-line-btn" data-line="yellow">Yellow Line</button>
         </div>
     </div>
     <div id="explore-list-content">`;
@@ -641,13 +640,9 @@ function attachExploreEvents(container) {
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            filterBtns.forEach(b => {
-                b.classList.remove('active', 'bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
-                b.classList.add('bg-card-subtle', 'text-secondary', 'border-subtle');
-            });
+            filterBtns.forEach(b => b.classList.remove('active'));
             const clickedBtn = e.currentTarget;
-            clickedBtn.classList.add('active', 'bg-emerald-500/15', 'text-emerald-400', 'border-emerald-500/30');
-            clickedBtn.classList.remove('bg-card-subtle', 'text-secondary', 'border-subtle');
+            clickedBtn.classList.add('active');
             currentCategory = clickedBtn.dataset.cat;
             filterExplore();
         });
@@ -655,10 +650,13 @@ function attachExploreEvents(container) {
 
     lineBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            lineBtns.forEach(b => {
-                b.classList.remove('active', 'bg-gray-500/10', 'bg-purple-500/10', 'bg-green-500/10', 'bg-yellow-500/10');
-                b.style.transform = 'scale(1)';
-            });
+            lineBtns.forEach(b => b.classList.remove('active'));
+            const clickedBtn = e.currentTarget;
+            clickedBtn.classList.add('active');
+            currentLine = clickedBtn.dataset.line;
+            filterExplore();
+        });
+    });
             const clickedBtn = e.currentTarget;
             clickedBtn.classList.add('active');
             clickedBtn.style.transform = 'scale(1.05)';
