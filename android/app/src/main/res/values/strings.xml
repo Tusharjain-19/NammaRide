@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Bengaluru Metro Guide</string>
-    <string name="title_activity_main">Bengaluru Metro Guide</string>
-    <string name="package_name">com.nammaride.app</string>
-    <string name="custom_url_scheme">com.nammaride.app</string>
-</resources>
