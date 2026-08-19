@@ -737,16 +737,14 @@ function updateSimulationUI() {
             <div class="flex justify-between items-center border-b border-subtle pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-emerald-400">
-                            <rect x="4" y="3" width="16" height="13" rx="3" stroke="currentColor" stroke-width="2"/>
-                            <path d="M4 9H20" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M9 3V6" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M15 3V6" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="8" cy="12" r="1" fill="currentColor"/>
-                            <circle cx="16" cy="12" r="1" fill="currentColor"/>
-                            <path d="M6 20L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M18 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12 16V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400">
+                            <rect x="4" y="3" width="16" height="13" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <rect x="6" y="5" width="12" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="8" cy="14" r="1.25" fill="currentColor"/>
+                            <circle cx="16" cy="14" r="1.25" fill="currentColor"/>
+                            <path d="M7 16L4 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M17 16L20 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
                     <div>
