@@ -323,8 +323,15 @@
                             data-lang-key="selectStationsHint">Select stations to see the fastest route.</div>
                     </div>
 
+                    <div id="board-train-btn-container" class="mb-4">
+                        <button id="board-train-btn" class="btn-primary hidden">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span data-lang-key="startLiveJourney">Start Live Journey</span>
+                        </button>
+                    </div>
+
                     <!-- I am at... Button (Premium Facelift) -->
-                    <div id="find-nearest-btn" class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 mb-8 flex items-center justify-between cursor-pointer hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all active:scale-[0.97] group shadow-sm">
+                    <div id="find-nearest-btn" class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 mb-6 flex items-center justify-between cursor-pointer hover:bg-emerald-500/20 hover:border-emerald-500/40 transition-all active:scale-[0.97] group shadow-sm">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
                                 <i data-lucide="navigation" class="w-6 h-6"></i>
@@ -339,11 +346,7 @@
                         </div>
                     </div>
 
-                    <div id="board-train-btn-container" class="mt-auto">
-                        <button id="board-train-btn" class="btn-primary hidden">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            <span data-lang-key="startLiveJourney">Start Live Journey</span>
-                        </button>
+                    <div id="disclaimer-container" class="mt-auto">
                         <p class="text-center text-[10px] text-secondary opacity-70 mt-3" data-lang-key="disclaimer">Disclaimer:
                             Timings and fare are estimates.</p>
                         <p class="text-center text-[10px] text-secondary opacity-50 mt-1" data-lang-key="nonOfficialDisclaimer">This
