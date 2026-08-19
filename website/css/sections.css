@@ -1159,7 +1159,6 @@ body.light-mode .station-type-badge.underground {
     gap: 1rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
-    scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;

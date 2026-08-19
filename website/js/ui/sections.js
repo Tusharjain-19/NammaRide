@@ -504,7 +504,7 @@ export function renderExplore(container) {
             <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
             <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> Shopping</button>
             <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> Parks & Lakes</button>
-            <button class="explore-cat-btn" data-cat="stadium"><i data-lucide="stadium" class="w-3 h-3"></i> Stadium</button>
+            <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> Stadium</button>
             <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
         </div>
         <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-line-filters">
