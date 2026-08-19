@@ -628,8 +628,49 @@ body.light-mode .explore-line-btn[data-line="yellow"].active {
     box-shadow: none !important;
 }
 
+/* Inactive Line-Specific Pill Colors */
+.explore-line-btn[data-line="purple"]:not(.active),
+body.light-mode .explore-line-btn[data-line="purple"]:not(.active) {
+    color: #A855F7 !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+    background: rgba(168, 85, 247, 0.08) !important;
+}
+.explore-line-btn[data-line="purple"]:not(.active):hover,
+body.light-mode .explore-line-btn[data-line="purple"]:not(.active):hover {
+    border-color: #A855F7 !important;
+    background: rgba(168, 85, 247, 0.16) !important;
+}
+
+.explore-line-btn[data-line="green"]:not(.active),
+body.light-mode .explore-line-btn[data-line="green"]:not(.active) {
+    color: #10B981 !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+.explore-line-btn[data-line="green"]:not(.active):hover,
+body.light-mode .explore-line-btn[data-line="green"]:not(.active):hover {
+    border-color: #10B981 !important;
+    background: rgba(16, 185, 129, 0.16) !important;
+}
+
+.explore-line-btn[data-line="yellow"]:not(.active) {
+    color: #EAB308 !important;
+    border-color: rgba(234, 179, 8, 0.35) !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+}
+body.light-mode .explore-line-btn[data-line="yellow"]:not(.active) {
+    color: #D97706 !important;
+    border-color: rgba(217, 119, 6, 0.35) !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+}
+.explore-line-btn[data-line="yellow"]:not(.active):hover,
+body.light-mode .explore-line-btn[data-line="yellow"]:not(.active):hover {
+    border-color: #EAB308 !important;
+    background: rgba(234, 179, 8, 0.18) !important;
+}
+
 body.light-mode .explore-cat-btn:not(.active),
-body.light-mode .explore-line-btn:not(.active) {
+body.light-mode .explore-line-btn[data-line="all"]:not(.active) {
     background: #FFFFFF;
     color: #334155;
     border-color: rgba(0, 0, 0, 0.12);
@@ -637,7 +678,7 @@ body.light-mode .explore-line-btn:not(.active) {
 }
 
 body.light-mode .explore-cat-btn:not(.active):hover,
-body.light-mode .explore-line-btn:not(.active):hover {
+body.light-mode .explore-line-btn[data-line="all"]:not(.active):hover {
     background: #F8FAFC;
     color: #0F172A;
     border-color: rgba(0, 0, 0, 0.2);
