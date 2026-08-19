@@ -780,14 +780,24 @@ function updateSimulationUI() {
                 <!-- Left: Train Icon + Trip Info -->
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-emerald-400">
-                            <rect x="4" y="3" width="16" height="13" rx="4" stroke="currentColor" stroke-width="2"/>
-                            <rect x="6" y="5" width="12" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-                            <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="8" cy="14" r="1.25" fill="currentColor"/>
-                            <circle cx="16" cy="14" r="1.25" fill="currentColor"/>
-                            <path d="M7 16L4 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M17 16L20 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400">
+                            <!-- Roof Cap -->
+                            <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                            <!-- Outer Train Body -->
+                            <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <!-- Windshield -->
+                            <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <!-- Windshield Glare Reflection Lines -->
+                            <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                            <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                            <!-- Left Capsule Headlight -->
+                            <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
+                            <!-- Right Capsule Headlight -->
+                            <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
+                            <!-- Center Bumper Arch -->
+                            <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
+                            <!-- Track Base Line -->
+                            <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
                     <div class="flex flex-col min-w-0">
