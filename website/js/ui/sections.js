@@ -323,9 +323,9 @@ export function renderTimings(container) {
     </div>`;
 
     Object.entries(timingsData).forEach(([key, line]) => {
-        const firstTrainStart = line.weekday?.firstTrain?.from_start || '05:00 AM';
-        const lastTrainEnd = line.weekday?.lastTrain?.from_end || '11:05 PM';
-        const peakFreq = line.weekday?.peakFrequency || '5-8 min';
+        const firstTrainStart = line.schedules?.mon_fri?.from_start?.[0]?.range?.split('-')[0]?.trim() || '05:00 AM';
+        const lastTrainEnd = line.schedules?.mon_fri?.from_end?.slice(-1)[0]?.range?.split('-')[1]?.trim() || '11:05 PM';
+        const peakFreq = line.schedules?.mon_fri?.from_start?.[2]?.frequency || '5-8 min';
 
         html += `<div class="timing-card" style="border-left: 3px solid ${line.color}">
             <div class="timing-card-header">
