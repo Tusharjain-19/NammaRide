@@ -563,7 +563,7 @@ body.light-mode .safety-icon-wrap {
     -webkit-backdrop-filter: blur(10px);
     color: var(--text-secondary);
     border: 1px solid var(--border-subtle);
-    padding: 0.4rem 0.9rem;
+    padding: 0.45rem 1rem;
     border-radius: 9999px;
     font-size: 0.68rem;
     font-weight: 700;
@@ -575,6 +575,15 @@ body.light-mode .safety-icon-wrap {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
     cursor: pointer;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.explore-cat-btn:focus, .explore-line-btn:focus,
+.explore-cat-btn:focus-visible, .explore-line-btn:focus-visible,
+.explore-cat-btn:active, .explore-line-btn:active {
+    outline: none !important;
+    box-shadow: none;
 }
 
 .explore-cat-btn:hover, .explore-line-btn:hover {

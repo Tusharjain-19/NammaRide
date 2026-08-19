@@ -497,7 +497,7 @@ export function renderExplore(container) {
             <input type="text" id="explore-search" placeholder="Search by station or place..." class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
-        <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="explore-category-filters">
+        <div class="flex gap-2.5 mt-4 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-category-filters">
             <button class="explore-cat-btn active" data-cat="all">All Categories</button>
             <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
             <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
@@ -507,7 +507,7 @@ export function renderExplore(container) {
             <button class="explore-cat-btn" data-cat="stadium"><i data-lucide="stadium" class="w-3 h-3"></i> Stadium</button>
             <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
         </div>
-        <div class="flex gap-2 mt-2 overflow-x-auto pb-1 custom-scrollbar" id="explore-line-filters">
+        <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-line-filters">
             <button class="explore-line-btn active" data-line="all">All Lines</button>
             <button class="explore-line-btn" data-line="purple">Purple Line</button>
             <button class="explore-line-btn" data-line="green">Green Line</button>
