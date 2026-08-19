@@ -1,0 +1,13 @@
+node_modules/
+.gradle/
+build/
+android/
+mobile-web/
+secure/
+*.jks
+*.keystore
+*.p12
+*.key
+.env
+.env.*
+local.properties

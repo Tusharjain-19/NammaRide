@@ -1,0 +1,6 @@
+{
+  "appId": "site.nammaride.app",
+  "appName": "NammaRide",
+  "webDir": "mobile-web",
+  "bundledWebRuntime": false
+}

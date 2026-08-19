@@ -1,0 +1,22 @@
+{
+  "name": "nammaride-mobile",
+  "version": "1.0.0",
+  "description": "NammaRide Android application",
+  "private": true,
+  "scripts": {
+    "web:sync": "node scripts/sync-web.js",
+    "cap:sync": "npx cap sync android",
+    "build:android": "npm run web:sync && npm run cap:sync",
+    "android:debug": "cd android && gradlew assembleDebug",
+    "android:release": "cd android && gradlew assembleRelease",
+    "android:aab": "cd android && gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/geolocation": "^6.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}
