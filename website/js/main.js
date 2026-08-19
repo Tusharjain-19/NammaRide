@@ -875,8 +875,8 @@ window.showNearbyAttractions = function(stationName) {
                 <div class="nearby-card-body">
                     <h4 class="nearby-card-title">${name}</h4>
                     <div class="nearby-card-meta">
-                        ${dist ? `<span><i data-lucide="navigation" class="w-3 h-3 text-pink-500"></i> ${dist}</span>` : ''}
-                        ${walk ? `<span><i data-lucide="footprints" class="w-3 h-3 text-pink-500"></i> ${walk}</span>` : ''}
+                        ${dist ? `<span><i data-lucide="navigation" class="w-3 h-3 text-emerald-400"></i> ${dist}</span>` : ''}
+                        ${walk ? `<span><i data-lucide="footprints" class="w-3 h-3 text-emerald-400"></i> ${walk}</span>` : ''}
                     </div>
                     <p class="nearby-card-desc">${desc}</p>
                     <div class="nearby-card-actions">

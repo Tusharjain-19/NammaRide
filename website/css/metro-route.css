@@ -22,6 +22,10 @@
     border-left-color: transparent;
 }
 
+.station-item:last-child::before {
+    display: none;
+}
+
 /* The Line Segment */
 .station-item::before {
     content: '';

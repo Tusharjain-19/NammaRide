@@ -100,8 +100,8 @@ function renderStationItem(node, details, index) {
     if (places.length > 0) {
         nearbyBadge = `
             <button class="nearby-explore-trigger flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold" onclick="window.showNearbyAttractions('${station.name.replace(/'/g, "\\'")}')">
-                <i data-lucide="sparkles" class="w-3 h-3 text-pink-500"></i>
-                <span class="text-pink-500">${places.length} nearby</span>
+                <i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i>
+                <span class="text-emerald-400">${places.length} nearby</span>
             </button>
         `;
     }
@@ -130,7 +130,12 @@ function renderStationItem(node, details, index) {
                 </div>
             </div>`;
     } else if (isEnd) {
-        metaInfo = `<div class="station-meta text-secondary">${T('arrive')} ${formatTime(details.arrivalTime)}</div>`;
+        metaInfo = `
+            <div class="station-meta text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center gap-2 mt-2 w-fit font-bold text-xs">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>${T('arrive') || 'Arriving at'} ${formatTime(details.arrivalTime)} • ${T('destination') || 'Your Destination'}</span>
+            </div>
+        `;
     }
 
     return `
