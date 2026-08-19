@@ -453,6 +453,18 @@ function switchView(viewId) {
 }
 
 // --- Bottom Navigation ---
+function updateNavIndicator() {
+    const activeBtn = document.querySelector('.nav-item.active');
+    const indicator = document.getElementById('nav-indicator');
+    if (!activeBtn || !indicator) return;
+
+    const left = activeBtn.offsetLeft;
+    const width = activeBtn.offsetWidth;
+
+    indicator.style.transform = `translateX(${left}px)`;
+    indicator.style.width = `${width}px`;
+}
+
 function initBottomNav() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -461,15 +473,45 @@ function initBottomNav() {
             navigateToView(view);
         });
     });
+
+    window.addEventListener('resize', updateNavIndicator);
+
+    // Auto-hide bottom nav on scroll down, show on scroll up
+    const sections = document.querySelectorAll('.section-view');
+    const bottomNav = document.getElementById('bottom-nav');
+    
+    sections.forEach(section => {
+        let lastScrollTop = 0;
+        section.addEventListener('scroll', () => {
+            const st = section.scrollTop;
+            if (st > lastScrollTop && st > 30) {
+                // Scroll Down -> Hide nav
+                if (bottomNav) bottomNav.classList.add('nav-hidden');
+            } else if (st < lastScrollTop) {
+                // Scroll Up -> Show nav
+                if (bottomNav) bottomNav.classList.remove('nav-hidden');
+            }
+            lastScrollTop = st <= 0 ? 0 : st;
+        }, { passive: true });
+    });
+
+    setTimeout(updateNavIndicator, 60);
 }
 
 function navigateToView(view) {
     activeView = view;
 
+    // Reveal nav if hidden when switching tab
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) bottomNav.classList.remove('nav-hidden');
+
     // Update active nav state
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const activeBtn = document.querySelector(`.nav-item[data-view="${view}"]`);
-    if (activeBtn) activeBtn.classList.add('active');
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+        updateNavIndicator();
+    }
 
     // Show the correct view
     if (view === 'plan') {
