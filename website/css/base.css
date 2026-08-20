@@ -18,9 +18,9 @@
     --bg-dropdown-hover: #1E293B;
     --dropdown-border: rgba(255, 255, 255, 0.15);
 
-    --glass-blur: blur(16px) saturate(180%);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
-    --glass-glow: 0 0 20px rgba(16, 185, 129, 0.25);
+    --glass-blur: none;
+    --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    --glass-glow: 0 0 15px rgba(16, 185, 129, 0.2);
     
     --bg-image: 
         radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
@@ -201,4 +201,22 @@ body:not(.light-mode) .dark-icon { display: block; }
 
 .text-gray-100 {
     color: var(--text-primary);
+}
+
+/* 120Hz High-FPS Hardware Accelerated Scroll Optimizations */
+* {
+    -webkit-overflow-scrolling: touch;
+}
+
+.section-view, .app-container, .nearby-cards-scroll, #explore-cards-container, .custom-scrollbar, body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.explore-card, .nearby-card-item, .station-item, .card {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
