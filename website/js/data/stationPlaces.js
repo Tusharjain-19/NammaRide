@@ -447,6 +447,20 @@ export const stationPlaces = {
       "image": "assets/images/places/national_college.jpg"
     },
     {
+      "id": "bmsce",
+      "name": "BMS College of Engineering (BMSCE)",
+      "nameKn": "ಬಿ.ಎಂ.ಎಸ್. ತಾಂತ್ರಿಕ ಮಹಾವಿದ್ಯಾಲಯ",
+      "type": "Education",
+      "lat": 12.9416151,
+      "lon": 77.5668099,
+      "distance_km": 1.1,
+      "walk_time_min": 14,
+      "approx_drive_time_min": 4,
+      "description": "B.M.S. College of Engineering (BMSCE) is an autonomous engineering college located on Bull Temple Road, Basavanagudi, Bengaluru. Established in 1946, it is one of India's premier engineering institutions.",
+      "maps_link": "https://www.google.com/maps/dir/National+College+Metro+Station/BMS+College+of+Engineering,+Bull+Temple+Rd,+Basavanagudi,+Bengaluru,+Karnataka+560004/@12.946003,77.56715,16z",
+      "image": "assets/images/places/bmsce.jpg"
+    },
+    {
       "id": "vv_puram_food_street",
       "name": "Thindi Beedi VV Puram",
       "type": "Shopping",

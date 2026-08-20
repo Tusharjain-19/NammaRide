@@ -1,5 +1,12 @@
-# Mobile builds & app assets (Do not push to GitHub)
-# (Allowed mobile/release directory for APK/AAB distribution)
+# Dependencies & Build Artifacts
+node_modules/
+mobile/node_modules/
+mobile/android/app/build/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/mobile-web/
+*.apk
+*.aab
 
 # OS & IDE temporary files
 .DS_Store
@@ -7,5 +14,5 @@ Thumbs.db
 .gemini/
 .idea/
 .vscode/
-node_modules/
 *.log
+scratch_places_list.json
