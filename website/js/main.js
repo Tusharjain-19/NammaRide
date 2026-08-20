@@ -47,11 +47,14 @@ function initTheme() {
     const theme = localStorage.getItem('appTheme') || 'dark';
     applyTheme(theme);
 
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-    });
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+            const newTheme = isLight ? 'dark' : 'light';
+            applyTheme(newTheme);
+        });
+    }
 }
 
 function applyTheme(theme) {
@@ -939,6 +942,9 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 }
 
 function initializeApp() {
+    // Initialize theme state & click handlers
+    initTheme();
+
     // Initialize sections module with translation helpers
     initSections(() => currentLang, T, T_STATION);
 

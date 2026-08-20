@@ -18,9 +18,9 @@
     --bg-dropdown-hover: #1E293B;
     --dropdown-border: rgba(255, 255, 255, 0.15);
 
-    --glass-blur: none;
-    --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-    --glass-glow: 0 0 15px rgba(16, 185, 129, 0.2);
+    --glass-blur: blur(20px) saturate(180%);
+    --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+    --glass-glow: 0 0 25px rgba(16, 185, 129, 0.25);
     
     --bg-image: 
         radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
