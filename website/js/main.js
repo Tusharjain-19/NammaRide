@@ -6,11 +6,11 @@ import { calculateFare } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
-import { inject } from "@vercel/analytics";
-
-// Only inject Vercel Analytics in production (not on localhost)
-if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-    inject();
+// Safely initialize Vercel Analytics only on production website (not in mobile app or offline)
+if (location.hostname.includes('nammaride.site')) {
+    import("@vercel/analytics").then(module => {
+        if (module && module.inject) module.inject();
+    }).catch(() => {});
 }
 
 // --- App State ---
@@ -833,6 +833,9 @@ function updateSimulationUI() {
 }
 
 function showJourneyComplete(destinationName) {
+    if (navigator.vibrate) {
+        try { navigator.vibrate([1000, 500, 1000, 500, 1000]); } catch (e) {}
+    }
     if (simulationState.locationWatcherId) {
         navigator.geolocation.clearWatch(simulationState.locationWatcherId);
         simulationState.locationWatcherId = null;

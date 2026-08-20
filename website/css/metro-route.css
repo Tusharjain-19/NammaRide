@@ -94,9 +94,6 @@
 /* Station States */
 .station-item.completed .station-dot {
     background-color: var(--bg-color);
-    opacity: 0.7;
-    box-shadow: none;
-}
     border-color: var(--line-default);
     opacity: 0.6;
     box-shadow: none;

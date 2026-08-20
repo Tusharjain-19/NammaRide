@@ -41,19 +41,20 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
 
     flatList.forEach((node, i) => {
         const nextNode = flatList[i + 1];
-        // Line logic
-        const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6' || c === '#A855F7' || c === '#9333EA';
-        const isGreen = (c) => c === '#2ECC71' || c === '#22C55E' || c === '#10B981' || c === '#059669';
-        const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308' || c === '#F59E0B';
+        // Line color logic: for interchange stations, downward line segment connects to nextNode using the new line color
+        const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6' || c === '#A855F7' || c === '#9333EA' || (typeof c === 'string' && c.toLowerCase().includes('purple'));
+        const isGreen = (c) => c === '#2ECC71' || c === '#22C55E' || c === '#10B981' || c === '#059669' || (typeof c === 'string' && c.toLowerCase().includes('green'));
+        const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308' || c === '#F59E0B' || (typeof c === 'string' && c.toLowerCase().includes('yellow'));
+
+        // For an interchange station, the line segment extending DOWNWARD to nextNode belongs to the OUTGOING line (nextNode.lineColor)
+        const segmentColor = (node.isInterchange && nextNode) ? nextNode.lineColor : (node.lineColor || (nextNode ? nextNode.lineColor : ''));
 
         let colorClass = 'line-default';
-        const color = node.lineColor || (nextNode ? nextNode.lineColor : '');
+        if (isPurple(segmentColor)) colorClass = 'line-purple';
+        else if (isGreen(segmentColor)) colorClass = 'line-green';
+        else if (isYellow(segmentColor)) colorClass = 'line-yellow';
 
-        if (isPurple(color)) colorClass = 'line-purple';
-        else if (isGreen(color)) colorClass = 'line-green';
-        else if (isYellow(color)) colorClass = 'line-yellow';
-
-        // Check for specific interchange types (Purple <-> Green)
+        // Check for specific interchange types
         let interchangeClass = '';
         if (node.isInterchange && nextNode) {
             const currentLine = node.lineColor;
@@ -67,6 +68,10 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
                 interchangeClass = 'interchange-green-yellow';
             } else if (isYellow(currentLine) && isGreen(nextLine)) {
                 interchangeClass = 'interchange-yellow-green';
+            } else if (isPurple(currentLine) && isYellow(nextLine)) {
+                interchangeClass = 'interchange-purple-yellow';
+            } else if (isYellow(currentLine) && isPurple(nextLine)) {
+                interchangeClass = 'interchange-yellow-purple';
             }
         }
 
@@ -77,7 +82,7 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
             interchangeClass: interchangeClass, // Pass specific class
             departureTime: journey.departureTime,
             arrivalTime: finalArrivalTime,
-            liClass: nextNode ? colorClass : colorClass, // Segment color
+            liClass: colorClass, // Segment color for downward vertical line
             nextPartDetails: node.nextPartDetails
         }, node.index);
     });

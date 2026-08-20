@@ -126,9 +126,9 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/sections.css">
 
-    <!-- External Libs (Non-blocking deferred execution) -->
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://cdn.tailwindcss.com" defer></script>
+    <!-- External Libs (Local for 100% Offline & Instant Loading) -->
+    <script src="js/libs/lucide.min.js" defer></script>
+    <script src="js/libs/tailwind.min.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             if (window.tailwind) {
@@ -442,7 +442,25 @@
     </div>
 
 
-
+    <script>
+        // Instant & Fallback Loading Screen Dismissal for Smooth Mobile Feel
+        (function() {
+            function dismissSplash() {
+                const splash = document.getElementById('splash-screen');
+                if (splash && splash.style.opacity !== '0') {
+                    splash.style.opacity = '0';
+                    setTimeout(function() { splash.style.display = 'none'; }, 400);
+                }
+            }
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(dismissSplash, 150);
+            } else {
+                document.addEventListener('DOMContentLoaded', function() { setTimeout(dismissSplash, 150); });
+            }
+            window.addEventListener('load', dismissSplash);
+            setTimeout(dismissSplash, 600);
+        })();
+    </script>
 </body>
 
 </html>

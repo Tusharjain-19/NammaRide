@@ -36,6 +36,8 @@
         right: 0;
         bottom: 0;
         z-index: 100;
+        padding-top: env(safe-area-inset-top, 0px) !important;
+        padding-bottom: env(safe-area-inset-bottom, 0px) !important;
         overscroll-behavior: none;
     }
 
