@@ -7,6 +7,7 @@ import { stationPlaces } from '../data/stationPlaces.js';
 import { safetyData } from '../data/safety.js';
 import { timingsData } from '../data/timings.js';
 import { metroData, stationTranslations } from '../data/stations.js';
+import { stationBoardImages } from '../data/stationBoardImages.js';
 
 let currentLangGetter = () => 'en';
 let T_fn = (k) => k;
@@ -527,13 +528,14 @@ export function renderExplore(container) {
                     placesSearchString += ` ${p.name} ${p.type} ${p.nameKn || ''} ${p.typeKn || ''}`; 
                 });
                 
-                let displayImg = 'assets/images/station.jpg';
-                if (places.length > 0 && places[0].image) {
+                let displayImg = stationBoardImages[s.id] || 'assets/images/station.jpg';
+                if (displayImg === 'assets/images/station.jpg' && places.length > 0 && places[0].image) {
                     displayImg = places[0].image;
                 }
 
                 stationsMap.set(s.name, {
                     name: s.name,
+                    id: s.id,
                     count: places.length,
                     lines: [lineKey],
                     lineColor: line.color,
@@ -668,13 +670,11 @@ function renderExploreCard(s, knName, placesStr, lines) {
          data-search-term="${searchTerm}" 
          data-lines="${lines}"
          onclick="window.showExploreStation('${s.name.replace(/'/g, "\\'")}')">
-        ${s.count > 0 ? `
         <div class="relative w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 border border-subtle bg-slate-800">
             <img src="${s.image}" alt="${s.name}" class="w-full h-full object-cover">
-            <div class="absolute bottom-1 left-1.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${s.count} Places</div>
+            ${s.count > 0 ? `<div class="absolute bottom-1 left-1.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${s.count} Places</div>` : ''}
         </div>
-        ` : ''}
-        <div class="explore-card-content ${s.count > 0 ? 'ml-3' : ''}">
+        <div class="explore-card-content ml-3">
             <div class="explore-card-name">${T_STATION_fn(s.name)}</div>
             ${knName && l === 'en' ? `<div class="explore-card-kn">${knName}</div>` : ''}
             <div class="flex items-center gap-1.5 mt-1.5">
