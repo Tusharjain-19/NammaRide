@@ -8,7 +8,8 @@ export const stationPlaces = {
       "lon": 77.476,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+International+Exhibition+Centre"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+International+Exhibition+Centre",
+      "image": "assets/images/places/biec.jpg"
     },
     {
       "id": "madavara",
@@ -18,7 +19,8 @@ export const stationPlaces = {
       "lon": 77.4728,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Madavara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Madavara+Bengaluru",
+      "image": "assets/images/places/madavara.jpg"
     }
   ],
   "Chikkabidarakallu": [
@@ -30,7 +32,8 @@ export const stationPlaces = {
       "lon": 77.483,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chikkabidarakallu+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chikkabidarakallu+Bengaluru",
+      "image": "assets/images/places/chikkabidarakallu.jpg"
     }
   ],
   "Manjunath Nagar": [
@@ -42,7 +45,8 @@ export const stationPlaces = {
       "lon": 77.4914,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manjunatha+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manjunatha+Nagar+Bengaluru",
+      "image": "assets/images/places/manjunatha_nagara.jpg"
     }
   ],
   "Nagasandra": [
@@ -54,7 +58,8 @@ export const stationPlaces = {
       "lon": 77.5001,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nagasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nagasandra+Bengaluru",
+      "image": "assets/images/places/nagasandra.jpg"
     },
     {
       "id": "nandi_hills",
@@ -65,7 +70,8 @@ export const stationPlaces = {
       "distance_km": 42,
       "walk_time_min": 500,
       "last_mile": true,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nandi+Hills"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nandi+Hills",
+      "image": "assets/images/places/nandi_hills.jpg"
     }
   ],
   "Dasarahalli": [
@@ -77,7 +83,8 @@ export const stationPlaces = {
       "lon": 77.5135,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Dasarahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Dasarahalli+Bengaluru",
+      "image": "assets/images/places/dasarahalli.jpg"
     }
   ],
   "Jalahalli": [
@@ -89,7 +96,8 @@ export const stationPlaces = {
       "lon": 77.5191,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jalahalli+Cross+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jalahalli+Cross+Bengaluru",
+      "image": "assets/images/places/jalahalli_cross.jpg"
     },
     {
       "id": "jalahalli_airforce",
@@ -99,7 +107,8 @@ export const stationPlaces = {
       "lon": 77.531,
       "distance_km": 1.4,
       "walk_time_min": 17,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Air+Force+Station+Jalahalli"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Air+Force+Station+Jalahalli",
+      "image": "assets/images/places/jalahalli_airforce.jpg"
     }
   ],
   "Peenya Industry": [
@@ -111,7 +120,8 @@ export const stationPlaces = {
       "lon": 77.5297,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Industrial+Area+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Industrial+Area+Bengaluru",
+      "image": "assets/images/places/peenya_industrial.jpg"
     }
   ],
   "Peenya": [
@@ -123,7 +133,8 @@ export const stationPlaces = {
       "lon": 77.5492,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Bengaluru",
+      "image": "assets/images/places/peenya.jpg"
     }
   ],
   "Goraguntepalya": [
@@ -135,7 +146,8 @@ export const stationPlaces = {
       "lon": 77.5539,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Goraguntepalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Goraguntepalya+Bengaluru",
+      "image": "assets/images/places/goraguntepalya.jpg"
     },
     {
       "id": "yeshwanthpur_rail_g09",
@@ -145,7 +157,8 @@ export const stationPlaces = {
       "lon": 77.554,
       "distance_km": 1.3,
       "walk_time_min": 16,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station",
+      "image": "assets/images/places/yeshwanthpur_rail_g09.jpg"
     }
   ],
   "Yeshwanthpur": [
@@ -157,7 +170,8 @@ export const stationPlaces = {
       "lon": 77.554,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station",
+      "image": "assets/images/places/yeshwanthpur_railway.jpg"
     },
     {
       "id": "orion_mall",
@@ -167,7 +181,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.5,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall.jpg"
     },
     {
       "id": "sankey_tank",
@@ -177,7 +192,8 @@ export const stationPlaces = {
       "lon": 77.57,
       "distance_km": 2,
       "walk_time_min": 20,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sankey+Tank+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sankey+Tank+Bengaluru",
+      "image": "assets/images/places/sankey_tank.jpg"
     }
   ],
   "Sandal Soap Factory": [
@@ -189,7 +205,8 @@ export const stationPlaces = {
       "lon": 77.5516,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Sandal+Soap+Factory+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Sandal+Soap+Factory+Bengaluru",
+      "image": "assets/images/places/sandal_soap_factory.jpg"
     },
     {
       "id": "orion_mall_g11",
@@ -199,7 +216,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall_g11.jpg"
     }
   ],
   "Mahalakshmi": [
@@ -211,7 +229,8 @@ export const stationPlaces = {
       "lon": 77.5505,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mahalakshmi+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mahalakshmi+Temple+Bengaluru",
+      "image": "assets/images/places/mahalakshmi_temple.jpg"
     },
     {
       "id": "mantri_mall",
@@ -221,7 +240,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 2,
       "walk_time_min": 24,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru",
+      "image": "assets/images/places/mantri_mall.jpg"
     }
   ],
   "Rajajinagar": [
@@ -233,7 +253,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall_g13.jpg"
     },
     {
       "id": "rajajinagar_shopping",
@@ -243,7 +264,8 @@ export const stationPlaces = {
       "lon": 77.5518,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajajinagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajajinagar+Bengaluru",
+      "image": "assets/images/places/rajajinagar_shopping.jpg"
     }
   ],
   "Mahakavi Kuvempu Road": [
@@ -255,7 +277,8 @@ export const stationPlaces = {
       "lon": 77.5583,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kuvempu+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kuvempu+Road+Bengaluru",
+      "image": "assets/images/places/kuvempu_road.jpg"
     },
     {
       "id": "isckon_temple",
@@ -265,7 +288,8 @@ export const stationPlaces = {
       "lon": 77.551,
       "distance_km": 2,
       "walk_time_min": 24,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=ISKCON+Temple+Bangalore"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=ISKCON+Temple+Bangalore",
+      "image": "assets/images/places/isckon_temple.jpg"
     }
   ],
   "Srirampura": [
@@ -277,7 +301,8 @@ export const stationPlaces = {
       "lon": 77.5621,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Srirampura+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Srirampura+Bengaluru",
+      "image": "assets/images/places/srirampura.jpg"
     }
   ],
   "Mantri Square Sampige Road": [
@@ -289,7 +314,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru",
+      "image": "assets/images/places/mantri_square.jpg"
     },
     {
       "id": "malleshwaram",
@@ -299,7 +325,8 @@ export const stationPlaces = {
       "lon": 77.57,
       "distance_km": 1.5,
       "walk_time_min": 18,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Malleshwaram+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Malleshwaram+Market+Bengaluru",
+      "image": "assets/images/places/malleshwaram.jpg"
     }
   ],
   "Nadaprabhu Kempegowda Stn., Majestic": [
@@ -311,7 +338,8 @@ export const stationPlaces = {
       "lon": 77.5713,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru",
+      "image": "assets/images/places/majestic_bus_g17.jpg"
     },
     {
       "id": "majestic_rail_g17",
@@ -321,7 +349,8 @@ export const stationPlaces = {
       "lon": 77.5687,
       "distance_km": 0.6,
       "walk_time_min": 7,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction",
+      "image": "assets/images/places/majestic_rail_g17.jpg"
     },
     {
       "id": "bangalore_palace_g17",
@@ -331,7 +360,8 @@ export const stationPlaces = {
       "lon": 77.5921,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace",
+      "image": "assets/images/places/bangalore_palace_g17.jpg"
     },
     {
       "id": "freedom_park_g17",
@@ -341,7 +371,8 @@ export const stationPlaces = {
       "lon": 77.577,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru",
+      "image": "assets/images/places/freedom_park_g17.jpg"
     }
   ],
   "Chickpete": [
@@ -353,7 +384,8 @@ export const stationPlaces = {
       "lon": 77.5756,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chickpete+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chickpete+Market+Bengaluru",
+      "image": "assets/images/places/chickpete_market.jpg"
     },
     {
       "id": "pete_heritage",
@@ -363,7 +395,8 @@ export const stationPlaces = {
       "lon": 77.574,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bengaluru+Pete+Heritage+Walk"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bengaluru+Pete+Heritage+Walk",
+      "image": "assets/images/places/pete_heritage.jpg"
     }
   ],
   "Krishna Rajendra Market": [
@@ -375,7 +408,8 @@ export const stationPlaces = {
       "lon": 77.5784,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Market+Bengaluru",
+      "image": "assets/images/places/kr_market.jpg"
     },
     {
       "id": "tipu_sultan_palace",
@@ -385,7 +419,8 @@ export const stationPlaces = {
       "lon": 77.573,
       "distance_km": 0.7,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Tipu+Sultan+Summer+Palace+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Tipu+Sultan+Summer+Palace+Bengaluru",
+      "image": "assets/images/places/tipu_sultan_palace.jpg"
     },
     {
       "id": "avenue_road",
@@ -395,7 +430,8 @@ export const stationPlaces = {
       "lon": 77.578,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Avenue+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Avenue+Road+Bengaluru",
+      "image": "assets/images/places/avenue_road.jpg"
     }
   ],
   "National College": [
@@ -407,7 +443,8 @@ export const stationPlaces = {
       "lon": 77.5737,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=National+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=National+College+Bengaluru",
+      "image": "assets/images/places/national_college.jpg"
     },
     {
       "id": "vv_puram_food_street",
@@ -417,7 +454,8 @@ export const stationPlaces = {
       "lon": 77.577,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=VV+Puram+Food+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=VV+Puram+Food+Street+Bengaluru",
+      "image": "assets/images/places/vv_puram_food_street.jpg"
     }
   ],
   "Lalbagh Botanical Garden": [
@@ -429,7 +467,8 @@ export const stationPlaces = {
       "lon": 77.5848,
       "distance_km": 0.3,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Lalbagh+Botanical+Garden+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Lalbagh+Botanical+Garden+Bengaluru",
+      "image": "assets/images/places/lalbagh.jpg"
     },
     {
       "id": "bull_temple",
@@ -439,7 +478,8 @@ export const stationPlaces = {
       "lon": 77.568,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bull+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bull+Temple+Bengaluru",
+      "image": "assets/images/places/bull_temple.jpg"
     }
   ],
   "Whitefield (Kadugodi)": [
@@ -451,7 +491,8 @@ export const stationPlaces = {
       "lon": 77.6963,
       "distance_km": 1.1,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru",
+      "image": "assets/images/places/phoenix_marketcity.jpg"
     },
     {
       "id": "columbia_asia_whitefield",
@@ -461,7 +502,8 @@ export const stationPlaces = {
       "lon": 77.7499,
       "distance_km": 2,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Columbia+Asia+Hospital+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Columbia+Asia+Hospital+Whitefield+Bengaluru",
+      "image": "assets/images/places/columbia_asia_whitefield.jpg"
     },
     {
       "id": "itpl",
@@ -471,7 +513,8 @@ export const stationPlaces = {
       "lon": 77.737,
       "distance_km": 1.6,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=ITPL+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=ITPL+Whitefield+Bengaluru",
+      "image": "assets/images/places/itpl.jpg"
     }
   ],
   "Sri Sathya Sai Hospital": [
@@ -483,7 +526,8 @@ export const stationPlaces = {
       "lon": 77.7248,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sathya+Sai+Hospital+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sathya+Sai+Hospital+Whitefield+Bengaluru",
+      "image": "assets/images/places/sri_sathya_sai_hospital.jpg"
     }
   ],
   "Singayyanapalya": [
@@ -495,7 +539,8 @@ export const stationPlaces = {
       "lon": 77.6828,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Singayyanapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Singayyanapalya+Bengaluru",
+      "image": "assets/images/places/singayyanapalya.jpg"
     },
     {
       "id": "phoenix_marketcity_p11",
@@ -505,7 +550,8 @@ export const stationPlaces = {
       "lon": 77.696,
       "distance_km": 1.5,
       "walk_time_min": 18,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru",
+      "image": "assets/images/places/phoenix_marketcity_p11.jpg"
     }
   ],
   "Krishnarajapura (KR Pura)": [
@@ -517,7 +563,8 @@ export const stationPlaces = {
       "lon": 77.672,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru",
+      "image": "assets/images/places/kr_pura_railway.jpg"
     },
     {
       "id": "kr_pura_market",
@@ -527,7 +574,8 @@ export const stationPlaces = {
       "lon": 77.671,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Pura+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Pura+Market+Bengaluru",
+      "image": "assets/images/places/kr_pura_market.jpg"
     }
   ],
   "Baiyappanahalli": [
@@ -539,7 +587,8 @@ export const stationPlaces = {
       "lon": 77.652,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Railway+Station+Bengaluru",
+      "image": "assets/images/places/baiyappanahalli_railway.jpg"
     },
     {
       "id": "baiyappanahalli_bus",
@@ -549,7 +598,8 @@ export const stationPlaces = {
       "lon": 77.651,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/baiyappanahalli_bus.jpg"
     }
   ],
   "Swami Vivekananda Road": [
@@ -561,7 +611,8 @@ export const stationPlaces = {
       "lon": 77.619,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru",
+      "image": "assets/images/places/ulsoor_lake.jpg"
     },
     {
       "id": "halasuru_park",
@@ -571,7 +622,8 @@ export const stationPlaces = {
       "lon": 77.6198,
       "distance_km": 1.9,
       "walk_time_min": 23,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Lake+Bengaluru",
+      "image": "assets/images/places/halasuru_park.jpg"
     }
   ],
   "Indiranagar": [
@@ -583,7 +635,8 @@ export const stationPlaces = {
       "lon": 77.6412,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=100+Feet+Road+Indiranagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=100+Feet+Road+Indiranagar+Bengaluru",
+      "image": "assets/images/places/indiranagar_100ft.jpg"
     },
     {
       "id": "cmh_road",
@@ -593,7 +646,8 @@ export const stationPlaces = {
       "lon": 77.6409,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=CMH+Road+Indiranagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=CMH+Road+Indiranagar+Bengaluru",
+      "image": "assets/images/places/cmh_road.jpg"
     }
   ],
   "Trinity": [
@@ -605,7 +659,8 @@ export const stationPlaces = {
       "lon": 77.6181,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Trinity+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Trinity+Circle+Bengaluru",
+      "image": "assets/images/places/trinity_circle.jpg"
     },
     {
       "id": "manipal_hospital_old_airport",
@@ -615,7 +670,8 @@ export const stationPlaces = {
       "lon": 77.647,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Old+Airport+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Old+Airport+Road+Bengaluru",
+      "image": "assets/images/places/manipal_hospital_old_airport.jpg"
     }
   ],
   "Mahatma Gandhi Road": [
@@ -627,7 +683,8 @@ export const stationPlaces = {
       "lon": 77.606,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brigade+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brigade+Road+Bengaluru",
+      "image": "assets/images/places/brigade_road.jpg"
     },
     {
       "id": "commercial_street",
@@ -637,7 +694,8 @@ export const stationPlaces = {
       "lon": 77.6082,
       "distance_km": 1,
       "walk_time_min": 13,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Commercial+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Commercial+Street+Bengaluru",
+      "image": "assets/images/places/commercial_street.jpg"
     },
     {
       "id": "garuda_mall",
@@ -647,7 +705,8 @@ export const stationPlaces = {
       "lon": 77.6098,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garuda+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garuda+Mall+Bengaluru",
+      "image": "assets/images/places/garuda_mall.jpg"
     }
   ],
   "Cubbon Park": [
@@ -659,7 +718,8 @@ export const stationPlaces = {
       "lon": 77.5929,
       "distance_km": 0.2,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru",
+      "image": "assets/images/places/cubbon_park.jpg"
     },
     {
       "id": "government_museum",
@@ -669,7 +729,8 @@ export const stationPlaces = {
       "lon": 77.5963,
       "distance_km": 0.7,
       "walk_time_min": 7,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Government+Museum+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Government+Museum+Bengaluru",
+      "image": "assets/images/places/government_museum.jpg"
     },
     {
       "id": "visvesvaraya_museum",
@@ -679,7 +740,8 @@ export const stationPlaces = {
       "lon": 77.5964,
       "distance_km": 1,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Visvesvaraya+Industrial+and+Technological+Museum+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Visvesvaraya+Industrial+and+Technological+Museum+Bengaluru",
+      "image": "assets/images/places/visvesvaraya_museum.jpg"
     },
     {
       "id": "chinnaswamy_stadium",
@@ -689,7 +751,8 @@ export const stationPlaces = {
       "lon": 77.5996,
       "distance_km": 0.9,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=M+Chinnaswamy+Stadium+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=M+Chinnaswamy+Stadium+Bengaluru",
+      "image": "assets/images/places/chinnaswamy_stadium.jpg"
     },
     {
       "id": "ub_city",
@@ -699,7 +762,8 @@ export const stationPlaces = {
       "lon": 77.596,
       "distance_km": 1.1,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=UB+City+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=UB+City+Bengaluru",
+      "image": "assets/images/places/ub_city.jpg"
     }
   ],
   "Dr. B.R. Ambedkar Stn., Vidhana Soudha": [
@@ -711,7 +775,8 @@ export const stationPlaces = {
       "lon": 77.5906,
       "distance_km": 0.2,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vidhana+Soudha+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vidhana+Soudha+Bengaluru",
+      "image": "assets/images/places/vidhana_soudha.jpg"
     },
     {
       "id": "high_court",
@@ -721,7 +786,8 @@ export const stationPlaces = {
       "lon": 77.5911,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Karnataka+High+Court+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Karnataka+High+Court+Bengaluru",
+      "image": "assets/images/places/high_court.jpg"
     },
     {
       "id": "cubbon_park_p21",
@@ -731,7 +797,8 @@ export const stationPlaces = {
       "lon": 77.5929,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru",
+      "image": "assets/images/places/cubbon_park_p21.jpg"
     }
   ],
   "Sir M. Visveswaraya Stn., Central College": [
@@ -743,7 +810,8 @@ export const stationPlaces = {
       "lon": 77.5835,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+College+Bengaluru",
+      "image": "assets/images/places/central_college.jpg"
     },
     {
       "id": "bangalore_university_city",
@@ -753,7 +821,8 @@ export const stationPlaces = {
       "lon": 77.5815,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Central+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Central+College+Bengaluru",
+      "image": "assets/images/places/bangalore_university_city.jpg"
     }
   ],
   "Magadi Road": [
@@ -765,7 +834,8 @@ export const stationPlaces = {
       "lon": 77.5542,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Magadi+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Magadi+Road+Bengaluru",
+      "image": "assets/images/places/magadi_road_market.jpg"
     },
     {
       "id": "kempambudhi_lake",
@@ -775,7 +845,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempambudhi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempambudhi+Lake+Bengaluru",
+      "image": "assets/images/places/kempambudhi_lake.jpg"
     }
   ],
   "Vijayanagar": [
@@ -787,7 +858,8 @@ export const stationPlaces = {
       "lon": 77.5372,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bengaluru",
+      "image": "assets/images/places/vijayanagar_market.jpg"
     },
     {
       "id": "vijayanagar_bus",
@@ -797,7 +869,8 @@ export const stationPlaces = {
       "lon": 77.537,
       "distance_km": 1,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/vijayanagar_bus.jpg"
     }
   ],
   "Jnanabharathi": [
@@ -809,7 +882,8 @@ export const stationPlaces = {
       "lon": 77.503,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Bengaluru",
+      "image": "assets/images/places/bangalore_university.jpg"
     },
     {
       "id": "jnanabharathi_campus",
@@ -819,7 +893,8 @@ export const stationPlaces = {
       "lon": 77.5015,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jnanabharathi+Campus+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jnanabharathi+Campus+Bengaluru",
+      "image": "assets/images/places/jnanabharathi_campus.jpg"
     }
   ],
   "Mysuru Road": [
@@ -831,7 +906,8 @@ export const stationPlaces = {
       "lon": 77.5212,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Road+Bengaluru",
+      "image": "assets/images/places/mysore_road.jpg"
     },
     {
       "id": "gopalan_mall_p30",
@@ -841,7 +917,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 1.7,
       "walk_time_min": 21,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_mall_p30.jpg"
     }
   ],
   "Sri Balagangadharanatha Swamiji Stn., Hosahalli": [
@@ -853,7 +930,8 @@ export const stationPlaces = {
       "lon": 77.5459,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosahalli+Bengaluru",
+      "image": "assets/images/places/hosahalli.jpg"
     },
     {
       "id": "forum_mall_vijayanagar",
@@ -863,7 +941,8 @@ export const stationPlaces = {
       "lon": 77.5544,
       "distance_km": 1.9,
       "walk_time_min": 23,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=GT+World+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=GT+World+Mall+Bengaluru",
+      "image": "assets/images/places/forum_mall_vijayanagar.jpg"
     }
   ],
   "South End Circle": [
@@ -875,7 +954,8 @@ export const stationPlaces = {
       "lon": 77.5815,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=South+End+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=South+End+Circle+Bengaluru",
+      "image": "assets/images/places/south_end_circle.jpg"
     },
     {
       "id": "jayanagar_4th",
@@ -885,7 +965,8 @@ export const stationPlaces = {
       "lon": 77.583,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru",
+      "image": "assets/images/places/jayanagar_4th.jpg"
     }
   ],
   "Jayanagar": [
@@ -897,7 +978,8 @@ export const stationPlaces = {
       "lon": 77.583,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru",
+      "image": "assets/images/places/jayanagar_shopping.jpg"
     },
     {
       "id": "jayanagar_park",
@@ -907,7 +989,8 @@ export const stationPlaces = {
       "lon": 77.58,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+Park+Bengaluru",
+      "image": "assets/images/places/jayanagar_park.jpg"
     }
   ],
   "Rashtreeya Vidyalaya Road": [
@@ -919,7 +1002,8 @@ export const stationPlaces = {
       "lon": 77.5801,
       "distance_km": 0.1,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru",
+      "image": "assets/images/places/rv_road_y01.jpg"
     },
     {
       "id": "ranga_shankara_y01",
@@ -929,7 +1013,8 @@ export const stationPlaces = {
       "lon": 77.5828,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru",
+      "image": "assets/images/places/ranga_shankara_y01.jpg"
     }
   ],
   "Banashankari": [
@@ -941,7 +1026,8 @@ export const stationPlaces = {
       "lon": 77.5742,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+Amma+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+Amma+Temple+Bengaluru",
+      "image": "assets/images/places/banashankari_temple.jpg"
     },
     {
       "id": "banashankari_bda",
@@ -951,7 +1037,8 @@ export const stationPlaces = {
       "lon": 77.572,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+BDA+Complex"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+BDA+Complex",
+      "image": "assets/images/places/banashankari_bda.jpg"
     }
   ],
   "Jayaprakash Nagar": [
@@ -963,7 +1050,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=JP+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=JP+Nagar+Bengaluru",
+      "image": "assets/images/places/jp_nagar.jpg"
     }
   ],
   "Yelachenahalli": [
@@ -975,7 +1063,8 @@ export const stationPlaces = {
       "lon": 77.5702,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yelachenahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yelachenahalli+Bengaluru",
+      "image": "assets/images/places/yelachenahalli.jpg"
     }
   ],
   "Konankunte Cross": [
@@ -987,7 +1076,8 @@ export const stationPlaces = {
       "lon": 77.5663,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Konanakunte+Cross+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Konanakunte+Cross+Bengaluru",
+      "image": "assets/images/places/konanakunte_cross.jpg"
     }
   ],
   "Doddakallasandra": [
@@ -999,7 +1089,8 @@ export const stationPlaces = {
       "lon": 77.5638,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Doddakallasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Doddakallasandra+Bengaluru",
+      "image": "assets/images/places/doddakallasandra.jpg"
     }
   ],
   "Vajarahalli": [
@@ -1011,7 +1102,8 @@ export const stationPlaces = {
       "lon": 77.5447,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vajarahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vajarahalli+Bengaluru",
+      "image": "assets/images/places/vajarahalli.jpg"
     }
   ],
   "Talaghattapura": [
@@ -1023,7 +1115,8 @@ export const stationPlaces = {
       "lon": 77.5384,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Thalaghattapura+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Thalaghattapura+Bengaluru",
+      "image": "assets/images/places/thalaghattapura.jpg"
     }
   ],
   "Silk Institute": [
@@ -1035,7 +1128,8 @@ export const stationPlaces = {
       "lon": 77.5299,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Institute+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Institute+Bengaluru",
+      "image": "assets/images/places/silk_institute.jpg"
     }
   ],
   "Jayadeva Hospital": [
@@ -1047,7 +1141,8 @@ export const stationPlaces = {
       "lon": 77.6,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru",
+      "image": "assets/images/places/jayadeva_hospital.jpg"
     },
     {
       "id": "fortis_bannerghatta",
@@ -1057,7 +1152,8 @@ export const stationPlaces = {
       "lon": 77.5968,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru",
+      "image": "assets/images/places/fortis_bannerghatta.jpg"
     }
   ],
   "BTM Layout": [
@@ -1069,7 +1165,8 @@ export const stationPlaces = {
       "lon": 77.6082,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Layout+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Layout+Bengaluru",
+      "image": "assets/images/places/btm_layout.jpg"
     },
     {
       "id": "btm_lake",
@@ -1079,7 +1176,8 @@ export const stationPlaces = {
       "lon": 77.6135,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Lake+Bengaluru",
+      "image": "assets/images/places/btm_lake.jpg"
     },
     {
       "id": "byg_brewski",
@@ -1089,7 +1187,8 @@ export const stationPlaces = {
       "lon": 77.607,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Byg+Brewski+BTM+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Byg+Brewski+BTM+Bengaluru",
+      "image": "assets/images/places/byg_brewski.jpg"
     }
   ],
   "Central Silk Board": [
@@ -1101,7 +1200,8 @@ export const stationPlaces = {
       "lon": 77.62,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Board+Food+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Board+Food+Street+Bengaluru",
+      "image": "assets/images/places/silk_board_food_street.jpg"
     },
     {
       "id": "central_silk_board",
@@ -1111,7 +1211,8 @@ export const stationPlaces = {
       "lon": 77.6206,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+Silk+Board+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+Silk+Board+Bengaluru",
+      "image": "assets/images/places/central_silk_board.jpg"
     }
   ],
   "Electronic City": [
@@ -1123,7 +1224,8 @@ export const stationPlaces = {
       "lon": 77.6711,
       "distance_km": 0.5,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Electronic+City+IT+Hub+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Electronic+City+IT+Hub+Bengaluru",
+      "image": "assets/images/places/electronic_city_it.jpg"
     }
   ],
   "Bommasandra": [
@@ -1135,7 +1237,8 @@ export const stationPlaces = {
       "lon": 77.6875,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommasandra+Industrial+Area+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommasandra+Industrial+Area+Bengaluru",
+      "image": "assets/images/places/bommasandra.jpg"
     }
   ],
   "Ragigudda": [
@@ -1147,7 +1250,8 @@ export const stationPlaces = {
       "lon": 77.5883,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ragigudda+Anjaneya+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ragigudda+Anjaneya+Temple+Bengaluru",
+      "image": "assets/images/places/ragigudda_temple.jpg"
     }
   ],
   "Infosys Foundation Konappana Agrahara": [
@@ -1159,7 +1263,8 @@ export const stationPlaces = {
       "lon": 77.6743,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Infosys+Foundation+Konappana+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Infosys+Foundation+Konappana+Agrahara+Bengaluru",
+      "image": "assets/images/places/konappana_agrahara.jpg"
     }
   ],
   "Hopefarm Channasandra": [
@@ -1171,7 +1276,8 @@ export const stationPlaces = {
       "lon": 77.7479,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hope+Farm+Channasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hope+Farm+Channasandra+Bengaluru",
+      "image": "assets/images/places/hopefarm_channasandra.jpg"
     },
     {
       "id": "channasandra_railway",
@@ -1181,7 +1287,8 @@ export const stationPlaces = {
       "lon": 77.747,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Channasandra+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Channasandra+Railway+Station+Bengaluru",
+      "image": "assets/images/places/channasandra_railway.jpg"
     }
   ],
   "Kadugodi Tree Park": [
@@ -1193,7 +1300,8 @@ export const stationPlaces = {
       "lon": 77.7397,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Bengaluru",
+      "image": "assets/images/places/kadugodi_tree_park.jpg"
     },
     {
       "id": "kadugodi_park",
@@ -1203,7 +1311,8 @@ export const stationPlaces = {
       "lon": 77.7393,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Lake+Bengaluru",
+      "image": "assets/images/places/kadugodi_park.jpg"
     }
   ],
   "Pattanduru Agrahara": [
@@ -1215,7 +1324,8 @@ export const stationPlaces = {
       "lon": 77.7324,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanduru+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanduru+Agrahara+Bengaluru",
+      "image": "assets/images/places/pattanduru_agrahara.jpg"
     },
     {
       "id": "whitefield_railway",
@@ -1225,7 +1335,8 @@ export const stationPlaces = {
       "lon": 77.758,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Whitefield+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Whitefield+Railway+Station+Bengaluru",
+      "image": "assets/images/places/whitefield_railway.jpg"
     }
   ],
   "Nallurhalli": [
@@ -1237,7 +1348,8 @@ export const stationPlaces = {
       "lon": 77.7175,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nallurhalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nallurhalli+Bengaluru",
+      "image": "assets/images/places/nallurhalli_it_area.jpg"
     },
     {
       "id": "prestige_shantiniketan",
@@ -1247,7 +1359,8 @@ export const stationPlaces = {
       "lon": 77.726,
       "distance_km": 1.5,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Prestige+Shantiniketan+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Prestige+Shantiniketan+Bengaluru",
+      "image": "assets/images/places/prestige_shantiniketan.jpg"
     }
   ],
   "Kundalahalli": [
@@ -1259,7 +1372,8 @@ export const stationPlaces = {
       "lon": 77.7126,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kundalahalli+Gate+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kundalahalli+Gate+Bengaluru",
+      "image": "assets/images/places/kundalahalli_gate.jpg"
     },
     {
       "id": "brookefield",
@@ -1269,7 +1383,8 @@ export const stationPlaces = {
       "lon": 77.715,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brookefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brookefield+Bengaluru",
+      "image": "assets/images/places/brookefield.jpg"
     }
   ],
   "Seetharamapalya": [
@@ -1281,7 +1396,8 @@ export const stationPlaces = {
       "lon": 77.7027,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Seetharamapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Seetharamapalya+Bengaluru",
+      "image": "assets/images/places/seetharamapalya.jpg"
     },
     {
       "id": "hoodi_lake",
@@ -1291,7 +1407,8 @@ export const stationPlaces = {
       "lon": 77.7072,
       "distance_km": 1.5,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru",
+      "image": "assets/images/places/hoodi_lake.jpg"
     }
   ],
   "Hoodi": [
@@ -1303,7 +1420,8 @@ export const stationPlaces = {
       "lon": 77.6963,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Circle+Bengaluru",
+      "image": "assets/images/places/hoodi_circle.jpg"
     },
     {
       "id": "hoodi_lake",
@@ -1313,7 +1431,8 @@ export const stationPlaces = {
       "lon": 77.7072,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru",
+      "image": "assets/images/places/hoodi_lake.jpg"
     }
   ],
   "Garudacharapalya": [
@@ -1325,7 +1444,8 @@ export const stationPlaces = {
       "lon": 77.6917,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garudacharapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garudacharapalya+Bengaluru",
+      "image": "assets/images/places/garudacharapalya_tech.jpg"
     },
     {
       "id": "bagmane_world_tech",
@@ -1335,7 +1455,8 @@ export const stationPlaces = {
       "lon": 77.687,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bagmane+World+Technology+Center+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bagmane+World+Technology+Center+Bengaluru",
+      "image": "assets/images/places/bagmane_world_tech.jpg"
     }
   ],
   "Benniganahalli": [
@@ -1347,7 +1468,8 @@ export const stationPlaces = {
       "lon": 77.6665,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Benniganahalli+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Benniganahalli+Lake+Bengaluru",
+      "image": "assets/images/places/benniganahalli.jpg"
     },
     {
       "id": "kr_pura_railway_p13",
@@ -1357,7 +1479,8 @@ export const stationPlaces = {
       "lon": 77.672,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru",
+      "image": "assets/images/places/kr_pura_railway_p13.jpg"
     }
   ],
   "Halasuru": [
@@ -1369,7 +1492,8 @@ export const stationPlaces = {
       "lon": 77.619,
       "distance_km": 0.9,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru",
+      "image": "assets/images/places/ulsoor_lake_p17.jpg"
     },
     {
       "id": "halasuru_someshwara",
@@ -1379,7 +1503,8 @@ export const stationPlaces = {
       "lon": 77.62,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Someshwara+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Someshwara+Temple+Bengaluru",
+      "image": "assets/images/places/halasuru_someshwara.jpg"
     }
   ],
   "KSR City Railway Station": [
@@ -1391,7 +1516,8 @@ export const stationPlaces = {
       "lon": 77.5687,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction",
+      "image": "assets/images/places/ksr_city_railway.jpg"
     },
     {
       "id": "majestic_bus_p24",
@@ -1401,7 +1527,8 @@ export const stationPlaces = {
       "lon": 77.5713,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru",
+      "image": "assets/images/places/majestic_bus_p24.jpg"
     }
   ],
   "Attiguppe": [
@@ -1413,7 +1540,8 @@ export const stationPlaces = {
       "lon": 77.5298,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Attiguppe+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Attiguppe+Bengaluru",
+      "image": "assets/images/places/attiguppe_market.jpg"
     },
     {
       "id": "bapujinagar",
@@ -1423,7 +1551,8 @@ export const stationPlaces = {
       "lon": 77.535,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bapujinagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bapujinagar+Bengaluru",
+      "image": "assets/images/places/bapujinagar.jpg"
     }
   ],
   "Deepanjali Nagar": [
@@ -1435,7 +1564,8 @@ export const stationPlaces = {
       "lon": 77.5262,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Deepanjali+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Deepanjali+Nagar+Bengaluru",
+      "image": "assets/images/places/deepanjali_nagar.jpg"
     },
     {
       "id": "gopalan_arcade",
@@ -1445,7 +1575,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_arcade.jpg"
     }
   ],
   "Pantharapalya-Nayandahalli": [
@@ -1457,7 +1588,8 @@ export const stationPlaces = {
       "lon": 77.5147,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Bengaluru",
+      "image": "assets/images/places/nayandahalli.jpg"
     },
     {
       "id": "nayandahalli_rail",
@@ -1467,7 +1599,8 @@ export const stationPlaces = {
       "lon": 77.51,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Railway+Station+Bengaluru",
+      "image": "assets/images/places/nayandahalli_rail.jpg"
     }
   ],
   "Rajarajeshwari Nagar": [
@@ -1479,7 +1612,8 @@ export const stationPlaces = {
       "lon": 77.5104,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajarajeshwari+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajarajeshwari+Nagar+Bengaluru",
+      "image": "assets/images/places/rr_nagar.jpg"
     },
     {
       "id": "gopalan_arcade_p32",
@@ -1489,7 +1623,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_arcade_p32.jpg"
     }
   ],
   "Pattanagere": [
@@ -1501,7 +1636,8 @@ export const stationPlaces = {
       "lon": 77.4975,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Bengaluru",
+      "image": "assets/images/places/pattanagere.jpg"
     },
     {
       "id": "pattanagere_lake",
@@ -1511,7 +1647,8 @@ export const stationPlaces = {
       "lon": 77.492,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Lake+Bengaluru",
+      "image": "assets/images/places/pattanagere_lake.jpg"
     }
   ],
   "Kengeri Bus Terminal": [
@@ -1523,7 +1660,8 @@ export const stationPlaces = {
       "lon": 77.4878,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/kengeri_bus_terminal.jpg"
     },
     {
       "id": "kengeri_lake",
@@ -1533,7 +1671,8 @@ export const stationPlaces = {
       "lon": 77.485,
       "distance_km": 1.3,
       "walk_time_min": 16,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Lake+Bengaluru",
+      "image": "assets/images/places/kengeri_lake.jpg"
     }
   ],
   "Kengeri": [
@@ -1545,7 +1684,8 @@ export const stationPlaces = {
       "lon": 77.4767,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bengaluru",
+      "image": "assets/images/places/kengeri.jpg"
     },
     {
       "id": "kengeri_bus",
@@ -1555,7 +1695,8 @@ export const stationPlaces = {
       "lon": 77.4878,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/kengeri_bus.jpg"
     }
   ],
   "Challaghatta": [
@@ -1567,7 +1708,8 @@ export const stationPlaces = {
       "lon": 77.4619,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Challaghatta+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Challaghatta+Bengaluru",
+      "image": "assets/images/places/challaghatta.jpg"
     },
     {
       "id": "challaghatta_nice",
@@ -1577,7 +1719,8 @@ export const stationPlaces = {
       "lon": 77.463,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=NICE+Road+Challaghatta+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=NICE+Road+Challaghatta+Bengaluru",
+      "image": "assets/images/places/challaghatta_nice.jpg"
     }
   ],
   "P01": [
@@ -1589,7 +1732,8 @@ export const stationPlaces = {
       "lon": 77.6963,
       "distance_km": 1.1,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru",
+      "image": "assets/images/places/phoenix_marketcity.jpg"
     },
     {
       "id": "columbia_asia_whitefield",
@@ -1599,7 +1743,8 @@ export const stationPlaces = {
       "lon": 77.7499,
       "distance_km": 2,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Columbia+Asia+Hospital+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Columbia+Asia+Hospital+Whitefield+Bengaluru",
+      "image": "assets/images/places/columbia_asia_whitefield.jpg"
     },
     {
       "id": "itpl",
@@ -1609,7 +1754,8 @@ export const stationPlaces = {
       "lon": 77.737,
       "distance_km": 1.6,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=ITPL+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=ITPL+Whitefield+Bengaluru",
+      "image": "assets/images/places/itpl.jpg"
     }
   ],
   "P02": [
@@ -1621,7 +1767,8 @@ export const stationPlaces = {
       "lon": 77.7479,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hope+Farm+Channasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hope+Farm+Channasandra+Bengaluru",
+      "image": "assets/images/places/hopefarm_channasandra.jpg"
     },
     {
       "id": "channasandra_railway",
@@ -1631,7 +1778,8 @@ export const stationPlaces = {
       "lon": 77.747,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Channasandra+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Channasandra+Railway+Station+Bengaluru",
+      "image": "assets/images/places/channasandra_railway.jpg"
     }
   ],
   "P03": [
@@ -1643,7 +1791,8 @@ export const stationPlaces = {
       "lon": 77.7397,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Bengaluru",
+      "image": "assets/images/places/kadugodi_tree_park.jpg"
     },
     {
       "id": "kadugodi_park",
@@ -1653,7 +1802,8 @@ export const stationPlaces = {
       "lon": 77.7393,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kadugodi+Tree+Park+Lake+Bengaluru",
+      "image": "assets/images/places/kadugodi_park.jpg"
     }
   ],
   "P04": [
@@ -1665,7 +1815,8 @@ export const stationPlaces = {
       "lon": 77.7324,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanduru+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanduru+Agrahara+Bengaluru",
+      "image": "assets/images/places/pattanduru_agrahara.jpg"
     },
     {
       "id": "whitefield_railway",
@@ -1675,7 +1826,8 @@ export const stationPlaces = {
       "lon": 77.758,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Whitefield+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Whitefield+Railway+Station+Bengaluru",
+      "image": "assets/images/places/whitefield_railway.jpg"
     }
   ],
   "P05": [
@@ -1687,7 +1839,8 @@ export const stationPlaces = {
       "lon": 77.7248,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sathya+Sai+Hospital+Whitefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sathya+Sai+Hospital+Whitefield+Bengaluru",
+      "image": "assets/images/places/sri_sathya_sai_hospital.jpg"
     }
   ],
   "P06": [
@@ -1699,7 +1852,8 @@ export const stationPlaces = {
       "lon": 77.7175,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nallurhalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nallurhalli+Bengaluru",
+      "image": "assets/images/places/nallurhalli_it_area.jpg"
     },
     {
       "id": "prestige_shantiniketan",
@@ -1709,7 +1863,8 @@ export const stationPlaces = {
       "lon": 77.726,
       "distance_km": 1.5,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Prestige+Shantiniketan+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Prestige+Shantiniketan+Bengaluru",
+      "image": "assets/images/places/prestige_shantiniketan.jpg"
     }
   ],
   "P07": [
@@ -1721,7 +1876,8 @@ export const stationPlaces = {
       "lon": 77.7126,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kundalahalli+Gate+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kundalahalli+Gate+Bengaluru",
+      "image": "assets/images/places/kundalahalli_gate.jpg"
     },
     {
       "id": "brookefield",
@@ -1731,7 +1887,8 @@ export const stationPlaces = {
       "lon": 77.715,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brookefield+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brookefield+Bengaluru",
+      "image": "assets/images/places/brookefield.jpg"
     }
   ],
   "P08": [
@@ -1743,7 +1900,8 @@ export const stationPlaces = {
       "lon": 77.7027,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Seetharamapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Seetharamapalya+Bengaluru",
+      "image": "assets/images/places/seetharamapalya.jpg"
     },
     {
       "id": "hoodi_lake",
@@ -1753,7 +1911,8 @@ export const stationPlaces = {
       "lon": 77.7072,
       "distance_km": 1.5,
       "walk_time_min": 19,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru",
+      "image": "assets/images/places/hoodi_lake.jpg"
     }
   ],
   "P09": [
@@ -1765,7 +1924,8 @@ export const stationPlaces = {
       "lon": 77.6963,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Circle+Bengaluru",
+      "image": "assets/images/places/hoodi_circle.jpg"
     },
     {
       "id": "hoodi_lake",
@@ -1775,7 +1935,8 @@ export const stationPlaces = {
       "lon": 77.7072,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hoodi+Lake+Bengaluru",
+      "image": "assets/images/places/hoodi_lake.jpg"
     }
   ],
   "P10": [
@@ -1787,7 +1948,8 @@ export const stationPlaces = {
       "lon": 77.6917,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garudacharapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garudacharapalya+Bengaluru",
+      "image": "assets/images/places/garudacharapalya_tech.jpg"
     },
     {
       "id": "bagmane_world_tech",
@@ -1797,7 +1959,8 @@ export const stationPlaces = {
       "lon": 77.687,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bagmane+World+Technology+Center+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bagmane+World+Technology+Center+Bengaluru",
+      "image": "assets/images/places/bagmane_world_tech.jpg"
     }
   ],
   "P11": [
@@ -1809,7 +1972,8 @@ export const stationPlaces = {
       "lon": 77.6828,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Singayyanapalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Singayyanapalya+Bengaluru",
+      "image": "assets/images/places/singayyanapalya.jpg"
     },
     {
       "id": "phoenix_marketcity_p11",
@@ -1819,7 +1983,8 @@ export const stationPlaces = {
       "lon": 77.696,
       "distance_km": 1.5,
       "walk_time_min": 18,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Phoenix+Marketcity+Bengaluru",
+      "image": "assets/images/places/phoenix_marketcity_p11.jpg"
     }
   ],
   "P12": [
@@ -1831,7 +1996,8 @@ export const stationPlaces = {
       "lon": 77.672,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru",
+      "image": "assets/images/places/kr_pura_railway.jpg"
     },
     {
       "id": "kr_pura_market",
@@ -1841,7 +2007,8 @@ export const stationPlaces = {
       "lon": 77.671,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Pura+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Pura+Market+Bengaluru",
+      "image": "assets/images/places/kr_pura_market.jpg"
     }
   ],
   "P13": [
@@ -1853,7 +2020,8 @@ export const stationPlaces = {
       "lon": 77.6665,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Benniganahalli+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Benniganahalli+Lake+Bengaluru",
+      "image": "assets/images/places/benniganahalli.jpg"
     },
     {
       "id": "kr_pura_railway_p13",
@@ -1863,7 +2031,8 @@ export const stationPlaces = {
       "lon": 77.672,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Krishnarajapura+Railway+Station+Bengaluru",
+      "image": "assets/images/places/kr_pura_railway_p13.jpg"
     }
   ],
   "P14": [
@@ -1875,7 +2044,8 @@ export const stationPlaces = {
       "lon": 77.652,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Railway+Station+Bengaluru",
+      "image": "assets/images/places/baiyappanahalli_railway.jpg"
     },
     {
       "id": "baiyappanahalli_bus",
@@ -1885,7 +2055,8 @@ export const stationPlaces = {
       "lon": 77.651,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Baiyappanahalli+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/baiyappanahalli_bus.jpg"
     }
   ],
   "P15": [
@@ -1897,7 +2068,8 @@ export const stationPlaces = {
       "lon": 77.619,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru",
+      "image": "assets/images/places/ulsoor_lake.jpg"
     },
     {
       "id": "halasuru_park",
@@ -1907,7 +2079,8 @@ export const stationPlaces = {
       "lon": 77.6198,
       "distance_km": 1.9,
       "walk_time_min": 23,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Lake+Bengaluru",
+      "image": "assets/images/places/halasuru_park.jpg"
     }
   ],
   "P16": [
@@ -1919,7 +2092,8 @@ export const stationPlaces = {
       "lon": 77.6412,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=100+Feet+Road+Indiranagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=100+Feet+Road+Indiranagar+Bengaluru",
+      "image": "assets/images/places/indiranagar_100ft.jpg"
     },
     {
       "id": "cmh_road",
@@ -1929,7 +2103,8 @@ export const stationPlaces = {
       "lon": 77.6409,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=CMH+Road+Indiranagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=CMH+Road+Indiranagar+Bengaluru",
+      "image": "assets/images/places/cmh_road.jpg"
     }
   ],
   "P17": [
@@ -1941,7 +2116,8 @@ export const stationPlaces = {
       "lon": 77.619,
       "distance_km": 0.9,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ulsoor+Lake+Bengaluru",
+      "image": "assets/images/places/ulsoor_lake_p17.jpg"
     },
     {
       "id": "halasuru_someshwara",
@@ -1951,7 +2127,8 @@ export const stationPlaces = {
       "lon": 77.62,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Someshwara+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Halasuru+Someshwara+Temple+Bengaluru",
+      "image": "assets/images/places/halasuru_someshwara.jpg"
     }
   ],
   "P18": [
@@ -1963,7 +2140,8 @@ export const stationPlaces = {
       "lon": 77.6181,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Trinity+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Trinity+Circle+Bengaluru",
+      "image": "assets/images/places/trinity_circle.jpg"
     },
     {
       "id": "manipal_hospital_old_airport",
@@ -1973,7 +2151,8 @@ export const stationPlaces = {
       "lon": 77.647,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Old+Airport+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Old+Airport+Road+Bengaluru",
+      "image": "assets/images/places/manipal_hospital_old_airport.jpg"
     }
   ],
   "P19": [
@@ -1985,7 +2164,8 @@ export const stationPlaces = {
       "lon": 77.606,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brigade+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Brigade+Road+Bengaluru",
+      "image": "assets/images/places/brigade_road.jpg"
     },
     {
       "id": "commercial_street",
@@ -1995,7 +2175,8 @@ export const stationPlaces = {
       "lon": 77.6082,
       "distance_km": 1,
       "walk_time_min": 13,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Commercial+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Commercial+Street+Bengaluru",
+      "image": "assets/images/places/commercial_street.jpg"
     },
     {
       "id": "garuda_mall",
@@ -2005,7 +2186,8 @@ export const stationPlaces = {
       "lon": 77.6098,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garuda+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Garuda+Mall+Bengaluru",
+      "image": "assets/images/places/garuda_mall.jpg"
     }
   ],
   "P20": [
@@ -2017,7 +2199,8 @@ export const stationPlaces = {
       "lon": 77.5929,
       "distance_km": 0.2,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru",
+      "image": "assets/images/places/cubbon_park.jpg"
     },
     {
       "id": "government_museum",
@@ -2027,7 +2210,8 @@ export const stationPlaces = {
       "lon": 77.5963,
       "distance_km": 0.7,
       "walk_time_min": 7,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Government+Museum+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Government+Museum+Bengaluru",
+      "image": "assets/images/places/government_museum.jpg"
     },
     {
       "id": "visvesvaraya_museum",
@@ -2037,7 +2221,8 @@ export const stationPlaces = {
       "lon": 77.5964,
       "distance_km": 1,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Visvesvaraya+Industrial+and+Technological+Museum+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Visvesvaraya+Industrial+and+Technological+Museum+Bengaluru",
+      "image": "assets/images/places/visvesvaraya_museum.jpg"
     },
     {
       "id": "chinnaswamy_stadium",
@@ -2047,7 +2232,8 @@ export const stationPlaces = {
       "lon": 77.5996,
       "distance_km": 0.9,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=M+Chinnaswamy+Stadium+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=M+Chinnaswamy+Stadium+Bengaluru",
+      "image": "assets/images/places/chinnaswamy_stadium.jpg"
     },
     {
       "id": "ub_city",
@@ -2057,7 +2243,8 @@ export const stationPlaces = {
       "lon": 77.596,
       "distance_km": 1.1,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=UB+City+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=UB+City+Bengaluru",
+      "image": "assets/images/places/ub_city.jpg"
     }
   ],
   "P21": [
@@ -2069,7 +2256,8 @@ export const stationPlaces = {
       "lon": 77.5906,
       "distance_km": 0.2,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vidhana+Soudha+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vidhana+Soudha+Bengaluru",
+      "image": "assets/images/places/vidhana_soudha.jpg"
     },
     {
       "id": "high_court",
@@ -2079,7 +2267,8 @@ export const stationPlaces = {
       "lon": 77.5911,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Karnataka+High+Court+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Karnataka+High+Court+Bengaluru",
+      "image": "assets/images/places/high_court.jpg"
     },
     {
       "id": "cubbon_park_p21",
@@ -2089,7 +2278,8 @@ export const stationPlaces = {
       "lon": 77.5929,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Cubbon+Park+Bengaluru",
+      "image": "assets/images/places/cubbon_park_p21.jpg"
     }
   ],
   "P22": [
@@ -2101,7 +2291,8 @@ export const stationPlaces = {
       "lon": 77.5835,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+College+Bengaluru",
+      "image": "assets/images/places/central_college.jpg"
     },
     {
       "id": "bangalore_university_city",
@@ -2111,7 +2302,8 @@ export const stationPlaces = {
       "lon": 77.5815,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Central+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Central+College+Bengaluru",
+      "image": "assets/images/places/bangalore_university_city.jpg"
     }
   ],
   "P23": [
@@ -2123,7 +2315,8 @@ export const stationPlaces = {
       "lon": 77.5713,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru",
+      "image": "assets/images/places/majestic_bus_terminal.jpg"
     },
     {
       "id": "majestic_railway",
@@ -2133,7 +2326,8 @@ export const stationPlaces = {
       "lon": 77.5687,
       "distance_km": 0.6,
       "walk_time_min": 7,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction",
+      "image": "assets/images/places/majestic_railway.jpg"
     },
     {
       "id": "bangalore_palace",
@@ -2143,7 +2337,8 @@ export const stationPlaces = {
       "lon": 77.5921,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace",
+      "image": "assets/images/places/bangalore_palace.jpg"
     },
     {
       "id": "freedom_park",
@@ -2153,7 +2348,8 @@ export const stationPlaces = {
       "lon": 77.577,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru",
+      "image": "assets/images/places/freedom_park.jpg"
     }
   ],
   "P24": [
@@ -2165,7 +2361,8 @@ export const stationPlaces = {
       "lon": 77.5687,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction",
+      "image": "assets/images/places/ksr_city_railway.jpg"
     },
     {
       "id": "majestic_bus_p24",
@@ -2175,7 +2372,8 @@ export const stationPlaces = {
       "lon": 77.5713,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru",
+      "image": "assets/images/places/majestic_bus_p24.jpg"
     }
   ],
   "P25": [
@@ -2187,7 +2385,8 @@ export const stationPlaces = {
       "lon": 77.5542,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Magadi+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Magadi+Road+Bengaluru",
+      "image": "assets/images/places/magadi_road_market.jpg"
     },
     {
       "id": "kempambudhi_lake",
@@ -2197,7 +2396,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempambudhi+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempambudhi+Lake+Bengaluru",
+      "image": "assets/images/places/kempambudhi_lake.jpg"
     }
   ],
   "P26": [
@@ -2209,7 +2409,8 @@ export const stationPlaces = {
       "lon": 77.5459,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosahalli+Bengaluru",
+      "image": "assets/images/places/hosahalli.jpg"
     },
     {
       "id": "forum_mall_vijayanagar",
@@ -2219,7 +2420,8 @@ export const stationPlaces = {
       "lon": 77.5544,
       "distance_km": 1.9,
       "walk_time_min": 23,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=GT+World+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=GT+World+Mall+Bengaluru",
+      "image": "assets/images/places/forum_mall_vijayanagar.jpg"
     }
   ],
   "P27": [
@@ -2231,7 +2433,8 @@ export const stationPlaces = {
       "lon": 77.5372,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bengaluru",
+      "image": "assets/images/places/vijayanagar_market.jpg"
     },
     {
       "id": "vijayanagar_bus",
@@ -2241,7 +2444,8 @@ export const stationPlaces = {
       "lon": 77.537,
       "distance_km": 1,
       "walk_time_min": 12,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vijayanagar+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/vijayanagar_bus.jpg"
     }
   ],
   "P28": [
@@ -2253,7 +2457,8 @@ export const stationPlaces = {
       "lon": 77.5298,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Attiguppe+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Attiguppe+Bengaluru",
+      "image": "assets/images/places/attiguppe_market.jpg"
     },
     {
       "id": "bapujinagar",
@@ -2263,7 +2468,8 @@ export const stationPlaces = {
       "lon": 77.535,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bapujinagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bapujinagar+Bengaluru",
+      "image": "assets/images/places/bapujinagar.jpg"
     }
   ],
   "P29": [
@@ -2275,7 +2481,8 @@ export const stationPlaces = {
       "lon": 77.5262,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Deepanjali+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Deepanjali+Nagar+Bengaluru",
+      "image": "assets/images/places/deepanjali_nagar.jpg"
     },
     {
       "id": "gopalan_arcade",
@@ -2285,7 +2492,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_arcade.jpg"
     }
   ],
   "P30": [
@@ -2297,7 +2505,8 @@ export const stationPlaces = {
       "lon": 77.5212,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Road+Bengaluru",
+      "image": "assets/images/places/mysore_road.jpg"
     },
     {
       "id": "gopalan_mall_p30",
@@ -2307,7 +2516,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 1.7,
       "walk_time_min": 21,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_mall_p30.jpg"
     }
   ],
   "P31": [
@@ -2319,7 +2529,8 @@ export const stationPlaces = {
       "lon": 77.5147,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Bengaluru",
+      "image": "assets/images/places/nayandahalli.jpg"
     },
     {
       "id": "nayandahalli_rail",
@@ -2329,7 +2540,8 @@ export const stationPlaces = {
       "lon": 77.51,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Railway+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nayandahalli+Railway+Station+Bengaluru",
+      "image": "assets/images/places/nayandahalli_rail.jpg"
     }
   ],
   "P32": [
@@ -2341,7 +2553,8 @@ export const stationPlaces = {
       "lon": 77.5104,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajarajeshwari+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajarajeshwari+Nagar+Bengaluru",
+      "image": "assets/images/places/rr_nagar.jpg"
     },
     {
       "id": "gopalan_arcade_p32",
@@ -2351,7 +2564,8 @@ export const stationPlaces = {
       "lon": 77.5184,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gopalan+Arcade+Mall+Bengaluru",
+      "image": "assets/images/places/gopalan_arcade_p32.jpg"
     }
   ],
   "P33": [
@@ -2363,7 +2577,8 @@ export const stationPlaces = {
       "lon": 77.503,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+University+Bengaluru",
+      "image": "assets/images/places/bangalore_university.jpg"
     },
     {
       "id": "jnanabharathi_campus",
@@ -2373,7 +2588,8 @@ export const stationPlaces = {
       "lon": 77.5015,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jnanabharathi+Campus+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jnanabharathi+Campus+Bengaluru",
+      "image": "assets/images/places/jnanabharathi_campus.jpg"
     }
   ],
   "P34": [
@@ -2385,7 +2601,8 @@ export const stationPlaces = {
       "lon": 77.4975,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Bengaluru",
+      "image": "assets/images/places/pattanagere.jpg"
     },
     {
       "id": "pattanagere_lake",
@@ -2395,7 +2612,8 @@ export const stationPlaces = {
       "lon": 77.492,
       "distance_km": 0.6,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Pattanagere+Lake+Bengaluru",
+      "image": "assets/images/places/pattanagere_lake.jpg"
     }
   ],
   "P35": [
@@ -2407,7 +2625,8 @@ export const stationPlaces = {
       "lon": 77.4878,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/kengeri_bus_terminal.jpg"
     },
     {
       "id": "kengeri_lake",
@@ -2417,7 +2636,8 @@ export const stationPlaces = {
       "lon": 77.485,
       "distance_km": 1.3,
       "walk_time_min": 16,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Lake+Bengaluru",
+      "image": "assets/images/places/kengeri_lake.jpg"
     }
   ],
   "P36": [
@@ -2429,7 +2649,8 @@ export const stationPlaces = {
       "lon": 77.4767,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bengaluru",
+      "image": "assets/images/places/kengeri.jpg"
     },
     {
       "id": "kengeri_bus",
@@ -2439,7 +2660,8 @@ export const stationPlaces = {
       "lon": 77.4878,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kengeri+Bus+Terminal+Bengaluru",
+      "image": "assets/images/places/kengeri_bus.jpg"
     }
   ],
   "P37": [
@@ -2451,7 +2673,8 @@ export const stationPlaces = {
       "lon": 77.4619,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Challaghatta+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Challaghatta+Bengaluru",
+      "image": "assets/images/places/challaghatta.jpg"
     },
     {
       "id": "challaghatta_nice",
@@ -2461,7 +2684,8 @@ export const stationPlaces = {
       "lon": 77.463,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=NICE+Road+Challaghatta+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=NICE+Road+Challaghatta+Bengaluru",
+      "image": "assets/images/places/challaghatta_nice.jpg"
     }
   ],
   "G01": [
@@ -2473,7 +2697,8 @@ export const stationPlaces = {
       "lon": 77.476,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+International+Exhibition+Centre"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+International+Exhibition+Centre",
+      "image": "assets/images/places/biec.jpg"
     },
     {
       "id": "madavara",
@@ -2483,7 +2708,8 @@ export const stationPlaces = {
       "lon": 77.4728,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Madavara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Madavara+Bengaluru",
+      "image": "assets/images/places/madavara.jpg"
     }
   ],
   "G02": [
@@ -2495,7 +2721,8 @@ export const stationPlaces = {
       "lon": 77.483,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chikkabidarakallu+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chikkabidarakallu+Bengaluru",
+      "image": "assets/images/places/chikkabidarakallu.jpg"
     }
   ],
   "G03": [
@@ -2507,7 +2734,8 @@ export const stationPlaces = {
       "lon": 77.4914,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manjunatha+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Manjunatha+Nagar+Bengaluru",
+      "image": "assets/images/places/manjunatha_nagara.jpg"
     }
   ],
   "G04": [
@@ -2519,7 +2747,8 @@ export const stationPlaces = {
       "lon": 77.5001,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nagasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nagasandra+Bengaluru",
+      "image": "assets/images/places/nagasandra.jpg"
     },
     {
       "id": "nandi_hills",
@@ -2530,7 +2759,8 @@ export const stationPlaces = {
       "distance_km": 42,
       "walk_time_min": 500,
       "last_mile": true,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nandi+Hills"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nandi+Hills",
+      "image": "assets/images/places/nandi_hills.jpg"
     }
   ],
   "G05": [
@@ -2542,7 +2772,8 @@ export const stationPlaces = {
       "lon": 77.5135,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Dasarahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Dasarahalli+Bengaluru",
+      "image": "assets/images/places/dasarahalli.jpg"
     }
   ],
   "G06": [
@@ -2554,7 +2785,8 @@ export const stationPlaces = {
       "lon": 77.5191,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jalahalli+Cross+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jalahalli+Cross+Bengaluru",
+      "image": "assets/images/places/jalahalli_cross.jpg"
     },
     {
       "id": "jalahalli_airforce",
@@ -2564,7 +2796,8 @@ export const stationPlaces = {
       "lon": 77.531,
       "distance_km": 1.4,
       "walk_time_min": 17,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Air+Force+Station+Jalahalli"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Air+Force+Station+Jalahalli",
+      "image": "assets/images/places/jalahalli_airforce.jpg"
     }
   ],
   "G07": [
@@ -2576,7 +2809,8 @@ export const stationPlaces = {
       "lon": 77.5297,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Industrial+Area+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Industrial+Area+Bengaluru",
+      "image": "assets/images/places/peenya_industrial.jpg"
     }
   ],
   "G08": [
@@ -2588,7 +2822,8 @@ export const stationPlaces = {
       "lon": 77.5492,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Peenya+Bengaluru",
+      "image": "assets/images/places/peenya.jpg"
     }
   ],
   "G09": [
@@ -2600,7 +2835,8 @@ export const stationPlaces = {
       "lon": 77.5539,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Goraguntepalya+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Goraguntepalya+Bengaluru",
+      "image": "assets/images/places/goraguntepalya.jpg"
     },
     {
       "id": "yeshwanthpur_rail_g09",
@@ -2610,7 +2846,8 @@ export const stationPlaces = {
       "lon": 77.554,
       "distance_km": 1.3,
       "walk_time_min": 16,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station",
+      "image": "assets/images/places/yeshwanthpur_rail_g09.jpg"
     }
   ],
   "G10": [
@@ -2622,7 +2859,8 @@ export const stationPlaces = {
       "lon": 77.554,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yesvantpur+Junction+Railway+Station",
+      "image": "assets/images/places/yeshwanthpur_railway.jpg"
     },
     {
       "id": "orion_mall",
@@ -2632,7 +2870,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.5,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall.jpg"
     },
     {
       "id": "sankey_tank",
@@ -2642,7 +2881,8 @@ export const stationPlaces = {
       "lon": 77.57,
       "distance_km": 2,
       "walk_time_min": 20,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sankey+Tank+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sankey+Tank+Bengaluru",
+      "image": "assets/images/places/sankey_tank.jpg"
     }
   ],
   "G11": [
@@ -2654,7 +2894,8 @@ export const stationPlaces = {
       "lon": 77.5516,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Sandal+Soap+Factory+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mysore+Sandal+Soap+Factory+Bengaluru",
+      "image": "assets/images/places/sandal_soap_factory.jpg"
     },
     {
       "id": "orion_mall_g11",
@@ -2664,7 +2905,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall_g11.jpg"
     }
   ],
   "G12": [
@@ -2676,7 +2918,8 @@ export const stationPlaces = {
       "lon": 77.5505,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mahalakshmi+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mahalakshmi+Temple+Bengaluru",
+      "image": "assets/images/places/mahalakshmi_temple.jpg"
     },
     {
       "id": "mantri_mall",
@@ -2686,7 +2929,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 2,
       "walk_time_min": 24,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru",
+      "image": "assets/images/places/mantri_mall.jpg"
     }
   ],
   "G13": [
@@ -2698,7 +2942,8 @@ export const stationPlaces = {
       "lon": 77.555,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Orion+Mall+Bengaluru",
+      "image": "assets/images/places/orion_mall_g13.jpg"
     },
     {
       "id": "rajajinagar_shopping",
@@ -2708,7 +2953,8 @@ export const stationPlaces = {
       "lon": 77.5518,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajajinagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rajajinagar+Bengaluru",
+      "image": "assets/images/places/rajajinagar_shopping.jpg"
     }
   ],
   "G14": [
@@ -2720,7 +2966,8 @@ export const stationPlaces = {
       "lon": 77.5583,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kuvempu+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kuvempu+Road+Bengaluru",
+      "image": "assets/images/places/kuvempu_road.jpg"
     },
     {
       "id": "isckon_temple",
@@ -2730,7 +2977,8 @@ export const stationPlaces = {
       "lon": 77.551,
       "distance_km": 2,
       "walk_time_min": 24,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=ISKCON+Temple+Bangalore"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=ISKCON+Temple+Bangalore",
+      "image": "assets/images/places/isckon_temple.jpg"
     }
   ],
   "G15": [
@@ -2742,7 +2990,8 @@ export const stationPlaces = {
       "lon": 77.5621,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Srirampura+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Srirampura+Bengaluru",
+      "image": "assets/images/places/srirampura.jpg"
     }
   ],
   "G16": [
@@ -2754,7 +3003,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Mantri+Square+Mall+Bengaluru",
+      "image": "assets/images/places/mantri_square.jpg"
     },
     {
       "id": "malleshwaram",
@@ -2764,7 +3014,8 @@ export const stationPlaces = {
       "lon": 77.57,
       "distance_km": 1.5,
       "walk_time_min": 18,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Malleshwaram+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Malleshwaram+Market+Bengaluru",
+      "image": "assets/images/places/malleshwaram.jpg"
     }
   ],
   "G17": [
@@ -2776,7 +3027,8 @@ export const stationPlaces = {
       "lon": 77.5713,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kempegowda+Bus+Station+Bengaluru",
+      "image": "assets/images/places/majestic_bus_g17.jpg"
     },
     {
       "id": "majestic_rail_g17",
@@ -2786,7 +3038,8 @@ export const stationPlaces = {
       "lon": 77.5687,
       "distance_km": 0.6,
       "walk_time_min": 7,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KSR+Bengaluru+City+Junction",
+      "image": "assets/images/places/majestic_rail_g17.jpg"
     },
     {
       "id": "bangalore_palace_g17",
@@ -2796,7 +3049,8 @@ export const stationPlaces = {
       "lon": 77.5921,
       "distance_km": 2,
       "walk_time_min": 25,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bangalore+Palace",
+      "image": "assets/images/places/bangalore_palace_g17.jpg"
     },
     {
       "id": "freedom_park_g17",
@@ -2806,7 +3060,8 @@ export const stationPlaces = {
       "lon": 77.577,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Freedom+Park+Bengaluru",
+      "image": "assets/images/places/freedom_park_g17.jpg"
     }
   ],
   "G18": [
@@ -2818,7 +3073,8 @@ export const stationPlaces = {
       "lon": 77.5756,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chickpete+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Chickpete+Market+Bengaluru",
+      "image": "assets/images/places/chickpete_market.jpg"
     },
     {
       "id": "pete_heritage",
@@ -2828,7 +3084,8 @@ export const stationPlaces = {
       "lon": 77.574,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bengaluru+Pete+Heritage+Walk"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bengaluru+Pete+Heritage+Walk",
+      "image": "assets/images/places/pete_heritage.jpg"
     }
   ],
   "G19": [
@@ -2840,7 +3097,8 @@ export const stationPlaces = {
       "lon": 77.5784,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=KR+Market+Bengaluru",
+      "image": "assets/images/places/kr_market.jpg"
     },
     {
       "id": "tipu_sultan_palace",
@@ -2850,7 +3108,8 @@ export const stationPlaces = {
       "lon": 77.573,
       "distance_km": 0.7,
       "walk_time_min": 8,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Tipu+Sultan+Summer+Palace+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Tipu+Sultan+Summer+Palace+Bengaluru",
+      "image": "assets/images/places/tipu_sultan_palace.jpg"
     },
     {
       "id": "avenue_road",
@@ -2860,7 +3119,8 @@ export const stationPlaces = {
       "lon": 77.578,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Avenue+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Avenue+Road+Bengaluru",
+      "image": "assets/images/places/avenue_road.jpg"
     }
   ],
   "G20": [
@@ -2872,7 +3132,8 @@ export const stationPlaces = {
       "lon": 77.5737,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=National+College+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=National+College+Bengaluru",
+      "image": "assets/images/places/national_college.jpg"
     },
     {
       "id": "vv_puram_food_street",
@@ -2882,7 +3143,8 @@ export const stationPlaces = {
       "lon": 77.577,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=VV+Puram+Food+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=VV+Puram+Food+Street+Bengaluru",
+      "image": "assets/images/places/vv_puram_food_street.jpg"
     }
   ],
   "G21": [
@@ -2894,7 +3156,8 @@ export const stationPlaces = {
       "lon": 77.5848,
       "distance_km": 0.3,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Lalbagh+Botanical+Garden+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Lalbagh+Botanical+Garden+Bengaluru",
+      "image": "assets/images/places/lalbagh.jpg"
     },
     {
       "id": "bull_temple",
@@ -2904,7 +3167,8 @@ export const stationPlaces = {
       "lon": 77.568,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bull+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bull+Temple+Bengaluru",
+      "image": "assets/images/places/bull_temple.jpg"
     }
   ],
   "G22": [
@@ -2916,7 +3180,8 @@ export const stationPlaces = {
       "lon": 77.5815,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=South+End+Circle+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=South+End+Circle+Bengaluru",
+      "image": "assets/images/places/south_end_circle.jpg"
     },
     {
       "id": "jayanagar_4th",
@@ -2926,7 +3191,8 @@ export const stationPlaces = {
       "lon": 77.583,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru",
+      "image": "assets/images/places/jayanagar_4th.jpg"
     }
   ],
   "G23": [
@@ -2938,7 +3204,8 @@ export const stationPlaces = {
       "lon": 77.583,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+4th+Block+Bengaluru",
+      "image": "assets/images/places/jayanagar_shopping.jpg"
     },
     {
       "id": "jayanagar_park",
@@ -2948,7 +3215,8 @@ export const stationPlaces = {
       "lon": 77.58,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+Park+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayanagar+Park+Bengaluru",
+      "image": "assets/images/places/jayanagar_park.jpg"
     }
   ],
   "G24": [
@@ -2960,7 +3228,8 @@ export const stationPlaces = {
       "lon": 77.5801,
       "distance_km": 0.1,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru",
+      "image": "assets/images/places/rv_road.jpg"
     },
     {
       "id": "ranga_shankara",
@@ -2970,7 +3239,8 @@ export const stationPlaces = {
       "lon": 77.5828,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru",
+      "image": "assets/images/places/ranga_shankara.jpg"
     },
     {
       "id": "rv_college",
@@ -2980,7 +3250,8 @@ export const stationPlaces = {
       "lon": 77.4987,
       "distance_km": 8.9,
       "last_mile": true,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=RV+College+of+Engineering+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=RV+College+of+Engineering+Bengaluru",
+      "image": "assets/images/places/rv_college.jpg"
     }
   ],
   "G25": [
@@ -2992,7 +3263,8 @@ export const stationPlaces = {
       "lon": 77.5742,
       "distance_km": 1.2,
       "walk_time_min": 15,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+Amma+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+Amma+Temple+Bengaluru",
+      "image": "assets/images/places/banashankari_temple.jpg"
     },
     {
       "id": "banashankari_bda",
@@ -3002,7 +3274,8 @@ export const stationPlaces = {
       "lon": 77.572,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+BDA+Complex"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Banashankari+BDA+Complex",
+      "image": "assets/images/places/banashankari_bda.jpg"
     }
   ],
   "G26": [
@@ -3014,7 +3287,8 @@ export const stationPlaces = {
       "lon": 77.5714,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=JP+Nagar+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=JP+Nagar+Bengaluru",
+      "image": "assets/images/places/jp_nagar.jpg"
     }
   ],
   "G27": [
@@ -3026,7 +3300,8 @@ export const stationPlaces = {
       "lon": 77.5702,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yelachenahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Yelachenahalli+Bengaluru",
+      "image": "assets/images/places/yelachenahalli.jpg"
     }
   ],
   "G28": [
@@ -3038,7 +3313,8 @@ export const stationPlaces = {
       "lon": 77.5663,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Konanakunte+Cross+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Konanakunte+Cross+Bengaluru",
+      "image": "assets/images/places/konanakunte_cross.jpg"
     }
   ],
   "G29": [
@@ -3050,7 +3326,8 @@ export const stationPlaces = {
       "lon": 77.5638,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Doddakallasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Doddakallasandra+Bengaluru",
+      "image": "assets/images/places/doddakallasandra.jpg"
     }
   ],
   "G30": [
@@ -3062,7 +3339,8 @@ export const stationPlaces = {
       "lon": 77.5447,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vajarahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vajarahalli+Bengaluru",
+      "image": "assets/images/places/vajarahalli.jpg"
     }
   ],
   "G31": [
@@ -3074,7 +3352,8 @@ export const stationPlaces = {
       "lon": 77.5384,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Thalaghattapura+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Thalaghattapura+Bengaluru",
+      "image": "assets/images/places/thalaghattapura.jpg"
     }
   ],
   "G32": [
@@ -3086,7 +3365,8 @@ export const stationPlaces = {
       "lon": 77.5299,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Institute+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Institute+Bengaluru",
+      "image": "assets/images/places/silk_institute.jpg"
     }
   ],
   "Y01": [
@@ -3098,7 +3378,8 @@ export const stationPlaces = {
       "lon": 77.5801,
       "distance_km": 0.1,
       "walk_time_min": 2,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Rashtreeya+Vidyalaya+Road+Bengaluru",
+      "image": "assets/images/places/rv_road_y01.jpg"
     },
     {
       "id": "ranga_shankara_y01",
@@ -3108,7 +3389,8 @@ export const stationPlaces = {
       "lon": 77.5828,
       "distance_km": 0.9,
       "walk_time_min": 11,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru",
+      "image": "assets/images/places/ranga_shankara_y01.jpg"
     }
   ],
   "Y02": [
@@ -3120,7 +3402,8 @@ export const stationPlaces = {
       "lon": 77.5883,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ragigudda+Anjaneya+Temple+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ragigudda+Anjaneya+Temple+Bengaluru",
+      "image": "assets/images/places/ragigudda_temple.jpg"
     }
   ],
   "Y03": [
@@ -3132,7 +3415,8 @@ export const stationPlaces = {
       "lon": 77.6,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru",
+      "image": "assets/images/places/jayadeva_hospital.jpg"
     },
     {
       "id": "fortis_bannerghatta",
@@ -3142,7 +3426,8 @@ export const stationPlaces = {
       "lon": 77.5968,
       "distance_km": 1.8,
       "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru",
+      "image": "assets/images/places/fortis_bannerghatta.jpg"
     }
   ],
   "Y04": [
@@ -3154,7 +3439,8 @@ export const stationPlaces = {
       "lon": 77.6082,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Layout+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Layout+Bengaluru",
+      "image": "assets/images/places/btm_layout.jpg"
     },
     {
       "id": "btm_lake",
@@ -3164,7 +3450,8 @@ export const stationPlaces = {
       "lon": 77.6135,
       "distance_km": 0.8,
       "walk_time_min": 10,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Lake+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Lake+Bengaluru",
+      "image": "assets/images/places/btm_lake.jpg"
     },
     {
       "id": "byg_brewski",
@@ -3174,7 +3461,8 @@ export const stationPlaces = {
       "lon": 77.607,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Byg+Brewski+BTM+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Byg+Brewski+BTM+Bengaluru",
+      "image": "assets/images/places/byg_brewski.jpg"
     }
   ],
   "Y05": [
@@ -3186,7 +3474,8 @@ export const stationPlaces = {
       "lon": 77.62,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Board+Food+Street+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Silk+Board+Food+Street+Bengaluru",
+      "image": "assets/images/places/silk_board_food_street.jpg"
     },
     {
       "id": "central_silk_board",
@@ -3196,7 +3485,8 @@ export const stationPlaces = {
       "lon": 77.6206,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+Silk+Board+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Central+Silk+Board+Bengaluru",
+      "image": "assets/images/places/central_silk_board.jpg"
     }
   ],
   "Y06": [
@@ -3208,7 +3498,8 @@ export const stationPlaces = {
       "lon": 77.6295,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Market+Bengaluru",
+      "image": "assets/images/places/bommanahalli_market.jpg"
     },
     {
       "id": "bommanahalli",
@@ -3218,7 +3509,8 @@ export const stationPlaces = {
       "lon": 77.632,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Bengaluru",
+      "image": "assets/images/places/bommanahalli.jpg"
     }
   ],
   "Bommanahalli": [
@@ -3230,7 +3522,8 @@ export const stationPlaces = {
       "lon": 77.6295,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Market+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Market+Bengaluru",
+      "image": "assets/images/places/bommanahalli_market.jpg"
     },
     {
       "id": "bommanahalli",
@@ -3240,7 +3533,8 @@ export const stationPlaces = {
       "lon": 77.632,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommanahalli+Bengaluru",
+      "image": "assets/images/places/bommanahalli.jpg"
     }
   ],
   "Y07": [
@@ -3252,7 +3546,8 @@ export const stationPlaces = {
       "lon": 77.6392,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hongasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hongasandra+Bengaluru",
+      "image": "assets/images/places/hongasandra.jpg"
     }
   ],
   "Hongasandra": [
@@ -3264,7 +3559,8 @@ export const stationPlaces = {
       "lon": 77.6392,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hongasandra+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hongasandra+Bengaluru",
+      "image": "assets/images/places/hongasandra.jpg"
     }
   ],
   "Y08": [
@@ -3276,7 +3572,8 @@ export const stationPlaces = {
       "lon": 77.6453,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kudlu+Gate+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kudlu+Gate+Bengaluru",
+      "image": "assets/images/places/kudlu_gate.jpg"
     },
     {
       "id": "sai_sparsh",
@@ -3286,7 +3583,8 @@ export const stationPlaces = {
       "lon": 77.643,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sai+Sparsh+Hospital+Kudlu+Gate"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sai+Sparsh+Hospital+Kudlu+Gate",
+      "image": "assets/images/places/sai_sparsh.jpg"
     },
     {
       "id": "narasimha_chitramandira",
@@ -3296,7 +3594,8 @@ export const stationPlaces = {
       "lon": 77.646,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Narasimha+Chitramandira+Kudlu+Gate"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Narasimha+Chitramandira+Kudlu+Gate",
+      "image": "assets/images/places/narasimha_chitramandira.jpg"
     }
   ],
   "Kudlu Gate": [
@@ -3308,7 +3607,8 @@ export const stationPlaces = {
       "lon": 77.6453,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kudlu+Gate+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kudlu+Gate+Bengaluru",
+      "image": "assets/images/places/kudlu_gate.jpg"
     },
     {
       "id": "sai_sparsh",
@@ -3318,7 +3618,8 @@ export const stationPlaces = {
       "lon": 77.643,
       "distance_km": 0.5,
       "walk_time_min": 6,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sai+Sparsh+Hospital+Kudlu+Gate"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sai+Sparsh+Hospital+Kudlu+Gate",
+      "image": "assets/images/places/sai_sparsh.jpg"
     },
     {
       "id": "narasimha_chitramandira",
@@ -3328,7 +3629,8 @@ export const stationPlaces = {
       "lon": 77.646,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Narasimha+Chitramandira+Kudlu+Gate"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Narasimha+Chitramandira+Kudlu+Gate",
+      "image": "assets/images/places/narasimha_chitramandira.jpg"
     }
   ],
   "Y09": [
@@ -3340,7 +3642,8 @@ export const stationPlaces = {
       "lon": 77.6525,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Live100+Hospital+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Live100+Hospital+Bengaluru",
+      "image": "assets/images/places/live100.jpg"
     },
     {
       "id": "begur_kere",
@@ -3350,7 +3653,8 @@ export const stationPlaces = {
       "lon": 77.65,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Begur+Kere+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Begur+Kere+Bengaluru",
+      "image": "assets/images/places/begur_kere.jpg"
     }
   ],
   "Singasandra": [
@@ -3362,7 +3666,8 @@ export const stationPlaces = {
       "lon": 77.6525,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Live100+Hospital+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Live100+Hospital+Bengaluru",
+      "image": "assets/images/places/live100.jpg"
     },
     {
       "id": "begur_kere",
@@ -3372,7 +3677,8 @@ export const stationPlaces = {
       "lon": 77.65,
       "distance_km": 0.7,
       "walk_time_min": 9,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Begur+Kere+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Begur+Kere+Bengaluru",
+      "image": "assets/images/places/begur_kere.jpg"
     }
   ],
   "Y10": [
@@ -3384,7 +3690,8 @@ export const stationPlaces = {
       "lon": 77.6584,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosa+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosa+Road+Bengaluru",
+      "image": "assets/images/places/hosa_road.jpg"
     },
     {
       "id": "hosa_road_hospital",
@@ -3394,7 +3701,8 @@ export const stationPlaces = {
       "lon": 77.658,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sai+Hospital+Hosa+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sai+Hospital+Hosa+Road+Bengaluru",
+      "image": "assets/images/places/hosa_road_hospital.jpg"
     }
   ],
   "Hosa Road": [
@@ -3406,7 +3714,8 @@ export const stationPlaces = {
       "lon": 77.6584,
       "distance_km": 0.2,
       "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosa+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hosa+Road+Bengaluru",
+      "image": "assets/images/places/hosa_road.jpg"
     },
     {
       "id": "hosa_road_hospital",
@@ -3416,7 +3725,8 @@ export const stationPlaces = {
       "lon": 77.658,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sai+Hospital+Hosa+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sri+Sai+Hospital+Hosa+Road+Bengaluru",
+      "image": "assets/images/places/hosa_road_hospital.jpg"
     }
   ],
   "Y11": [
@@ -3428,7 +3738,8 @@ export const stationPlaces = {
       "lon": 77.6635,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Beratena+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Beratena+Agrahara+Bengaluru",
+      "image": "assets/images/places/beratena_agrahara.jpg"
     }
   ],
   "Beratena Agrahara": [
@@ -3440,7 +3751,8 @@ export const stationPlaces = {
       "lon": 77.6635,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Beratena+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Beratena+Agrahara+Bengaluru",
+      "image": "assets/images/places/beratena_agrahara.jpg"
     }
   ],
   "Y12": [
@@ -3452,7 +3764,8 @@ export const stationPlaces = {
       "lon": 77.6711,
       "distance_km": 0.5,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Electronic+City+IT+Hub+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Electronic+City+IT+Hub+Bengaluru",
+      "image": "assets/images/places/electronic_city_it.jpg"
     }
   ],
   "Y13": [
@@ -3464,7 +3777,8 @@ export const stationPlaces = {
       "lon": 77.6743,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Infosys+Foundation+Konappana+Agrahara+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Infosys+Foundation+Konappana+Agrahara+Bengaluru",
+      "image": "assets/images/places/konappana_agrahara.jpg"
     }
   ],
   "Y14": [
@@ -3476,7 +3790,8 @@ export const stationPlaces = {
       "lon": 77.6775,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Huskur+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Huskur+Road+Bengaluru",
+      "image": "assets/images/places/huskur_road.jpg"
     }
   ],
   "Huskur Road": [
@@ -3488,7 +3803,8 @@ export const stationPlaces = {
       "lon": 77.6775,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Huskur+Road+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Huskur+Road+Bengaluru",
+      "image": "assets/images/places/huskur_road.jpg"
     }
   ],
   "Y15": [
@@ -3500,7 +3816,8 @@ export const stationPlaces = {
       "lon": 77.6813,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hebbagodi+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hebbagodi+Bengaluru",
+      "image": "assets/images/places/hebbagodi.jpg"
     }
   ],
   "Hebbagodi": [
@@ -3512,7 +3829,8 @@ export const stationPlaces = {
       "lon": 77.6813,
       "distance_km": 0.3,
       "walk_time_min": 4,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hebbagodi+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hebbagodi+Bengaluru",
+      "image": "assets/images/places/hebbagodi.jpg"
     }
   ],
   "Y16": [
@@ -3524,7 +3842,8 @@ export const stationPlaces = {
       "lon": 77.6875,
       "distance_km": 0.4,
       "walk_time_min": 5,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommasandra+Industrial+Area+Bengaluru"
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommasandra+Industrial+Area+Bengaluru",
+      "image": "assets/images/places/bommasandra.jpg"
     }
   ]
 };
