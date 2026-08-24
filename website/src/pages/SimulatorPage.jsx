@@ -312,6 +312,8 @@ export default function SimulatorPage() {
                   ref={iframeRef}
                   src="/simulator/index.html"
                   title="NammaRide Mobile App Simulator"
+                  allow="geolocation; autoplay; clipboard-write; encrypted-media"
+                  loading="eager"
                   className="w-full h-full border-0 rounded-[38px] bg-white dark:bg-black pointer-events-auto"
                   onLoad={handleIframeLoad}
                 />
