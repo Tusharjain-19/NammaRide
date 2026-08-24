@@ -115,6 +115,26 @@
       }
     }
     </script>
+    <!-- Robot & AI Crawler Access Rules -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow" />
+
+    <!-- JSON-LD Schema 4: WebSite with SearchAction for Sitelinks -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NammaRide",
+      "url": "https://nammaride.vercel.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nammaride.vercel.app/stations?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,6 +142,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   </head>
   <body class="antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-emerald-500 selection:text-white">
+    <noscript>
+      <div style="padding: 20px; font-family: sans-serif;">
+        <h1>NammaRide — #1 Best Geo GPS App for Bengaluru Namma Metro</h1>
+        <p>NammaRide is the ultimate Bengaluru Metro transit navigation companion. Features 100% offline satellite Geo GPS nearest station tracking, fare calculators, Purple/Green/Yellow line maps, and bilingual English & Kannada guides.</p>
+        <h2>Key Features:</h2>
+        <ul>
+          <li>Offline Geo GPS Station Detection without mobile internet</li>
+          <li>Proximity vibration arrival alerts for underground and elevated stations</li>
+          <li>Complete 83+ station directory across Purple, Green, and Yellow lines</li>
+          <li>Smart Card 5% discount fare calculation</li>
+          <li>Direct WhatsApp ticket booking integration</li>
+        </ul>
+        <p>Download the official Android app on Google Play Store: https://play.google.com/store/apps/details?id=site.nammaride.app</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
