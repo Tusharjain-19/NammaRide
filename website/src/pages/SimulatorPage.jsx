@@ -268,7 +268,7 @@ export default function SimulatorPage() {
   };
 
   return (
-    <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white dark:from-[#0B0F19] dark:to-[#07090E] min-h-screen transition-colors duration-300">
+    <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Hero Header */}
@@ -299,20 +299,20 @@ export default function SimulatorPage() {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, type: "spring", stiffness: 100, damping: 15 }}
-              className="w-[300px] h-[600px] sm:w-[330px] sm:h-[650px] bg-gray-900 dark:bg-gray-950 rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-gray-800/80 transition-all duration-300"
+              className="w-[300px] h-[600px] sm:w-[330px] sm:h-[650px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800 transition-all duration-300"
             >
               {/* Power / Volume Buttons */}
-              <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-gray-800 rounded-r-md"></div>
-              <div className="absolute top-48 -right-1 w-1 h-20 bg-gray-300 dark:bg-gray-800 rounded-r-md"></div>
-              <div className="absolute top-28 -left-1 w-1 h-10 bg-gray-300 dark:bg-gray-800 rounded-l-md"></div>
+              <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
+              <div className="absolute top-48 -right-1 w-1 h-20 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
+              <div className="absolute top-28 -left-1 w-1 h-10 bg-gray-300 dark:bg-neutral-800 rounded-l-md"></div>
 
               {/* Screen Content Wrapper */}
-              <div className="flex-grow relative bg-gray-100 dark:bg-[#0B0F19] flex flex-col overflow-hidden rounded-[38px] shadow-inner border border-gray-200 dark:border-gray-900/50">
+              <div className="flex-grow relative bg-gray-100 dark:bg-black flex flex-col overflow-hidden rounded-[38px] shadow-inner border border-gray-200 dark:border-neutral-800">
                 <iframe
                   ref={iframeRef}
                   src="/simulator/index.html"
                   title="NammaRide Mobile App Simulator"
-                  className="w-full h-full border-0 rounded-[38px] bg-white pointer-events-auto"
+                  className="w-full h-full border-0 rounded-[38px] bg-white dark:bg-black pointer-events-auto"
                   onLoad={handleIframeLoad}
                 />
 
