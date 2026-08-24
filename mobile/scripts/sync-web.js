@@ -12,7 +12,7 @@ function copyDirSync(src, dest) {
     const entries = fs.readdirSync(src, { withFileTypes: true });
 
     for (let entry of entries) {
-        if (entry.name === '.DS_Store') {
+        if (['.DS_Store', 'node_modules', '.git', 'dist', 'build', '.cache', '.next', '.vscode'].includes(entry.name)) {
             continue;
         }
 
