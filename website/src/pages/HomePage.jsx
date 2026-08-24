@@ -621,6 +621,15 @@ export default function HomePage() {
                 walk: '4 min walk to campus gate',
                 fare: '₹10 - ₹45',
                 hubs: 'Basavanagudi Campus, Bull Temple'
+              },
+              {
+                park: 'Shri Doddabasavanna Temple (Bull Temple)',
+                station: 'National College / Lalbagh',
+                line: 'Green Line',
+                color: '#10B981',
+                walk: '10 min walk / 3 min auto',
+                fare: '₹10 - ₹45',
+                hubs: 'Bull Temple Road, Basavanagudi'
               }
             ].map((hub, idx) => (
               <div 

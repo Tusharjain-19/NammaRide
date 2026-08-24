@@ -34,6 +34,11 @@
     overflow-x: hidden;
     transition: background-color 0.4s ease, color 0.4s ease;
   }
+
+  /* 🔳 Crisp Rectangular Box Architecture Across Entire Web App */
+  *, *::before, *::after {
+    border-radius: 0 !important;
+  }
 }
 
 /* Force dark mode text visibility */
@@ -49,6 +54,7 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 8px 30px rgba(16, 185, 129, 0.05);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0 !important;
 }
 
 .light-glass-card:hover {
@@ -56,29 +62,33 @@
   border-color: rgba(16, 185, 129, 0.2);
   transform: translateY(-4px) scale(1.008);
   box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.18);
+  border-radius: 0 !important;
 }
 
 .dark .light-glass-card {
   background: rgba(13, 13, 13, 0.9);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  border-radius: 0 !important;
 }
 
 .dark .light-glass-card:hover {
   background: rgba(23, 23, 23, 0.95);
   border-color: rgba(16, 185, 129, 0.4);
   box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.3);
+  border-radius: 0 !important;
 }
 
 .glow-button {
   box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+  border-radius: 0 !important;
 }
 
 /* 💎 Editorial Parallax Scroll View Timeline (Pure CSS) */
 .style-image-container {
   overflow: hidden;
   position: relative;
-  border-radius: 2rem;
+  border-radius: 0 !important;
 }
 
 .style-image {
@@ -91,6 +101,7 @@
   animation: parallax-move linear both;
   animation-timeline: view();
   animation-range: entry 0% exit 100%;
+  border-radius: 0 !important;
 }
 
 @keyframes parallax-move {
@@ -102,11 +113,13 @@
 .editorial-card-tilt {
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
   will-change: transform;
+  border-radius: 0 !important;
 }
 
 .editorial-card-tilt:hover {
   transform: translateY(-6px) rotate3d(1, 0.5, 0, 2.5deg) skewY(-0.4deg);
   box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.2);
+  border-radius: 0 !important;
 }
 
 /* 📜 Staggered Typography Mask & Slide Reveal */
@@ -133,7 +146,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: rgba(16, 185, 129, 0.4);
-  border-radius: 9999px;
+  border-radius: 0 !important;
   border: 2px solid transparent;
 }
 

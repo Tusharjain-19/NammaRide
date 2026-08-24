@@ -436,6 +436,20 @@ export const stationPlaces = {
   ],
   "National College": [
     {
+      "id": "shri_doddabasavanna_temple",
+      "name": "Shri Doddabasavanna Temple (Bull Temple)",
+      "nameKn": "ಶ್ರೀ ದೊಡ್ಡ ಬಸವಣ್ಣ ದೇವಾಲಯ (ಬುಲ್ ಟೆಂಪಲ್)",
+      "type": "Temple",
+      "lat": 12.9420315,
+      "lon": 77.5681024,
+      "distance_km": 0.8,
+      "walk_time_min": 10,
+      "approx_drive_time_min": 3,
+      "description": "Historical 16th-century temple built by Kempe Gowda I featuring the giant monolithic Nandi sculpture, located in Basavanagudi near National College Metro Station.",
+      "maps_link": "https://www.google.com/maps/dir//Shri+Doddabasavanna+Temple,+Bull+Temple+Rd,+Basavanagudi,+Bengaluru,+Karnataka+560004/@26.9166007,76.3521509,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bae15cc5aead55f:0x3408320f99f27d44!2m2!1d77.5681024!2d12.9420315?entry=ttu&g_ep=EgoyMDI2MDgxOS4wIKXMDSoASAFQAw%3D%3D",
+      "image": "assets/images/doddabasavanna_temple.jpg"
+    },
+    {
       "id": "national_college",
       "name": "National College",
       "type": "Education",

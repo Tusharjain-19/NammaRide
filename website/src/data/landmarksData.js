@@ -787,6 +787,23 @@ export const landmarksData = [
     image: '/simulator/assets/images/logo_app.png'
   },
   {
+    id: 'shri_doddabasavanna_temple',
+    name_en: 'Shri Doddabasavanna Temple (Bull Temple)',
+    name_kn: 'ಶ್ರೀ ದೊಡ್ಡ ಬಸವಣ್ಣ ದೇವಾಲಯ (ಬುಲ್ ಟೆಂಪಲ್)',
+    category: 'heritage',
+    description: 'Iconic 16th-century Dravidian temple built by Kempe Gowda I housing the monumental monolithic Nandi bull. Located in Basavanagudi near National College Metro Station.',
+    nearest_station: 'National College',
+    station_code: 'G20',
+    line: 'Green Line',
+    line_color: 'bg-emerald-500',
+    distance: '800m',
+    walk_time: '10 min walk / 3 min auto',
+    exit_gate: 'Gate B (Bull Temple Road)',
+    rating: 4.9,
+    maps_url: 'https://www.google.com/maps/dir//Shri+Doddabasavanna+Temple,+Bull+Temple+Rd,+Basavanagudi,+Bengaluru,+Karnataka+560004/@26.9166007,76.3521509,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bae15cc5aead55f:0x3408320f99f27d44!2m2!1d77.5681024!2d12.9420315?entry=ttu&g_ep=EgoyMDI2MDgxOS4wIKXMDSoASAFQAw%3D%3D',
+    image: '/assets/images/doddabasavanna_temple.jpg'
+  },
+  {
     id: 'national_college',
     name_en: 'National College',
     name_kn: 'National College',
