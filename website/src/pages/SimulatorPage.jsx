@@ -175,8 +175,8 @@ export default function SimulatorPage() {
                 }}
                 className={`cursor-pointer rounded-3xl border transition-all overflow-hidden ${
                   isExpanded
-                    ? 'bg-white dark:bg-gray-900 border-emerald-500 shadow-xl shadow-emerald-500/5 ring-1 ring-emerald-500/20'
-                    : 'bg-white/60 dark:bg-gray-900/60 hover:bg-white dark:hover:bg-gray-900 border-gray-200 dark:border-gray-800 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm'
+                    ? 'bg-white dark:bg-neutral-900 border-emerald-500 shadow-xl shadow-emerald-500/5 ring-1 ring-emerald-500/20'
+                    : 'bg-white/60 dark:bg-black/60 hover:bg-white dark:hover:bg-neutral-900 border-gray-200 dark:border-neutral-800 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm'
                 }`}
               >
                 <div className="p-6 flex items-start gap-4 select-none">
@@ -184,7 +184,7 @@ export default function SimulatorPage() {
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors border ${
                     isExpanded
                       ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                      : 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                      : 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-500 dark:text-gray-400'
                   }`}>
                     {tab.icon}
                   </div>
@@ -242,7 +242,7 @@ export default function SimulatorPage() {
                             {tab.features.map((feature, i) => (
                               <div
                                 key={i}
-                                className="flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800"
+                                className="flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-900/80 border border-gray-100 dark:border-neutral-800"
                               >
                                 <div className="w-5 h-5 rounded-md bg-emerald-500/15 flex items-center justify-center shrink-0">
                                   <ArrowRight className="w-3 h-3 text-emerald-500" />

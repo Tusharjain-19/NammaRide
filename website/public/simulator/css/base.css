@@ -14,8 +14,8 @@
     --accent-light: #34D399;
 
     /* Solid Opaque Dropdown Colors per design.md */
-    --bg-dropdown: #141E2D;
-    --bg-dropdown-hover: #1E293B;
+    --bg-dropdown: #121218;
+    --bg-dropdown-hover: #1A1A22;
     --dropdown-border: rgba(255, 255, 255, 0.15);
 
     --glass-blur: blur(20px) saturate(180%);
@@ -23,10 +23,10 @@
     --glass-glow: 0 0 25px rgba(16, 185, 129, 0.25);
     
     --bg-image: 
-        radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.28) 0%, transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.28) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, rgba(234, 179, 8, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 80% 85%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(234, 179, 8, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 80% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
         url('../assets/images/vidhana_soudha.jpg');
 
     --line-purple: #A855F7;
