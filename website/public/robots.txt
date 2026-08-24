@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nammaride.site/sitemap.xml
+Sitemap: https://nammaride.vercel.app/sitemap.xml
+Sitemap: https://site.nammaride.app/sitemap.xml
