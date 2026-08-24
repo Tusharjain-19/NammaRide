@@ -369,14 +369,14 @@ export default function HomePage() {
               </motion.span>
               
               <h1 className="font-display-xl text-[36px] sm:text-display-xl 2xl:text-7xl 3xl:text-8xl text-gray-900 dark:text-white leading-tight tracking-tight">
-                Navigate Bengaluru Metro{' '}
+                {t('heroTitle1')}{' '}
                 <span className="text-emerald-500 relative inline-block">
-                  Smartly
+                  {t('heroTitleHighlight')}
                   <svg className="absolute w-full h-3 -bottom-1 left-0 text-emerald-200 opacity-50 z-[-1]" preserveAspectRatio="none" viewBox="0 0 100 10">
                     <path d="M0,5 Q50,10 100,5" fill="none" stroke="currentColor" strokeWidth="4"></path>
                   </svg>
                 </span>
-                , Offline Always
+                , {t('heroTitle2')}
               </h1>
 
               <motion.p 
@@ -385,7 +385,7 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="font-body-lg text-base sm:text-body-lg 2xl:text-xl text-gray-600 dark:text-gray-300 max-w-2xl 2xl:max-w-3xl leading-relaxed"
               >
-                Your daily Bengaluru Metro companion: plan routes in seconds, save on fares with Smart Card tips, and navigate 83 stations effortlessly. No internet needed.
+                {t('heroDesc')}
               </motion.p>
             </div>
 
@@ -419,19 +419,19 @@ export default function HomePage() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800"
             >
-              <p className="font-label-sm text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">All 3 Lines Covered</p>
+              <p className="font-label-sm text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">{t('all3Lines')}</p>
               <div className="flex flex-wrap gap-4">
                 <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-purple-line shadow-xs">
                   <span className="w-3 h-3 rounded-full bg-purple-line"></span>
-                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">Purple Line</span>
+                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('purpleLine')}</span>
                 </div>
                 <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-emerald-500 shadow-xs">
                   <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">Green Line</span>
+                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('greenLine')}</span>
                 </div>
                 <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-yellow-line shadow-xs">
                   <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">Yellow Line</span>
+                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('yellowLine')}</span>
                 </div>
               </div>
             </motion.div>
@@ -485,18 +485,18 @@ export default function HomePage() {
       >
         <div className="light-glass-card p-8 rounded-[36px] space-y-6 max-w-5xl mx-auto">
           <div className="text-center space-y-2">
-            <h2 className="font-headline-lg text-headline-lg font-bold text-gray-900 dark:text-white">Why 1000+ Commuters Switched to NammaRide</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">See how NammaRide stacks up against the competition: feature by feature.</p>
+            <h2 className="font-headline-lg text-headline-lg font-bold text-gray-900 dark:text-white">{t('whyCommutersSwitched')}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('whyCommutersDesc')}</p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 uppercase font-mono text-xs">
-                  <th className="py-3 px-4">Feature</th>
-                  <th className="py-3 px-4 text-emerald-accent font-bold">NammaRide</th>
-                  <th className="py-3 px-4">BMRCL Official</th>
-                  <th className="py-3 px-4">Google Maps</th>
+                  <th className="py-3 px-4">{t('feature')}</th>
+                  <th className="py-3 px-4 text-emerald-accent font-bold">{t('nammaride')}</th>
+                  <th className="py-3 px-4">{t('bmrclOfficial')}</th>
+                  <th className="py-3 px-4">{t('googleMaps')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-gray-600 dark:text-gray-300">
@@ -524,7 +524,7 @@ export default function HomePage() {
           className="text-center max-w-3xl mx-auto mb-14 space-y-3"
         >
           <h2 className="font-headline-lg text-headline-lg font-bold text-gray-900 dark:text-white">
-            Built for Real Commuters, Not Just Maps
+            {t('builtForRealCommuters')}
           </h2>
         </motion.div>
 

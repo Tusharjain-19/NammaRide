@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { X, Download } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import googlePlayImg from '../assets/images/google play.svg';
 import logoApp from '../assets/images/logo_app.png';
 
 export default function MobileAppBanner() {
+  const { t } = useLanguage();
   const [dismissed, setDismissed] = useState(() => {
     try {
       return sessionStorage.getItem('nammaride_mobile_banner_dismissed') === 'true';
@@ -42,10 +44,10 @@ export default function MobileAppBanner() {
           
           <div className="flex flex-col min-w-0">
             <h4 className="font-heading font-black text-xs text-white leading-tight truncate">
-              Download NammaRide App
+              {t('downloadAppMobileBanner')}
             </h4>
             <p className="text-[10px] text-emerald-400 font-semibold truncate leading-tight mt-0.5">
-              100% Offline Maps & Live Alerts
+              {t('mobileBannerMessage')}
             </p>
           </div>
         </div>

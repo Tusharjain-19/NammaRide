@@ -30,59 +30,56 @@ export default function Footer() {
               <span className="font-heading font-extrabold text-xl text-[var(--text-primary)]">NammaRide</span>
             </div>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Bengaluru Transit Companion. Fast, accurate, and offline-ready route planning for Purple, Green, Yellow, Red & Blue Metro lines.
+              {t('footerTagline')}
             </p>
             <div className="flex items-center gap-2 pt-1">
               <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7]"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_#eab308]"></span>
-              <span className="text-[10px] text-[var(--text-secondary)] font-mono font-bold uppercase tracking-wider ml-1">Purple • Green • Yellow</span>
+              <span className="text-[10px] text-[var(--text-secondary)] font-mono font-bold uppercase tracking-wider ml-1">{t('purpleLine')} • {t('greenLine')} • {t('yellowLine')}</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">Transit Companion</h4>
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">{t('quickLinks')}</h4>
             <ul className="space-y-2.5 text-xs">
               <li>
                 <Link to="/simulator" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
-                  <span>Web App Simulator</span>
+                  <span>{t('simulator')}</span>
                   <span className="px-1.5 py-0.2 text-[9px] bg-emerald-500/20 text-emerald-500 rounded font-bold">Live</span>
                 </Link>
               </li>
               <li>
-                <Link to="/stations" className="hover:text-emerald-500 transition-colors">Metro Stations Directory</Link>
+                <Link to="/stations" className="hover:text-emerald-500 transition-colors">{t('stations')}</Link>
               </li>
               <li>
-                <Link to="/map" className="hover:text-emerald-500 transition-colors">Interactive Metro Map</Link>
+                <Link to="/map" className="hover:text-emerald-500 transition-colors">{t('map')}</Link>
               </li>
               <li>
-                <Link to="/explore" className="hover:text-emerald-500 transition-colors">Explore Landmarks Guide</Link>
+                <Link to="/explore" className="hover:text-emerald-500 transition-colors">{t('explore')}</Link>
               </li>
               <li>
-                <Link to="/timings" className="hover:text-emerald-500 transition-colors">Metro Train Timetable</Link>
+                <Link to="/timings" className="hover:text-emerald-500 transition-colors">{t('timings')}</Link>
               </li>
               <li>
-                <Link to="/safety" className="hover:text-emerald-500 transition-colors">Safety Guidelines</Link>
+                <Link to="/safety" className="hover:text-emerald-500 transition-colors">{t('safety')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Company & Legal */}
           <div>
-            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">Company & Legal</h4>
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">{t('legal')}</h4>
             <ul className="space-y-2.5 text-xs">
               <li>
-                <Link to="/about" className="hover:text-emerald-500 transition-colors">About Us</Link>
+                <Link to="/about" className="hover:text-emerald-500 transition-colors">{t('about')}</Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-emerald-500 transition-colors">Content Blog</Link>
+                <Link to="/blog" className="hover:text-emerald-500 transition-colors">{t('blog')}</Link>
               </li>
               <li>
-                <Link to="/testimonials" className="hover:text-emerald-500 transition-colors">User Testimonials</Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-emerald-500 transition-colors">Contact Support</Link>
+                <Link to="/contact" className="hover:text-emerald-500 transition-colors">{t('contact')}</Link>
               </li>
               <li>
                 <Link to="/privacy" className="hover:text-emerald-500 transition-colors">Privacy Policy</Link>
@@ -95,9 +92,9 @@ export default function Footer() {
 
           {/* Download & Developer Credit */}
           <div>
-            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">Download NammaRide</h4>
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] tracking-wider uppercase mb-4">{t('download')}</h4>
             <p className="text-xs text-[var(--text-secondary)] mb-4">
-              Get the native Android app for 100% offline access, turnstile QR gate storage, and fast navigation.
+              {t('heroDesc')}
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -123,7 +120,7 @@ export default function Footer() {
                   className="inline-flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-emerald-500 transition-colors group font-medium"
                 >
                   <Code className="w-4 h-4 text-emerald-500 opacity-70 group-hover:opacity-100" />
-                  <span className="underline underline-offset-4 decoration-emerald-500/30 group-hover:decoration-emerald-500">Developed by Tushar Jain (tusharjain.in)</span>
+                  <span className="underline underline-offset-4 decoration-emerald-500/30 group-hover:decoration-emerald-500">{t('developedBy')} (tusharjain.in)</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </div>
@@ -144,7 +141,7 @@ export default function Footer() {
         {/* Disclaimer & Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-[11px] text-[var(--text-secondary)]">
           <p>
-            © {new Date().getFullYear()} NammaRide. All rights reserved. 
+            © {new Date().getFullYear()} NammaRide. {t('allRightsReserved')} 
             <span className="block sm:inline sm:ml-2">Disclaimer: Timings and fare are estimates. Independent transit guide, not an official BMRCL site.</span>
           </p>
           <div className="flex items-center gap-4 font-medium">

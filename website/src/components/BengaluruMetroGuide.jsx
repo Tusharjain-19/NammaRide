@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Compass, Navigation, ShieldCheck, MapPin, Zap, CheckCircle2, Award, Smartphone, Globe, Radio } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import googlePlayImg from '../assets/images/google play.svg';
 
 export default function BengaluruMetroGuide() {
-  const [activeLang, setActiveLang] = useState('en');
+  const { lang } = useLanguage();
+  const [activeLang, setActiveLang] = useState(lang || 'en');
+
+  useEffect(() => {
+    if (lang) setActiveLang(lang);
+  }, [lang]);
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 2xl:px-12 max-w-container-max 3xl:max-w-[1800px] mx-auto w-full">
