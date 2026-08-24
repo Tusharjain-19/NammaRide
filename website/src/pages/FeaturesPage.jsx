@@ -6,49 +6,57 @@ import googlePlayImg from '../../assets/images/google play.svg';
 export default function FeaturesPage() {
   const featureList = [
     {
-      icon: <Navigation className="w-8 h-8 text-emerald-400" />,
+      icon: <Navigation className="w-7 h-7 text-emerald-400" />,
+      iconBg: 'bg-emerald-500/10 border-emerald-500/30',
       title: 'Smart Route Finder & Interchange Advice',
       description: 'Calculates the fastest route between any two Bengaluru Metro stations, specifying exact interchange stations (like Nadaprabhu Kempegowda Station Majestic), platforms, and total journey duration.',
       badge: 'Core Feature'
     },
     {
-      icon: <Zap className="w-8 h-8 text-amber-400" />,
+      icon: <Zap className="w-7 h-7 text-amber-400" />,
+      iconBg: 'bg-amber-500/10 border-amber-500/30',
       title: 'Live Fare Calculator',
       description: 'Provides exact BMRCL fare breakdowns (ranging from ₹10 minimum fare to ₹60 maximum cross-city fare) including 5% discounts for Smart Card and QR ticket users.',
       badge: 'Fare System'
     },
     {
-      icon: <QrCode className="w-8 h-8 text-purple-400" />,
+      icon: <QrCode className="w-7 h-7 text-purple-400" />,
+      iconBg: 'bg-purple-500/10 border-purple-500/30',
       title: 'Turnstile QR Ticket Saver & 100% Brightness Gate View',
       description: 'Never fumble with your gallery at turnstile gates. Store your QR ticket screenshot in NammaRide and launch the fullscreen scanner with 100% automatic brightness boost.',
       badge: 'Exclusive'
     },
     {
-      icon: <Clock className="w-8 h-8 text-blue-400" />,
+      icon: <Clock className="w-7 h-7 text-blue-400" />,
+      iconBg: 'bg-blue-500/10 border-blue-500/30',
       title: 'First & Last Train Schedules',
       description: 'Accurate morning 05:00 AM start times and late night 11:05 PM terminal departure schedules across Purple, Green, and Yellow lines.',
       badge: 'Timings'
     },
     {
-      icon: <Smartphone className="w-8 h-8 text-pink-400" />,
+      icon: <Smartphone className="w-7 h-7 text-pink-400" />,
+      iconBg: 'bg-pink-500/10 border-pink-500/30',
       title: '100% Offline Underground Operation',
       description: 'No network signal underground? No problem. Route data, station maps, fares, and saved QR tickets work completely offline without internet connection.',
       badge: 'Offline Mode'
     },
     {
-      icon: <Compass className="w-8 h-8 text-teal-400" />,
+      icon: <Compass className="w-7 h-7 text-teal-400" />,
+      iconBg: 'bg-teal-500/10 border-teal-500/30',
       title: 'Station Places & City Landmarks',
       description: 'Explore tourist attractions, tech parks (Whitefield, Electronic City), shopping centers, and hospitals near each metro station.',
       badge: 'City Guide'
     },
     {
-      icon: <Globe className="w-8 h-8 text-indigo-400" />,
+      icon: <Globe className="w-7 h-7 text-indigo-400" />,
+      iconBg: 'bg-indigo-500/10 border-indigo-500/30',
       title: 'Multi-Language Support (EN, HI, KN)',
       description: 'Seamlessly switch between English, Hindi (हिन्दी), and Kannada (ಕನ್ನಡ) for native station names and transit navigation.',
       badge: 'Accessibility'
     },
     {
-      icon: <Moon className="w-8 h-8 text-yellow-400" />,
+      icon: <Moon className="w-7 h-7 text-yellow-400" />,
+      iconBg: 'bg-yellow-500/10 border-yellow-500/30',
       title: 'Dark & Light Mode System',
       description: 'Designed for ultimate readability under bright Bengaluru sunlight or low-light evening commutes.',
       badge: 'UI Design'
@@ -56,7 +64,7 @@ export default function FeaturesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-slate-100 py-16 px-4 sm:px-6 lg:px-8 bg-ambient-grid">
+    <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header */}
@@ -81,7 +89,7 @@ export default function FeaturesPage() {
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-14 h-14 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center shadow-lg">
+                  <div className={`w-13 h-13 p-3 rounded-2xl border flex items-center justify-center shadow-md ${item.iconBg}`}>
                     {item.icon}
                   </div>
                   <span className="px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400">

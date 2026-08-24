@@ -290,44 +290,50 @@ export default function HomePage() {
 
   const features = [
     {
-      icon: <Navigation className="w-6 h-6 text-emerald-400" />,
+      icon: <Navigation className="w-6 h-6 text-emerald-500 dark:text-emerald-400" />,
       title: 'Smart Route Planner',
       description: 'Calculates the fastest metro route, platform interchanges, trip duration, and intermediate stations.',
+      iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-500 border-emerald-500/20 dark:border-emerald-500/40',
       color: 'from-emerald-500/20 to-teal-500/5',
       border: 'border-emerald-500/30'
     },
     {
-      icon: <Zap className="w-6 h-6 text-amber-400" />,
+      icon: <Zap className="w-6 h-6 text-amber-500 dark:text-amber-400" />,
       title: 'Live Fare Calculator',
       description: 'Know your exact ticket price before you travel — from ₹10 to ₹90 across all stations, with 10% Smart Card savings shown instantly.',
+      iconBg: 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-500 border-amber-500/20 dark:border-amber-500/40',
       color: 'from-amber-500/20 to-yellow-500/5',
       border: 'border-amber-500/30'
     },
     {
-      icon: <QrCode className="w-6 h-6 text-purple-400" />,
+      icon: <QrCode className="w-6 h-6 text-purple-500 dark:text-purple-400" />,
       title: 'QR Ticket at Your Fingertips',
       description: 'Save your WhatsApp or BMRCL QR ticket inside the app. Walk up to the turnstile, scan instantly at max brightness — no fumbling.',
+      iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-500 border-purple-500/20 dark:border-purple-500/40',
       color: 'from-purple-500/20 to-indigo-500/5',
       border: 'border-purple-500/30'
     },
     {
-      icon: <Clock className="w-6 h-6 text-blue-400" />,
+      icon: <Clock className="w-6 h-6 text-blue-500 dark:text-blue-400" />,
       title: 'Never Miss Your Train',
       description: 'Check first train (5:30 AM) and last train (11:45 PM) schedules for every station. Plan your morning or late-night commute with confidence.',
+      iconBg: 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-500 border-blue-500/20 dark:border-blue-500/40',
       color: 'from-blue-500/20 to-cyan-500/5',
       border: 'border-blue-500/30'
     },
     {
-      icon: <Smartphone className="w-6 h-6 text-pink-400" />,
+      icon: <Smartphone className="w-6 h-6 text-pink-500 dark:text-pink-400" />,
       title: 'Works Underground, Always',
       description: 'No internet? No problem. NammaRide works perfectly in metro tunnels, basements, and anywhere without Wi-Fi or mobile data.',
+      iconBg: 'bg-pink-500/10 dark:bg-pink-500/20 text-pink-500 border-pink-500/20 dark:border-pink-500/40',
       color: 'from-pink-500/20 to-rose-500/5',
       border: 'border-pink-500/30'
     },
     {
-      icon: <Compass className="w-6 h-6 text-teal-400" />,
+      icon: <Compass className="w-6 h-6 text-teal-500 dark:text-teal-400" />,
       title: 'Discover What\'s Nearby',
       description: 'Find the best tech parks, cafes, malls, and tourist spots within walking distance of every metro station.',
+      iconBg: 'bg-teal-500/10 dark:bg-teal-500/20 text-teal-500 border-teal-500/20 dark:border-teal-500/40',
       color: 'from-teal-500/20 to-emerald-500/5',
       border: 'border-teal-500/30'
     }
@@ -532,7 +538,7 @@ export default function HomePage() {
               className="light-glass-card editorial-card-tilt p-8 rounded-3xl flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gray-850 border border-gray-100 dark:border-gray-800 flex items-center justify-center shadow-sm">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-xs transition-colors ${f.iconBg}`}>
                   {f.icon}
                 </div>
                 <h3 className="font-title-lg text-title-lg font-bold text-gray-900 dark:text-white">{f.title}</h3>
