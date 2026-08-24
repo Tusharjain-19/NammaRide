@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Download, Zap, Navigation, MapPin, QrCode, Clock, Compass, ShieldCheck, ChevronRight, CheckCircle2, ChevronDown, Smartphone, Sparkles, ArrowRight, Shield, Globe, Lock, WifiOff, Accessibility, Phone, XCircle, AlertTriangle, Search, Menu, Filter, ArrowDownUp, Route, Star, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
 import googlePlayImg from '../../assets/images/google play.svg';
 
 function HeroSimulation() {
@@ -747,6 +748,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 📖 BENGALURU METRO BILINGUAL SEO & GEO GPS GUIDE */}
+      <BengaluruMetroGuide />
 
       {/* 📲 CRAZY SECTION 4: SCAN QR CODE TO INSTALL NAMMARIDE APP */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">

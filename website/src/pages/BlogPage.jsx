@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Compass, BookOpen, Clock, Calendar, ArrowRight, Bookmark } from 'lucide-react';
+import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -154,6 +154,11 @@ export default function BlogPage() {
 
             </article>
           ))}
+        </div>
+
+        {/* 1000+ Word Comprehensive Bilingual Guide Component */}
+        <div className="pt-8">
+          <BengaluruMetroGuide />
         </div>
 
       </div>
