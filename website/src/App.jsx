@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import MobileAppBanner from './components/MobileAppBanner';
 import HomePage from './pages/HomePage';
 import SimulatorPage from './pages/SimulatorPage';
 import FeaturesPage from './pages/FeaturesPage';
@@ -62,6 +63,7 @@ export default function App() {
               </Routes>
             </main>
             <Footer />
+            <MobileAppBanner />
           </div>
         </BrowserRouter>
       </LanguageProvider>

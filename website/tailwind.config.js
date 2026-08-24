@@ -24,9 +24,14 @@ export default {
         "3xl": "1.5rem",
         full: "9999px"
       },
+      screens: {
+        'xs': '475px',
+        '3xl': '1800px',
+        '4xl': '2200px',
+      },
       spacing: {
         "section-gap": "120px",
-        "container-max": "1440px",
+        "container-max": "1720px",
         "component-gap": "24px",
         "gutter-desktop": "32px",
         "margin-desktop": "80px"

@@ -346,7 +346,7 @@ export default function HomePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full"
+        className="relative pb-section-gap px-4 sm:px-6 lg:px-8 2xl:px-12 max-w-container-max 3xl:max-w-[1800px] mx-auto w-full"
       >
         <div className="grid grid-cols-12 gap-gutter-desktop items-center">
           
@@ -355,7 +355,7 @@ export default function HomePage() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="col-span-12 md:col-span-7 flex flex-col gap-8 pr-8"
+            className="col-span-12 md:col-span-7 flex flex-col gap-8 pr-0 md:pr-8"
           >
             <div className="flex flex-col gap-4">
               <motion.span 
@@ -367,7 +367,7 @@ export default function HomePage() {
                 {t('tagline')}
               </motion.span>
               
-              <h1 className="font-display-xl text-[48px] sm:text-display-xl text-gray-900 dark:text-white leading-tight tracking-tight">
+              <h1 className="font-display-xl text-[36px] sm:text-display-xl 2xl:text-7xl 3xl:text-8xl text-gray-900 dark:text-white leading-tight tracking-tight">
                 Navigate Bengaluru Metro{' '}
                 <span className="text-emerald-500 relative inline-block">
                   Smartly
@@ -382,7 +382,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="font-body-lg text-body-lg text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed"
+                className="font-body-lg text-base sm:text-body-lg 2xl:text-xl text-gray-600 dark:text-gray-300 max-w-2xl 2xl:max-w-3xl leading-relaxed"
               >
                 Your daily Bengaluru Metro companion: plan routes in seconds, save on fares with Smart Card tips, and navigate 83 stations effortlessly. No internet needed.
               </motion.p>
@@ -447,7 +447,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-purple-500/10 rounded-[3rem] transform rotate-3 scale-105 border border-white/20 shadow-sm z-0 blur-xl"></div>
             
             {/* Phone shell */}
-            <div className="w-[300px] h-[600px] sm:w-[330px] sm:h-[650px] bg-gray-950 rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-800/80">
+            <div className="w-[280px] h-[560px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-950 rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-800/80 transition-all duration-300">
               
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-800 rounded-r-md"></div>

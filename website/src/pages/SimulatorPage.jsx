@@ -268,29 +268,29 @@ export default function SimulatorPage() {
   };
 
   return (
-    <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <div className="pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
+      <div className="max-w-container-max 3xl:max-w-[1720px] mx-auto space-y-12 2xl:space-y-16">
         
         {/* Hero Header */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto space-y-4"
+          className="text-center max-w-3xl 2xl:max-w-4xl mx-auto space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs 2xl:text-sm font-bold uppercase tracking-wider">
             <Zap className="w-4 h-4" /> Live Web App Simulation
           </div>
-          <h1 className="font-heading font-black text-4xl sm:text-5xl text-gray-900 dark:text-white tracking-tight">
+          <h1 className="font-heading font-black text-3xl sm:text-5xl 2xl:text-6xl text-gray-900 dark:text-white tracking-tight">
             NammaRide Web Simulator
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base 2xl:text-lg leading-relaxed max-w-2xl 2xl:max-w-3xl mx-auto">
             Test the core transit utility directly in your browser. Check routes, ticket rates, and station directions inside our smartphone mockup interface.
           </p>
         </motion.div>
 
         {/* Always Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 2xl:gap-16 items-start">
           
           {/* Left Column: Phone simulator with entry scroll animation */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center lg:sticky lg:top-24">
@@ -299,7 +299,7 @@ export default function SimulatorPage() {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, type: "spring", stiffness: 100, damping: 15 }}
-              className="w-[300px] h-[600px] sm:w-[330px] sm:h-[650px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800 transition-all duration-300"
+              className="w-[290px] h-[580px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800 transition-all duration-300"
             >
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
