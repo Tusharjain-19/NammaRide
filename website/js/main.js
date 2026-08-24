@@ -19,6 +19,34 @@ let startDropdown, endDropdown;
 let currentJourney = null;
 let activeView = 'plan';
 
+// Storage Safety Guards
+function safeStorageGet(storageType, key) {
+    try {
+        const store = storageType === 'session' ? window.sessionStorage : window.localStorage;
+        return store ? store.getItem(key) : null;
+    } catch (e) {
+        console.warn(`[Storage] Cannot read ${key}:`, e);
+        return null;
+    }
+}
+
+function safeStorageSet(storageType, key, val) {
+    try {
+        const store = storageType === 'session' ? window.sessionStorage : window.localStorage;
+        if (store) store.setItem(key, val);
+    } catch (e) {
+        console.warn(`[Storage] Cannot write ${key}:`, e);
+    }
+}
+
+// Offline/Online Status Monitor
+window.addEventListener('online', () => {
+    console.log('[Network] Back online');
+});
+window.addEventListener('offline', () => {
+    console.log('[Network] Running in Offline Mode');
+});
+
 // Tracks the status of the live journey simulation
 const simulationState = { 
     isActive: false, 
@@ -44,21 +72,33 @@ function getLineColor(lineName) {
 }
 
 function initTheme() {
-    const theme = localStorage.getItem('appTheme') || 'dark';
-    applyTheme(theme);
+    const savedTheme = localStorage.getItem('appTheme') || 'light';
+    applyTheme(savedTheme);
 
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light');
-            const newTheme = isLight ? 'dark' : 'light';
-            applyTheme(newTheme);
-        });
-    }
+    // Sync theme from React parent message updates
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED') {
+            applyTheme(event.data.theme);
+        }
+    });
+
+    // Global event delegation for theme toggle buttons across dynamic re-renders
+    document.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('#theme-toggle, #mode-toggle, .theme-toggle-btn');
+        if (toggleBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isCurrentlyLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+            const nextTheme = isCurrentlyLight ? 'dark' : 'light';
+            applyTheme(nextTheme);
+        }
+    });
 }
 
 function applyTheme(theme) {
-    if (theme === 'light') {
+    const isLight = theme === 'light';
+    
+    if (isLight) {
         document.body.classList.add('light-mode');
         document.documentElement.classList.add('light');
         document.documentElement.classList.remove('dark');
@@ -67,20 +107,28 @@ function applyTheme(theme) {
         document.documentElement.classList.remove('light');
         document.documentElement.classList.add('dark');
     }
-    localStorage.setItem('appTheme', theme);
 
-    // Update theme toggle icons
-    const darkIcon = document.querySelector('.dark-icon');
-    const lightIcon = document.querySelector('.light-icon');
-    if (darkIcon && lightIcon) {
-        if (theme === 'light') {
-            darkIcon.classList.add('hidden');
-            lightIcon.classList.remove('hidden');
-        } else {
-            darkIcon.classList.remove('hidden');
-            lightIcon.classList.add('hidden');
-        }
+    try {
+        localStorage.setItem('appTheme', isLight ? 'light' : 'dark');
+    } catch (e) {
+        console.warn('Storage disabled', e);
     }
+
+    // Toggle icons for all buttons matching theme toggle selectors
+    document.querySelectorAll('#theme-toggle, #mode-toggle, .theme-toggle-btn').forEach(btn => {
+        const darkIcon = btn.querySelector('.dark-icon') || btn.querySelector('[data-lucide="moon"]');
+        const lightIcon = btn.querySelector('.light-icon') || btn.querySelector('[data-lucide="sun"]');
+        
+        if (darkIcon && lightIcon) {
+            if (isLight) {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            } else {
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+            }
+        }
+    });
 
     if (window.lucide) window.lucide.createIcons();
 }
@@ -628,6 +676,28 @@ function startSimulation(journey, useLiveLocation, startTimeOverride) {
     simulationState.animationFrameId = requestAnimationFrame(tick);
 }
 
+function triggerStationAlarm(stationName, isUnderground) {
+    if (simulationState.alarmTriggered) return;
+    simulationState.alarmTriggered = true;
+
+    // Vibration feedback only (800ms pulse, 300ms pause, 800ms pulse)
+    if (navigator.vibrate) {
+        try { navigator.vibrate([800, 300, 800, 300, 800]); } catch (e) {}
+    }
+
+    // Banner toast notification
+    const toast = document.getElementById('toast');
+    if (toast) {
+        let msg = `⚡ Arriving at ${stationName} soon!`;
+        if (isUnderground) {
+            msg += ` (Note: Underground section ahead - GPS signal may drop)`;
+        }
+        toast.innerHTML = `<div class="font-bold text-amber-400 text-xs">${msg}</div>`;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 6000);
+    }
+}
+
 function onGPSUpdate(position) {
     if (!simulationState.isActive) return;
 
@@ -657,10 +727,17 @@ function onGPSUpdate(position) {
         }
     }
 
-    // Auto arrival: if within 500m of destination
+    // Check target destination alarm (1-2 stations before arrival or ~5 min before)
     const destIndex = timeline.length - 1;
     const destNode = timeline[destIndex];
     const destStation = stationsMeta.find(s => s.id === destNode.stationId);
+
+    if (destIndex - closestIndex <= 2 && closestIndex < destIndex) {
+        const isUnderground = destStation && destStation.type === 'Underground';
+        triggerStationAlarm(T_STATION(destNode.stationName), isUnderground);
+    }
+
+    // Auto arrival: if within 500m of destination
     if (destStation) {
         const loc = destStation.location || destStation;
         if (loc.lat && loc.lon) {
@@ -919,15 +996,21 @@ function stopSimulation() {
     }
     sessionStorage.removeItem('activeJourney');
     sessionStorage.removeItem('simulationState');
+    sessionStorage.removeItem('activeJourneyTicketImage');
     navigateToView('plan');
 }
 
 function handleJourneyUpdate() {
     const startVal = document.getElementById('start-station').value;
     const endVal = document.getElementById('end-station').value;
-    if (startVal && endVal) {
+    const startName = startDropdown ? startDropdown.getSelectedStationName() : null;
+    const endName = endDropdown ? endDropdown.getSelectedStationName() : null;
+
+    if (startVal && endVal && startName !== endName) {
         const j = calculateJourney(startVal, endVal);
         displayJourneyResult(j);
+    } else {
+        displayJourneyResult(null);
     }
 }
 
@@ -949,12 +1032,20 @@ function initializeApp() {
     initSections(() => currentLang, T, T_STATION);
 
     startDropdown = new CustomDropdown('start-station-dropdown', 'enterStart', 'start', (val) => {
-        document.getElementById('start-station').value = val;
+        document.getElementById('start-station').value = val || '';
+        const startName = startDropdown.getSelectedStationName();
+        if (endDropdown) {
+            endDropdown.setExcludedStationName(startName);
+        }
         handleJourneyUpdate();
     });
 
     endDropdown = new CustomDropdown('end-station-dropdown', 'enterEnd', 'end', (val) => {
-        document.getElementById('end-station').value = val;
+        document.getElementById('end-station').value = val || '';
+        const endName = endDropdown.getSelectedStationName();
+        if (startDropdown) {
+            startDropdown.setExcludedStationName(endName);
+        }
         handleJourneyUpdate();
     });
 
@@ -1027,15 +1118,34 @@ function initializeApp() {
         if (simulationState.isActive) return;
         const startVal = document.getElementById('start-station').value;
         const endVal = document.getElementById('end-station').value;
-        if (startVal && endVal) {
-            startDropdown.selectById(endVal);
-            endDropdown.selectById(startVal);
+        if (startVal || endVal) {
+            startDropdown.excludedStationName = null;
+            endDropdown.excludedStationName = null;
+
+            if (endVal) startDropdown.selectById(endVal); else startDropdown.clearSelection();
+            if (startVal) endDropdown.selectById(startVal); else endDropdown.clearSelection();
+
+            const newStartName = startDropdown.getSelectedStationName();
+            const newEndName = endDropdown.getSelectedStationName();
+
+            if (endDropdown) endDropdown.setExcludedStationName(newStartName);
+            if (startDropdown) startDropdown.setExcludedStationName(newEndName);
+
+            handleJourneyUpdate();
         }
     });
 
     document.getElementById('board-train-btn').addEventListener('click', () => {
-        if (currentJourney) startSimulation(currentJourney, false);
+        if (!currentJourney) return;
+        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        if (!ticketData) {
+            window.openTicketUploadModal();
+        } else {
+            startSimulation(currentJourney, false);
+        }
     });
+
+    initTicketModule();
 
     const findNearestBtn = document.getElementById('find-nearest-btn');
     if (findNearestBtn) {
@@ -1357,6 +1467,226 @@ window.showNearbyPlaceDetail = function(stationName, placeId) {
     appContainer.appendChild(detailModal);
     if (window.lucide) window.lucide.createIcons();
 };
+
+// --- QR Ticket Vault & Gate Scanner Module ---
+let pendingTicketFile = null;
+
+function initTicketModule() {
+    const uploadModal = document.getElementById('ticket-upload-modal');
+    const dropzone = document.getElementById('ticket-dropzone');
+    const fileInput = document.getElementById('ticket-file-input');
+    const previewContainer = document.getElementById('ticket-preview-container');
+    const previewImg = document.getElementById('ticket-preview-img');
+    const dropzonePrompt = document.getElementById('ticket-dropzone-prompt');
+    const confirmBtn = document.getElementById('ticket-upload-confirm');
+    const skipBtn = document.getElementById('ticket-upload-skip');
+    const closeUploadBtn = document.getElementById('ticket-upload-close');
+
+    const qrScannerModal = document.getElementById('qr-scanner-modal');
+    const qrCloseBtn = document.getElementById('qr-scanner-close');
+    const qrModalImg = document.getElementById('qr-modal-img');
+    const qrEmptyState = document.getElementById('qr-modal-empty-state');
+    const qrReuploadBtn = document.getElementById('qr-modal-reupload-btn');
+    const qrRemoveBtn = document.getElementById('qr-modal-remove-btn');
+    const floatingQrBtn = document.getElementById('floating-qr-btn');
+
+    if (dropzone && fileInput) {
+        dropzone.addEventListener('click', () => fileInput.click());
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.add('drag-over');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.classList.remove('drag-over');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt && dt.files && dt.files[0]) {
+                handleTicketFileSelect(dt.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handleTicketFileSelect(e.target.files[0]);
+            }
+        });
+    }
+
+    function handleTicketFileSelect(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            pendingTicketFile = e.target.result;
+            if (previewImg) previewImg.src = pendingTicketFile;
+            if (previewContainer) previewContainer.classList.remove('hidden');
+            if (dropzonePrompt) dropzonePrompt.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.openTicketUploadModal = function() {
+        if (!uploadModal) return;
+        uploadModal.classList.add('modal-active');
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    window.closeTicketUploadModal = function() {
+        if (!uploadModal) return;
+        uploadModal.classList.remove('modal-active');
+    };
+
+    if (closeUploadBtn) closeUploadBtn.addEventListener('click', window.closeTicketUploadModal);
+    if (skipBtn) {
+        skipBtn.addEventListener('click', () => {
+            window.closeTicketUploadModal();
+            if (currentJourney) startSimulation(currentJourney, false);
+        });
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (pendingTicketFile) {
+                sessionStorage.setItem('activeJourneyTicketImage', pendingTicketFile);
+            }
+            window.closeTicketUploadModal();
+            if (currentJourney) startSimulation(currentJourney, false);
+        });
+    }
+
+    // Gate Scanner View Modal
+    window.openQRScannerModal = function() {
+        if (!qrScannerModal) return;
+        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        const routeSubEl = document.getElementById('qr-modal-route-sub');
+
+        if (currentJourney) {
+            const startPart = currentJourney.parts[0]?.stations[0];
+            const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
+            const endStation = lastPart?.stations[lastPart.stations.length - 1];
+            if (startPart && endStation && routeSubEl) {
+                routeSubEl.innerText = `${T_STATION(startPart.name)} ➔ ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
+            }
+        }
+
+        if (ticketData) {
+            if (qrModalImg) {
+                qrModalImg.src = ticketData;
+                qrModalImg.classList.remove('hidden');
+            }
+            if (qrEmptyState) qrEmptyState.classList.add('hidden');
+        } else {
+            if (qrModalImg) qrModalImg.classList.add('hidden');
+            if (qrEmptyState) qrEmptyState.classList.remove('hidden');
+        }
+
+        qrScannerModal.classList.add('modal-active');
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    window.closeQRScannerModal = function() {
+        if (!qrScannerModal) return;
+        qrScannerModal.classList.remove('modal-active');
+        window.closeQRFullscreen();
+    };
+
+    if (qrCloseBtn) qrCloseBtn.addEventListener('click', window.closeQRScannerModal);
+    if (qrReuploadBtn) {
+        qrReuploadBtn.addEventListener('click', () => {
+            window.closeQRScannerModal();
+            window.openTicketUploadModal();
+        });
+    }
+
+    if (qrRemoveBtn) {
+        qrRemoveBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('activeJourneyTicketImage');
+            pendingTicketFile = null;
+            if (previewImg) previewImg.src = '';
+            if (previewContainer) previewContainer.classList.add('hidden');
+            if (dropzonePrompt) dropzonePrompt.classList.remove('hidden');
+            window.closeQRScannerModal();
+            if (currentJourney) renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
+        });
+    }
+
+    // Fullscreen QR Gate Mode logic
+    const qrFullscreenOverlay = document.getElementById('qr-fullscreen-overlay');
+    const qrFsImg = document.getElementById('qr-fs-img');
+    const qrFsCloseBtn = document.getElementById('qr-fullscreen-close');
+    const openFsBtn = document.getElementById('open-qr-fullscreen-btn');
+    const imgWrapper = document.getElementById('qr-modal-img-wrapper');
+    let wakeLockSentinel = null;
+
+    async function requestScreenWakeLock() {
+        if ('wakeLock' in navigator) {
+            try {
+                wakeLockSentinel = await navigator.wakeLock.request('screen');
+            } catch (err) {}
+        }
+    }
+
+    function releaseScreenWakeLock() {
+        if (wakeLockSentinel) {
+            try { wakeLockSentinel.release(); } catch(e){}
+            wakeLockSentinel = null;
+        }
+    }
+
+    window.openQRFullscreen = function() {
+        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        if (!ticketData || !qrFullscreenOverlay) return;
+
+        if (qrFsImg) qrFsImg.src = ticketData;
+
+        const routeTitleEl = document.getElementById('qr-fs-route-title');
+        if (currentJourney && routeTitleEl) {
+            const startPart = currentJourney.parts[0]?.stations[0];
+            const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
+            const endStation = lastPart?.stations[lastPart.stations.length - 1];
+            if (startPart && endStation) {
+                routeTitleEl.innerText = `${T_STATION(startPart.name)} ➔ ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
+            }
+        }
+
+        qrFullscreenOverlay.classList.add('modal-active');
+        requestScreenWakeLock();
+        if (window.lucide) window.lucide.createIcons();
+    };
+
+    window.closeQRFullscreen = function() {
+        if (!qrFullscreenOverlay) return;
+        qrFullscreenOverlay.classList.remove('modal-active');
+        releaseScreenWakeLock();
+    };
+
+    if (openFsBtn) openFsBtn.addEventListener('click', window.openQRFullscreen);
+    if (imgWrapper) imgWrapper.addEventListener('click', window.openQRFullscreen);
+    if (qrFsCloseBtn) qrFsCloseBtn.addEventListener('click', window.closeQRFullscreen);
+
+    // Floating QR Button Click
+    if (floatingQrBtn) {
+        floatingQrBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+            if (ticketData) {
+                window.openQRScannerModal();
+            } else {
+                window.openTicketUploadModal();
+            }
+        });
+    }
+}
 
 // Start Application
 if (document.readyState === 'loading') {

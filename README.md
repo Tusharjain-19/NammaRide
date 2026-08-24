@@ -45,6 +45,50 @@ Unlike generic navigation tools that lose signal underground, NammaRide provides
 
 ---
 
+## 📱 Application Screenshots
+
+### 🌙 Dark Mode & ☀️ Light Mode
+
+<p align="center">
+  <strong>Trip Planner & Route Summary</strong><br/>
+  <img src="website/assets/screenshots/ss1.png" alt="Planner View Dark Mode" width="45%" />
+  <img src="website/assets/screenshots/ss1_light.png" alt="Planner View Light Mode" width="45%" />
+</p>
+
+<br/>
+
+<p align="center">
+  <strong>Live Journey Tracking & Map View</strong><br/>
+  <img src="website/assets/screenshots/ss2.png" alt="Live Journey Dark Mode" width="45%" />
+  <img src="website/assets/screenshots/ss2_light.png" alt="Live Journey Light Mode" width="45%" />
+</p>
+
+<br/>
+
+<p align="center">
+  <strong>Station Directory & Details</strong><br/>
+  <img src="website/assets/screenshots/ss3.png" alt="Stations List Dark Mode" width="45%" />
+  <img src="website/assets/screenshots/ss3_light.png" alt="Stations List Light Mode" width="45%" />
+</p>
+
+<br/>
+
+<p align="center">
+  <strong>Train Timings & Schedules</strong><br/>
+  <img src="website/assets/screenshots/ss4.png" alt="Timings View Dark Mode" width="45%" />
+  <img src="website/assets/screenshots/ss4_light.png" alt="Timings View Light Mode" width="45%" />
+</p>
+
+<br/>
+
+<p align="center">
+  <strong>Explore Nearby Places & Tourist Attractions</strong><br/>
+  <img src="website/assets/screenshots/ss5.png" alt="Explore View Dark Mode" width="45%" />
+  <img src="website/assets/screenshots/ss5_light.png" alt="Explore View Light Mode" width="45%" />
+</p>
+
+---
+
 ## 🚫 License & Strict Non-Commercial Terms
 
 ### 🔒 STRICTLY NOT FOR COMMERCIAL USE

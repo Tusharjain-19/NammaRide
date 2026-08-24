@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0F172A;
+    --border-color: #e2e8f0;
+  }
+  :root.dark {
+    --bg-color: #000000;
+    --card-bg: #0d0d0d;
+    --text-primary: #ffffff;
+    --border-color: #262626;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.dark, html.dark body {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+}
+
+/* Force dark mode text visibility */
+.dark .text-deep-slate {
+  color: #FFFFFF !important;
+}
+
+/* Glassmorphism Luxury Cards */
+.light-glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.light-glass-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(16, 185, 129, 0.2);
+  transform: translateY(-4px) scale(1.008);
+  box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.18);
+}
+
+.dark .light-glass-card {
+  background: rgba(13, 13, 13, 0.9);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+}
+
+.dark .light-glass-card:hover {
+  background: rgba(23, 23, 23, 0.95);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.3);
+}
+
+.glow-button {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+/* 💎 Editorial Parallax Scroll View Timeline (Pure CSS) */
+.style-image-container {
+  overflow: hidden;
+  position: relative;
+  border-radius: 2rem;
+}
+
+.style-image {
+  height: 125%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: -12.5%;
+  will-change: transform;
+  animation: parallax-move linear both;
+  animation-timeline: view();
+  animation-range: entry 0% exit 100%;
+}
+
+@keyframes parallax-move {
+  from { transform: translateY(-12%) scale(1.05); }
+  to { transform: translateY(12%) scale(1.0); }
+}
+
+/* ⚡ Progressive Tilt & Skew on Scroll/Hover */
+.editorial-card-tilt {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+  will-change: transform;
+}
+
+.editorial-card-tilt:hover {
+  transform: translateY(-6px) rotate3d(1, 0.5, 0, 2.5deg) skewY(-0.4deg);
+  box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.2);
+}
+
+/* 📜 Staggered Typography Mask & Slide Reveal */
+.stagger-text-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.stagger-text-slide {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* High-FPS Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.4);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.8);
+}
+
+

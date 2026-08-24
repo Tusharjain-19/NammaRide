@@ -8,6 +8,12 @@ mobile/mobile-web/
 *.apk
 *.aab
 
+# Environment variables (DO NOT COMMIT TO GITHUB)
+.env
+.env*
+!.env.example
+*.env
+
 # OS & IDE temporary files
 .DS_Store
 Thumbs.db
@@ -16,3 +22,5 @@ Thumbs.db
 .vscode/
 *.log
 scratch_places_list.json
+privacy_policy*
+*/privacy_policy*
