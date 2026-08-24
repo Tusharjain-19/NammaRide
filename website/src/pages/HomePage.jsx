@@ -580,7 +580,7 @@ export default function HomePage() {
               {
                 park: 'Manyata Tech Park',
                 station: 'Nagawara Metro Station',
-                line: 'Green / Pink Line Interchange',
+                line: 'Green Line',
                 color: '#10B981',
                 walk: '5 min feeder shuttle',
                 fare: '₹15 - ₹65',
@@ -605,13 +605,13 @@ export default function HomePage() {
                 hubs: 'Amazon, Samsung, Dell, EMC'
               },
               {
-                park: 'RMZ Ecospace & Bellandur',
-                station: 'Bellandur / Central Silk Board',
-                line: 'Outer Ring Road (ORR Line)',
-                color: '#3B82F6',
-                walk: 'Feeder bus & direct skywalk',
-                fare: '₹15 - ₹70',
-                hubs: 'Intel, Cisco, Accenture, EY'
+                park: 'MG Road & Church Street Promenade',
+                station: 'MG Road Metro Station',
+                line: 'Purple Line',
+                color: '#A855F7',
+                walk: 'Direct exit to Church Street',
+                fare: '₹10 - ₹50',
+                hubs: 'Shopping, Dining, Hard Rock Cafe, Metro Art Center'
               },
               {
                 park: 'BMS College of Engineering',
@@ -624,12 +624,30 @@ export default function HomePage() {
               },
               {
                 park: 'Shri Doddabasavanna Temple (Bull Temple)',
-                station: 'National College / Lalbagh',
+                station: 'National College Metro Station',
                 line: 'Green Line',
                 color: '#10B981',
                 walk: '10 min walk / 3 min auto',
                 fare: '₹10 - ₹45',
                 hubs: 'Bull Temple Road, Basavanagudi'
+              },
+              {
+                park: 'Central Silk Board & HSR Layout Hub',
+                station: 'Central Silk Board Interchange',
+                line: 'Yellow Line',
+                color: '#EAB308',
+                walk: 'Direct Interchange Skywalk',
+                fare: '₹15 - ₹60',
+                hubs: 'HSR Layout, BTM Layout, Tech Startups'
+              },
+              {
+                park: 'ISCKON Temple & Orion Mall',
+                station: 'Mahalakshmi / Rajajinagar',
+                line: 'Green Line',
+                color: '#10B981',
+                walk: '3 min walk via Gate A',
+                fare: '₹10 - ₹50',
+                hubs: 'ISCKON Temple, Orion Mall, WTC Bengaluru'
               }
             ].map((hub, idx) => (
               <div 
@@ -650,12 +668,16 @@ export default function HomePage() {
                     <span className="font-bold text-gray-900 dark:text-white">{hub.station}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500 dark:text-gray-400">Line:</span>
-                    <span className="font-bold" style={{ color: hub.color }}>{hub.line}</span>
+                    <span className="text-gray-500 dark:text-gray-400">Line & Connectivity:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{hub.line}</span>
                   </div>
-                  <div className="flex items-center justify-between pt-1 border-t border-gray-200/50 dark:border-neutral-800">
-                    <span className="text-gray-500 dark:text-gray-400">Campus Access:</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{hub.walk}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 dark:text-gray-400">Walking / Shuttle:</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{hub.walk}</span>
+                  </div>
+                  <div className="flex items-center justify-between pt-1 border-t border-gray-200/60 dark:border-neutral-800">
+                    <span className="text-gray-500 dark:text-gray-400 font-medium">Est. Ticket Fare:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{hub.fare}</span>
                   </div>
                 </div>
               </div>
@@ -747,7 +769,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="inline-block transition-transform hover:scale-105 active:scale-95 drop-shadow-lg"
               >
-                <img src="/assets/images/google play.svg" alt="Get it on Google Play" className="h-14 sm:h-16 w-auto object-contain" />
+                <img src={googlePlayImg} alt="Get it on Google Play" className="h-14 sm:h-16 w-auto object-contain" />
               </a>
             </div>
           </div>

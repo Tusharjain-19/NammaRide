@@ -6,12 +6,7 @@ import { calculateFare } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
-// Safely initialize Vercel Analytics only on production website (not in mobile app or offline)
-if (location.hostname.includes('nammaride.site')) {
-    import("@vercel/analytics").then(module => {
-        if (module && module.inject) module.inject();
-    }).catch(() => {});
-}
+// Standalone simulation module
 
 // --- App State ---
 let currentLang = getCurrentLang();
