@@ -17,7 +17,7 @@
       "destination": "/simulator/$1"
     },
     {
-      "source": "/((?!simulator).*)",
+      "source": "/((?!simulator|.*\\.[a-zA-Z0-9]+).*)",
       "destination": "/index.html"
     }
   ],

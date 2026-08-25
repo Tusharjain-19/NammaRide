@@ -36,5 +36,4 @@ User-agent: facebookexternalhit
 Allow: /
 
 # XML Sitemaps for Google and AI Search Engines
-Sitemap: https://nammaride.vercel.app/sitemap.xml
-Sitemap: https://site.nammaride.app/sitemap.xml
+Sitemap: https://nammaride.site/sitemap.xml
