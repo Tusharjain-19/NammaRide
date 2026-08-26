@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Download, Code, ShieldCheck, MapPin, ExternalLink, Heart } from 'lucide-react';
+import { Download, Code, ShieldCheck, MapPin, ExternalLink, Heart, Star } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import googlePlayImg from '../../assets/images/google play.svg';
 
@@ -110,8 +110,30 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Developer Credit per design.md */}
-            <div className="mt-6 pt-4 border-t border-[var(--border-color)] space-y-2">
+            {/* Developer Credit per design.md & Google Preferred Source */}
+            <div className="mt-6 pt-4 border-t border-[var(--border-color)] space-y-3">
+              {/* Google Preferred Source Integration */}
+              <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                    Set as Preferred Source
+                  </span>
+                  <a
+                    href="https://google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] text-emerald-500 hover:underline flex items-center gap-1 font-medium"
+                    title="Manage preferred sources directly on Google"
+                  >
+                    <span>Google Preferences</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+                {/* Standard JS Widget Container */}
+                <div className="g-preferred-source" data-site="https://nammaride.vercel.app"></div>
+              </div>
+
               <div>
                 <a 
                   href="https://www.tusharjain.in/" 
