@@ -111,9 +111,9 @@ export default function Footer() {
             </div>
 
             {/* Developer Credit per design.md & Google Preferred Source */}
-            <div className="mt-6 pt-4 border-t border-[var(--border-color)] space-y-3">
+            <div className="mt-6 pt-4 border-t border-[var(--border-color)] space-y-4">
               {/* Google Preferred Source Integration */}
-              <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3 space-y-2">
+              <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-3.5 space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                     <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -130,8 +130,27 @@ export default function Footer() {
                     <ExternalLink className="w-2.5 h-2.5" />
                   </a>
                 </div>
+                <p className="text-[10px] text-[var(--text-secondary)] leading-snug">
+                  ⭐ Prioritize NammaRide in Google Search, AI Overviews & Google Discover!
+                </p>
                 {/* Standard JS Widget Container */}
-                <div className="g-preferred-source" data-site="https://nammaride.vercel.app"></div>
+                <div 
+                  className="g-preferred-source" 
+                  data-site="nammaride.vercel.app"
+                  data-theme="dark"
+                  data-size="medium"
+                  data-auto-return="true"
+                >
+                  <a
+                    href="https://www.google.com/search?q=NammaRide+Bengaluru+Metro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all"
+                  >
+                    <Star className="w-3 h-3 fill-white" />
+                    <span>⭐ Save on Google</span>
+                  </a>
+                </div>
               </div>
 
               <div>

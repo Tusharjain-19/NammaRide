@@ -5,6 +5,7 @@ import { Download, Zap, Navigation, MapPin, QrCode, Clock, Compass, ShieldCheck,
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
+import GooglePreferredSourceCard from '../components/GooglePreferredSourceCard';
 import googlePlayImg from '../../assets/images/google play.svg';
 
 function HeroSimulation() {
@@ -747,6 +748,11 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* 🌟 GOOGLE PREFERRED SOURCE BANNER */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <GooglePreferredSourceCard />
       </section>
 
       {/* 📖 BENGALURU METRO BILINGUAL SEO & GEO GPS GUIDE */}
