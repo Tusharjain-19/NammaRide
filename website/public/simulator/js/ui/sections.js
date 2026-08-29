@@ -96,14 +96,14 @@ export function renderStationsList(container) {
         <h2 class="section-title" data-lang-key="stations">${T_fn('stations') || 'Stations'}</h2>
         <p class="section-subtitle">All Namma Metro stations • Tap for details</p>
         <div class="mt-4 relative">
-            <input type="text" id="stations-search" placeholder="Search stations..." class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
+            <input type="text" id="stations-search" placeholder="${T_fn('searchStations') || 'Search stations...'}" class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="line-filters">
-            <button class="line-filter-btn active shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20" data-line="all">All</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">Purple</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">Green</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FBBF24]/10 text-[#D97706] border border-[#FBBF24]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Yellow Line">Yellow</button>
+            <button class="line-filter-btn active shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20" data-line="all">${T_fn('lineAll') || 'All'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">${T_fn('linePurple') || 'Purple'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">${T_fn('lineGreen') || 'Green'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FBBF24]/10 text-[#D97706] border border-[#FBBF24]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Yellow Line">${T_fn('lineYellow') || 'Yellow'}</button>
         </div>
     </div>
     <div id="stations-list-content">`;
@@ -503,24 +503,24 @@ export function renderExplore(container) {
         <h2 class="section-title">${T_fn('exploreBengaluru') || 'Explore Bengaluru'}</h2>
         <p class="section-subtitle">${T_fn('exploreSub') || 'Tap a station to discover nearby places'}</p>
         <div class="mt-4 relative">
-            <input type="text" id="explore-search" placeholder="Search by station or place..." class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
+            <input type="text" id="explore-search" placeholder="${T_fn('searchExplore') || 'Search by station or place...'}" class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2.5 mt-4 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-category-filters">
-            <button class="explore-cat-btn active" data-cat="all">All Categories</button>
-            <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
-            <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
-            <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
-            <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> Shopping</button>
-            <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> Parks & Lakes</button>
-            <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> Stadium</button>
-            <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
+            <button class="explore-cat-btn active" data-cat="all">${T_fn('catAll') || 'All Categories'}</button>
+            <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> ${T_fn('catHospital') || 'Hospital'}</button>
+            <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> ${T_fn('catHeritage') || 'Tourism'}</button>
+            <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> ${T_fn('catPlaces') || 'Places'}</button>
+            <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> ${T_fn('catShopping') || 'Shopping'}</button>
+            <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> ${T_fn('catParks') || 'Parks & Lakes'}</button>
+            <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> ${T_fn('catStadium') || 'Stadium'}</button>
+            <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> ${T_fn('catTransit') || 'Transit'}</button>
         </div>
         <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-line-filters">
-            <button class="explore-line-btn active" data-line="all">All Lines</button>
-            <button class="explore-line-btn" data-line="purple">Purple Line</button>
-            <button class="explore-line-btn" data-line="green">Green Line</button>
-            <button class="explore-line-btn" data-line="yellow">Yellow Line</button>
+            <button class="explore-line-btn active" data-line="all">${T_fn('lineAll') || 'All Lines'}</button>
+            <button class="explore-line-btn" data-line="purple">${T_fn('linePurple') || 'Purple Line'}</button>
+            <button class="explore-line-btn" data-line="green">${T_fn('lineGreen') || 'Green Line'}</button>
+            <button class="explore-line-btn" data-line="yellow">${T_fn('lineYellow') || 'Yellow Line'}</button>
         </div>
     </div>
     <div id="explore-list-content">`;
@@ -562,7 +562,7 @@ export function renderExplore(container) {
     const withoutAttractions = allStations.filter(s => s.count === 0);
 
     if (withAttractions.length > 0) {
-        html += `<div class="explore-section-label flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i> Stations with nearby places</div>`;
+        html += `<div class="explore-section-label flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i> ${T_fn('stationsWithPlaces') || 'Stations with nearby places'}</div>`;
         withAttractions.forEach(s => {
             const knName = stationsMeta.find(m => m.name === s.name)?.name_kn || '';
             html += renderExploreCard(s, knName, s.placesSearch, s.lines.join(' '));
@@ -570,7 +570,7 @@ export function renderExplore(container) {
     }
 
     if (withoutAttractions.length > 0) {
-        html += `<div class="explore-section-label flex items-center gap-1.5" style="margin-top:1rem"><i data-lucide="map" class="w-4 h-4 text-secondary"></i> Other stations</div>`;
+        html += `<div class="explore-section-label flex items-center gap-1.5" style="margin-top:1rem"><i data-lucide="map" class="w-4 h-4 text-secondary"></i> ${T_fn('otherStations') || 'Other stations'}</div>`;
         withoutAttractions.forEach(s => {
             const knName = stationsMeta.find(m => m.name === s.name)?.name_kn || '';
             html += renderExploreCard(s, knName, s.placesSearch, s.lines.join(' '));
@@ -674,13 +674,18 @@ function renderExploreCard(s, knName, placesStr, lines) {
     const searchTerm = `${s.name} ${knName} ${placesStr || ''}`.toLowerCase();
     const l = lang();
     
+    const placesBadgeText = s.count > 0 ? `${s.count} ${s.count === 1 ? (T_fn('place') || 'Place') : (T_fn('places') || 'Places')}` : '';
+    const exploreActionText = s.count > 0 
+        ? `${T_fn('exploreNearby') || 'Explore Nearby'} <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>` 
+        : `<span class="text-secondary text-[10px]">${T_fn('noPlacesListed') || 'No places listed'}</span>`;
+
     return `<div class="explore-card js-explore-item" 
          data-search-term="${searchTerm}" 
          data-lines="${lines}"
          onclick="window.showExploreStation('${s.name.replace(/'/g, "\\'")}')">
         <div class="relative w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 border border-subtle bg-slate-800">
             <img src="${s.image}" alt="${s.name}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='assets/images/train.jpg';">
-            ${s.count > 0 ? `<div class="absolute bottom-1 left-1.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${s.count} Places</div>` : ''}
+            ${s.count > 0 ? `<div class="absolute bottom-1 left-1.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 opacity-90">${placesBadgeText}</div>` : ''}
         </div>
         <div class="explore-card-content ml-3">
             <div class="explore-card-name">${T_STATION_fn(s.name)}</div>
@@ -688,7 +693,7 @@ function renderExploreCard(s, knName, placesStr, lines) {
             <div class="flex items-center gap-1.5 mt-1.5">
                 ${s.lines.map(lineKey => `<div class="w-1.5 h-1.5 rounded-full" style="background:${metroData[lineKey].color}"></div>`).join('')}
                 <div class="explore-card-action ml-1" style="${s.count > 0 ? 'color: #10B981;' : ''}">
-                    ${s.count > 0 ? `Explore Nearby <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>` : `<span class="text-secondary text-[10px]">No places listed</span>`}
+                    ${exploreActionText}
                 </div>
             </div>
         </div>

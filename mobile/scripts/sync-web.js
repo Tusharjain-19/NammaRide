@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const srcDir = path.join(__dirname, '../../website');
+const srcDir = path.join(__dirname, '../../website/public/simulator');
 const destDir = path.join(__dirname, '../mobile-web');
 
 function copyDirSync(src, dest) {
@@ -33,11 +33,8 @@ if (fs.existsSync(destDir)) {
     fs.rmSync(destDir, { recursive: true, force: true });
 }
 
-// 2. Copy all files
-console.log(`Copying from ${srcDir} to ${destDir}...`);
+// 2. Copy simulator web assets
+console.log(`Copying mobile web assets from ${srcDir} to ${destDir}...`);
 copyDirSync(srcDir, destDir);
 
-// 3. Ensure clean JS output for Capacitor WebView
 console.log('Mobile web sync complete!');
-
-console.log('Sync complete!');

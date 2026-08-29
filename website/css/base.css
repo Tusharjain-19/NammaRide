@@ -42,16 +42,16 @@
 }
 
 body.light-mode {
-    --bg-color: #F0F4F8;
-    --bg-card: rgba(255, 255, 255, 0.65);
-    --bg-card-hover: rgba(255, 255, 255, 0.85);
-    --bg-input: rgba(255, 255, 255, 0.75);
+    --bg-color: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F1F5F9;
+    --bg-input: #F1F5F9;
     --text-primary: #0F172A;
     --text-secondary: #475569;
-    --border-color: rgba(255, 255, 255, 0.8);
-    --border-subtle: rgba(0, 0, 0, 0.08);
-    --header-bg: rgba(240, 244, 248, 0.5);
-    --header-border: rgba(0, 0, 0, 0.08);
+    --border-color: rgba(203, 213, 225, 0.8);
+    --border-subtle: rgba(203, 213, 225, 0.5);
+    --header-bg: rgba(255, 255, 255, 0.95);
+    --header-border: rgba(203, 213, 225, 0.8);
 
     --bg-dropdown: #FFFFFF;
     --bg-dropdown-hover: #F1F5F9;
@@ -65,10 +65,35 @@ body.light-mode {
     --glass-glow: 0 0 25px rgba(16, 185, 129, 0.25);
     
     --bg-image: 
-        radial-gradient(circle at 10% 15%, rgba(16, 185, 129, 0.22) 0%, transparent 50%),
-        radial-gradient(circle at 90% 25%, rgba(168, 85, 247, 0.22) 0%, transparent 55%),
-        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 25%, rgba(168, 85, 247, 0.15) 0%, transparent 55%),
+        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
         url('../assets/images/vidhana_soudha.jpg');
+}
+
+/* High-Contrast Light Mode Inversion Overrides */
+body.light-mode .app-container,
+body.light-mode .section-view {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+}
+
+body.light-mode .journey-planner-card,
+body.light-mode .card,
+body.light-mode .explore-card,
+body.light-mode .nearby-card-item,
+body.light-mode .station-item {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: #E2E8F0 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .dropdown-trigger,
+body.light-mode .search-input {
+    background-color: #F1F5F9 !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
 }
 
 
@@ -171,7 +196,12 @@ body.light-mode .bg-slate-800\/50, body.light-mode .bg-slate-800\/40, body.light
 }
 
 * {
-    -webkit-tap-highlight-color: rgba(16, 185, 129, 0.1); 
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none;
+}
+
+button:focus, button:focus-visible, a:focus, a:focus-visible, input:focus {
+    outline: none !important;
 }
 
 .custom-scrollbar {
@@ -219,4 +249,35 @@ body:not(.light-mode) .dark-icon { display: block; }
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+}
+
+/* Liquid Waterfall Top-to-Bottom Theme Transition Overlay */
+#theme-waterfall-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    pointer-events: none !important;
+    opacity: 0;
+    transform-origin: top center;
+}
+
+#theme-waterfall-overlay.animating {
+    opacity: 1;
+    pointer-events: none !important;
+    animation: waterfallSweep 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes waterfallSweep {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        opacity: 0.9;
+    }
+    50% {
+        clip-path: polygon(0 0, 100% 0, 100% 70%, 0 90%);
+        opacity: 1;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 0;
+    }
 }

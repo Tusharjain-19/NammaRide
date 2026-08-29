@@ -6,7 +6,7 @@
 /* ─── Bottom Navigation ─── */
 .bottom-nav {
     position: absolute;
-    bottom: 1rem;
+    bottom: calc(2.25rem + env(safe-area-inset-bottom, 24px));
     left: 1rem;
     right: 1rem;
     display: flex;
@@ -99,12 +99,12 @@ body.light-mode .nav-item.active {
 
 /* ─── Section Views Common ─── */
 .section-view {
-    padding: 1rem 1rem 5.5rem 1rem;
+    padding: 1rem 1rem calc(8rem + env(safe-area-inset-bottom, 24px)) 1rem;
     background: transparent;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: contain;
     touch-action: pan-y;
     flex-grow: 1;
     display: flex;
@@ -764,15 +764,25 @@ body.light-mode .explore-line-btn[data-line="all"]:not(.active):hover {
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
-/* Explore Filter Bar */
-#explore-category-filters::-webkit-scrollbar {
-    display: none;
-}
-
-#explore-category-filters {
+/* Explore & Line Filter Bars (Expanded Vertical Touch Scroll Area) */
+#explore-category-filters, #explore-line-filters, #line-filters {
     -ms-overflow-style: none;
     scrollbar-width: none;
     touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    min-height: 48px;
+    align-items: center;
+}
+
+#explore-category-filters::-webkit-scrollbar,
+#explore-line-filters::-webkit-scrollbar,
+#line-filters::-webkit-scrollbar {
+    display: none;
 }
 
 .explore-cat-btn {

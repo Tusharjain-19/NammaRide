@@ -4,16 +4,34 @@
 
 @layer base {
   :root {
+    /* ─── Light Mode Design Tokens ─── */
     --bg-color: #f8fafc;
     --card-bg: #ffffff;
+    --surface-secondary: #f1f5f9;
     --text-primary: #0F172A;
+    --text-secondary: #475569;
     --border-color: #e2e8f0;
+    --input-bg: #f1f5f9;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+
+    /* Fare Calculator / Glass panel */
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
   }
+
   :root.dark {
+    /* ─── Dark Mode Design Tokens ─── */
     --bg-color: #000000;
     --card-bg: #0d0d0d;
+    --surface-secondary: #181818;
     --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
     --border-color: #262626;
+    --input-bg: #111111;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+
+    --bg-card: #0d0d0d;
+    --bg-card-hover: #1a1a1a;
   }
   
   html {
@@ -32,7 +50,6 @@
     color: var(--text-primary);
     font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   /* 🔳 Crisp Rectangular Box Architecture Across Entire Web App */
@@ -41,12 +58,45 @@
   }
 }
 
+/* ─── Smooth Theme Transition (color-only, no transform/opacity) ─── */
+body,
+body *:not(script):not(style):not(svg):not(path) {
+  transition: background-color 0.2s ease, color 0.15s ease, 
+              border-color 0.2s ease, fill 0.15s ease, stroke 0.15s ease,
+              box-shadow 0.2s ease;
+}
+
 /* Force dark mode text visibility */
 .dark .text-deep-slate {
   color: #FFFFFF !important;
 }
 
-/* Glassmorphism Luxury Cards */
+/* ─── Glass Panel (used by FareCalculator, Features, Safety pages) ─── */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+}
+
+.dark .glass-panel {
+  background: rgba(13, 13, 13, 0.9);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Dropdown Opaque (used by FareCalculator inputs) ─── */
+.dropdown-opaque {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dropdown-opaque option {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+
+/* ─── Glassmorphism Luxury Cards ─── */
 .light-glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(24px);
@@ -154,4 +204,23 @@
   background: rgba(16, 185, 129, 0.8);
 }
 
+/* ─── Premium Theme Toggle Button Animation ─── */
+.theme-toggle-icon {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.2s ease;
+}
 
+.theme-toggle-icon-enter {
+  animation: themeIconIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes themeIconIn {
+  0% {
+    transform: rotate(-90deg) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}

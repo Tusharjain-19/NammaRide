@@ -100,10 +100,10 @@ export function renderStationsList(container) {
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="line-filters">
-            <button class="line-filter-btn active shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20" data-line="all">All</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">Purple</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">Green</button>
-            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FBBF24]/10 text-[#D97706] border border-[#FBBF24]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Yellow Line">Yellow</button>
+            <button class="line-filter-btn active shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20" data-line="all">${T_fn('filterAll') || 'All'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">${T_fn('filterPurple') || 'Purple'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">${T_fn('filterGreen') || 'Green'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FBBF24]/10 text-[#D97706] border border-[#FBBF24]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Yellow Line">${T_fn('filterYellow') || 'Yellow'}</button>
         </div>
     </div>
     <div id="stations-list-content">`;
@@ -507,20 +507,20 @@ export function renderExplore(container) {
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
         <div class="flex gap-2.5 mt-4 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-category-filters">
-            <button class="explore-cat-btn active" data-cat="all">All Categories</button>
-            <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> Hospital</button>
-            <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> Tourism</button>
-            <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> Places</button>
-            <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> Shopping</button>
-            <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> Parks & Lakes</button>
-            <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> Stadium</button>
-            <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> Transit</button>
+            <button class="explore-cat-btn active" data-cat="all">${T_fn('filterAllCategories') || 'All Categories'}</button>
+            <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> ${T_fn('filterHospital') || 'Hospital'}</button>
+            <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> ${T_fn('filterTourism') || 'Tourism'}</button>
+            <button class="explore-cat-btn" data-cat="building"><i data-lucide="building-2" class="w-3 h-3"></i> ${T_fn('filterPlaces') || 'Places'}</button>
+            <button class="explore-cat-btn" data-cat="market"><i data-lucide="shopping-bag" class="w-3 h-3"></i> ${T_fn('filterShopping') || 'Shopping'}</button>
+            <button class="explore-cat-btn" data-cat="park"><i data-lucide="trees" class="w-3 h-3"></i> ${T_fn('filterParks') || 'Parks & Lakes'}</button>
+            <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> ${T_fn('filterStadium') || 'Stadium'}</button>
+            <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> ${T_fn('filterTransit') || 'Transit'}</button>
         </div>
         <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-line-filters">
-            <button class="explore-line-btn active" data-line="all">All Lines</button>
-            <button class="explore-line-btn" data-line="purple">Purple Line</button>
-            <button class="explore-line-btn" data-line="green">Green Line</button>
-            <button class="explore-line-btn" data-line="yellow">Yellow Line</button>
+            <button class="explore-line-btn active" data-line="all">${T_fn('filterAllLines') || 'All Lines'}</button>
+            <button class="explore-line-btn" data-line="purple">${T_fn('filterPurple') || 'Purple Line'}</button>
+            <button class="explore-line-btn" data-line="green">${T_fn('filterGreen') || 'Green Line'}</button>
+            <button class="explore-line-btn" data-line="yellow">${T_fn('filterYellow') || 'Yellow Line'}</button>
         </div>
     </div>
     <div id="explore-list-content">`;

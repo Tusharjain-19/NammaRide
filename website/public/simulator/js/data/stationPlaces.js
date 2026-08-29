@@ -477,7 +477,7 @@ export const stationPlaces = {
     {
       "id": "vv_puram_food_street",
       "name": "Thindi Beedi VV Puram",
-      "type": "Shopping",
+      "type": "Food & Dining",
       "lat": 12.95,
       "lon": 77.577,
       "distance_km": 0.5,

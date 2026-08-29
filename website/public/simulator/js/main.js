@@ -59,6 +59,8 @@ const simulationState = {
 };
 
 // --- Theme Management ---
+let currentThemeState = 'light';
+
 function getLineColor(lineName) {
     if (lineName === 'Purple Line') return '#8B5CF6';
     if (lineName === 'Green Line') return '#22C55E';
@@ -66,66 +68,96 @@ function getLineColor(lineName) {
     return '#6366F1';
 }
 
+function getInitialTheme() {
+    try {
+        const saved = localStorage.getItem('nammaride_theme')
+            || localStorage.getItem('nammaride_app_theme')
+            || localStorage.getItem('appTheme');
+        if (saved === 'dark' || saved === 'light') {
+            return saved;
+        }
+    } catch (e) {}
+
+    try {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+    } catch (e) {}
+
+    return 'light';
+}
+
 function initTheme() {
-    const savedTheme = localStorage.getItem('appTheme') || 'light';
-    applyTheme(savedTheme);
+    currentThemeState = getInitialTheme();
+    applyTheme(currentThemeState);
 
     // Sync theme from React parent message updates
     window.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED') {
-            applyTheme(event.data.theme);
+        if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED' && event.data.theme) {
+            currentThemeState = event.data.theme === 'dark' ? 'dark' : 'light';
+            applyTheme(currentThemeState);
         }
     });
 
-    // Global event delegation for theme toggle buttons across dynamic re-renders
-    document.addEventListener('click', (e) => {
+    // Single unified theme toggle listener
+    const handleThemeToggle = (e) => {
         const toggleBtn = e.target.closest('#theme-toggle, #mode-toggle, .theme-toggle-btn');
         if (toggleBtn) {
             e.preventDefault();
             e.stopPropagation();
-            const isCurrentlyLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light');
-            const nextTheme = isCurrentlyLight ? 'dark' : 'light';
-            applyTheme(nextTheme);
+
+            currentThemeState = currentThemeState === 'light' ? 'dark' : 'light';
+            applyTheme(currentThemeState);
         }
-    });
+    };
+
+    document.addEventListener('click', handleThemeToggle, { capture: true });
 }
 
 function applyTheme(theme) {
     const isLight = theme === 'light';
+    currentThemeState = isLight ? 'light' : 'dark';
     
-    if (isLight) {
-        document.body.classList.add('light-mode');
-        document.documentElement.classList.add('light');
-        document.documentElement.classList.remove('dark');
+    if (typeof window.applyNammaTheme === 'function') {
+        window.applyNammaTheme(currentThemeState);
     } else {
-        document.body.classList.remove('light-mode');
-        document.documentElement.classList.remove('light');
-        document.documentElement.classList.add('dark');
-    }
+        const doc = document.documentElement;
+        const body = document.body;
 
-    try {
-        localStorage.setItem('appTheme', isLight ? 'light' : 'dark');
-    } catch (e) {
-        console.warn('Storage disabled', e);
-    }
-
-    // Toggle icons for all buttons matching theme toggle selectors
-    document.querySelectorAll('#theme-toggle, #mode-toggle, .theme-toggle-btn').forEach(btn => {
-        const darkIcon = btn.querySelector('.dark-icon') || btn.querySelector('[data-lucide="moon"]');
-        const lightIcon = btn.querySelector('.light-icon') || btn.querySelector('[data-lucide="sun"]');
-        
-        if (darkIcon && lightIcon) {
-            if (isLight) {
-                darkIcon.classList.add('hidden');
-                lightIcon.classList.remove('hidden');
-            } else {
-                darkIcon.classList.remove('hidden');
-                lightIcon.classList.add('hidden');
+        if (isLight) {
+            doc.classList.add('light', 'light-mode');
+            doc.classList.remove('dark');
+            doc.setAttribute('data-theme', 'light');
+            if (body) {
+                body.classList.add('light-mode');
+                body.classList.remove('dark-mode');
+            }
+        } else {
+            doc.classList.remove('light', 'light-mode');
+            doc.classList.add('dark');
+            doc.setAttribute('data-theme', 'dark');
+            if (body) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
             }
         }
-    });
+    }
 
-    if (window.lucide) window.lucide.createIcons();
+    // Dynamic Mobile Status Bar Sync
+    const metaThemeColor = document.getElementById('theme-color-meta') || document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', isLight ? '#E8EDF5' : '#000000');
+    }
+
+    // Non-blocking storage & postMessage sync across all keys
+    try {
+        localStorage.setItem('nammaride_theme', isLight ? 'light' : 'dark');
+        localStorage.setItem('nammaride_app_theme', isLight ? 'light' : 'dark');
+        localStorage.setItem('appTheme', isLight ? 'light' : 'dark');
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'NAMMARIDE_THEME_SYNC', theme: isLight ? 'light' : 'dark' }, '*');
+        }
+    } catch (e) {}
 }
 
 // Cache for station lookup and routing graph
@@ -413,7 +445,9 @@ function displayJourneyResult(journey) {
                 </div>
 
                 <button id="whatsapp-book-btn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-[#25D366]/20 transition-transform active:scale-95">
-                    <img src="assets/whatsapp.svg" alt="WhatsApp" class="w-5 h-5">
+                    <svg class="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.01zm-7.01 15.24h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.198 8.198 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
+                    </svg>
                     <span>Book Ticket</span>
                 </button>
             </div>
@@ -1019,7 +1053,7 @@ function handleJourneyUpdate() {
     }
 }
 
-// Calculate distance between two coordinates in km
+// Calculate aerial distance between two coordinates in km
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the earth in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -1027,6 +1061,21 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+}
+
+// Google Maps-Style Urban Road Route Distance Algorithm
+function getRoadRouteDistanceInKm(lat1, lon1, lat2, lon2) {
+    const haversineDist = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+    
+    // Calculate Manhattan Grid metric for city road topology
+    const latRad = lat1 * (Math.PI / 180);
+    const dLatKm = Math.abs(lat2 - lat1) * 111.13;
+    const dLonKm = Math.abs(lon2 - lon1) * 111.13 * Math.cos(latRad);
+    const manhattanDist = dLatKm + dLonKm;
+    
+    // Urban Road Circuity Factor (C = 1.35 for Bengaluru street network)
+    const roadRouteDist = Math.max(haversineDist * 1.35, manhattanDist * 1.08);
+    return Number(roadRouteDist.toFixed(2));
 }
 
 function initializeApp() {
@@ -1174,15 +1223,14 @@ function initializeApp() {
                         const { latitude, longitude } = position.coords;
                         
                         let nearest = null;
-                        let minDistance = Infinity;
+                        let minRoadDistance = Infinity;
                         
                         stationsMeta.forEach(station => {
-                            // FIX: Access nested location property
                             const loc = station.location || station; 
                             if (loc.lat && loc.lon) {
-                                const dist = getDistanceFromLatLonInKm(latitude, longitude, loc.lat, loc.lon);
-                                if (dist < minDistance) {
-                                    minDistance = dist;
+                                const roadDist = getRoadRouteDistanceInKm(latitude, longitude, loc.lat, loc.lon);
+                                if (roadDist < minRoadDistance) {
+                                    minRoadDistance = roadDist;
                                     nearest = station;
                                 }
                             }
@@ -1191,7 +1239,7 @@ function initializeApp() {
                         if (nearest) {
                             startDropdown.selectById(nearest.id);
                             const translatedName = T_STATION(nearest.name);
-                            const distStr = minDistance < 1 ? `${(minDistance * 1000).toFixed(0)}m` : `${minDistance.toFixed(1)}km`;
+                            const distStr = minRoadDistance < 1 ? `${(minRoadDistance * 1000).toFixed(0)}m road route` : `${minRoadDistance.toFixed(1)}km road route`;
                             
                             if (subtitleEl) subtitleEl.innerText = `At ${translatedName} (${distStr})`;
                             setTimeout(() => { if (subtitleEl) subtitleEl.innerText = originalText; }, 5000);
@@ -1289,6 +1337,11 @@ function initializeApp() {
     
     // Only use non-passive for the scroller containers
     const scrollFix = (e) => {
+        // Exclude touch events originating inside dropdown menus or station lists to keep dropdown touch scrolling smooth & unblocked
+        if (e.target.closest && e.target.closest('.dropdown-menu, .station-list, .custom-dropdown, .search-container')) {
+            return;
+        }
+
         const activeSection = document.querySelector('.section-view:not(.hidden)');
         if (!activeSection) return;
 

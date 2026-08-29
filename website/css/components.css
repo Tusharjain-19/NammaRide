@@ -59,8 +59,9 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(59, 130, 246, 0.2);
     z-index: 999;
     display: none;
-    max-height: 400px;
-    overflow-y: auto;
+    flex-direction: column;
+    max-height: min(330px, 45vh);
+    overflow: hidden;
     animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -76,7 +77,7 @@
 }
 
 .dropdown-menu.open {
-    display: block;
+    display: flex;
 }
 
 .search-container {
@@ -86,6 +87,7 @@
     top: 0;
     background: var(--bg-dropdown);
     z-index: 10;
+    flex-shrink: 0;
 }
 
 .search-input {
@@ -106,7 +108,12 @@
 }
 
 .station-list {
+    flex: 1;
+    max-height: 250px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
     padding: 0.5rem;
 }
 

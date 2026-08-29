@@ -71,33 +71,60 @@ function getLineColor(lineName) {
     return '#6366F1';
 }
 
+let currentWebsiteThemeState = 'light';
+
 function initTheme() {
-    const savedTheme = localStorage.getItem('appTheme') || 'light';
-    applyTheme(savedTheme);
+    const savedTheme = localStorage.getItem('nammaride_app_theme') || localStorage.getItem('appTheme') || 'light';
+    currentWebsiteThemeState = savedTheme === 'dark' ? 'dark' : 'light';
+    applyTheme(currentWebsiteThemeState);
 
     // Sync theme from React parent message updates
     window.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED') {
-            applyTheme(event.data.theme);
+        if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED' && event.data.theme) {
+            currentWebsiteThemeState = event.data.theme === 'dark' ? 'dark' : 'light';
+            applyTheme(currentWebsiteThemeState);
         }
     });
 
-    // Global event delegation for theme toggle buttons across dynamic re-renders
-    document.addEventListener('click', (e) => {
+    // Event delegation for theme toggle buttons with 300ms throttle
+    let lastToggleTime = 0;
+    const handleThemeToggle = (e) => {
         const toggleBtn = e.target.closest('#theme-toggle, #mode-toggle, .theme-toggle-btn');
         if (toggleBtn) {
             e.preventDefault();
             e.stopPropagation();
-            const isCurrentlyLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light');
-            const nextTheme = isCurrentlyLight ? 'dark' : 'light';
-            applyTheme(nextTheme);
+            const now = Date.now();
+            if (now - lastToggleTime < 300) return;
+            lastToggleTime = now;
+
+            currentWebsiteThemeState = currentWebsiteThemeState === 'light' ? 'dark' : 'light';
+            applyTheme(currentWebsiteThemeState);
         }
-    });
+    };
+
+    document.addEventListener('click', handleThemeToggle, { capture: true });
 }
 
 function applyTheme(theme) {
     const isLight = theme === 'light';
+    currentWebsiteThemeState = isLight ? 'light' : 'dark';
     
+    // Create liquid waterfall curtain overlay element if not present
+    let waterfallOverlay = document.getElementById('theme-waterfall-overlay');
+    if (!waterfallOverlay) {
+        waterfallOverlay = document.createElement('div');
+        waterfallOverlay.id = 'theme-waterfall-overlay';
+        document.body.appendChild(waterfallOverlay);
+    }
+    
+    waterfallOverlay.style.background = isLight 
+        ? 'linear-gradient(180deg, #F0F4F8 0%, #FFFFFF 100%)' 
+        : 'linear-gradient(180deg, #000000 0%, #121216 100%)';
+    
+    waterfallOverlay.classList.remove('animating');
+    void waterfallOverlay.offsetWidth; // Trigger reflow for animation restart
+    waterfallOverlay.classList.add('animating');
+
     if (isLight) {
         document.body.classList.add('light-mode');
         document.documentElement.classList.add('light');
@@ -109,28 +136,11 @@ function applyTheme(theme) {
     }
 
     try {
+        localStorage.setItem('nammaride_app_theme', isLight ? 'light' : 'dark');
         localStorage.setItem('appTheme', isLight ? 'light' : 'dark');
     } catch (e) {
         console.warn('Storage disabled', e);
     }
-
-    // Toggle icons for all buttons matching theme toggle selectors
-    document.querySelectorAll('#theme-toggle, #mode-toggle, .theme-toggle-btn').forEach(btn => {
-        const darkIcon = btn.querySelector('.dark-icon') || btn.querySelector('[data-lucide="moon"]');
-        const lightIcon = btn.querySelector('.light-icon') || btn.querySelector('[data-lucide="sun"]');
-        
-        if (darkIcon && lightIcon) {
-            if (isLight) {
-                darkIcon.classList.add('hidden');
-                lightIcon.classList.remove('hidden');
-            } else {
-                darkIcon.classList.remove('hidden');
-                lightIcon.classList.add('hidden');
-            }
-        }
-    });
-
-    if (window.lucide) window.lucide.createIcons();
 }
 
 // Cache for station lookup and routing graph
@@ -417,7 +427,9 @@ function displayJourneyResult(journey) {
                 </div>
 
                 <button id="whatsapp-book-btn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-[#25D366]/20 transition-transform active:scale-95">
-                    <img src="assets/whatsapp.svg" alt="WhatsApp" class="w-5 h-5">
+                    <svg class="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.01zm-7.01 15.24h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.198 8.198 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
+                    </svg>
                     <span>Book Ticket</span>
                 </button>
             </div>
@@ -1014,14 +1026,18 @@ function handleJourneyUpdate() {
     }
 }
 
-// Calculate distance between two coordinates in km
+// Calculate Google Maps style urban road network distance (accounting for street grid & walking routes)
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the earth in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    const aerialKm = R * c;
+    
+    // Urban road network factor: ~1.38x aerial distance in Bengaluru city street grid
+    const roadKm = aerialKm * 1.38;
+    return roadKm;
 }
 
 function initializeApp() {

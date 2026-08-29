@@ -1,12 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" class="light light-mode">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            function getSavedTheme() {
+                try {
+                    var saved = localStorage.getItem('nammaride_theme') || localStorage.getItem('nammaride_app_theme') || localStorage.getItem('appTheme');
+                    if (saved === 'dark' || saved === 'light') return saved;
+                } catch(e) {}
+                return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+            }
+
+            window.applyNammaTheme = function(theme) {
+                var isDark = theme === 'dark';
+                var doc = document.documentElement;
+                var body = document.body;
+
+                if (isDark) {
+                    doc.classList.remove('light', 'light-mode');
+                    doc.classList.add('dark');
+                    doc.setAttribute('data-theme', 'dark');
+                    if (body) {
+                        body.classList.remove('light-mode');
+                        body.classList.add('dark-mode');
+                    }
+                } else {
+                    doc.classList.remove('dark');
+                    doc.classList.add('light', 'light-mode');
+                    doc.setAttribute('data-theme', 'light');
+                    if (body) {
+                        body.classList.add('light-mode');
+                        body.classList.remove('dark-mode');
+                    }
+                }
+
+                var metaThemeColor = document.getElementById('theme-color-meta') || document.querySelector('meta[name="theme-color"]');
+                if (metaThemeColor) {
+                    metaThemeColor.setAttribute('content', isDark ? '#000000' : '#E8EDF5');
+                }
+
+                try {
+                    localStorage.setItem('nammaride_theme', isDark ? 'dark' : 'light');
+                    localStorage.setItem('nammaride_app_theme', isDark ? 'dark' : 'light');
+                    localStorage.setItem('appTheme', isDark ? 'dark' : 'light');
+                } catch(e) {}
+            };
+
+            window.toggleNammaTheme = function(e) {
+                if (e) {
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                }
+                var current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                var next = current === 'dark' ? 'light' : 'dark';
+                window.applyNammaTheme(next);
+            };
+
+            var initialTheme = getSavedTheme();
+            window.applyNammaTheme(initialTheme);
+
+            function syncOnLoad() {
+                window.applyNammaTheme(getSavedTheme());
+            }
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                syncOnLoad();
+            } else {
+                document.addEventListener('DOMContentLoaded', syncOnLoad);
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000" id="theme-color-meta">
     <link rel="icon" type="image/png" href="assets/images/logo_app.png">
     <link rel="apple-touch-icon" href="assets/images/logo_app.png">
+
     <link rel="manifest" href="manifest.json">
 
     <!-- SEO & Metadata -->
@@ -163,13 +232,13 @@
 <body>
 
     <!-- PREMIUM FIXED LOADING SCREEN (outside app-container to cover full viewport) -->
-    <div id="splash-screen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000000;transition:opacity 0.5s ease-out;">
+    <div id="splash-screen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#E8EDF5;transition:opacity 0.5s ease-out;">
         <div style="display:flex;flex-direction:column;align-items:center;">
-            <div style="width:64px;height:64px;border-radius:16px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 30px rgba(16,185,129,0.3);">
+            <div style="width:64px;height:64px;border-radius:16px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 25px rgba(16,185,129,0.15);">
                 <img src="assets/images/logo_app.png" alt="NammaRide Logo" style="width: 42px; height: 42px; object-fit: contain;">
             </div>
-            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.025em;margin-bottom:4px;color:#F8FAFC;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">NammaRide</h1>
-            <p style="color:#34D399;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-size:10px;margin-bottom:32px;opacity:0.9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">Bengaluru Transit</p>
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.025em;margin-bottom:4px;color:#0F172A;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">NammaRide</h1>
+            <p style="color:#059669;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-size:10px;margin-bottom:32px;opacity:0.9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">Bengaluru Transit</p>
             <div class="splash-dots">
                 <span class="splash-dot dot-purple"></span>
                 <span class="splash-dot dot-green"></span>
@@ -394,21 +463,21 @@
                 </div>
             </div>
 
-            <header class="app-header flex justify-between items-center px-4 py-3">
-                <h1 class="text-lg font-bold text-primary tracking-wider flex items-center gap-2">
-                    <img src="assets/images/logo_app.png" alt="NammaRide Logo" width="32" height="32" style="width: 32px; height: 32px; max-width: 32px; max-height: 32px;" class="object-contain">
-                    <span class="text-primary font-bold tracking-tight" data-lang-key="appName">NammaRide</span>
+            <header class="app-header flex justify-between items-center px-4">
+                <h1 class="text-base font-extrabold text-primary tracking-tight flex items-center gap-2">
+                    <img src="assets/images/logo_app.png" alt="NammaRide Logo" width="30" height="30" style="width: 30px; height: 30px; max-width: 30px; max-height: 30px;" class="object-contain">
+                    <span class="text-primary font-extrabold text-lg tracking-tight" data-lang-key="appName">NammaRide</span>
                 </h1>
 
-                <div class="flex items-center gap-3">
-                    <!-- Theme Toggle -->
-                    <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-card-subtle border border-subtle text-secondary hover:text-emerald-400 transition-colors shadow-sm" title="Toggle Theme">
-                        <i data-lucide="moon" class="w-4 h-4 dark-icon"></i>
-                        <i data-lucide="sun" class="w-4 h-4 light-icon hidden"></i>
+                <div class="flex items-center gap-2.5">
+                    <!-- Theme Toggle (44px Android Touch Target) -->
+                    <button id="theme-toggle" onclick="window.toggleNammaTheme(event)" class="relative w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-card-subtle border border-subtle text-secondary hover:text-emerald-400 active:scale-90 transition-all shadow-sm" title="Toggle Theme" aria-label="Toggle Theme">
+                        <i data-lucide="moon" class="w-5 h-5 dark-icon pointer-events-none text-amber-400"></i>
+                        <i data-lucide="sun" class="w-5 h-5 light-icon pointer-events-none text-amber-500"></i>
                     </button>
 
                     <div class="relative" id="lang-dropdown-container">
-                        <button id="lang-btn" class="bg-card-subtle text-secondary font-bold text-xs py-1.5 px-3 rounded-lg border border-subtle focus:outline-none flex items-center gap-1.5 hover:bg-card-hover transition-colors shadow-sm">
+                        <button id="lang-btn" class="bg-card-subtle text-secondary font-bold text-xs py-1.5 px-3 rounded-xl border border-subtle focus:outline-none flex items-center gap-1 hover:bg-card-hover transition-colors shadow-sm min-h-[36px]">
                             <span id="current-lang-text">EN</span>
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </button>

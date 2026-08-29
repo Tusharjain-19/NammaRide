@@ -147,7 +147,9 @@ export const translations = {
         typeTransit: "Transit Hub", typeConvention: "Convention Centre", typeHeritage: "Heritage Site",
         typeEV: "EV Charging", typeUniversity: "University", typeHospital: "Hospital",
         typeMall: "Mall", typeMuseum: "Museum", typeStadium: "Stadium", typeMarket: "Market",
-        typePark: "Park", typeLake: "Lake", typeIT: "IT Hub"
+        // Filter Labels
+        filterAll: "All", filterAllCategories: "All Categories", filterPurple: "Purple Line", filterGreen: "Green Line", filterYellow: "Yellow Line", filterAllLines: "All Lines",
+        filterHospital: "Hospital", filterTourism: "Tourism", filterPlaces: "Places", filterShopping: "Shopping", filterParks: "Parks & Lakes", filterStadium: "Stadium", filterTransit: "Transit"
     },
     hi: {
         appName: "NammaRide", planYourTrip: "आज कहाँ जाना है?", selectStationsHint: "सबसे तेज़ रूट देखने के लिए स्टेशन चुनें।", startLiveJourney: "लाइव यात्रा शुरू करें",
@@ -181,7 +183,7 @@ export const translations = {
         entryFee: "प्रवेश शुल्क", bestTime: "घूमने का सबसे अच्छा समय", openMaps: "मैप्स में खोलें",
         places: "स्थान", about: "बारे में", history: "इतिहास",
         // Types
-        typeTransit: "परಿವಹನ ಕೇಂದ್ರ", typeConvention: "सम्मेलन केंद्र", typeHeritage: "धरोहर स्थल",
+        typeTransit: "परिवहन केंद्र", typeConvention: "सम्मेलन केंद्र", typeHeritage: "धरोहर स्थल",
         typeEV: "ईवी चार्जिंग", typeUniversity: "विश्वविद्यालय", typeHospital: "अस्पताल",
         typeMall: "मॉल", typeMuseum: "संग्रहालय", typeStadium: "स्टेडियम", typeMarket: "बाजार",
         typePark: "पार्क", typeLake: "झील", typeIT: "आईटी हब",
@@ -190,6 +192,9 @@ export const translations = {
         manualFinish: "मैन्युअल समाप्ति",
         exploreNearby: "आसपास के आकर्षण देखें",
         stationsPassed: "स्टेशन पार किए",
+        // Filter Labels
+        filterAll: "सभी", filterAllCategories: "सभी श्रेणियां", filterPurple: "पर्पल लाइन", filterGreen: "ग्रीन लाइन", filterYellow: "येलो लाइन", filterAllLines: "सभी लाइनें",
+        filterHospital: "अस्पताल", filterTourism: "पर्यटन", filterPlaces: "स्थान", filterShopping: "खरीदारी", filterParks: "पार्क और झीलें", filterStadium: "स्टेडियम", filterTransit: "ट्रांजिट"
     },
     kn: {
         appName: "NammaRide", planYourTrip: "ಇಂದು ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು?", selectStationsHint: "ವೇಗದ ಮಾರ್ಗವನ್ನು ನೋಡಲು ನಿಲ್ದಾಣಗಳನ್ನು ಆರಿಸಿ.", startLiveJourney: "ಲೈವ್ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ",
@@ -231,7 +236,10 @@ export const translations = {
         typeTransit: "ಸಾರಿಗೆ ಕೇಂದ್ರ", typeConvention: "ಸಮಾವೇಶ ಕೇಂದ್ರ", typeHeritage: "ಪರಂಪರೆಯ ತಾಣ",
         typeEV: "ಇವಿ ಚಾರ್ಜಿಂಗ್", typeUniversity: "ವಿಶ್ವವಿದ್ಯಾಲಯ", typeHospital: "ಆಸ್ಪತ್ರೆ",
         typeMall: "ಮಾಲ್", typeMuseum: "ವಸ್ತುಸಂಗ್ರಹಾಲಯ", typeStadium: "ಕ್ರೀಡಾಂಗಣ", typeMarket: "ಮಾರುಕಟ್ಟೆ",
-        typePark: "ಉದ್ಯಾನ", typeLake: "ಕೆರೆ", typeIT: "ಐಟಿ ಹಬ್"
+        typePark: "ಉದ್ಯಾನ", typeLake: "ಕೆರೆ", typeIT: "ಐಟಿ ಹಬ್",
+        // Filter Labels
+        filterAll: "ಎಲ್ಲಾ", filterAllCategories: "ಎಲ್ಲಾ ವರ್ಗಗಳು", filterPurple: "ನೇರಳೆ ಮಾರ್ಗ", filterGreen: "ಹಸಿರು ಮಾರ್ಗ", filterYellow: "ಹಳದಿ ಮಾರ್ಗ", filterAllLines: "ಎಲ್ಲಾ ಮಾರ್ಗಗಳು",
+        filterHospital: "ಆಸ್ಪತ್ರೆ", filterTourism: "ಪ್ರವಾಸೋದ್ಯಮ", filterPlaces: "ಸ್ಥಳಗಳು", filterShopping: "ಖರೀದಿ", filterParks: "ಉದ್ಯಾನ ಮತ್ತು ಕೆರೆಗಳು", filterStadium: "ಕ್ರೀಡಾಂಗಣ", filterTransit: "ಸಾರಿಗೆ"
     }
 };
 
