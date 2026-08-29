@@ -7,8 +7,13 @@
   **The ultimate offline-first transit navigation system for Bengaluru Namma Metro (BMRCL).**
 
   [![Live Website](https://img.shields.io/badge/Live_Website-nammaride.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nammaride.vercel.app/)
-  [![App Domain](https://img.shields.io/badge/App_Domain-site.nammaride.app-10B981?style=for-the-badge&logo=googleplay&logoColor=white)](https://site.nammaride.app/)
-  [![Google Play](https://img.shields.io/badge/Google_Play-Get_App-34A853?style=for-the-badge&logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=site.nammaride.app)
+  [![App Domain](https://img.shields.io/badge/App_Domain-nammaride.site-10B981?style=for-the-badge&logo=google&logoColor=white)](https://nammaride.site/)
+
+  <br/>
+
+  <a href="https://play.google.com/store/apps/details?id=site.nammaride.app" target="_blank" rel="noopener noreferrer">
+    <img src="website/src/assets/images/google%20play.svg" alt="Get it on Google Play" height="56" />
+  </a>
 
 </div>
 
@@ -66,7 +71,7 @@ NammaRide/
 │   ├── tailwind.config.js             # Tailwind CSS theme tokens & colors
 │   ├── .env.example                   # Environment variable template
 │   ├── public/
-│   │   ├── sitemap.xml                # SEO Sitemap for nammaride.vercel.app & site.nammaride.app
+│   │   ├── sitemap.xml                # SEO Sitemap for nammaride.vercel.app & nammaride.site
 │   │   ├── robots.txt                 # Search Engine Crawler directives
 │   │   └── simulator/                 # Standalone web app simulator assets
 │   └── src/
@@ -132,7 +137,7 @@ Follow these steps to run NammaRide locally on your machine:
 ## 🌐 Live Web Deployment
 
 - **Vercel Web App**: [https://nammaride.vercel.app/](https://nammaride.vercel.app/)
-- **Production Web Domain**: [https://site.nammaride.app/](https://site.nammaride.app/)
+- **Production Web Domain**: [https://nammaride.site/](https://nammaride.site/)
 - **Google Play Store**: [Download NammaRide Android App](https://play.google.com/store/apps/details?id=site.nammaride.app)
 
 ---
