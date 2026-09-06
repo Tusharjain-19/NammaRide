@@ -15,13 +15,6 @@ function getInitialTheme() {
     }
   } catch (e) {}
 
-  // First launch — use system preference
-  try {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-  } catch (e) {}
-
   return 'light';
 }
 

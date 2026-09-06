@@ -726,7 +726,7 @@ export function renderExploreStation(container, stationName) {
             const name = l === 'kn' ? (knPlaceName || p.name) : (l === 'hi' && p.nameHi ? p.nameHi : p.name);
             const distText = p.distance_km ? `${p.distance_km} km` : '';
             const walkText = p.walk_time_min ? `${p.walk_time_min} min walk` : (p.last_mile ? 'Auto/Cab recommended' : '');
-            const pImage = p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=150&h=150&sig=${p.id.length + idx}`;
+            const pImage = p.image || 'assets/images/vidhana_soudha.jpg';
 
             html += `<div class="place-card relative" onclick="window.showPlaceDetail('${stationName.replace(/'/g, "\\'")}', '${p.id}')">
                 <div class="relative w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 border border-subtle bg-slate-800">
@@ -784,7 +784,7 @@ export function renderPlaceDetail(container, stationName, placeId) {
 
     <div class="place-detail-header relative overflow-hidden min-h-[160px] flex flex-col justify-end p-4 rounded-xl mb-4 border border-subtle">
         <div class="absolute inset-0 bg-slate-800 z-0">
-            <img src="${p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=800&h=400&sig=${p.id.length}`}" alt="${name}" class="w-full h-full object-cover">
+            <img src="${p.image || 'assets/images/vidhana_soudha.jpg'}" alt="${name}" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
         </div>
         <div class="relative z-10 text-white">

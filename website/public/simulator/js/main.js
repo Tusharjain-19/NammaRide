@@ -78,12 +78,6 @@ function getInitialTheme() {
         }
     } catch (e) {}
 
-    try {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'dark';
-        }
-    } catch (e) {}
-
     return 'light';
 }
 
@@ -98,20 +92,6 @@ function initTheme() {
             applyTheme(currentThemeState);
         }
     });
-
-    // Single unified theme toggle listener
-    const handleThemeToggle = (e) => {
-        const toggleBtn = e.target.closest('#theme-toggle, #mode-toggle, .theme-toggle-btn');
-        if (toggleBtn) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            currentThemeState = currentThemeState === 'light' ? 'dark' : 'light';
-            applyTheme(currentThemeState);
-        }
-    };
-
-    document.addEventListener('click', handleThemeToggle, { capture: true });
 }
 
 function applyTheme(theme) {
@@ -520,7 +500,7 @@ function displayJourneyResult(journey) {
 
 function switchView(viewId) {
     // Hide all views
-    const allViews = ['planner-view', 'map-view', 'stations-view', 'timings-view', 'explore-view', 'safety-view'];
+    const allViews = ['planner-view', 'map-view', 'stations-view', 'timings-view', 'explore-view', 'safety-view', 'not-found-view'];
     allViews.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -635,6 +615,9 @@ function navigateToView(view) {
     } else if (view === 'safety') {
         switchView('safety-view');
         renderSafety(document.getElementById('safety-view'));
+    } else {
+        switchView('not-found-view');
+        if (window.lucide) window.lucide.createIcons();
     }
 }
 
@@ -1399,7 +1382,7 @@ window.showNearbyAttractions = function(stationName) {
         const walk = p.walk_time_min ? `${p.walk_time_min} min walk` : '';
         const desc = p.description || p.summary || 'Discover this amazing place near the station.';
         const mapsLink = p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Bengaluru')}`;
-        const image = p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=240&h=160&sig=${p.id.length + idx}`;
+        const image = p.image || 'assets/images/vidhana_soudha.jpg';
 
         return `
             <div class="nearby-card-item">
@@ -1476,7 +1459,7 @@ window.showNearbyPlaceDetail = function(stationName, placeId) {
     const walkText = p.walk_time_min ? `${p.walk_time_min} min walk` : '';
     const driveText = p.approx_drive_time_min ? `~${p.approx_drive_time_min} min by auto/cab` : '';
     const mapsLink = p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' Bengaluru')}`;
-    const image = p.image || `https://images.unsplash.com/photo-1620063251433-875c742c3ff2?auto=format&fit=crop&q=80&w=800&h=400&sig=${p.id.length}`;
+    const image = p.image || 'assets/images/vidhana_soudha.jpg';
 
     // Remove existing if any
     const existing = document.getElementById('nearby-detail-modal');

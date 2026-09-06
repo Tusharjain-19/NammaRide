@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Smartphone, Monitor, RefreshCw, ExternalLink, Download, Zap, Navigation, MapPin, Clock, Compass, ShieldCheck, Phone, ArrowRight, Wifi, WifiOff, BatteryCharging, Bell } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Smartphone, Monitor, RefreshCw, ExternalLink, Download, Zap, Navigation, MapPin, Clock, Compass, ShieldCheck, Phone, ArrowRight, Wifi, WifiOff, BatteryCharging, Bell, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import googlePlaySvg from '../../assets/images/google play.svg';
 import { useTheme } from '../context/ThemeContext';
 
@@ -51,6 +51,7 @@ const appTabs = [
 export default function SimulatorPage() {
   const [activeTab, setActiveTab] = useState('planner');
   const iframeRef = useRef(null);
+  const cardRefs = useRef({});
   const { theme } = useTheme();
 
   // Sync theme to simulator iframe when theme changes
@@ -77,8 +78,7 @@ export default function SimulatorPage() {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  const handleTabSelect = (tabId) => {
-    setActiveTab(tabId);
+  const navigateIframe = useCallback((tabId) => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       const viewName = tabId === 'planner' ? 'plan' : tabId;
       try {
@@ -89,7 +89,26 @@ export default function SimulatorPage() {
         // Safe fallback if iframe is cross-origin or not loaded
       }
     }
-  };
+  }, []);
+
+  const handleTabSelect = useCallback((tabId) => {
+    if (tabId === activeTab) return; // Don't re-select same tab
+    setActiveTab(tabId);
+
+    // Navigate iframe with a tiny delay so React state settles first
+    requestAnimationFrame(() => {
+      navigateIframe(tabId);
+    });
+
+    // Smooth scroll the selected card into view (only on mobile/smaller screens)
+    const cardEl = cardRefs.current[tabId];
+    if (cardEl) {
+      // Use a short delay so the expansion animation starts first
+      setTimeout(() => {
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }, [activeTab, navigateIframe]);
 
   const handleIframeLoad = () => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
@@ -113,159 +132,6 @@ export default function SimulatorPage() {
   };
 
   const currentTab = appTabs.find(t => t.id === activeTab);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
-    }
-  };
-
-  const renderFeatureExploration = () => {
-    return (
-      <div className="space-y-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-          className="space-y-2"
-        >
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
-            How App Tabs Work on Google Play
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Click any feature below to interact with it in the simulator and explore its native Android capabilities.
-          </p>
-        </motion.div>
-
-        {/* Feature Cards List with stagger slide-in animation */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="space-y-4"
-        >
-          {appTabs.map((tab) => {
-            const isExpanded = activeTab === tab.id;
-            return (
-              <div
-                key={tab.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleTabSelect(tab.id);
-                }}
-                className={`cursor-pointer rounded-3xl border transition-all overflow-hidden ${
-                  isExpanded
-                    ? 'bg-white dark:bg-neutral-900 border-emerald-500 shadow-xl shadow-emerald-500/5 ring-1 ring-emerald-500/20'
-                    : 'bg-white/60 dark:bg-black/60 hover:bg-white dark:hover:bg-neutral-900 border-gray-200 dark:border-neutral-800 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm'
-                }`}
-              >
-                <div className="p-6 flex items-start gap-4 select-none">
-                  {/* Icon */}
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors border ${
-                    isExpanded
-                      ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                      : 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-500 dark:text-gray-400'
-                  }`}>
-                    {tab.icon}
-                  </div>
-
-                  {/* Header & Tagline */}
-                  <div className="flex-grow min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">{tab.label}</h3>
-                      {isExpanded && (
-                        <span className="shrink-0 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20 animate-pulse">
-                          Active Tab
-                        </span>
-                      )}
-                    </div>
-                    
-                    {!isExpanded && (
-                      <p className="text-gray-500 dark:text-gray-400 text-sm truncate mt-1">
-                        {tab.description.slice(0, 80)}...
-                      </p>
-                    )}
-
-                    {/* Expanded Content */}
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        transition={{ duration: 0.3 }}
-                        className="mt-4 space-y-5"
-                      >
-                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                          {tab.description}
-                        </p>
-
-                        {/* Native Benefit Badge */}
-                        <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                            <Zap className="w-4 h-4 text-white" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] uppercase tracking-wider font-extrabold text-emerald-700 dark:text-emerald-400 mb-0.5">
-                              Native Play Store Benefit
-                            </p>
-                            <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
-                              {tab.nativeBenefit}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Key Capabilities */}
-                        <div className="space-y-2.5 pt-2">
-                          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Key Capabilities
-                          </p>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {tab.features.map((feature, i) => (
-                              <div
-                                key={i}
-                                className="flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-900/80 border border-gray-100 dark:border-neutral-800"
-                              >
-                                <div className="w-5 h-5 rounded-md bg-emerald-500/15 flex items-center justify-center shrink-0">
-                                  <ArrowRight className="w-3 h-3 text-emerald-500" />
-                                </div>
-                                <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">
-                                  {feature}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </motion.div>
-      </div>
-    );
-  };
 
   return (
     <div className="pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
@@ -292,14 +158,13 @@ export default function SimulatorPage() {
         {/* Always Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 2xl:gap-16 items-start">
           
-          {/* Left Column: Phone simulator with entry scroll animation */}
+          {/* Left Column: Phone simulator — sticky, no scroll-triggered re-animation */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center lg:sticky lg:top-24">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 100, damping: 15 }}
-              className="w-[290px] h-[580px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800 transition-all duration-300"
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.7, type: "spring", stiffness: 120, damping: 18 }}
+              className="w-[290px] h-[580px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800"
             >
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
@@ -326,7 +191,136 @@ export default function SimulatorPage() {
 
           {/* Right Column: Detailed feature explanations */}
           <div className="lg:col-span-7">
-            {renderFeatureExploration()}
+            <div className="space-y-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-2"
+              >
+                <h2 className="font-heading font-bold text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
+                  How App Tabs Work on Google Play
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  Click any feature below to interact with it in the simulator and explore its native Android capabilities.
+                </p>
+              </motion.div>
+
+              {/* Feature Cards List */}
+              <div className="space-y-3">
+                {appTabs.map((tab, index) => {
+                  const isExpanded = activeTab === tab.id;
+                  return (
+                    <motion.div
+                      key={tab.id}
+                      ref={(el) => { cardRefs.current[tab.id] = el; }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.1 * index }}
+                      layout="position"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleTabSelect(tab.id);
+                      }}
+                      className={`cursor-pointer rounded-3xl border overflow-hidden transition-colors duration-200 ${
+                        isExpanded
+                          ? 'bg-white dark:bg-neutral-900 border-emerald-500 shadow-xl shadow-emerald-500/5 ring-1 ring-emerald-500/20'
+                          : 'bg-white/60 dark:bg-black/60 hover:bg-white dark:hover:bg-neutral-900 border-gray-200 dark:border-neutral-800 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm'
+                      }`}
+                    >
+                      <div className="p-5 sm:p-6 flex items-start gap-4 select-none">
+                        {/* Icon */}
+                        <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-200 border ${
+                          isExpanded
+                            ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                            : 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-500 dark:text-gray-400'
+                        }`}>
+                          {tab.icon}
+                        </div>
+
+                        {/* Header & Tagline */}
+                        <div className="flex-grow min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="font-heading font-bold text-base sm:text-lg text-gray-900 dark:text-white">{tab.label}</h3>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {isExpanded && (
+                                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20">
+                                  Active
+                                </span>
+                              )}
+                              <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </div>
+                          </div>
+                          
+                          {!isExpanded && (
+                            <p className="text-gray-500 dark:text-gray-400 text-sm truncate mt-1">
+                              {tab.description.slice(0, 80)}...
+                            </p>
+                          )}
+
+                          {/* Expanded Content with AnimatePresence for smooth enter/exit */}
+                          <AnimatePresence initial={false}>
+                            {isExpanded && (
+                              <motion.div
+                                key={`expanded-${tab.id}`}
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                                className="overflow-hidden"
+                              >
+                                <div className="mt-4 space-y-5">
+                                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                                    {tab.description}
+                                  </p>
+
+                                  {/* Native Benefit Badge */}
+                                  <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                                      <Zap className="w-4 h-4 text-white" />
+                                    </div>
+                                    <div>
+                                      <p className="text-[10px] uppercase tracking-wider font-extrabold text-emerald-700 dark:text-emerald-400 mb-0.5">
+                                        Native Play Store Benefit
+                                      </p>
+                                      <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
+                                        {tab.nativeBenefit}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* Key Capabilities */}
+                                  <div className="space-y-2.5 pt-2">
+                                    <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                      Key Capabilities
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                      {tab.features.map((feature, i) => (
+                                        <div
+                                          key={i}
+                                          className="flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-900/80 border border-gray-100 dark:border-neutral-800"
+                                        >
+                                          <div className="w-5 h-5 rounded-md bg-emerald-500/15 flex items-center justify-center shrink-0">
+                                            <ArrowRight className="w-3 h-3 text-emerald-500" />
+                                          </div>
+                                          <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">
+                                            {feature}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
         </div>
@@ -417,3 +411,4 @@ export default function SimulatorPage() {
     </div>
   );
 }
+

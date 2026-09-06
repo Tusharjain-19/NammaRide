@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404 - Out of Track | NammaRide Bengaluru Metro</title>
+    <meta name="description" content="The page or station route you are looking for does not exist on NammaRide Bengaluru Metro Guide.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Outfit', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #050505;
+            color: #F3F4F6;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4 sm:p-6 antialiased selection:bg-emerald-500 selection:text-white">
+    <div class="max-w-xl w-full bg-neutral-900/90 backdrop-blur-2xl p-6 sm:p-10 rounded-[36px] border border-neutral-800 text-center space-y-8 shadow-2xl relative overflow-hidden">
+        
+        <!-- Glow accents -->
+        <div class="absolute -top-20 -left-20 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -right-20 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Top Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black uppercase tracking-wider">
+                Error 404 • Signal Lost
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold">
+                Purple Line
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                Green Line
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
+                Yellow Line
+            </span>
+        </div>
+
+        <!-- Animated SVG Graphic -->
+        <div class="relative w-44 h-44 mx-auto flex items-center justify-center">
+            <svg class="w-full h-full text-emerald-400" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 15 165 Q 100 135 185 165" stroke="#A855F7" stroke-width="4" stroke-dasharray="8 6" stroke-linecap="round" opacity="0.7" />
+                <path d="M 15 175 Q 100 145 185 175" stroke="#10B981" stroke-width="4" stroke-dasharray="8 6" stroke-linecap="round" />
+                <path d="M 15 185 Q 100 155 185 185" stroke="#EAB308" stroke-width="4" stroke-dasharray="8 6" stroke-linecap="round" opacity="0.7" />
+
+                <circle cx="100" cy="78" r="46" fill="currentColor" fill-opacity="0.06" />
+                <circle cx="100" cy="78" r="34" stroke="currentColor" stroke-width="3" stroke-dasharray="6 4" />
+                <circle cx="100" cy="78" r="14" fill="currentColor" fill-opacity="0.15" />
+
+                <rect x="70" y="52" width="60" height="54" rx="16" fill="#0F172A" stroke="currentColor" stroke-width="3.5" />
+                <rect x="77" y="60" width="46" height="22" rx="7" fill="#38BDF8" fill-opacity="0.85" />
+                <line x1="86" y1="78" x2="98" y2="65" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
+                <circle cx="83" cy="94" r="4.5" fill="#FBBF24" />
+                <circle cx="117" cy="94" r="4.5" fill="#FBBF24" />
+                <path d="M 88 106 C 94 102, 106 102, 112 106" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+
+            <span class="absolute top-1 right-1 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500 to-emerald-500 text-white text-xs font-black tracking-widest font-mono shadow-lg">
+                404
+            </span>
+        </div>
+
+        <!-- Text Header -->
+        <div class="space-y-3">
+            <h1 class="font-heading font-black text-3xl sm:text-4xl text-white tracking-tight">
+                Out of Track!
+            </h1>
+            <p class="text-neutral-300 font-bold text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
+                The station or route page you requested could not be found.
+            </p>
+            <p class="text-neutral-400 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
+                Return to the main NammaRide route planner or explore live maps, fare calculator, train timings, and station guides.
+            </p>
+        </div>
+
+        <!-- Main Button -->
+        <div class="space-y-3 pt-2">
+            <a href="/" class="w-full py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm shadow-xl shadow-emerald-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 border border-emerald-400/30">
+                <span>Back to Route Planner</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+
+            <!-- Grid of links -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <a href="/map" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    🗺️ Metro Map
+                </a>
+                <a href="/fare-calculator" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    🧮 Fare Calculator
+                </a>
+                <a href="/timings" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    ⏰ Train Timings
+                </a>
+                <a href="/stations" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    🚉 All Stations
+                </a>
+                <a href="/explore" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    🧭 Explore City
+                </a>
+                <a href="/download" class="py-2.5 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-neutral-700">
+                    📲 Get Android App
+                </a>
+            </div>
+        </div>
+
+        <p class="text-[10px] text-neutral-500 font-mono tracking-widest uppercase">
+            NammaRide • Bengaluru Transit Companion
+        </p>
+
+    </div>
+</body>
+</html>

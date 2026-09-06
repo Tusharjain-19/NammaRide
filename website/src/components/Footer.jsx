@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Download, Code, ShieldCheck, MapPin, ExternalLink, Heart, Star } from 'lucide-react';
+import { Download, Code, ShieldCheck, MapPin, ExternalLink, Heart, Star, MessageSquarePlus } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import googlePlayImg from '../../assets/images/google play.svg';
 
@@ -153,7 +153,7 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div>
+              <div className="flex flex-col gap-2">
                 <a 
                   href="https://www.tusharjain.in/" 
                   target="_blank" 
@@ -162,6 +162,16 @@ export default function Footer() {
                 >
                   <Code className="w-4 h-4 text-emerald-500 opacity-70 group-hover:opacity-100" />
                   <span className="underline underline-offset-4 decoration-emerald-500/30 group-hover:decoration-emerald-500">{t('developedBy')} (tusharjain.in)</span>
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                </a>
+                <a 
+                  href="https://www.nammaride.site/contact" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-emerald-500 transition-colors group font-medium"
+                >
+                  <MessageSquarePlus className="w-4 h-4 text-emerald-500 opacity-70 group-hover:opacity-100" />
+                  <span className="underline underline-offset-4 decoration-emerald-500/30 group-hover:decoration-emerald-500">Feedback / Report Bug</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </div>
