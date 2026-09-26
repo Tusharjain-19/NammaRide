@@ -1,4 +1,5 @@
 import { T, T_STATION, CONFIG, formatTime } from '../utils/helpers.js';
+import { stationPlaces } from '../data/stationPlaces.js';
 
 export function renderLiveRoute(journey, routeListElement, simulationState) {
     let routeHtml = '';
@@ -112,6 +113,19 @@ function renderStationItem(node, details, index) {
     const station = node.station;
     const name = T_STATION(station.name);
 
+    const places = stationPlaces[station.name] || [];
+    let nearbyBadge = '';
+    if (isEnd && places.length > 0) {
+        nearbyBadge = `
+            <button type="button" class="nearby-explore-trigger flex items-center gap-1 font-bold" onclick="window.showNearbyAttractions('${station.name.replace(/'/g, "\\'")}')" title="Explore ${places.length} nearby places">
+                <svg class="w-3.5 h-3.5 nearby-sparkle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+                </svg>
+                <span class="nearby-text text-xs">${places.length} nearby</span>
+            </button>
+        `;
+    }
+
     let metaInfo = '';
     if (isStart) {
         metaInfo = `<div class="info-strip text-secondary bg-card-subtle">${T('boardAt')} ${T('platform')} ${node.part.startPlatform} <span class="text-[10px] opacity-75">(${T('towards')} ${node.part.journeyDirectionName})</span></div>`;
@@ -137,9 +151,12 @@ function renderStationItem(node, details, index) {
             </div>`;
     } else if (isEnd) {
         metaInfo = `
-            <div class="station-meta text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center gap-2 mt-2 w-fit font-bold text-xs">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span>${T('arrive') || 'Arriving at'} ${formatTime(details.arrivalTime)} • ${T('destination') || 'Your Destination'}</span>
+            <div class="station-meta text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center justify-between gap-2 mt-2 w-full font-bold text-xs">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
+                    <span>${T('arrive') || 'Arriving at'} ${formatTime(details.arrivalTime)} • ${T('destination') || 'Your Destination'}</span>
+                </div>
+                ${nearbyBadge}
             </div>
         `;
     }
@@ -150,6 +167,7 @@ function renderStationItem(node, details, index) {
             <div class="station-content">
                 <div class="flex items-center justify-between gap-2 w-full">
                     <div class="station-name">${name}</div>
+                    ${nearbyBadge}
                 </div>
                 ${metaInfo}
             </div>

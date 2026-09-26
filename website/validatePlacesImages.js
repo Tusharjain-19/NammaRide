@@ -1,8 +1,12 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const JS_PLACES_PATH = path.join(__dirname, 'js', 'data', 'stationPlaces.js');
-const PLACES_DIR = path.join(__dirname, 'assets', 'images', 'places');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const JS_PLACES_PATH = path.join(__dirname, 'public', 'simulator', 'js', 'data', 'stationPlaces.js');
+const PLACES_DIR = path.join(__dirname, 'public', 'simulator', 'assets', 'images', 'places');
 
 (async () => {
     try {

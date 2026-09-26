@@ -177,6 +177,11 @@
     border-left-color: var(--line-green);
 }
 
+.station-content {
+    width: 100%;
+    min-width: 0;
+}
+
 .station-name {
     font-size: 1rem;
     font-weight: 500;

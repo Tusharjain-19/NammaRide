@@ -40,6 +40,13 @@
     --font-mono: 'Space Grotesk', monospace;
     
     --transition-speed: 0.08s;
+
+    /* Radius System Tokens */
+    --radius-card: 1.25rem;
+    --radius-modal: 1.25rem;
+    --radius-button: 0.75rem;
+    --radius-input: 0.75rem;
+    --radius-pill: 9999px;
 }
 
 /* ═══════════════════════════════════════════
@@ -75,6 +82,12 @@ body.light-mode {
         radial-gradient(circle at 50% 75%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
         radial-gradient(circle at 75% 80%, rgba(234, 179, 8, 0.18) 0%, transparent 50%),
         url('../assets/images/vidhana_soudha.jpg');
+
+    --radius-card: 1.25rem;
+    --radius-modal: 1.25rem;
+    --radius-button: 0.75rem;
+    --radius-input: 0.75rem;
+    --radius-pill: 9999px;
 }
 
 html, body {
@@ -82,7 +95,12 @@ html, body {
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
-    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+* {
+    -webkit-overflow-scrolling: touch;
 }
 
 

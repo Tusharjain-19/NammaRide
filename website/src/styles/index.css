@@ -17,6 +17,12 @@
     /* Fare Calculator / Glass panel */
     --bg-card: #ffffff;
     --bg-card-hover: #f1f5f9;
+
+    --radius-card: 1.25rem;
+    --radius-modal: 1.25rem;
+    --radius-button: 0.75rem;
+    --radius-input: 0.75rem;
+    --radius-pill: 9999px;
   }
 
   :root.dark {
@@ -32,10 +38,18 @@
 
     --bg-card: #0d0d0d;
     --bg-card-hover: #1a1a1a;
+
+    --radius-card: 1.25rem;
+    --radius-modal: 1.25rem;
+    --radius-button: 0.75rem;
+    --radius-input: 0.75rem;
+    --radius-pill: 9999px;
   }
   
   html {
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -50,11 +64,8 @@
     color: var(--text-primary);
     font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
-  }
-
-  /* 🔳 Crisp Rectangular Box Architecture Across Entire Web App */
-  *, *::before, *::after {
-    border-radius: 0 !important;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -77,6 +88,7 @@ body *:not(script):not(style):not(svg):not(path) {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
 }
 
 .dark .glass-panel {
@@ -89,6 +101,7 @@ body *:not(script):not(style):not(svg):not(path) {
   background-color: var(--input-bg);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-input);
 }
 
 .dropdown-opaque option {
@@ -104,7 +117,7 @@ body *:not(script):not(style):not(svg):not(path) {
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 8px 30px rgba(16, 185, 129, 0.05);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 0 !important;
+  border-radius: var(--radius-card);
 }
 
 .light-glass-card:hover {
@@ -112,26 +125,26 @@ body *:not(script):not(style):not(svg):not(path) {
   border-color: rgba(16, 185, 129, 0.2);
   transform: translateY(-4px) scale(1.008);
   box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.18);
-  border-radius: 0 !important;
+  border-radius: var(--radius-card);
 }
 
 .dark .light-glass-card {
   background: rgba(13, 13, 13, 0.9);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-  border-radius: 0 !important;
+  border-radius: var(--radius-card);
 }
 
 .dark .light-glass-card:hover {
   background: rgba(23, 23, 23, 0.95);
   border-color: rgba(16, 185, 129, 0.4);
   box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.3);
-  border-radius: 0 !important;
+  border-radius: var(--radius-card);
 }
 
 .glow-button {
   box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
-  border-radius: 0 !important;
+  border-radius: var(--radius-button);
 }
 
 /* 💎 Editorial Parallax Scroll View Timeline (Pure CSS) */

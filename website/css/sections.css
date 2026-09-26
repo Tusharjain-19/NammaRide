@@ -1069,27 +1069,47 @@ body.light-mode .station-type-badge.underground {
 
 /* ─── Nearby Attractions Timeline Trigger and Bottom Sheet Drawer ─── */
 .nearby-explore-trigger {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    color: #34D399;
-    border-radius: 9999px;
-    padding: 0.25rem 0.65rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #34D399 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+    flex-shrink: 0 !important;
+    line-height: 1 !important;
+}
+
+.nearby-explore-trigger .nearby-sparkle-icon {
+    color: #34D399 !important;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
 }
+
+.nearby-explore-trigger .nearby-text {
+    color: #34D399 !important;
+}
+
 .nearby-explore-trigger:hover {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.4);
-    transform: scale(1.05) translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    opacity: 0.8 !important;
+    transform: translateY(-1px) !important;
 }
+
 .nearby-explore-trigger:active {
-    transform: scale(0.98) translateY(0);
+    transform: scale(0.95) !important;
+}
+
+/* Light mode high-contrast overrides */
+body.light-mode .nearby-explore-trigger,
+body.light-mode .nearby-explore-trigger .nearby-sparkle-icon,
+body.light-mode .nearby-explore-trigger .nearby-text {
+    color: #047857 !important;
 }
 
 .nearby-sheet-overlay {

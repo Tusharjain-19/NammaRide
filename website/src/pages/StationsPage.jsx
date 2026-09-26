@@ -227,10 +227,21 @@ export default function StationsPage() {
               
               <button
                 onClick={() => setActiveStationModal(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-gray-50 dark:bg-neutral-900 text-gray-400 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-neutral-800 z-10"
+                className="absolute top-6 right-6 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 border border-white/20 z-20 shadow-md backdrop-blur-sm"
               >
                 <X className="w-5 h-5" />
               </button>
+
+              {/* Station Board Photo Preview */}
+              <div className="w-full h-44 rounded-2xl overflow-hidden bg-neutral-900 border border-gray-200 dark:border-neutral-800 relative shadow-md -mt-2">
+                <img 
+                  src={`assets/images/stations/${activeStationModal.id}.jpg`} 
+                  alt={activeStationModal.name_en} 
+                  className="w-full h-full object-cover" 
+                  onError={(e) => { e.target.onerror = null; e.target.src = 'assets/images/train.jpg'; }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              </div>
 
               <div className="space-y-1.5 pr-10">
                 <div className="flex flex-wrap gap-1.5">
