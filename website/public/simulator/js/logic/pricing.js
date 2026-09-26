@@ -1,35 +1,49 @@
 
 
-// 1. FARE ZONE TABLE (10 zones, distance-slab based)
-export const FARE_ZONES = [
-  { zone: "F1",  minKm: 0,   maxKm: 2,        fare: 10 },
-  { zone: "F2",  minKm: 2,   maxKm: 4,        fare: 20 },
-  { zone: "F3",  minKm: 4,   maxKm: 6,        fare: 30 },
-  { zone: "F4",  minKm: 6,   maxKm: 8,        fare: 40 },
-  { zone: "F5",  minKm: 8,   maxKm: 10,       fare: 50 },
-  { zone: "F6",  minKm: 10,  maxKm: 15,       fare: 60 },
-  { zone: "F7",  minKm: 15,  maxKm: 20,       fare: 70 },
-  { zone: "F8",  minKm: 20,  maxKm: 25,       fare: 80 },
-  { zone: "F9",  minKm: 25,  maxKm: 30,       fare: 90 },
-  { zone: "F10", minKm: 30,  maxKm: Infinity, fare: 90 },
+// ============================================================
+// NammaRide — BMRCL Official Fare Pricing Engine
+// Based on station-hop-count tariff (FFC Feb 2025 revision)
+// ============================================================
+
+// 1. FARE SLAB TABLE (hop-count based, per BMRCL Fare Fixation Committee)
+export const FARE_SLABS = [
+  { slab: 1,  minHops: 0,  maxHops: 0,   fare: 10,  label: "Same Station"     },
+  { slab: 2,  minHops: 1,  maxHops: 2,   fare: 10,  label: "0 – 2 km"        },
+  { slab: 3,  minHops: 3,  maxHops: 4,   fare: 20,  label: "2 – 4 km"        },
+  { slab: 4,  minHops: 5,  maxHops: 6,   fare: 30,  label: "4 – 6 km"        },
+  { slab: 5,  minHops: 7,  maxHops: 8,   fare: 40,  label: "6 – 8 km"        },
+  { slab: 6,  minHops: 9,  maxHops: 10,  fare: 50,  label: "8 – 10 km"       },
+  { slab: 7,  minHops: 11, maxHops: 15,  fare: 60,  label: "10 – 15 km"      },
+  { slab: 8,  minHops: 16, maxHops: 20,  fare: 70,  label: "15 – 20 km"      },
+  { slab: 9,  minHops: 21, maxHops: 25,  fare: 80,  label: "20 – 25 km"      },
+  { slab: 10, minHops: 26, maxHops: 999, fare: 90,  label: "Above 25 km"     },
 ];
 
+// Legacy alias for backward compatibility
+export const FARE_ZONES = FARE_SLABS.map((s, i) => ({
+  zone: `F${i + 1}`,
+  minKm: s.minHops,
+  maxKm: s.maxHops === 999 ? Infinity : s.maxHops,
+  fare: s.fare
+}));
+
 export const SMART_CARD_DISCOUNTS = {
-  peakHour:    0.05,   
-  offPeak:     0.10,   
-  sunday:      0.10,   
-  nationalHoliday: 0.10,
+  peakHour:        0.05,   // 5% off during weekday peak
+  offPeak:         0.10,   // 10% off during off-peak windows
+  sunday:          0.10,   // 10% all day Sunday
+  nationalHoliday: 0.10,   // 10% all day on Republic Day, Independence Day, Gandhi Jayanti
 };
 
+// BMRCL Official Peak Hours (Mon–Sat, excludes Sundays & National Holidays)
 export const PEAK_HOURS = [
-  { start: "07:00", end: "10:00" }, 
-  { start: "17:00", end: "20:00" }, 
+  { start: "08:00", end: "12:00" },  // Morning peak
+  { start: "16:00", end: "21:00" },  // Evening peak
 ];
 
 export const NATIONAL_HOLIDAYS = [
-  { month: 1,  day: 26, name: "Republic Day"       },
-  { month: 8,  day: 15, name: "Independence Day"   },
-  { month: 10, day: 2,  name: "Gandhi Jayanti"     },
+  { month: 1,  day: 26, name: "Republic Day"     },
+  { month: 8,  day: 15, name: "Independence Day" },
+  { month: 10, day: 2,  name: "Gandhi Jayanti"   },
 ];
 
 export const TOURIST_CARDS = [
@@ -38,59 +52,45 @@ export const TOURIST_CARDS = [
   { name: "5-Day Pass", validity: 5, smartCard: 900, mobileQR: 850, description: "Unlimited travel for 5 consecutive days" },
 ];
 
-export const SMART_CARD_MIN_BALANCE = 90; 
+export const SMART_CARD_MIN_BALANCE = 90;
 
-/**
- * calculateFare - Compatibility layer for existing main.js
- */
-export function calculateFare(distanceKm, travelDate = new Date(), ticketType = 'TOKEN') {
-  const isSmart = (ticketType === true || ticketType === 'CARD' || ticketType === 'QR' || ticketType === 'NCMC');
-  
-  const baseFare = getFareByDistance(distanceKm);
-  const zoneInfo = getZoneByDistance(distanceKm);
-  const peakIdx = isPeakHour(travelDate);
-  const sunday = isSunday(travelDate);
-  const holiday = isNationalHoliday(travelDate);
-
-  let finalFare = baseFare;
-  let saving = 0;
-  let discountLabel = "No discount (Token)";
-
-  if (isSmart) {
-    const scResult = calculateSmartCardFare(baseFare, travelDate);
-    finalFare = scResult.discountedFare;
-    saving = scResult.saving;
-    discountLabel = scResult.discountLabel;
-  }
-
-  return {
-    distanceKm: Number(distanceKm).toFixed(2),
-    zone: zoneInfo.zone,
-    baseFare: baseFare,
-    finalFare: finalFare, // Alias for payableFare for main.js compatibility
-    payableFare: finalFare,
-    appliedDiscount: saving, // Alias for saving for main.js compatibility
-    saving: saving,
-    discountLabel: discountLabel,
-    ticketType: isSmart ? "Smart Card / NCMC" : "Token",
-    isPeakHour: peakIdx,
-    isSunday: sunday,
-    isNationalHoliday: holiday
-  };
+// ─── Core Fare-by-Hops Function ───
+export function getFareByHops(hops) {
+  if (hops < 0) throw new Error("Hops cannot be negative");
+  if (hops === 0) return 10;
+  if (hops <= 2) return 10;
+  if (hops <= 4) return 20;
+  if (hops <= 6) return 30;
+  if (hops <= 8) return 40;
+  if (hops <= 10) return 50;
+  if (hops <= 15) return 60;
+  if (hops <= 20) return 70;
+  if (hops <= 25) return 80;
+  return 90; // H >= 26, capped at ₹90
 }
 
+export function getSlabByHops(hops) {
+  if (hops === 0) return FARE_SLABS[0];
+  return FARE_SLABS.find(s => hops >= s.minHops && hops <= s.maxHops) || FARE_SLABS[FARE_SLABS.length - 1];
+}
+
+// ─── Legacy distance-based function (kept for backward compat, now maps to hops) ───
 export function getFareByDistance(distanceKm) {
+  // Convert approximate km to hop estimate for legacy callers
+  // Average inter-station distance is ~1.2 km across all lines
   if (distanceKm < 0) throw new Error("Distance cannot be negative");
-  if (distanceKm === 0) return FARE_ZONES[0].fare;
-  const zone = FARE_ZONES.find((z) => distanceKm > z.minKm && distanceKm <= z.maxKm);
-  return zone ? zone.fare : FARE_ZONES[FARE_ZONES.length - 1].fare;
+  if (distanceKm === 0) return 10;
+  const estimatedHops = Math.round(distanceKm / 1.15);
+  return getFareByHops(estimatedHops);
 }
 
 export function getZoneByDistance(distanceKm) {
-  if (distanceKm === 0) return FARE_ZONES[0];
-  return (FARE_ZONES.find((z) => distanceKm > z.minKm && distanceKm <= z.maxKm) || FARE_ZONES[FARE_ZONES.length - 1]);
+  if (distanceKm === 0) return FARE_SLABS[0];
+  const estimatedHops = Math.round(distanceKm / 1.15);
+  return getSlabByHops(estimatedHops);
 }
 
+// ─── Time / Discount Functions ───
 export function isSunday(date) { return date.getDay() === 0; }
 
 export function isNationalHoliday(date) {
@@ -124,6 +124,60 @@ export function calculateSmartCardFare(baseFare, date) {
   return { discountedFare, saving: discount, discountLabel: label };
 }
 
+// ─── Primary Fare Calculator (hop-based) ───
+export function calculateFareByHops(hops, travelDate = new Date(), ticketType = 'TOKEN') {
+  const isSmart = (ticketType === true || ticketType === 'CARD' || ticketType === 'QR' || ticketType === 'NCMC');
+
+  const baseFare = getFareByHops(hops);
+  const slabInfo = getSlabByHops(hops);
+  const peakIdx = isPeakHour(travelDate);
+  const sunday = isSunday(travelDate);
+  const holiday = isNationalHoliday(travelDate);
+
+  let finalFare = baseFare;
+  let saving = 0;
+  let discountLabel = "No discount (Token)";
+
+  if (isSmart) {
+    const scResult = calculateSmartCardFare(baseFare, travelDate);
+    finalFare = scResult.discountedFare;
+    saving = scResult.saving;
+    discountLabel = scResult.discountLabel;
+  }
+
+  return {
+    stationHops: hops,
+    zone: `F${slabInfo.slab}`,
+    slab: slabInfo,
+    baseFare: baseFare,
+    finalFare: finalFare,
+    payableFare: finalFare,
+    appliedDiscount: saving,
+    saving: saving,
+    discountLabel: discountLabel,
+    ticketType: isSmart ? "Smart Card / NCMC" : "Token",
+    isPeakHour: peakIdx,
+    isSunday: sunday,
+    isNationalHoliday: holiday
+  };
+}
+
+/**
+ * calculateFare - Legacy compatibility layer (accepts distanceKm OR hops)
+ * Now internally converts to hops for accurate BMRCL pricing
+ */
+export function calculateFare(distanceOrHops, travelDate = new Date(), ticketType = 'TOKEN') {
+  // If called from calculateJourney, this receives stationHops directly
+  // If called from legacy code, receives distanceKm (we estimate hops)
+  const hops = Number.isInteger(distanceOrHops) ? distanceOrHops : Math.round(distanceOrHops / 1.15);
+  
+  const result = calculateFareByHops(hops, travelDate, ticketType);
+  // Add legacy distanceKm field for backward compat
+  result.distanceKm = Number.isInteger(distanceOrHops) ? (distanceOrHops * 1.15).toFixed(2) : Number(distanceOrHops).toFixed(2);
+  return result;
+}
+
+// ─── Utility: Haversine distance (kept for GPS features) ───
 export function haversineDistance(a, b) {
   const R = 6371;
   const dLat = toRad(b.lat - a.lat);
@@ -136,6 +190,7 @@ export function haversineDistance(a, b) {
 
 function toRad(deg) { return (deg * Math.PI) / 180; }
 
+// ─── Legacy route distance accumulator (kept for backward compat) ───
 export function routeDistance(fromId, toId, lineData) {
   const stations = lineData.stations;
   const fromIdx = stations.findIndex((s) => s.id === fromId);
@@ -144,6 +199,93 @@ export function routeDistance(fromId, toId, lineData) {
   const startIdx = Math.min(fromIdx, toIdx);
   const endIdx = Math.max(fromIdx, toIdx);
   return stations.slice(startIdx, endIdx).reduce((sum, s) => sum + s.distanceToNext, 0);
+}
+
+// ─── Hop-count calculator between any two station IDs ───
+export function countStationHops(fromId, toId, metroData) {
+  const purple = metroData.purple;
+  const green = metroData.green;
+  const yellow = metroData.yellow;
+
+  const MAJESTIC_PURPLE_ID = "P23";
+  const MAJESTIC_GREEN_ID = "G17";
+  const RV_ROAD_GREEN_ID = "G24";
+  const RV_ROAD_YELLOW_ID = "Y01";
+
+  const inLine = (id, line) => line.stations.some(s => s.id === id);
+  const indexOf = (id, line) => line.stations.findIndex(s => s.id === id);
+
+  const majesticPurpleIdx = indexOf(MAJESTIC_PURPLE_ID, purple); // 22 (0-indexed from Whitefield end)
+  const majesticGreenIdx = indexOf(MAJESTIC_GREEN_ID, green);     // 16
+  const rvRoadGreenIdx = indexOf(RV_ROAD_GREEN_ID, green);        // 23
+  const rvRoadYellowIdx = indexOf(RV_ROAD_YELLOW_ID, yellow);     // 0
+
+  const GREEN_TRUNK_HOPS = Math.abs(rvRoadGreenIdx - majesticGreenIdx); // 7
+
+  if (fromId === toId) return 0;
+
+  const fromPurple = inLine(fromId, purple);
+  const fromGreen = inLine(fromId, green);
+  const fromYellow = inLine(fromId, yellow);
+  const toPurple = inLine(toId, purple);
+  const toGreen = inLine(toId, green);
+  const toYellow = inLine(toId, yellow);
+
+  let minHops = Infinity;
+
+  // Same-line direct travel
+  if (fromPurple && toPurple) {
+    minHops = Math.min(minHops, Math.abs(indexOf(fromId, purple) - indexOf(toId, purple)));
+  }
+  if (fromGreen && toGreen) {
+    minHops = Math.min(minHops, Math.abs(indexOf(fromId, green) - indexOf(toId, green)));
+  }
+  if (fromYellow && toYellow) {
+    minHops = Math.min(minHops, Math.abs(indexOf(fromId, yellow) - indexOf(toId, yellow)));
+  }
+
+  // Purple ↔ Green (via Majestic)
+  if (fromPurple && toGreen) {
+    const h = Math.abs(indexOf(fromId, purple) - majesticPurpleIdx) + Math.abs(indexOf(toId, green) - majesticGreenIdx);
+    minHops = Math.min(minHops, h);
+  }
+  if (fromGreen && toPurple) {
+    const h = Math.abs(indexOf(fromId, green) - majesticGreenIdx) + Math.abs(indexOf(toId, purple) - majesticPurpleIdx);
+    minHops = Math.min(minHops, h);
+  }
+
+  // Green ↔ Yellow (via RV Road)
+  if (fromGreen && toYellow) {
+    const h = Math.abs(indexOf(fromId, green) - rvRoadGreenIdx) + Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
+    minHops = Math.min(minHops, h);
+  }
+  if (fromYellow && toGreen) {
+    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx) + Math.abs(indexOf(toId, green) - rvRoadGreenIdx);
+    minHops = Math.min(minHops, h);
+  }
+
+  // Purple ↔ Yellow (via Majestic → Green trunk → RV Road)
+  if (fromPurple && toYellow) {
+    const h = Math.abs(indexOf(fromId, purple) - majesticPurpleIdx) + GREEN_TRUNK_HOPS + Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
+    minHops = Math.min(minHops, h);
+  }
+  if (fromYellow && toPurple) {
+    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx) + GREEN_TRUNK_HOPS + Math.abs(indexOf(toId, purple) - majesticPurpleIdx);
+    minHops = Math.min(minHops, h);
+  }
+
+  // Handle interchange stations that exist on multiple lines (RV Road is G24 and Y01)
+  // If fromId is on Green and also is RV Road, try Yellow direct
+  if (fromId === RV_ROAD_GREEN_ID && toYellow) {
+    const h = Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
+    minHops = Math.min(minHops, h);
+  }
+  if (toId === RV_ROAD_GREEN_ID && fromYellow) {
+    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx);
+    minHops = Math.min(minHops, h);
+  }
+
+  return minHops === Infinity ? 0 : minHops;
 }
 
 export function interLineDistance(fromId, toId, purpleLine, greenLine) {
@@ -175,13 +317,18 @@ export function calculateTripFare(fromId, toId, purpleLine, greenLine, travelDat
   if (!fromStation || !toStation) throw new Error("Station not found");
 
   if (fromId === toId) {
-    return { from: fromStation.name, to: toStation.name, routeDistanceKm: 0, path: [], zone: "F1", baseFare: 10, payableFare: smartCard ? 9 : 10, saving: smartCard ? 1 : 0, discountLabel: smartCard ? "Smart Card discount" : "No discount", ticketType: smartCard ? "Smart Card / NCMC" : "Token", isPeakHour: isPeakHour(travelDate), isSunday: isSunday(travelDate), isNationalHoliday: isNationalHoliday(travelDate), travelDate };
+    return { from: fromStation.name, to: toStation.name, routeDistanceKm: 0, stationHops: 0, path: [], zone: "F1", baseFare: 10, payableFare: smartCard ? 9 : 10, saving: smartCard ? 1 : 0, discountLabel: smartCard ? "Smart Card discount" : "No discount", ticketType: smartCard ? "Smart Card / NCMC" : "Token", isPeakHour: isPeakHour(travelDate), isSunday: isSunday(travelDate), isNationalHoliday: isNationalHoliday(travelDate), travelDate };
   }
 
   const result = interLineDistance(fromId, toId, purpleLine, greenLine);
   if (!result) throw new Error("Route not found");
-  const fareResult = calculateFare(result.distance, travelDate, smartCard);
-  return { from: fromStation.name, to: toStation.name, routeDistanceKm: +result.distance.toFixed(2), path: result.path, ...fareResult, travelDate };
+  
+  // Count actual station hops for accurate pricing
+  const metroDataForHops = { purple: purpleLine, green: greenLine, yellow: { stations: [] } };
+  const hops = countStationHops(fromId, toId, metroDataForHops);
+  const fareResult = calculateFareByHops(hops, travelDate, smartCard);
+  
+  return { from: fromStation.name, to: toStation.name, routeDistanceKm: +result.distance.toFixed(2), stationHops: hops, path: result.path, ...fareResult, travelDate };
 }
 
 export function evaluateTouristCard(tripDistances, days, useMobileQR = false) {
@@ -196,7 +343,9 @@ export function evaluateTouristCard(tripDistances, days, useMobileQR = false) {
 export const FARE_CHART = {
   effectiveFrom: "09 February 2025",
   status: "Active (Feb 2026 hike kept on hold by BMRCL)",
-  lastChecked: "15 March 2026",
+  lastChecked: "26 September 2026",
+  pricingMethod: "station-hop-count",
+  slabs: FARE_SLABS,
   zones: FARE_ZONES,
   touristCards: TOURIST_CARDS,
   discounts: SMART_CARD_DISCOUNTS,

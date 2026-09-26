@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MessageSquare, ShieldAlert, Sparkles, Send, Plus, Minus, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import MetaSEO from '../components/MetaSEO';
 
 // Google Apps Script Web App URL loaded safely from environment variables (.env)
 const GOOGLE_SHEET_ENDPOINT = import.meta.env.VITE_GOOGLE_SHEETS_API_URL || 'https://script.google.com/macros/s/AKfycbzmBsgmnu_w7d8jy_f2OjddNiQD-Agi4RK_0BHphCE3-ldep7xkfXbQj8wewGg1rLWa/exec';
@@ -134,6 +135,11 @@ export default function ContactPage() {
 
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="Contact & Support Hub — NammaRide Bengaluru Metro"
+        description="Get in touch with NammaRide support. Report station route discrepancies, submit feature requests, or inquire about BMRCL fare updates."
+        canonicalPath="/contact"
+      />
       <div className="max-w-5xl mx-auto space-y-12">
         
         {/* Header */}

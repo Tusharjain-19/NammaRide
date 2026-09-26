@@ -4,6 +4,7 @@ import { Search, MapPin, Clock, ArrowRightLeft, ShieldCheck, Zap, X, Info, Phone
 import { Link } from 'react-router-dom';
 import { stationsData } from '../data/stationsData';
 import { useLanguage } from '../context/LanguageContext';
+import MetaSEO from '../components/MetaSEO';
 
 const getLineStyles = (lineId) => {
   switch (lineId.toLowerCase()) {
@@ -60,6 +61,11 @@ export default function StationsPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
+      <MetaSEO 
+        title="All 83+ Metro Stations Directory — Bengaluru Namma Metro"
+        description="Search complete database of Bengaluru Namma Metro stations across Purple, Green, and Yellow lines. Features GPS coordinates, elevator counts, exit gate guides, and nearby tech park connectivity."
+        canonicalPath="/stations"
+      />
       <div className="space-y-10">
         
         {/* Header */}

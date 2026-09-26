@@ -2,7 +2,7 @@ import { metroData, translations, stationTranslations, lineNameMap } from './dat
 import { stationsMeta } from './data/stationsMeta.js';
 import { CustomDropdown } from './ui/dropdown.js';
 import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
-import { calculateFare } from './logic/pricing.js';
+import { calculateFare, calculateFareByHops, countStationHops } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
@@ -348,12 +348,16 @@ function calculateJourney(startId, endId) {
         }
     }
 
+    // Count station hops (actual stations traversed, not counting origin)
+    const stationHops = countStationHops(startId, endId, metroData);
+
     const departureTime = getDepartureTime();
-    const fareDetails = calculateFare(totalDistanceKm, departureTime, 'TOKEN');
+    const fareDetails = calculateFareByHops(stationHops, departureTime, 'TOKEN');
 
     return {
         id: `${startId}-${endId}`, parts: parts, totalTime: distances[endId],
         fare: fareDetails.finalFare, baseFare: fareDetails.baseFare,
+        stationHops: stationHops,
         distanceKm: totalDistanceKm.toFixed(2), fareDetails: fareDetails, departureTime: departureTime
     };
 }
@@ -870,52 +874,43 @@ function updateSimulationUI() {
     }
 
     simStatus.innerHTML = `
-        <div class="live-tracking-panel w-full flex flex-col p-3 px-4 rounded-2xl shadow-lg gap-2">
-            <div class="flex items-center justify-between gap-2">
-                <!-- Left: Train Icon + Trip Info -->
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400">
-                            <!-- Roof Cap -->
+        <div class="live-tracking-panel w-full flex flex-col p-3 px-3.5 rounded-2xl shadow-xl gap-2">
+            <!-- Row 1: Train Icon, Destination, GPS status, and Close button -->
+            <div class="flex items-center justify-between gap-2 border-b border-subtle/40 pb-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400">
                             <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                            <!-- Outer Train Body -->
                             <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
-                            <!-- Windshield -->
                             <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Windshield Glare Reflection Lines -->
                             <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
                             <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                            <!-- Left Capsule Headlight -->
                             <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Right Capsule Headlight -->
                             <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Center Bumper Arch -->
                             <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Track Base Line -->
                             <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div class="flex flex-col min-w-0">
-                        <div class="flex items-center gap-1.5 leading-none">
-                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
-                            <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
-                        </div>
-                        <div class="flex items-center gap-1 text-xs font-extrabold text-primary mt-1">
-                            <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
-                        </div>
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="text-[11px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
+                        <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
                     </div>
                 </div>
+                <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1 rounded-lg text-xs transition-colors flex items-center justify-center shrink-0" title="${T('exitJourney') || 'Exit'}">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
 
-                <!-- Right: Action Buttons -->
-                <div class="flex items-center gap-1.5 shrink-0">
-                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1">
-                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                        <span>${T('finishJourney') || 'Finish'}</span>
-                    </button>
-                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1.5 rounded-xl text-xs transition-colors flex items-center justify-center" title="${T('exitJourney') || 'Exit'}">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+            <!-- Row 2: Remaining Time & Finish Journey Button -->
+            <div class="flex items-center justify-between gap-2 pt-0.5">
+                <div class="flex items-center gap-1.5 text-xs font-extrabold text-primary">
+                    <i data-lucide="clock" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
                 </div>
+                <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1 shrink-0">
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                    <span>${T('finishJourney') || 'Finish'}</span>
+                </button>
             </div>
             ${gpsWarningHtml}
         </div>

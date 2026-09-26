@@ -1,26 +1,17 @@
 import React, { useState } from 'react';
 import { Star, MessageSquare, ThumbsUp, Sparkles, ShieldCheck, Download, Share2 } from 'lucide-react';
+import MetaSEO from '../components/MetaSEO';
 
 export default function TestimonialsPage() {
   const [activeFilter, setActiveFilter] = useState('all');
 
-  // Real Play Store reviews list (empty until official store reviews arrive)
-  const reviewsList = [];
-
-  const filters = [
-    { id: 'all', label: 'All Reviews' },
-    { id: 'offline', label: 'Offline Capability' },
-    { id: 'privacy', label: 'Privacy' },
-    { id: 'accuracy', label: 'Accuracy & Info' },
-    { id: 'ease', label: 'Ease of Use' }
-  ];
-
-  const filteredReviews = reviewsList.filter(
-    (rev) => activeFilter === 'all' || rev.category === activeFilter
-  );
-
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="User Reviews & Testimonials — NammaRide Metro App"
+        description="Read verified commuter reviews and ratings for NammaRide, rated #1 offline Geo GPS metro app for Bengaluru."
+        canonicalPath="/testimonials"
+      />
       <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Header */}

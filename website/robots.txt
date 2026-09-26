@@ -1,39 +1,60 @@
-# Allow all standard search engine crawlers and AI search agents
+# Allow all search engine crawlers and AI search agents for Geo & SEO indexing
 User-agent: *
 Allow: /
 
+# Google Search & AI Crawlers
 User-agent: Googlebot
 Allow: /
-
 User-agent: Google-Extended
 Allow: /
-
-User-agent: Bingbot
+User-agent: GoogleOther
 Allow: /
 
+# OpenAI Crawlers
 User-agent: GPTBot
 Allow: /
-
 User-agent: ChatGPT-User
 Allow: /
+User-agent: OIMG-User
+Allow: /
 
+# Perplexity AI Crawlers
 User-agent: PerplexityBot
 Allow: /
 
+# Anthropic Claude Crawlers
 User-agent: ClaudeBot
 Allow: /
-
 User-agent: Anthropic-AI
 Allow: /
 
+# DeepSeek & Other AI Crawlers
+User-agent: DeepSeekBot
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
+User-agent: Cohere-AI
+Allow: /
+
+# Search Engine Bots
+User-agent: Bingbot
+Allow: /
 User-agent: Applebot
 Allow: /
-
-User-agent: Twitterbot
+User-agent: DuckDuckBot
+Allow: /
+User-agent: Yandex
+Allow: /
+User-agent: Baiduspider
 Allow: /
 
-User-agent: facebookexternalhit
-Allow: /
-
-# XML Sitemaps for Google and AI Search Engines
+# XML Sitemaps & LLM Manifests
+Sitemap: https://www.nammaride.site/sitemap.xml
 Sitemap: https://nammaride.site/sitemap.xml
+Sitemap: https://nammaride.vercel.app/sitemap.xml
+
+# LLM AI Context Manifests
+# https://www.nammaride.site/llms.txt
+# https://www.nammaride.site/llms-full.txt

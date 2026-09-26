@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Phone, HeartHandshake, Eye, Volume2, Moon, Lock, Mail } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import MetaSEO from '../components/MetaSEO';
 
 export default function SafetyPage() {
   const { lang, t } = useLanguage();
@@ -14,6 +15,11 @@ export default function SafetyPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+      <MetaSEO
+        title="Safety Guidelines & Emergency Helplines — Bengaluru Namma Metro"
+        description="Official BMRCL helpline numbers (080-4100-4100), women's safety coach details, lost & found instructions, and Divyangjan accessibility features."
+        canonicalPath="/safety"
+      />
       <div className="max-w-5xl mx-auto space-y-12 pt-20">
         
         {/* Header */}

@@ -1,9 +1,15 @@
 import React from 'react';
 import { Shield, EyeOff, Lock } from 'lucide-react';
+import MetaSEO from '../components/MetaSEO';
 
 export default function PrivacyPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="Privacy Policy — NammaRide Bengaluru Metro App"
+        description="NammaRide privacy policy: Zero personal data collection, zero tracking, 100% offline local GPS processing, and zero third-party ads."
+        canonicalPath="/privacy"
+      />
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-900 p-8 sm:p-10 rounded-[32px] border border-gray-200 dark:border-gray-800 shadow-sm space-y-6 text-xs text-gray-600 dark:text-gray-400">
         
         <div className="text-center space-y-3 pb-4 border-b border-gray-100 dark:border-gray-850">

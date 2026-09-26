@@ -1,11 +1,16 @@
-import React from 'react';
 import { Smartphone, Zap, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import googlePlayImg from '../../assets/images/google play.svg';
+import MetaSEO from '../components/MetaSEO';
 
 export default function DownloadPage() {
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
+      <MetaSEO
+        title="Download NammaRide Android App — #1 Offline Bengaluru Metro GPS App"
+        description="Download NammaRide Android application for Bengaluru Namma Metro. 100% offline satellite Geo GPS station tracking, zero data usage, and instant fare calculator."
+        canonicalPath="/download"
+      />
       <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Header */}

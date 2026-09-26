@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { stationsData } from '../data/stationsData';
+import MetaSEO from '../components/MetaSEO';
 
 export default function NotFoundPage() {
   const { lang } = useLanguage();
@@ -134,6 +135,11 @@ export default function NotFoundPage() {
 
   return (
     <div className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-black dark:via-neutral-950 dark:to-black flex items-center justify-center transition-colors duration-300">
+      <MetaSEO
+        title="404 — Page Not Found | NammaRide Bengaluru Metro"
+        description="The page or station route you requested was not found. Search Bengaluru Metro stations, fares, or maps on NammaRide."
+        canonicalPath="/404"
+      />
       <div className="max-w-2xl w-full bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl p-6 sm:p-10 rounded-[36px] border border-gray-200/80 dark:border-neutral-800 text-center space-y-8 shadow-2xl relative overflow-hidden">
         
         {/* Ambient Metro Background Line Glows */}

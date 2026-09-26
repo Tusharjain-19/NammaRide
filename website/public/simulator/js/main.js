@@ -2,7 +2,7 @@ import { metroData, translations, stationTranslations, lineNameMap } from './dat
 import { stationsMeta } from './data/stationsMeta.js';
 import { CustomDropdown } from './ui/dropdown.js';
 import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
-import { calculateFare } from './logic/pricing.js';
+import { calculateFare, calculateFareByHops, countStationHops } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
@@ -346,12 +346,16 @@ function calculateJourney(startId, endId) {
         }
     }
 
+    // Count station hops (actual stations traversed, not counting origin)
+    const stationHops = countStationHops(startId, endId, metroData);
+
     const departureTime = getDepartureTime();
-    const fareDetails = calculateFare(totalDistanceKm, departureTime, 'TOKEN');
+    const fareDetails = calculateFareByHops(stationHops, departureTime, 'TOKEN');
 
     return {
         id: `${startId}-${endId}`, parts: parts, totalTime: distances[endId],
         fare: fareDetails.finalFare, baseFare: fareDetails.baseFare,
+        stationHops: stationHops,
         distanceKm: totalDistanceKm.toFixed(2), fareDetails: fareDetails, departureTime: departureTime
     };
 }
@@ -411,24 +415,24 @@ function displayJourneyResult(journey) {
             </div>
 
             <!-- WhatsApp Ticket Booking Card -->
-            <div class="whatsapp-booking-card p-4">
-                <div class="flex items-center justify-between mb-3">
+            <div class="mt-3 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
                     <div class="flex flex-col">
                         <span class="text-xs font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
-                        <span class="text-[11px] text-emerald-400 font-bold mt-0.5">₹${totalFareAmount}</span>
+                        <span class="text-xs text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5">Total: ₹${totalFareAmount}</span>
                     </div>
-                    <div class="flex items-center gap-4 bg-card-subtle px-3 py-1.5 rounded-full border border-subtle">
-                        <button id="p-minus-btn" class="w-8 h-8 shrink-0 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary font-bold text-lg transition-colors border border-subtle/50">-</button>
-                        <span class="font-bold text-base text-primary min-w-[20px] text-center">${passengerCount}</span>
-                        <button id="p-plus-btn" class="w-8 h-8 shrink-0 flex items-center justify-center rounded-full bg-card hover:bg-card-hover text-primary font-bold text-lg transition-colors border border-subtle/50">+</button>
+                    <div class="flex items-center gap-2 bg-white dark:bg-neutral-900 px-3 py-1.5 rounded-xl border border-emerald-500/30 shadow-sm">
+                        <button id="p-minus-btn" type="button" class="w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">-</button>
+                        <span class="font-extrabold text-sm text-primary w-6 text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" type="button" class="w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">+</button>
                     </div>
                 </div>
 
-                <button id="whatsapp-book-btn" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-[#25D366]/20 transition-transform active:scale-95">
-                    <svg class="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <button id="whatsapp-book-btn" type="button" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition-all active:scale-95 text-xs uppercase tracking-wider">
+                    <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.01zm-7.01 15.24h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.198 8.198 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
                     </svg>
-                    <span>Book Ticket</span>
+                    <span>Book Ticket on WhatsApp</span>
                 </button>
             </div>
         `;
@@ -880,52 +884,43 @@ function updateSimulationUI() {
     }
 
     simStatus.innerHTML = `
-        <div class="live-tracking-panel w-full flex flex-col p-3 px-4 rounded-2xl shadow-lg gap-2">
-            <div class="flex items-center justify-between gap-2">
-                <!-- Left: Train Icon + Trip Info -->
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-400">
-                            <!-- Roof Cap -->
+        <div class="live-tracking-panel w-full flex flex-col p-3 px-3.5 rounded-2xl shadow-xl gap-2">
+            <!-- Row 1: Train Icon, Destination, GPS status, and Close button -->
+            <div class="flex items-center justify-between gap-2 border-b border-subtle/40 pb-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400">
                             <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                            <!-- Outer Train Body -->
                             <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
-                            <!-- Windshield -->
                             <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Windshield Glare Reflection Lines -->
                             <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
                             <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                            <!-- Left Capsule Headlight -->
                             <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Right Capsule Headlight -->
                             <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Center Bumper Arch -->
                             <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
-                            <!-- Track Base Line -->
                             <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div class="flex flex-col min-w-0">
-                        <div class="flex items-center gap-1.5 leading-none">
-                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
-                            <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
-                        </div>
-                        <div class="flex items-center gap-1 text-xs font-extrabold text-primary mt-1">
-                            <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
-                        </div>
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="text-[11px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
+                        <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
                     </div>
                 </div>
+                <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1 rounded-lg text-xs transition-colors flex items-center justify-center shrink-0" title="${T('exitJourney') || 'Exit'}">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
 
-                <!-- Right: Action Buttons -->
-                <div class="flex items-center gap-1.5 shrink-0">
-                    <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1">
-                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                        <span>${T('finishJourney') || 'Finish'}</span>
-                    </button>
-                    <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1.5 rounded-xl text-xs transition-colors flex items-center justify-center" title="${T('exitJourney') || 'Exit'}">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+            <!-- Row 2: Remaining Time & Finish Journey Button -->
+            <div class="flex items-center justify-between gap-2 pt-0.5">
+                <div class="flex items-center gap-1.5 text-xs font-extrabold text-primary">
+                    <i data-lucide="clock" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
                 </div>
+                <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1 shrink-0">
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                    <span>${T('finishJourney') || 'Finish'}</span>
+                </button>
             </div>
             ${gpsWarningHtml}
         </div>

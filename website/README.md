@@ -6,8 +6,8 @@
 
   **Official Web Application & Interactive App Simulator for NammaRide.**
 
-  [![Live Website](https://img.shields.io/badge/Live_Website-nammaride.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nammaride.vercel.app/)
-  [![App Domain](https://img.shields.io/badge/App_Domain-site.nammaride.app-10B981?style=for-the-badge&logo=googleplay&logoColor=white)](https://site.nammaride.app/)
+  [![Main Website](https://img.shields.io/badge/Main_Website-www.nammaride.site-10B981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://www.nammaride.site/)
+  [![Vercel Mirror](https://img.shields.io/badge/Vercel_Mirror-nammaride.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nammaride.vercel.app/)
 
 </div>
 
@@ -41,5 +41,6 @@ npm run build
 
 ## 🌐 Live URLs
 
-- **Vercel Web App**: [https://nammaride.vercel.app/](https://nammaride.vercel.app/)
-- **Production Domain**: [https://site.nammaride.app/](https://site.nammaride.app/)
+- **Main Production Domain**: [https://www.nammaride.site/](https://www.nammaride.site/)
+- **Apex Domain Mirror**: [https://nammaride.site/](https://nammaride.site/)
+- **Vercel Mirror**: [https://nammaride.vercel.app/](https://nammaride.vercel.app/)

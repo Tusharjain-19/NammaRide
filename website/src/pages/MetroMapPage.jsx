@@ -3,6 +3,7 @@ import { ZoomIn, ZoomOut, Maximize2, MapPin, Zap, Clock, Bus, Accessibility, Bui
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { stationsData } from '../data/stationsData';
+import MetaSEO from '../components/MetaSEO';
 
 export default function MetroMapPage() {
   const { lang, t } = useLanguage();
@@ -27,9 +28,20 @@ export default function MetroMapPage() {
     return () => window.removeEventListener('click', handleOutsideClick);
   }, []);
 
+  // Mobile default zoom adaptation
   useEffect(() => {
-    setImageError(false);
-  }, [activeStation]);
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      setZoomLevel(0.85);
+    }
+  }, []);
+
+  const quickStationChips = [
+    { name: 'Majestic', id: 'g17' },
+    { name: 'MG Road', id: 'p10' },
+    { name: 'Whitefield', id: 'p01' },
+    { name: 'Electronic City', id: 'y09' },
+    { name: 'Indiranagar', id: 'p08' }
+  ];
 
   const handleMouseDown = (e) => {
     if (e.button !== 0 && e.type !== 'touchstart') return;
@@ -95,6 +107,11 @@ export default function MetroMapPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
+      <MetaSEO
+        title="High-Res Interactive Bengaluru Metro Map 2026 — Vector PDF Download"
+        description="Explore official 2026 BMRCL Bengaluru Metro map covering Purple, Green, Yellow, Blue (Airport), and Pink lines. Features high-res zoom, dark mode inversion, and PDF download."
+        canonicalPath="/map"
+      />
       <div className="space-y-8">
         
         {/* Header */}
@@ -184,88 +201,67 @@ export default function MetroMapPage() {
                     ))}
                 </div>
               )}
+              {/* Quick Station Chips */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pt-2 pb-1 custom-scrollbar">
+                {quickStationChips.map((chip) => (
+                  <button
+                    key={chip.id}
+                    onClick={() => {
+                      const found = stationsData.find(s => s.name_en.toLowerCase().includes(chip.name.toLowerCase()));
+                      if (found) centerOnStation(found, 1.2);
+                    }}
+                    className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-300 hover:text-emerald-500 font-bold text-[10px] whitespace-nowrap transition-all border border-gray-200 dark:border-neutral-700 shrink-0 active:scale-95 flex items-center gap-1"
+                  >
+                    <MapPin className="w-3 h-3 text-emerald-500" />
+                    <span>{chip.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
           </div>
         </div>
 
         {/* MAP CONTAINER & TOOLBAR */}
-        <div className="rounded-3xl p-4 sm:p-6 relative overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-neutral-800 shadow-xl">
+        <div className="rounded-3xl p-3 sm:p-6 relative overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-neutral-800 shadow-xl space-y-3">
           
-          {/* Legend Overlay Card with Active & Under Construction Pink/Blue Lines */}
-          <div className="absolute top-8 left-8 z-10 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200 dark:border-neutral-800 shadow-md w-52 space-y-3 font-sans pointer-events-none select-none hidden md:block">
-            <div className="border-b border-gray-100 dark:border-neutral-800 pb-1.5">
-              <p className="text-xs font-black text-gray-900 dark:text-white tracking-tight">Official Metro Map 2025</p>
-              <p className="text-[9px] text-gray-400 font-semibold uppercase">BMRCL Network Guide</p>
-            </div>
-            
-            <div className="space-y-2 text-[10px] font-bold">
-              {/* Active Operational Lines */}
-              <div className="flex items-center gap-2 text-gray-900 dark:text-white">
-                <span className="w-5 h-1.5 bg-purple-line rounded-full shadow-xs"></span>
-                <span>Purple Line (Active)</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-900 dark:text-white">
-                <span className="w-5 h-1.5 bg-emerald-500 rounded-full shadow-xs"></span>
-                <span>Green Line (Active)</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-900 dark:text-white">
-                <span className="w-5 h-1.5 bg-yellow-line rounded-full shadow-xs"></span>
-                <span>Yellow Line (Active / Phase 1)</span>
-              </div>
-
-              {/* Under Construction / Inactive Lines */}
-              <div className="pt-1 border-t border-gray-100 dark:border-neutral-800 space-y-1.5">
-                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                  <span className="w-5 h-1.5 bg-pink-400 rounded-full border border-dashed border-pink-500"></span>
-                  <span className="italic">Pink Line (Under Construction)</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                  <span className="w-5 h-1.5 bg-sky-400 rounded-full border border-dashed border-sky-500"></span>
-                  <span className="italic">Blue Line (Airport Line / Inactive)</span>
-                </div>
-              </div>
-            </div>
+          {/* Mobile & Desktop Line Legend Bar */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar border-b border-gray-100 dark:border-neutral-900 text-[11px] font-bold">
+            <span className="text-gray-400 text-[10px] uppercase font-mono shrink-0">Lines:</span>
+            <span className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500"></span> Purple Line</span>
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Green Line</span>
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Yellow Line</span>
+            <span className="px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-500 border border-dashed border-pink-500/40 whitespace-nowrap shrink-0 italic flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-pink-400"></span> Pink (Upcoming)</span>
+            <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-500 border border-dashed border-sky-500/40 whitespace-nowrap shrink-0 italic flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-sky-400"></span> Blue (Airport)</span>
           </div>
 
-          {/* Compass Overlay */}
-          <div className="absolute top-8 right-24 z-10 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md p-2 rounded-2xl border border-gray-200 dark:border-neutral-800 shadow-md hidden sm:flex flex-col items-center justify-center font-sans w-11 h-11 pointer-events-none select-none">
-            <div className="relative w-5 h-5 flex items-center justify-center">
-              <svg className="w-full h-full text-slate-400 animate-spin-slow" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                <path d="M 12 4 L 15 13 L 12 11 L 9 13 Z" fill="#EF4444" />
-                <path d="M 12 20 L 15 11 L 12 11 L 9 11 Z" fill="#64748B" />
-              </svg>
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[8px] font-black text-gray-900 dark:text-white">N</span>
+          <div className="relative">
+            {/* Map Zoom Controls (Touch Friendly) */}
+            <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 bg-white/95 dark:bg-neutral-900/95 p-2 rounded-2xl border border-gray-200 dark:border-neutral-800 backdrop-blur-md shadow-xl">
+              <button
+                onClick={() => setZoomLevel((z) => Math.min(z + 0.25, 2.8))}
+                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                title="Zoom In"
+              >
+                <ZoomIn className="w-5 h-5 text-emerald-500" />
+              </button>
+              <button
+                onClick={() => setZoomLevel((z) => Math.max(z - 0.25, 0.4))}
+                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                title="Zoom Out"
+              >
+                <ZoomOut className="w-5 h-5 text-emerald-500" />
+              </button>
+              <button
+                onClick={() => setZoomLevel(typeof window !== 'undefined' && window.innerWidth < 640 ? 0.85 : 0.75)}
+                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                title="Fit Screen"
+              >
+                <Maximize2 className="w-5 h-5 text-emerald-500" />
+              </button>
             </div>
-          </div>
 
-          {/* Map Zoom Controls */}
-          <div className="absolute top-8 right-8 z-20 flex flex-col gap-2 bg-white/90 dark:bg-neutral-900/90 p-2 rounded-2xl border border-gray-200 dark:border-neutral-800 backdrop-blur-md shadow-lg">
-            <button
-              onClick={() => setZoomLevel((z) => Math.min(z + 0.2, 2.8))}
-              className="p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-600 dark:text-gray-200"
-              title="Zoom In"
-            >
-              <ZoomIn className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setZoomLevel((z) => Math.max(z - 0.2, 0.35))}
-              className="p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-600 dark:text-gray-200"
-              title="Zoom Out"
-            >
-              <ZoomOut className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setZoomLevel(0.75)}
-              className="p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-600 dark:text-gray-200"
-              title="Reset Zoom (Fit Screen)"
-            >
-              <Maximize2 className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* MAP CANVAS VIEW (EXPANDED SCROLL CONTAINER WITH DEFAULTS ZOOMED OUT) */}
+            {/* MAP CANVAS VIEW (EXPANDED SCROLL CONTAINER WITH DEFAULTS ZOOMED OUT) */}
           <div 
             ref={containerRef}
             onMouseDown={handleMouseDown}
@@ -275,7 +271,7 @@ export default function MetroMapPage() {
             onTouchStart={handleMouseDown}
             onTouchMove={handleMouseMove}
             onTouchEnd={handleMouseUpOrLeave}
-            className={`w-full h-[780px] sm:h-[840px] overflow-auto flex items-center justify-center bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-neutral-800 p-4 custom-scrollbar ${
+            className={`w-full h-[65vh] sm:h-[840px] overflow-auto flex items-center justify-center bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-neutral-800 p-2 sm:p-4 custom-scrollbar ${
               isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
             }`}
           >
@@ -438,5 +434,6 @@ export default function MetroMapPage() {
       )}
 
       </div>
+    </div>
   );
 }

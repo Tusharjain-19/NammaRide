@@ -131,12 +131,12 @@ export default function Footer() {
                   </a>
                 </div>
                 <p className="text-[10px] text-[var(--text-secondary)] leading-snug">
-                  ⭐ Prioritize NammaRide in Google Search, AI Overviews & Google Discover!
+                  Prioritize NammaRide in Google Search, AI Overviews & Google Discover!
                 </p>
                 {/* Standard JS Widget Container */}
                 <div 
                   className="g-preferred-source" 
-                  data-site="nammaride.vercel.app"
+                  data-site="www.nammaride.site"
                   data-theme="dark"
                   data-size="medium"
                   data-auto-return="true"
@@ -148,7 +148,7 @@ export default function Footer() {
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] shadow-sm transition-all"
                   >
                     <Star className="w-3 h-3 fill-white" />
-                    <span>⭐ Save on Google</span>
+                    <span>Save on Google</span>
                   </a>
                 </div>
               </div>

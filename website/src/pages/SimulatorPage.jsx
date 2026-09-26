@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Smartphone, Monitor, RefreshCw, ExternalLink, Download, Zap, Navigation, MapPin, Clock, Compass, ShieldCheck, Phone, ArrowRight, Wifi, WifiOff, BatteryCharging, Bell, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import googlePlaySvg from '../../assets/images/google play.svg';
 import { useTheme } from '../context/ThemeContext';
+import MetaSEO from '../components/MetaSEO';
+import googlePlayImg from '../../assets/images/google play.svg';
 
 const appTabs = [
   {
@@ -135,6 +136,11 @@ export default function SimulatorPage() {
 
   return (
     <div className="pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
+      <MetaSEO
+        title="Interactive Web App Simulator — Test NammaRide Online"
+        description="Try NammaRide's #1 Bengaluru Metro app features live in your browser. Test smart route planning, fare calculations, and station guide capabilities."
+        canonicalPath="/simulator"
+      />
       <div className="max-w-container-max 3xl:max-w-[1720px] mx-auto space-y-12 2xl:space-y-16">
         
         {/* Hero Header */}
@@ -385,7 +391,7 @@ export default function SimulatorPage() {
                   rel="noopener noreferrer"
                   className="inline-block transition-transform hover:scale-105 active:scale-95 drop-shadow-lg"
                 >
-                  <img src={googlePlaySvg} alt="Get it on Google Play" className="h-14 sm:h-16 w-auto object-contain" />
+                  <img src={googlePlayImg} alt="Get it on Google Play" className="h-14 sm:h-16 w-auto object-contain" />
                 </a>
               </div>
             </div>

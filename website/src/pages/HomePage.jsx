@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
 import GooglePreferredSourceCard from '../components/GooglePreferredSourceCard';
+import MetaSEO from '../components/MetaSEO';
 import googlePlayImg from '../../assets/images/google play.svg';
 
 function HeroSimulation() {
@@ -342,6 +343,7 @@ export default function HomePage() {
   ];
   return (
     <div className="min-h-screen pt-32 flex flex-col relative overflow-x-hidden">
+      <MetaSEO canonicalPath="/" />
       
 {/* HERO SECTION */}
       <motion.section 

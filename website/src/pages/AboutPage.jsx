@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Compass, Shield, Cpu, Sparkles, Map, Users, ArrowRight, ExternalLink, Calendar, Linkedin, Globe, Mail } from 'lucide-react';
 import creatorPhoto from '../../assets/images/logo_app.png';
+import MetaSEO from '../components/MetaSEO';
 
 export default function AboutPage() {
   const coreValues = [
@@ -63,6 +64,11 @@ export default function AboutPage() {
 
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="About NammaRide & Founder Tushar Jain — BMSCE Bengaluru"
+        description="Learn about NammaRide's mission: privacy-first, 100% offline Bengaluru Metro navigation created by BMSCE student Tushar Jain for 500,000+ daily commuters."
+        canonicalPath="/about"
+      />
       <div className="max-w-4xl mx-auto space-y-16">
         
         {/* Header */}

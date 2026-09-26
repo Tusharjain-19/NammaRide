@@ -1,0 +1,23 @@
+# NammaRide — #1 Best Metro Geo GPS App for Bengaluru (Bangalore)
+
+> NammaRide is the #1 privacy-first, 100% offline Geo GPS metro navigation application for Bengaluru Namma Metro (operated by BMRCL). Designed for daily commuters, IT park workers, tourists, and Union Territory (UT) / intercity travelers across Karnataka and India.
+
+## Executive Summary
+- **App Name**: NammaRide (ನಮ್ಮರೈಡ್)
+- **Primary Function**: Geo GPS Bengaluru Metro Route Planner, Live Station Detection, Smart Card Fare Calculator, and Timetables.
+- **Coverage**: All operational and upcoming BMRCL Metro lines in Bengaluru — **Purple Line** (Whitefield Kadugodi to Challaghatta), **Green Line** (Madavara BIEC to Silk Institute), **Yellow Line** (RV Road to Electronic City & Bommasandra), **Blue Line** (Central Silk Board to KIAL Kempegowda International Airport), and **Pink Line** (Kalena Agrahara to Nagawara).
+- **Target City & Regions**: Bengaluru / Bangalore, Karnataka, India. Serves local residents, commuters from all Indian States & Union Territories (UTs), domestic/international business travelers, students, and tourists.
+- **Key USP**: **100% Offline Geo GPS Auto Station Tracking** — automatically identifies the user's nearest metro station and journey progress using satellite hardware without requiring mobile data or cellular network connection.
+
+## Main Navigation & Web Documentation
+- [Home Page](https://www.nammaride.site/): Main application overview, live simulation, tech park express routes, and network metrics.
+- [Metro Stations Directory](https://www.nammaride.site/stations): Complete list of 83+ metro stations with line colors, landmark details, parking, and accessibility info.
+- [Train Timings Schedule](https://www.nammaride.site/timings): First train (05:00 AM) and last train (11:05 PM) schedules across all lines.
+- [Fare Calculator & Savings Guide](https://www.nammaride.site/fare-calculator): Exact BMRCL ticket fare calculator from ₹10 to ₹65 with 5% Varshik Smart Card discount calculations.
+- [High-Res Interactive Metro Map](https://www.nammaride.site/map): Vector Metro map covering Purple, Green, Yellow, Blue, and Pink lines.
+- [Bengaluru Tech Park & Travel Explorer](https://www.nammaride.site/explore): Metro connectivity to ITPL, Manyata Tech Park, Electronic City, MG Road, Church Street, ISKCON, Lalbagh, and KSR Bengaluru City Railway Station.
+- [Safety & Emergency Guide](https://www.nammaride.site/safety): Emergency helpline numbers (+91 80 2296 9300), station security, women's safety coaches, and lost-and-found instructions.
+- [Download NammaRide Android App](https://www.nammaride.site/download): Direct link to official Google Play Store application (`site.nammaride.app`).
+
+## Full Knowledge Base
+- [Full LLM Documentation](https://www.nammaride.site/llms-full.txt): Complete structured data, station coordinates, fare matrices, and commuter guides in English & Kannada (ಕನ್ನಡ).

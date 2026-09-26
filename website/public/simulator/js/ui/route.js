@@ -1,5 +1,4 @@
 import { T, T_STATION, CONFIG, formatTime } from '../utils/helpers.js';
-import { stationPlaces } from '../data/stationPlaces.js';
 
 export function renderLiveRoute(journey, routeListElement, simulationState) {
     let routeHtml = '';
@@ -113,17 +112,6 @@ function renderStationItem(node, details, index) {
     const station = node.station;
     const name = T_STATION(station.name);
 
-    const places = stationPlaces[station.name] || [];
-    let nearbyBadge = '';
-    if (isEnd && places.length > 0) {
-        nearbyBadge = `
-            <button class="nearby-explore-trigger flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold" onclick="window.showNearbyAttractions('${station.name.replace(/'/g, "\\'")}')">
-                <i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i>
-                <span class="text-emerald-400">${places.length} nearby</span>
-            </button>
-        `;
-    }
-
     let metaInfo = '';
     if (isStart) {
         metaInfo = `<div class="info-strip text-secondary bg-card-subtle">${T('boardAt')} ${T('platform')} ${node.part.startPlatform} <span class="text-[10px] opacity-75">(${T('towards')} ${node.part.journeyDirectionName})</span></div>`;
@@ -162,7 +150,6 @@ function renderStationItem(node, details, index) {
             <div class="station-content">
                 <div class="flex items-center justify-between gap-2 w-full">
                     <div class="station-name">${name}</div>
-                    ${nearbyBadge}
                 </div>
                 ${metaInfo}
             </div>

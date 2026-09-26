@@ -7,8 +7,8 @@ export default function GooglePreferredSourceCard({ variant = 'default', classNa
   const { t } = useLanguage();
   const { theme } = useTheme();
 
-  const domain = 'nammaride.vercel.app';
-  const returnUrl = typeof window !== 'undefined' ? window.location.href : 'https://nammaride.vercel.app';
+  const domain = typeof window !== 'undefined' ? window.location.hostname : 'www.nammaride.site';
+  const returnUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.nammaride.site';
 
   if (variant === 'compact') {
     return (
@@ -39,6 +39,7 @@ export default function GooglePreferredSourceCard({ variant = 'default', classNa
               data-auto-return="true"
             >
               {/* Fallback button if Google script is loading/blocked */}
+              {/* Fallback button if Google script is loading/blocked */}
               <a
                 href={`https://www.google.com/search?q=${encodeURIComponent('NammaRide Bengaluru Metro')}&preferred_source=${domain}`}
                 target="_blank"
@@ -46,7 +47,7 @@ export default function GooglePreferredSourceCard({ variant = 'default', classNa
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md transition-all active:scale-95"
               >
                 <Star className="w-3.5 h-3.5 fill-white" />
-                <span>⭐ Save as Preferred Source</span>
+                <span>Save as Preferred Source</span>
               </a>
             </div>
           </div>
@@ -69,8 +70,9 @@ export default function GooglePreferredSourceCard({ variant = 'default', classNa
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[var(--text-primary)] leading-snug">
-          ⭐ Never Miss Namma Metro Live Updates & Fare Discounts!
+        <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[var(--text-primary)] leading-snug flex items-center gap-2">
+          <Star className="w-5 h-5 text-amber-400 fill-amber-400 shrink-0" />
+          <span>Never Miss Namma Metro Live Updates & Fare Discounts!</span>
         </h3>
         <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-medium">
           Add <strong>NammaRide</strong> as your <strong>Google Preferred Source</strong> so Google Search, AI Overviews, and Google Discover prioritize our offline Geo GPS guides, Majestic interchange routes, and fare calculator whenever you search for Bengaluru Metro!
@@ -100,7 +102,7 @@ export default function GooglePreferredSourceCard({ variant = 'default', classNa
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-95"
             >
               <Star className="w-4 h-4 fill-white" />
-              <span>⭐ Save NammaRide on Google</span>
+              <span>Save NammaRide on Google</span>
             </a>
           </div>
         </div>

@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import { Compass, BookOpen, Clock, Calendar, ArrowRight, Bookmark } from 'lucide-react';
 import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
+import MetaSEO from '../components/MetaSEO';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -71,6 +73,11 @@ export default function BlogPage() {
 
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="Bengaluru Metro Travel Blog & Commuter Guides — NammaRide"
+        description="Read comprehensive guides for Bengaluru Namma Metro: Whitefield tech park transit, top 20 office hubs, dining guides, smart card fare hacks, and women's safety tips."
+        canonicalPath="/blog"
+      />
       <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Header */}

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Clock, Zap, Info, Calendar, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { timingsData } from '../data/timingsData';
+import MetaSEO from '../components/MetaSEO';
 
 export default function TimingsPage() {
   const { lang, t } = useLanguage();
@@ -28,6 +29,11 @@ export default function TimingsPage() {
 
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <MetaSEO
+        title="Official Bengaluru Metro First & Last Train Timings 2026"
+        description="Check live operating schedule, first train (05:00 AM) and last train (11:05 PM) departures for all lines (Purple, Green, Yellow) on weekdays and Sundays."
+        canonicalPath="/timings"
+      />
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Header Section */}

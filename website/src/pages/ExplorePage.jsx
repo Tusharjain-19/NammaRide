@@ -4,6 +4,8 @@ import { Search, MapPin, Compass, Navigation, Zap, ExternalLink, Filter } from '
 import { Link } from 'react-router-dom';
 import { landmarkCategories, landmarksData } from '../data/landmarksData';
 import { useLanguage } from '../context/LanguageContext';
+import MetaSEO from '../components/MetaSEO';
+import BengaluruLandmarksEncyclopedia from '../components/BengaluruLandmarksEncyclopedia';
 
 const getLineStyles = (lineName) => {
   const normalized = lineName.toLowerCase();
@@ -90,6 +92,11 @@ export default function ExplorePage() {
 
   return (
     <div className="pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+      <MetaSEO
+        title="Explore Bengaluru Metro Attractions & Tech Parks Guide"
+        description="Find direct metro connections to ITPL, Electronic City, Manyata Tech Park, MG Road, Church Street, ISKCON, and Orion Mall across Purple, Green, and Yellow lines."
+        canonicalPath="/explore"
+      />
       <div className="max-w-7xl mx-auto space-y-10">
         
         {/* Header */}
@@ -248,6 +255,9 @@ export default function ExplorePage() {
             </button>
           </div>
         )}
+
+        {/* 10,000+ Word Detailed Bengaluru Metro & Landmark Encyclopedia */}
+        <BengaluruLandmarksEncyclopedia />
 
       </div>
     </div>
