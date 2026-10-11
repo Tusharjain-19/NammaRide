@@ -543,11 +543,31 @@
                 class="p-6 flex flex-col transition-opacity duration-300 overflow-y-auto custom-scrollbar section-view">
 
                 <div class="w-full max-w-md mx-auto pt-6 sm:pt-8 pb-10">
-                    <h2 class="text-3xl font-extrabold mb-6 text-[var(--text-primary)] tracking-tight leading-snug"
+                    <h2 class="text-3xl font-extrabold mb-5 text-[var(--text-primary)] tracking-tight leading-snug"
                         data-lang-key="planYourTrip">Where to go today?</h2>
 
+                    <!-- Live BMRCL Service Status Banner -->
+                    <div id="service-status-banner" class="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/25 rounded-2xl px-3.5 py-2.5 mb-5 backdrop-blur-md transition-all">
+                        <div class="flex items-center gap-2.5">
+                            <span class="relative flex h-2.5 w-2.5 shrink-0">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            </span>
+                            <div class="flex flex-col">
+                                <span class="text-xs font-bold text-primary flex items-center gap-1.5 leading-none">
+                                    <span>Normal Service</span>
+                                    <span class="text-[10px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-wider bg-emerald-500/15 px-1.5 py-0.5 rounded">All Lines</span>
+                                </span>
+                                <span class="text-[10px] text-secondary opacity-75 mt-0.5">Peak headway: ~4.5 mins • Last train: 11:05 PM</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] font-bold text-emerald-500 shrink-0 bg-emerald-500/15 px-2 py-1 rounded-xl border border-emerald-500/30">
+                            Live
+                        </div>
+                    </div>
+
                     <!-- Compact Inputs Block -->
-                    <div id="planner-controls" class="flex flex-col gap-5 mb-6 relative px-1 py-2">
+                    <div id="planner-controls" class="flex flex-col gap-5 mb-5 relative px-1 py-2">
                         <!-- Origin -->
                         <div class="relative z-20">
                             <div id="start-station-dropdown" class="w-full"></div>
@@ -565,6 +585,20 @@
                         <div class="relative z-10 pt-1">
                             <div id="end-station-dropdown" class="w-full"></div>
                             <input type="hidden" id="end-station" value="">
+                        </div>
+                    </div>
+
+                    <!-- Quick Commutes (Favorites & Recents) Chips -->
+                    <div id="quick-commutes-container" class="mb-5">
+                        <div class="flex items-center justify-between mb-2 px-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+                                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+                                <span>Quick Commutes</span>
+                            </span>
+                            <span class="text-[10px] text-secondary opacity-60">1-Tap Fast Plan</span>
+                        </div>
+                        <div id="quick-commutes-chips" class="flex items-center gap-2 overflow-x-auto pb-1.5 -mx-1 px-1 custom-scrollbar">
+                            <!-- Populated dynamically via JS -->
                         </div>
                     </div>
 

@@ -23,7 +23,7 @@ export const metroData = {
             { id: "P20", name: "Cubbon Park", lat: 12.9794, lon: 77.5959, timeToNext: 105, distanceToNext: 1.00, platforms: { forward: 2, backward: 2 } },
             { id: "P21", name: "Dr. B.R. Ambedkar Stn., Vidhana Soudha", lat: 12.9797, lon: 77.5907, timeToNext: 105, distanceToNext: 1.00, platforms: { forward: 2, backward: 2 } },
             { id: "P22", name: "Sir M. Visveswaraya Stn., Central College", lat: 12.9742, lon: 77.5839, timeToNext: 125, distanceToNext: 1.20, platforms: { forward: 2, backward: 2 } },
-            { id: "P23", name: "Nadaprabhu Kempegowda Stn., Majestic", lat: 12.9761, lon: 77.5731, timeToNext: 85, distanceToNext: 0.80, interchange: true, interchangeId: 'majestic', platforms: { forward: 4, backward: 4 } },
+            { id: "P23", name: "Nadaprabhu Kempegowda Stn., Majestic", lat: 12.9761, lon: 77.5731, timeToNext: 85, distanceToNext: 0.80, interchange: true, interchangeId: 'majestic', platforms: { forward: 2, backward: 1 } },
             { id: "P24", name: "KSR City Railway Station", lat: 12.9718, lon: 77.5670, timeToNext: 135, distanceToNext: 1.30, platforms: { forward: 2, backward: 2 } },
             { id: "P25", name: "Magadi Road", lat: 12.9782, lon: 77.5542, timeToNext: 115, distanceToNext: 1.10, platforms: { forward: 2, backward: 3 } },
             { id: "P26", name: "Sri Balagangadharanatha Swamiji Stn., Hosahalli", lat: 12.9701, lon: 77.5459, timeToNext: 105, distanceToNext: 1.00, platforms: { forward: 2, backward: 2 } },

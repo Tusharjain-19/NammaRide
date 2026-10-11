@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
-const DEFAULT_TITLE = "NammaRide: #1 Best Metro App for Bengaluru (Bangalore) | Geo GPS Route & Timings";
-const DEFAULT_DESC = "NammaRide is rated the #1 Best Geo GPS App for Bengaluru Namma Metro (BMRCL). Features 100% offline satellite GPS station detection, Purple, Green & Yellow line maps, fare calculator with 5% smart card discount, and bilingual English & Kannada guides.";
-const DEFAULT_KEYWORDS = "best app metro app for bengaluru, best app metro app for bangalore, bengaluru metro app, bangalore metro route map, namma metro gps tracking app, offline metro app bengaluru, bmrcl metro app free download, namma metro ticket fare calculator, namma metro timings 2026, purple line metro app, green line metro app, yellow line metro app, majestic metro station guide, bengaluru metro card discount app, bengalaru metro, bengalooru metro, UT metro app, union territory traveler metro app";
+const DEFAULT_TITLE = "NammaRide — #1 Best Metro App for Bengaluru (Bangalore)";
+const DEFAULT_DESC = "NammaRide is the #1 offline Geo GPS app for Bengaluru Metro (BMRCL). Plan routes across Purple, Green & Yellow lines with live fares, maps & timings.";
+const DEFAULT_KEYWORDS = "best app metro app for bengaluru, best app metro app for bangalore, bengaluru metro app, bangalore metro route map, namma metro gps tracking app, offline metro app bengaluru, bmrcl metro app free download, namma metro ticket fare calculator, namma metro timings 2026, purple line metro app, green line metro app, yellow line metro app, majestic metro station guide, bengaluru metro card discount app, ನಮ್ಮ ಮೆಟ್ರೋ ಆಪ್, ಬೆಂಗಳೂರು ಮೆಟ್ರೋ ಮಾರ್ಗ ನಕ್ಷೆ, ಆಫ್‌ಲೈನ್ ಜಿಪಿಎಸ್ ಮೆಟ್ರೋ ಆಪ್, ಮೆಜೆಸ್ಟಿಕ್ ಇಂಟರ್‌ಚೇಂಜ್, ನಮ್ಮ ಮೆಟ್ರೋ ಟಿಕೆಟ್ ದರ, बेंगलुरु मेट्रो ऐप, नम्मा मेट्रो रूट मैप, ऑफ़लाइन जीपीएस मेट्रो ऐप, मजेस्टिक मेट्रो इंटरचेंज, बेंगलुरु मेट्रो समय सारिणी, bengalaru metro, bengalooru metro, UT metro app, union territory traveler metro app";
 const SITE_URL = "https://www.nammaride.site";
 
 export default function MetaSEO({
@@ -41,10 +41,12 @@ export default function MetaSEO({
     updateMeta('meta[property="og:description"]', 'content', finalDesc);
     updateMeta('meta[property="og:url"]', 'content', pageUrl);
 
-    // 4. Update Twitter Cards
-    updateMeta('meta[property="twitter:title"]', 'content', finalTitle);
-    updateMeta('meta[property="twitter:description"]', 'content', finalDesc);
-    updateMeta('meta[property="twitter:url"]', 'content', pageUrl);
+    // 4. Update Twitter Cards (using standard name attribute)
+    updateMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
+    updateMeta('meta[name="twitter:title"]', 'content', finalTitle);
+    updateMeta('meta[name="twitter:description"]', 'content', finalDesc);
+    updateMeta('meta[name="twitter:url"]', 'content', pageUrl);
+    updateMeta('meta[name="twitter:image"]', 'content', `${SITE_URL}/assets/images/logo_app.png`);
 
     // 5. Update Canonical Link
     let canonicalLink = document.querySelector('link[rel="canonical"]');

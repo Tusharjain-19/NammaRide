@@ -88,14 +88,14 @@ export default function Navbar() {
           {/* Controls: Language Switcher, Theme Switcher, Google Play SVG */}
           <div className="hidden sm:flex items-center gap-4">
             
-            {/* Language Switcher Toggle (EN / ಕನ್ನಡ) */}
+            {/* Language Switcher Toggle (EN / ಕನ್ನಡ / हिन्दी) */}
             <button
               onClick={toggleLanguage}
               className="px-3 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all flex items-center gap-2"
-              title="Toggle Language"
+              title="Toggle Language (English / ಕನ್ನಡ / हिन्दी)"
             >
               <Globe className="w-4 h-4 text-emerald-500" />
-              <span>{lang === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
+              <span>{lang === 'en' ? 'ಕನ್ನಡ' : lang === 'kn' ? 'हिन्दी' : 'English'}</span>
             </button>
 
             {/* Theme Switcher Toggle — Premium Animated */}
@@ -118,8 +118,9 @@ export default function Navbar() {
             <button
               onClick={toggleLanguage}
               className="px-2.5 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-emerald-500 font-bold text-xs"
+              title="Toggle Language"
             >
-              {lang === 'en' ? 'ಕನ್ನಡ' : 'EN'}
+              {lang === 'en' ? 'ಕನ್ನಡ' : lang === 'kn' ? 'हिन्दी' : 'EN'}
             </button>
  
             <button

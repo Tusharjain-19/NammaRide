@@ -6,6 +6,9 @@ import { calculateFare, calculateFareByHops, countStationHops } from './logic/pr
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
+import { matchStation, scoreStation } from './utils/fuzzySearch.js';
+window.matchStation = matchStation;
+window.scoreStation = scoreStation;
 // Safely initialize Vercel Analytics only on production website (not in mobile app or offline)
 if (location.hostname.includes('nammaride.site')) {
     import("@vercel/analytics").then(module => {

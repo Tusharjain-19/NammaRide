@@ -52,9 +52,7 @@ Allow: /
 
 # XML Sitemaps & LLM Manifests
 Sitemap: https://www.nammaride.site/sitemap.xml
-Sitemap: https://nammaride.site/sitemap.xml
-Sitemap: https://nammaride.vercel.app/sitemap.xml
 
-# LLM AI Context Manifests
+# LLM AI Context Manifests (AEO & GEO)
 # https://www.nammaride.site/llms.txt
 # https://www.nammaride.site/llms-full.txt

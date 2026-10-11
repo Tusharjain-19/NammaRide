@@ -7,6 +7,16 @@ mobile/android/local.properties
 mobile/mobile-web/
 *.apk
 *.aab
+*.keystore
+*.jks
+dist/
+dist-ssr/
+build/
+
+# Mobile Secure Keys & Certificates (DO NOT COMMIT)
+mobile/secure/
+*.p8
+*.p12
 
 # Environment variables (DO NOT COMMIT TO GITHUB)
 .env

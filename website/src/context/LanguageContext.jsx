@@ -262,6 +262,136 @@ export const translations = {
     allRightsReserved: 'ಎಲ್ಲಾ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.',
     downloadAppMobileBanner: 'ನಮ್ಮರೈಡ್ ಆಪ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ',
     mobileBannerMessage: '100% ಆಫ್‌ಲೈನ್ ನಕ್ಷೆಗಳು ಮತ್ತು ಲೈವ್ ಅಲರ್ಟ್‌ಗಳು'
+  },
+  hi: {
+    // Navigation & Header
+    appName: 'नम्मा राइड',
+    subtitle: 'बेंगलुरु मेट्रो गाइड',
+    tagline: 'स्मार्ट यात्रा करें, हमेशा ऑफ़लाइन',
+    home: 'होम',
+    simulator: 'वेब सिम्युलेटर',
+    stations: 'मेट्रो स्टेशन',
+    map: 'मेट्रो मैप',
+    explore: 'शहर खोजें',
+    fareCalculator: 'किराया कैलकुलेटर',
+    timings: 'समय सारणी',
+    safety: 'सुरक्षा व सहायता',
+    features: 'विशेषताएं',
+    about: 'हमारे बारे में',
+    blog: 'ब्लॉग और गाइड',
+    contact: 'संपर्क करें',
+    download: 'ऐप डाउनलोड',
+    getApp: 'एंड्रॉइड ऐप प्राप्त करें',
+    language: 'भाषा',
+    developedBy: 'तुषार जैन द्वारा विकसित',
+
+    // Hero Section
+    heroTitle1: 'बेंगलुरु नम्मा मेट्रो यात्रा',
+    heroTitleHighlight: 'स्मार्टली',
+    heroTitle2: 'हमेशा ऑफ़लाइन',
+    heroDesc: 'आपका दैनिक बेंगलुरु मेट्रो साथी: कुछ ही सेकंड में मार्ग खोजें, स्मार्ट कार्ड टिप्स से बचत करें, और 83 स्टेशनों पर आसानी से घूमें। इंटरनेट की कोई आवश्यकता नहीं।',
+    all3Lines: 'तीनों मेट्रो लाइनें शामिल',
+    purpleLine: 'पर्पल लाइन',
+    greenLine: 'ग्रीन लाइन',
+    yellowLine: 'येलो लाइन',
+    liveSimulationRunning: 'लाइव सिम्युलेशन सक्रिय',
+
+    // Feature Highlights & USPs Comparison Table
+    builtForRealCommuters: 'वास्तविक यात्रियों के लिए विशेष रूप से निर्मित',
+    whyCommutersSwitched: '1000+ यात्रियों ने नम्मा राइड क्यों चुना',
+    whyCommutersDesc: 'देखें कि नम्मा राइड अन्य ऐप्स की तुलना में कैसे बेहतर है।',
+    feature: 'सुविधा',
+    nammaride: 'नम्मा राइड',
+    bmrclOfficial: 'BMRCL आधिकारिक',
+    googleMaps: 'गूगल मैप्स',
+
+    // Express Tech Park Navigator
+    techParkExpress: 'टेक पार्क एक्सप्रेस नेविगेटर',
+    techParkExpressTitle: 'बेंगलुरु के प्रमुख टेक हब्स के लिए सीधी मेट्रो',
+    techParkExpressDesc: 'निकटतम मेट्रो स्टेशन, लाइन रंग और पैदल/शटल दूरी देखने के लिए नीचे किसी भी टेक पार्क पर टैप करें।',
+    nearestMetro: 'निकटतम मेट्रो',
+    lineConnectivity: 'लाइन व कनेक्टिविटी',
+    walkingShuttle: 'पैदल / शटल',
+    estTicketFare: 'अनुमानित किराया',
+
+    // Live Metrics Dashboard
+    activeStationsCount: '83',
+    activeStationsLabel: 'सक्रिय स्टेशन',
+    activeStationsSub: 'पर्पल, ग्रीन और येलो लाइन',
+    offlineFirstCount: '100%',
+    offlineFirstLabel: 'पूर्णतः ऑफ़लाइन',
+    offlineFirstSub: 'शून्य इंटरनेट डेटा आवश्यक',
+    smartCardSavingsCount: '10%',
+    smartCardSavingsLabel: 'स्मार्ट कार्ड बचत',
+    smartCardSavingsSub: 'त्वरित छूट दरें',
+    zeroDataTrackingCount: '0 KB',
+    zeroDataTrackingLabel: 'डेटा ट्रैकिंग',
+    zeroDataTrackingSub: 'पूर्ण गोपनीयता गारंटी',
+
+    // Scan QR Code & App Download Section
+    scanQrTitle: 'नम्मा राइड एंड्रॉइड ऐप प्राप्त करें',
+    scanQrSubTitle: 'QR कोड स्कैन करें और नम्मा राइड ऐप डाउनलोड करें',
+    scanQrDesc: 'गूगल प्ले स्टोर खोलने के लिए अपने स्मार्टफोन कैमरे से QR कोड स्कैन करें। 100% ऑफ़लाइन नेविगेशन, प्लेटफॉर्म इंटरचेंज मैप्स और स्वचालित स्टेशन अलर्ट का आनंद लें।',
+    scanWithCamera: 'कैमरे से स्कैन करें',
+    directPlayDownload: 'सीधा गूगल प्ले डाउनलोड',
+    instantPlayScan: 'त्वरित गूगल प्ले स्कैन',
+
+    // Stations Page
+    browseStationsTitle: 'बेंगलुरु मेट्रो स्टेशन सूची',
+    browseStationsDesc: 'सभी 83 स्टेशनों के लिए प्लेटफॉर्म मैप्स, व्हीलचेयर सुविधा, लिफ्ट, एस्केलेटर और बस कनेक्टिविटी देखें।',
+    searchStationPlaceholder: 'स्टेशन का नाम या लाइन खोजें...',
+    allLinesFilter: 'सभी मेट्रो लाइनें',
+    stationFacilities: 'स्टेशन सुविधाएं',
+    accessibilityDetails: 'दिव्यांगजन सुविधाएं',
+    elevatorsLifts: 'लिफ्ट (एलिवेटर)',
+    escalators: 'एस्केलेटर',
+    accessibleRestroom: 'सुलभ शौचालय',
+    firstTrainLabel: 'पहली ट्रेन',
+    lastTrainLabel: 'आखिरी ट्रेन',
+
+    // Timings Page
+    timingsTitle: 'बेंगलुरु नम्मा मेट्रो ट्रेन समय सारणी व फ्रीक्वेंसी',
+    timingsDesc: 'पर्पल, ग्रीन और येलो लाइन के टर्मिनल स्टेशनों से पहली और आखिरी ट्रेन का समय जांचें।',
+    weekdaySatSchedule: 'सोमवार से शनिवार समय सारणी',
+    sundaySchedule: 'रविवार व सार्वजनिक अवकाश समय',
+    peakFrequency: 'पीक ऑवर्स फ्रीक्वेंसी (3–5 मिनट)',
+    offPeakFrequency: 'सामान्य समय फ्रीक्वेंसी (8–12 मिनट)',
+
+    // Explore City Page
+    exploreCityTitle: 'मेट्रो द्वारा बेंगलुरु शहर का भ्रमण करें',
+    exploreCityDesc: 'नम्मा मेट्रो स्टेशनों के निकट स्थित प्रमुख पर्यटन स्थल, टेक पार्क, शॉपिंग मॉल, मंदिर और पार्क खोजें।',
+    allCategories: 'सभी श्रेणियां',
+    heritageCulture: 'धरोहर व संस्कृति',
+    shoppingMalls: 'शॉपिंग व मॉल्स',
+    natureParks: 'प्रकृति व पार्क',
+    techWork: 'टेक पार्क्स व कार्यालय',
+    foodDining: 'खान-पान व रेस्टोरेंट',
+
+    // Fare Calculator Page
+    fareCalcTitle: 'नम्मा मेट्रो किराया और स्मार्ट कार्ड बचत कैलकुलेटर',
+    fareCalcDesc: 'टोकन किराया, स्मार्ट कार्ड छूट और कुल यात्रा समय जानने के लिए प्रारंभिक और गंतव्य स्टेशन चुनें।',
+    selectOrigin: 'प्रारंभिक स्टेशन चुनें',
+    selectDestination: 'गंतव्य स्टेशन चुनें',
+    calculateFareBtn: 'मार्ग व किराया जानें',
+    totalDistance: 'कुल दूरी',
+    estimatedTime: 'अनुमानित समय',
+    tokenFareLabel: 'मानक टोकन किराया',
+    smartCardFareLabel: 'स्मार्ट कार्ड किराया (5% छूट)',
+
+    // Safety & Helpline Page
+    safetyTitle: 'यात्री सुरक्षा, सुरक्षा व हेल्पलाइन',
+    safetyDesc: 'आपातकालीन संपर्क, सुरक्षा हेल्पलाइन नंबर, महिला विशेष कोच और खोया-पाया सामान प्रक्रिया।',
+    bmrclHelpline: 'BMRCL हेल्पलाइन: 1800-425-12345',
+    womenSafetyInfo: 'पहला कोच महिलाओं के लिए आरक्षित',
+    securityControlRoom: 'मेट्रो सुरक्षा नियंत्रण: 080-22969200',
+
+    // Footer & Mobile Banner
+    footerTagline: 'बेंगलुरु यात्रियों के लिए विशेष निर्मित। तेज़, सुरक्षित, 100% ऑफ़लाइन मेट्रो गाइड।',
+    quickLinks: 'त्वरित लिंक्स',
+    legal: 'नियम व गोपनीयता',
+    allRightsReserved: 'सर्वाधिकार सुरक्षित।',
+    downloadAppMobileBanner: 'नम्मा राइड ऐप डाउनलोड करें',
+    mobileBannerMessage: '100% ऑफ़लाइन मैप्स और लाइव अलर्ट'
   }
 };
 
@@ -283,7 +413,7 @@ export function LanguageProvider({ children }) {
   }, [lang]);
 
   const toggleLanguage = () => {
-    setLang((prev) => (prev === 'en' ? 'kn' : 'en'));
+    setLang((prev) => (prev === 'en' ? 'kn' : prev === 'kn' ? 'hi' : 'en'));
   };
 
   const t = (key) => {

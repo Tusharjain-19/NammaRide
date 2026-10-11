@@ -1,6 +1,6 @@
 import { metroData, translations, stationTranslations } from '../data/stations.js';
 import { T, T_STATION } from '../utils/helpers.js';
-import { matchStation } from '../utils/fuzzySearch.js';
+import { matchStation, scoreStation } from '../utils/fuzzySearch.js';
 
 export class CustomDropdown {
     constructor(containerId, placeholderKey, type, onChangeCallback) {
@@ -45,7 +45,7 @@ export class CustomDropdown {
         const selectedEl = document.getElementById(`selected-${this.container.id}`);
         if (selectedEl) {
             selectedEl.innerHTML = placeholder;
-            selectedEl.className = "text-primary font-medium text-sm";
+            selectedEl.className = "text-primary font-medium text-sm truncate min-w-0 flex-1 block";
         }
         const dotsContainer = document.getElementById(`dots-${this.container.id}`);
         if (dotsContainer) {
@@ -98,12 +98,12 @@ export class CustomDropdown {
         this.container.innerHTML = `
             <div class="custom-dropdown">
                 <div class="dropdown-trigger flex items-center justify-between px-4 py-3 cursor-pointer" id="trigger-${this.container.id}" tabindex="0">
-                    <span class="flex items-center gap-3">
-                        <i data-lucide="map-pin" class="w-5 h-5 text-accent-color opacity-80"></i>
-                        <span class="trigger-dots hidden" id="dots-${this.container.id}"></span>
-                        <span id="selected-${this.container.id}" class="text-primary font-medium text-sm">${placeholder}</span>
-                    </span>
-                    <i data-lucide="chevron-down" class="w-4 h-4 text-secondary opacity-50"></i>
+                    <div class="trigger-content flex items-center gap-2.5 min-w-0 flex-1 mr-2 overflow-hidden">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-accent-color opacity-80 shrink-0"></i>
+                        <span class="trigger-dots hidden shrink-0" id="dots-${this.container.id}"></span>
+                        <span id="selected-${this.container.id}" class="text-primary font-medium text-sm truncate min-w-0 flex-1 block">${placeholder}</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-secondary opacity-50 shrink-0"></i>
                 </div>
                 <div class="dropdown-menu custom-scrollbar" id="menu-${this.container.id}">
                     <div class="search-container p-3 border-b border-subtle">
@@ -183,7 +183,7 @@ export class CustomDropdown {
             this.selectedValue = station.id;
             const displayName = T_STATION(station.name);
             document.getElementById(`selected-${this.container.id}`).innerHTML = displayName;
-            document.getElementById(`selected-${this.container.id}`).className = "text-primary font-medium";
+            document.getElementById(`selected-${this.container.id}`).className = "text-primary font-medium text-sm truncate min-w-0 flex-1 block";
 
             const dotsContainer = document.getElementById(`dots-${this.container.id}`);
             dotsContainer.classList.remove('hidden');
@@ -261,22 +261,43 @@ export class CustomDropdown {
     }
 
     filter(query) {
-        this.filteredStations = this.stations.filter(s => {
+        const q = (query || '').trim();
+        if (!q) {
+            this.filteredStations = this.stations.filter(s => {
+                return !(this.excludedStationName && s.name === this.excludedStationName);
+            });
+            this.renderOptions();
+            return;
+        }
+
+        const scored = [];
+        this.stations.forEach(s => {
             if (this.excludedStationName && s.name === this.excludedStationName) {
-                return false;
+                return;
             }
             const rawName = s.name;
             const translatedName = T_STATION(s.name);
             const code = s.originalObj ? s.originalObj.code || '' : '';
-            return matchStation(rawName, query, translatedName, code);
+            const kn = s.originalObj ? s.originalObj.name_kn || '' : '';
+            const score = scoreStation(rawName, q, translatedName, code, kn);
+            if (score > 0) {
+                scored.push({ station: s, score });
+            }
         });
+
+        scored.sort((a, b) => b.score - a.score);
+        this.filteredStations = scored.map(item => item.station);
         this.renderOptions();
     }
 
     refreshTranslations() {
         if (!this.selectedValue) {
             const placeholder = T(this.placeholderKey);
-            document.getElementById(`selected-${this.container.id}`).innerText = placeholder;
+            const selectedEl = document.getElementById(`selected-${this.container.id}`);
+            if (selectedEl) {
+                selectedEl.innerText = placeholder;
+                selectedEl.className = "text-primary font-medium text-sm truncate min-w-0 flex-1 block";
+            }
         } else {
             this.select(this.selectedValue);
         }

@@ -6,6 +6,9 @@ import { calculateFare, calculateFareByHops, countStationHops } from './logic/pr
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
+import { matchStation, scoreStation } from './utils/fuzzySearch.js';
+window.matchStation = matchStation;
+window.scoreStation = scoreStation;
 // Standalone simulation module
 
 // --- App State ---
@@ -199,6 +202,7 @@ function setLanguage(lang) {
 
     if (startDropdown) startDropdown.refreshTranslations();
     if (endDropdown) endDropdown.refreshTranslations();
+    if (typeof renderQuickCommutes === 'function') renderQuickCommutes();
 
     // Refresh active section view
     refreshActiveView();
@@ -366,6 +370,137 @@ function getDepartureTime() {
     return new Date(Math.ceil(now.getTime() / coeff) * coeff);
 }
 
+// --- Commuter Fast Planning & Favorites System ---
+const DEFAULT_FAVORITE_ROUTES = [
+    { startId: 'P16', endId: 'P01', startName: 'Indiranagar', endName: 'Whitefield (Kadugodi)' },
+    { startId: 'P23', endId: 'G31', startName: 'Nadaprabhu Kempegowda Stn., Majestic', endName: 'Silk Institute' },
+    { startId: 'G26', endId: 'Y09', startName: 'Rashtreeya Vidyalaya Road', endName: 'Electronic City' }
+];
+
+function getFavoriteRoutes() {
+    try {
+        const stored = localStorage.getItem('nammaride_fav_routes');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch(e) {}
+    return DEFAULT_FAVORITE_ROUTES;
+}
+
+function saveFavoriteRoutes(favs) {
+    try {
+        localStorage.setItem('nammaride_fav_routes', JSON.stringify(favs));
+    } catch(e) {}
+}
+
+function isRouteFavorite(startId, endId) {
+    if (!startId || !endId) return false;
+    const favs = getFavoriteRoutes();
+    return favs.some(f => (f.startId === startId && f.endId === endId) || (f.startId === endId && f.endId === startId));
+}
+
+function toggleFavoriteRoute(startId, endId, startName, endName) {
+    let favs = getFavoriteRoutes();
+    const existingIdx = favs.findIndex(f => (f.startId === startId && f.endId === endId) || (f.startId === endId && f.endId === startId));
+    let isAdded = false;
+    if (existingIdx >= 0) {
+        favs.splice(existingIdx, 1);
+        isAdded = false;
+    } else {
+        favs.unshift({ startId, endId, startName, endName });
+        if (favs.length > 8) favs = favs.slice(0, 8);
+        isAdded = true;
+    }
+    saveFavoriteRoutes(favs);
+    renderQuickCommutes();
+    return isAdded;
+}
+
+function getRecentRoutes() {
+    try {
+        const stored = localStorage.getItem('nammaride_recent_routes');
+        if (stored) return JSON.parse(stored);
+    } catch(e) {}
+    return [];
+}
+
+function addRecentRoute(startId, endId, startName, endName) {
+    if (!startId || !endId || startId === endId) return;
+    try {
+        let recents = getRecentRoutes();
+        recents = recents.filter(r => !(r.startId === startId && r.endId === endId));
+        recents.unshift({ startId, endId, startName, endName, timestamp: Date.now() });
+        if (recents.length > 4) recents = recents.slice(0, 4);
+        localStorage.setItem('nammaride_recent_routes', JSON.stringify(recents));
+        renderQuickCommutes();
+    } catch(e) {}
+}
+
+function selectQuickRoute(startId, endId) {
+    if (!startDropdown || !endDropdown) return;
+    startDropdown.selectById(startId);
+    endDropdown.selectById(endId);
+    handleJourneyUpdate();
+    const summary = document.getElementById('journey-summary-container');
+    if (summary) {
+        summary.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function renderQuickCommutes() {
+    const container = document.getElementById('quick-commutes-chips');
+    if (!container) return;
+
+    const favs = getFavoriteRoutes();
+    const recents = getRecentRoutes();
+
+    let html = '';
+
+    // Favorites chips
+    favs.forEach((fav) => {
+        const sName = T_STATION(fav.startName);
+        const eName = T_STATION(fav.endName);
+        html += `
+            <button type="button" class="quick-chip group shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-card-subtle hover:bg-card-hover border border-subtle hover:border-emerald-500/40 rounded-xl transition-all active:scale-95 shadow-sm" data-start="${fav.startId}" data-end="${fav.endId}" title="${sName} ➔ ${eName}">
+                <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0"></i>
+                <span class="text-xs font-bold text-primary truncate max-w-[120px]">${sName}</span>
+                <span class="text-secondary opacity-40 text-xs font-bold">➔</span>
+                <span class="text-xs font-bold text-primary truncate max-w-[120px]">${eName}</span>
+            </button>
+        `;
+    });
+
+    // Recent routes that are not duplicate with favorites
+    recents.forEach((rec) => {
+        const isAlreadyFav = favs.some(f => (f.startId === rec.startId && f.endId === rec.endId) || (f.startId === rec.endId && f.endId === rec.startId));
+        if (isAlreadyFav) return;
+        const sName = T_STATION(rec.startName);
+        const eName = T_STATION(rec.endName);
+        html += `
+            <button type="button" class="quick-chip shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-card-subtle hover:bg-card-hover border border-subtle hover:border-emerald-500/40 rounded-xl transition-all active:scale-95 shadow-sm" data-start="${rec.startId}" data-end="${rec.endId}" title="${sName} ➔ ${eName}">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-secondary opacity-70 shrink-0"></i>
+                <span class="text-xs font-medium text-secondary group-hover:text-primary truncate max-w-[110px]">${sName}</span>
+                <span class="text-secondary opacity-40 text-xs">➔</span>
+                <span class="text-xs font-medium text-secondary group-hover:text-primary truncate max-w-[110px]">${eName}</span>
+            </button>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.quick-chip').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const startId = btn.getAttribute('data-start');
+            const endId = btn.getAttribute('data-end');
+            selectQuickRoute(startId, endId);
+        });
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+}
+
 let passengerCount = 1;
 
 function displayJourneyResult(journey) {
@@ -394,28 +529,107 @@ function displayJourneyResult(journey) {
     const lastStation = lastPart?.stations[lastPart.stations.length - 1];
     const startName = firstStation ? T_STATION(firstStation.name) : '';
     const endName = lastStation ? T_STATION(lastStation.name) : '';
+    const startId = firstStation ? firstStation.id : '';
+    const endId = lastStation ? lastStation.id : '';
+
+    const parts = journey.parts || [];
+    const interchangeCount = Math.max(0, parts.length - 1);
+
+    // Build Line Badges
+    const lineBadges = parts.map(p => {
+        const lk = p.stations[0]?.lineKey || 'purple';
+        let bg = 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+        let dot = 'bg-purple-400';
+        let lineLabel = 'Purple Line';
+        if (lk === 'green') {
+            bg = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+            dot = 'bg-emerald-400';
+            lineLabel = 'Green Line';
+        } else if (lk === 'yellow') {
+            bg = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+            dot = 'bg-amber-400';
+            lineLabel = 'Yellow Line';
+        }
+        return `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border ${bg} shadow-sm">
+                <span class="w-2 h-2 rounded-full ${dot}"></span>
+                <span>${lineLabel}</span>
+            </span>
+        `;
+    }).join(`<i data-lucide="arrow-right" class="w-3.5 h-3.5 text-secondary opacity-50 shrink-0"></i>`);
+
+    // Transfer text
+    let transferNotice = '';
+    if (interchangeCount === 0) {
+        transferNotice = `<span class="text-emerald-500 font-bold flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Direct Train • 0 Transfers</span>`;
+    } else {
+        const interchangeStationName = parts[1]?.stations[0]?.name ? T_STATION(parts[1].stations[0].name) : 'Majestic';
+        transferNotice = `<span class="text-amber-400 font-bold flex items-center gap-1"><i data-lucide="arrow-right-left" class="w-3 h-3"></i> ${interchangeCount} Transfer at ${interchangeStationName}</span>`;
+    }
+
+    const startPlatform = parts[0]?.startPlatform || 1;
+    const journeyDir = parts[0]?.journeyDirectionName || '';
 
     const updateSummaryUI = () => {
         const totalFareAmount = journey.fare * passengerCount;
+        const isFav = isRouteFavorite(startId, endId);
 
         summaryText.innerHTML = `
-            <div class="flex justify-between items-end mb-2">
+            <!-- Top Header with Route Title & Star Bookmark -->
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-subtle">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-secondary opacity-70">Calculated Metro Route</span>
+                    <h3 class="text-base font-extrabold text-primary flex items-center gap-1.5 truncate max-w-[240px]">
+                        <span>${startName}</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-secondary opacity-50 shrink-0"></i>
+                        <span>${endName}</span>
+                    </h3>
+                </div>
+                <button id="toggle-fav-btn" type="button" class="w-9 h-9 rounded-xl flex items-center justify-center bg-card-subtle hover:bg-card-hover border border-subtle active:scale-90 transition-all shadow-sm" title="${isFav ? 'Remove from favorites' : 'Save to favorites'}">
+                    <i data-lucide="star" class="w-4 h-4 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-secondary hover:text-amber-400'}"></i>
+                </button>
+            </div>
+
+            <!-- Time & Fare Row -->
+            <div class="flex justify-between items-end mb-3">
                 <div>
                     <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
-                    <p class="text-2xl font-bold text-primary">${formattedTime}</p>
+                    <p class="text-2xl font-extrabold text-primary tracking-tight">${formattedTime}</p>
                 </div>
                 <div class="text-right">
                     <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
-                    <p class="text-2xl font-bold text-emerald-400">₹${journey.fare} <span class="text-xs text-secondary opacity-70">/ person</span></p>
+                    <p class="text-2xl font-extrabold text-emerald-400 tracking-tight">₹${journey.fare} <span class="text-xs text-secondary opacity-70 font-normal">/ token</span></p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 text-xs text-[var(--accent-color)] bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
-                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                <span class="font-medium">${T('nextTrain')}: ${formatTime(journey.departureTime)} (${T('now')})</span>
+
+            <!-- Route Badges & Stations Strip -->
+            <div class="p-3 bg-card-subtle/70 rounded-xl border border-subtle mb-3 flex flex-col gap-2">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    ${lineBadges}
+                </div>
+                <div class="flex flex-wrap items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary">
+                    <span class="font-bold text-primary flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary"></i>
+                        ${journey.stationHops} ${T('stops') || 'Stops'} ${journey.distanceKm ? `(${journey.distanceKm} km)` : ''}
+                    </span>
+                    ${transferNotice}
+                </div>
+            </div>
+
+            <!-- Boarding Platform & Next Train Strip -->
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
+                    <span class="text-[10px] text-secondary uppercase tracking-wider font-bold">Platform & Direction</span>
+                    <span class="text-xs font-bold text-primary truncate mt-0.5">Platform ${startPlatform} • ${journeyDir}</span>
+                </div>
+                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
+                    <span class="text-[10px] text-secondary uppercase tracking-wider font-bold">${T('nextTrain')}</span>
+                    <span class="text-xs font-bold text-emerald-500 dark:text-emerald-400 truncate mt-0.5">${formatTime(journey.departureTime)}</span>
+                </div>
             </div>
 
             <!-- WhatsApp Ticket Booking Card -->
-            <div class="mt-3 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-3">
+            <div class="mt-2 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <div class="flex flex-col">
                         <span class="text-xs font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
@@ -438,6 +652,25 @@ function displayJourneyResult(journey) {
         `;
 
         if (window.lucide) window.lucide.createIcons();
+
+        // Favorite Button listener
+        const favBtn = document.getElementById('toggle-fav-btn');
+        if (favBtn) {
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rawStart = firstStation ? firstStation.name : startName;
+                const rawEnd = lastStation ? lastStation.name : endName;
+                const added = toggleFavoriteRoute(startId, endId, rawStart, rawEnd);
+                updateSummaryUI();
+                const toast = document.getElementById('toast');
+                if (toast) {
+                    toast.innerHTML = `<div class="font-bold text-xs ${added ? 'text-amber-400' : 'text-secondary'} flex items-center gap-1.5"><i data-lucide="${added ? 'star' : 'trash-2'}" class="w-3.5 h-3.5"></i> ${added ? 'Route saved to Quick Favorites!' : 'Removed from Favorites'}</div>`;
+                    toast.style.opacity = '1';
+                    if (window.lucide) window.lucide.createIcons();
+                    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+                }
+            });
+        }
 
         // Event listeners for passenger counter
         const minusBtn = document.getElementById('p-minus-btn');
@@ -1026,6 +1259,9 @@ function handleJourneyUpdate() {
     if (startVal && endVal && startName !== endName) {
         const j = calculateJourney(startVal, endVal);
         displayJourneyResult(j);
+        if (typeof addRecentRoute === 'function') {
+            addRecentRoute(startVal, endVal, startName, endName);
+        }
     } else {
         displayJourneyResult(null);
     }
@@ -1145,6 +1381,7 @@ function initializeApp() {
     setLanguage(currentLang);
 
     precomputeJourneyData();
+    renderQuickCommutes();
 
     document.getElementById('swap-stations').addEventListener('click', () => {
         if (simulationState.isActive) return;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, Navigation, ShieldCheck, MapPin, Zap, CheckCircle2, Award, Smartphone, Globe, Radio } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Compass, Navigation, ShieldCheck, MapPin, Zap, CheckCircle2, Award, Smartphone, Globe, Radio, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import googlePlayImg from '../assets/images/google play.svg';
 
@@ -25,15 +26,15 @@ export default function BengaluruMetroGuide() {
               Bengaluru Namma Metro Complete Commuter & Geo Navigation Guide
             </h2>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
-              Explore 83+ stations across Purple, Green, and Yellow lines with offline GPS station detection, fare calculators, and platform direction guides in English and Kannada (ಕನ್ನಡ).
+              Explore 83+ stations across Purple, Green, and Yellow lines with offline GPS station detection, fare calculators, and platform direction guides in English, Kannada (ಕನ್ನಡ), and Hindi (हिन्दी).
             </p>
           </div>
 
           {/* Toggle Switch */}
-          <div className="flex items-center gap-2 bg-gray-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-gray-200 dark:border-neutral-800 shrink-0 self-start md:self-auto">
+          <div className="flex flex-wrap items-center gap-2 bg-gray-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-gray-200 dark:border-neutral-800 shrink-0 self-start md:self-auto">
             <button
               onClick={() => setActiveLang('en')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                 activeLang === 'en'
                   ? 'bg-emerald-500 text-white shadow-md'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -44,7 +45,7 @@ export default function BengaluruMetroGuide() {
             </button>
             <button
               onClick={() => setActiveLang('kn')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                 activeLang === 'kn'
                   ? 'bg-emerald-500 text-white shadow-md'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -52,6 +53,17 @@ export default function BengaluruMetroGuide() {
             >
               <Globe className="w-3.5 h-3.5 text-amber-400" />
               <span>ಕನ್ನಡ ಮಾರ್ಗದರ್ಶಿ</span>
+            </button>
+            <button
+              onClick={() => setActiveLang('hi')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                activeLang === 'hi'
+                  ? 'bg-emerald-500 text-white shadow-md'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <Globe className="w-3.5 h-3.5 text-orange-400" />
+              <span>हिन्दी मार्गदर्शिका</span>
             </button>
           </div>
         </div>
@@ -195,6 +207,25 @@ export default function BengaluruMetroGuide() {
               </p>
             </section>
 
+            {/* English Internal Links Navigation Strip */}
+            <div className="pt-4 border-t border-gray-200 dark:border-neutral-800 flex flex-wrap gap-2 text-xs font-bold">
+              <Link to="/stations" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                Browse 83+ Stations Directory →
+              </Link>
+              <Link to="/timings" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                First & Last Train Timings →
+              </Link>
+              <Link to="/fare-calculator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                Fare & Smart Card Calculator →
+              </Link>
+              <Link to="/map" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                Interactive Metro Map →
+              </Link>
+              <Link to="/simulator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                Try Web Simulator →
+              </Link>
+            </div>
+
           </article>
         )}
 
@@ -274,6 +305,144 @@ export default function BengaluruMetroGuide() {
                 </p>
               </div>
             </section>
+
+            {/* Kannada Internal Links Navigation Strip */}
+            <div className="pt-4 border-t border-gray-200 dark:border-neutral-800 flex flex-wrap gap-2 text-xs font-bold">
+              <Link to="/stations" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                83+ ನಿಲ್ದಾಣಗಳ ಮಾಹಿತಿ →
+              </Link>
+              <Link to="/timings" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                ಮೆಟ್ರೋ ಸಮಯ ಸೂಚಕ →
+              </Link>
+              <Link to="/fare-calculator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                ಟಿಕೆಟ್ ದರ ಲೆಕ್ಕಾಚಾರ →
+              </Link>
+              <Link to="/map" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                ಸಂವಾದಾತ್ಮಕ ನಕ್ಷೆ →
+              </Link>
+              <Link to="/simulator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                ಲೈವ್ ಸಿಮ್ಯುಲೇಟರ್ →
+              </Link>
+            </div>
+
+          </article>
+        )}
+
+        {/* Language 3: HINDI COMPREHENSIVE GUIDE (हिन्दी समग्र मेट्रो मार्गदर्शिका - 1000+ Words) */}
+        {activeLang === 'hi' && (
+          <article className="prose dark:prose-invert max-w-none space-y-8 text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-sans">
+            
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-emerald-500 pl-3">
+                1. बेंगलुरु नम्मा मेट्रो: संपूर्ण अवलोकन (Namma Metro BMRCL Network Overview)
+              </h3>
+              <p>
+                बेंगलुरु शहर की जीवनरेखा कही जाने वाली <strong>नम्मा मेट्रो (Namma Metro)</strong> का संचालन बेंगलुरु मेट्रो रेल कॉर्पोरेशन लिमिटेड (BMRCL) द्वारा किया जाता है। दिल्ली मेट्रो के बाद नम्मा मेट्रो भारत का दूसरा सबसे बड़ा और सबसे व्यस्त मेट्रो रेल नेटवर्क है। यह कर्नाटक की राजधानी में दैनिक यातायात और जाम से बचने का सबसे विश्वसनीय, सुरक्षित और तेज़ माध्यम है।
+              </p>
+              <p>
+                वर्तमान में नम्मा मेट्रो का नेटवर्क 73+ किलोमीटर से अधिक लंबा है और इसके अंतर्गत 83+ सक्रिय मेट्रो स्टेशन आते हैं। यह नेटवर्क तीन प्रमुख लाइनों में विभाजित है: <strong>पर्पल लाइन (Purple Line)</strong>, <strong>ग्रीन लाइन (Green Line)</strong>, और नई <strong>येलो लाइन (Yellow Line)</strong>।
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-purple-500 pl-3">
+                2. पर्पल लाइन (Purple Line): व्हाइटफील्ड (काडुगोडी) से चल्लाघट्टा
+              </h3>
+              <p>
+                <strong>पर्पल लाइन</strong> बेंगलुरु का पूर्व-पश्चिम मुख्य ट्रांजिट कॉरिडोर है, जिसकी लंबाई 43.49 किलोमीटर है। यह पूर्व में <em>व्हाइटफील्ड (काडुगोडी)</em> से शुरू होकर दक्षिण-पश्चिम में <em>चल्लाघट्टा</em> तक जाती है। यह लाइन बेंगलुरु के प्रमुख आईटी पार्क्स, वाणिज्यिक केंद्रों और केंद्रीय सचिवालय को आपस में जोड़ती है।
+              </p>
+              <div className="bg-gray-50 dark:bg-neutral-900 p-5 rounded-2xl border border-gray-200 dark:border-neutral-800 space-y-3">
+                <h4 className="font-bold text-gray-900 dark:text-white text-base">पर्पल लाइन के प्रमुख स्टेशन व आकर्षण:</h4>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs font-medium">
+                  <li>• <strong>पत्तंदूर अग्रहारा (ITPL)</strong>: इंटरनेशनल टेक पार्क और प्रमुख आईटी कंपनियां।</li>
+                  <li>• <strong>गरुड़ाचारपाल्या / केआर पुरम</strong>: बागमाने टेक पार्क व आउटर रिंग रोड हब।</li>
+                  <li>• <strong>इंदिरानगर व हुडी</strong>: खरीदारी, कैफे और भोजन का प्रमुख केंद्र।</li>
+                  <li>• <strong>एमजी रोड व कब्बन पार्क</strong>: बेंगलुरु का सेंट्रल बिजनेस डिस्ट्रिक्ट और विशाल पार्क।</li>
+                  <li>• <strong>विधान सौध व सेंट्रल कॉलेज</strong>: कर्नाटक उच्च न्यायालय व राज्य विधानसभा।</li>
+                  <li>• <strong>केम्पेगौड़ा मजेस्टिक इंटरचेंज</strong>: ग्रीन लाइन व केएसआरटीसी बस स्टैंड का मुख्य जंक्शन।</li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-emerald-500 pl-3">
+                3. ग्रीन लाइन (Green Line): मादावरा (BIEC) से सिल्क इंस्टीट्यूट
+              </h3>
+              <p>
+                <strong>ग्रीन लाइन</strong> उत्तर-दक्षिण दिशा में 33.4 किलोमीटर तक फैली है, जो उत्तर में <em>मादावरा (बेंगलुरु इंटरनेशनल एग्जिबिशन सेंटर - BIEC)</em> को दक्षिण में <em>सिल्क इंस्टीट्यूट (कनकपुरा रोड)</em> से जोड़ती है। यह लाइन पारंपरिक आवासीय क्षेत्रों, विख्यात शिक्षण संस्थानों, औद्योगिक क्षेत्रों और सांस्कृतिक धरोहरों को जोड़ती है।
+              </p>
+              <div className="bg-gray-50 dark:bg-neutral-900 p-5 rounded-2xl border border-gray-200 dark:border-neutral-800 space-y-3">
+                <h4 className="font-bold text-gray-900 dark:text-white text-base">ग्रीन लाइन के प्रमुख स्टेशन व दर्शनीय स्थल:</h4>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs font-medium">
+                  <li>• <strong>नागासन्द्रा व पीण्या</strong>: पीण्या औद्योगिक क्षेत्र और IKEA नागासन्द्रा।</li>
+                  <li>• <strong>महालक्ष्मी व राजाजीनगर</strong>: विश्व प्रसिद्ध इस्कॉन मंदिर (ISKCON) और ओरियन मॉल।</li>
+                  <li>• <strong>मंत्री स्क्वायर संपिगे रोड</strong>: मल्लेश्वरम का ऐतिहासिक बाजार।</li>
+                  <li>• <strong>नेशनल कॉलेज व लालबाग</strong>: लालबाग बॉटनिकल गार्डन और बसवनगुड़ी बुल टेंपल।</li>
+                  <li>• <strong>जयनगर व जेपी नगर</strong>: 4थ ब्लॉक शॉपिंग कॉम्प्लेक्स और आवासीय क्षेत्र।</li>
+                  <li>• <strong>सिल्क इंस्टीट्यूट</strong>: आर्ट ऑफ लिविंग इंटरनेशनल आश्रम का निकटतम स्टेशन।</li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-amber-500 pl-3">
+                4. येलो लाइन (Yellow Line): आरवी रोड से इलेक्ट्रॉनिक सिटी और बोम्मासन्द्रा
+              </h3>
+              <p>
+                <strong>येलो लाइन</strong> 18.82 किलोमीटर लंबा एलिवेटेड कॉरिडोर है, जो <em>आरवी रोड (ग्रीन लाइन इंटरचेंज)</em> से शुरू होकर <em>सेंट्रल सिल्क बोर्ड</em>, <em>एचएसआर लेआउट</em>, और <em>इलेक्ट्रॉनिक सिटी फेज 1 व 2</em> होते हुए <em>बोम्मासन्द्रा</em> तक जाता है। यह लाइन इंफोसिस, विप्रो, टेक महिंद्रा और बायोकॉन पार्क में कार्यरत 5 लाख से अधिक आईटी पेशेवरों के लिए वरदान साबित हुई है।
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-emerald-500 pl-3">
+                5. नम्मा मेट्रो समय सारणी, किराया नियम और स्मार्ट कार्ड छूट
+              </h3>
+              <p>
+                नम्मा मेट्रो की सेवाएं सोमवार से शनिवार प्रतिदिन <strong>सुबह 05:00 बजे से रात 11:05 बजे तक</strong> और रविवार को <strong>सुबह 07:00 बजे से रात 11:05 बजे तक</strong> संचालित होती हैं। पीक ऑवर्स (सुबह 08:30 से 10:30 और शाम 05:00 से 08:00) के दौरान ट्रेनें हर 3 से 5 मिनट में उपलब्ध होती हैं।
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl space-y-2">
+                  <h5 className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">किराया गणना (Ticket Fare Rules)</h5>
+                  <p className="text-xs">
+                    न्यूनतम किराया <strong>₹10</strong> (2 किमी तक) से शुरू होकर लंबी दूरी के लिए अधिकतम <strong>₹65</strong> तक है। टोकन या आधिकारिक WhatsApp चैटबॉट (`+91 81055 56677`) से QR टिकट खरीदे जा सकते हैं।
+                  </p>
+                </div>
+                <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-2xl space-y-2">
+                  <h5 className="font-bold text-purple-600 dark:text-purple-400 text-sm">वार्षिक स्मार्ट कार्ड (Varshik Smart Card) 5% छूट</h5>
+                  <p className="text-xs">
+                    BMRCL स्मार्ट कार्ड का उपयोग करने पर प्रत्येक यात्रा पर फ्लैट <strong>5% की बचत</strong> होती है। नम्मा राइड ऐप में आप सीधे स्मार्ट कार्ड डिस्काउंट की गणना कर सकते हैं।
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-emerald-500 pl-3">
+                6. नम्मा राइड (NammaRide) ऐप बेंगलुरु यात्रियों के लिए क्यों सर्वश्रेष्ठ है?
+              </h3>
+              <p>
+                मजेस्टिक, सेंट्रल कॉलेज और विधान सौध जैसे भूमिगत (Underground) मेट्रो स्टेशनों में मोबाइल इंटरनेट अक्सर काम नहीं करता। नम्मा राइड का <strong>Geo GPS स्टेशन ट्रैकर</strong> आपके फोन के सैटेलाइट हार्डवेयर से सीधे जुड़ता है। यह 100% ऑफ़लाइन काम करता है, डेटा नहीं खर्च करता, और आपका स्टेशन आने से 1-2 स्टेशन पहले वाइब्रेशन अलर्ट देता है ताकि आपकी नींद में भी स्टेशन न छूटे।
+              </p>
+            </section>
+
+            {/* Hindi Internal Links Navigation Strip */}
+            <div className="pt-4 border-t border-gray-200 dark:border-neutral-800 flex flex-wrap gap-2 text-xs font-bold">
+              <Link to="/stations" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                सभी 83 मेट्रो स्टेशन देखें →
+              </Link>
+              <Link to="/timings" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                ट्रेन समय सारणी जांचें →
+              </Link>
+              <Link to="/fare-calculator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                किराया व छूट कैलकुलेटर →
+              </Link>
+              <Link to="/map" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                हाई-रेज़ोल्यूशन मेट्रो मैप →
+              </Link>
+              <Link to="/simulator" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">
+                वेब सिमुलेटर चलाएं →
+              </Link>
+            </div>
 
           </article>
         )}

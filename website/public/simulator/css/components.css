@@ -24,6 +24,8 @@
     box-shadow: var(--glass-shadow);
     padding: 1.15rem 1.25rem;
     position: relative;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .dropdown-trigger:active {
@@ -31,11 +33,49 @@
     background-color: var(--bg-dropdown-hover);
 }
 
-.dropdown-trigger span[id^="selected-"] {
+.dropdown-trigger .trigger-content,
+.dropdown-trigger > div.flex,
+.dropdown-trigger > span.flex {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    margin-right: 0.5rem;
+}
+
+.dropdown-trigger span[id^="selected-"],
+.dropdown-trigger .selected-text {
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+    display: block;
+}
+
+.dropdown-trigger i[data-lucide="chevron-down"],
+.dropdown-trigger i[data-lucide="chevron-up"],
+.dropdown-trigger i[data-lucide="map-pin"],
+.dropdown-trigger .trigger-dots {
+    flex-shrink: 0;
+}
+
+.trigger-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.trigger-dots .trigger-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .dropdown-trigger:hover {
@@ -153,6 +193,16 @@
     transition: all 0.15s ease;
     border-radius: 0.75rem;
     border: 1px solid transparent;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.station-option span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
 }
 
 .station-option:hover,
@@ -305,16 +355,20 @@
 
 /* Info Strips & Badges */
 .info-strip {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-secondary);
     background-color: var(--bg-card);
     backdrop-filter: blur(8px);
-    padding: 0.5rem 0.75rem;
+    padding: 0.45rem 0.65rem;
     border-radius: 6px;
     margin-top: 0.5rem;
-    display: inline-block;
+    display: block;
     border-left: 3px solid var(--line-default);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    max-width: 100%;
 }
 
 .line-purple .info-strip {

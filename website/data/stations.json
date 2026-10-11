@@ -278,8 +278,8 @@
           "interchange": true,
           "interchangeId": "majestic",
           "platforms": {
-            "forward": 4,
-            "backward": 4
+            "forward": 2,
+            "backward": 1
           }
         },
         {

@@ -1452,7 +1452,7 @@ export const stationsData = [
       "first_train": "05:00 AM",
       "last_train": "11:00 PM"
     },
-    "platform_count": 8,
+    "platform_count": 3,
     "accessibility": {
       "has_elevator": true,
       "elevator_count": 2,

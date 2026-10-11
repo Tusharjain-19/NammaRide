@@ -1,251 +1,202 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Primary Canonical Domain Pages (www.nammaride.site) -->
+
+  <!-- 1. Primary Canonical Home Page with Trilingual Annotations -->
   <url>
     <loc>https://www.nammaride.site/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/?lang=hi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nammaride.site/" />
   </url>
+
+  <!-- 2. High-Intent Core Transit Pages -->
   <url>
     <loc>https://www.nammaride.site/stations</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/stations" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/stations?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/stations?lang=hi" />
   </url>
+
   <url>
     <loc>https://www.nammaride.site/timings</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/timings" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/timings?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/timings?lang=hi" />
   </url>
+
   <url>
     <loc>https://www.nammaride.site/fare-calculator</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/fare-calculator" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/fare-calculator?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/fare-calculator?lang=hi" />
   </url>
+
   <url>
     <loc>https://www.nammaride.site/map</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/map" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/map?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/map?lang=hi" />
   </url>
+
   <url>
     <loc>https://www.nammaride.site/simulator</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/explore</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/explore" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/explore?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/explore?lang=hi" />
   </url>
+
   <url>
     <loc>https://www.nammaride.site/download</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
+
+  <!-- 3. Blog & Commuter In-Depth Guides -->
   <url>
     <loc>https://www.nammaride.site/blog</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/blog" />
+    <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/blog?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/blog?lang=hi" />
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#electronic-city-yellow-line-guide</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#majestic-interchange-guide</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#smart-card-vs-qr-ticket</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#bengaluru-metro-guide-first-timers</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#top-20-tech-offices-metro</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#safety-tips-women-commuters</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#budget-travel-metro-edition</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.nammaride.site/blog#best-restaurants-cafes-metro</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 4. Support, Safety, Features & Trust Pages -->
   <url>
     <loc>https://www.nammaride.site/features</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/safety</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/about</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/testimonials</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/contact</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/privacy</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
+
   <url>
     <loc>https://www.nammaride.site/terms</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
 
-  <!-- Mirror Domain Pages (nammaride.site) -->
-  <url>
-    <loc>https://nammaride.site/</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/stations</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/timings</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/fare-calculator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/map</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/simulator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/explore</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/download</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/blog</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/features</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/safety</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.site/about</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-
-  <!-- Mirror Domain Pages (nammaride.vercel.app) -->
-  <url>
-    <loc>https://nammaride.vercel.app/</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/stations</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/timings</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/fare-calculator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/map</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/simulator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/explore</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/download</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/blog</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/features</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/safety</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://nammaride.vercel.app/about</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
 </urlset>

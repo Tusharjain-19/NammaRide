@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Clock, ArrowRightLeft, ShieldCheck, Zap, X, Info, PhoneCall, Bus, Accessibility, Wifi, Banknote, Building2, Utensils } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { stationsData } from '../data/stationsData';
 import { useLanguage } from '../context/LanguageContext';
 import MetaSEO from '../components/MetaSEO';
+import { scoreStation } from '../utils/fuzzySearch';
 
 const getLineStyles = (lineId) => {
   switch (lineId.toLowerCase()) {
@@ -52,12 +53,29 @@ export default function StationsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStationModal, setActiveStationModal] = useState(null);
 
-  const filteredStations = stationsData.filter((st) => {
-    const matchesLine = selectedLine === 'all' || st.line_ids.includes(selectedLine);
-    const searchStr = (st.name_en + ' ' + st.name_kn + ' ' + st.code + ' ' + st.nearby_landmarks.join(' ')).toLowerCase();
-    const matchesSearch = searchStr.includes(searchQuery.toLowerCase());
-    return matchesLine && matchesSearch;
-  });
+  const filteredStations = useMemo(() => {
+    const q = searchQuery.trim();
+    const lineFiltered = stationsData.filter((st) => 
+      selectedLine === 'all' || st.line_ids.includes(selectedLine)
+    );
+    if (!q) return lineFiltered;
+
+    const scored = [];
+    lineFiltered.forEach((st) => {
+      const score = scoreStation(st.name_en, q, st.name_en, st.code, st.name_kn);
+      if (score > 0) {
+        scored.push({ station: st, score });
+      } else if (st.nearby_landmarks && st.nearby_landmarks.length > 0) {
+        const landmarkMatch = st.nearby_landmarks.some(l => scoreStation(l, q) > 0);
+        if (landmarkMatch) {
+          scored.push({ station: st, score: 300 });
+        }
+      }
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.map(item => item.station);
+  }, [selectedLine, searchQuery]);
 
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">

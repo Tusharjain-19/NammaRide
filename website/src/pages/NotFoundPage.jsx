@@ -20,6 +20,7 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { stationsData } from '../data/stationsData';
 import MetaSEO from '../components/MetaSEO';
+import { scoreStation } from '../utils/fuzzySearch';
 
 export default function NotFoundPage() {
   const { lang } = useLanguage();
@@ -55,13 +56,14 @@ export default function NotFoundPage() {
     const matchedPages = sitePages.filter(p => p.name.toLowerCase().includes(q));
 
     const matchedStations = stationsData
-      .filter(s => 
-        (s.name_en && s.name_en.toLowerCase().includes(q)) || 
-        (s.name_kn && s.name_kn.includes(q)) ||
-        (s.code && s.code.toLowerCase().includes(q))
-      )
-      .slice(0, 6)
       .map(s => ({
+        s,
+        score: scoreStation(s.name_en, q, s.name_en, s.code, s.name_kn)
+      }))
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6)
+      .map(({ s }) => ({
         name: s.name_en,
         subtitle: s.name_kn,
         url: `/stations?query=${encodeURIComponent(s.name_en)}`,

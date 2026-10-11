@@ -20,11 +20,11 @@ class CustomDropdown {
         this.container.innerHTML = `
             <div class="custom-dropdown">
                 <div class="dropdown-trigger" tabindex="0">
-                    <div class="flex items-center">
-                        <span class="trigger-dots"></span>
-                        <span class="selected-text">${this.placeholder}</span>
+                    <div class="trigger-content flex items-center gap-2.5 min-w-0 flex-1 mr-2 overflow-hidden">
+                        <span class="trigger-dots shrink-0"></span>
+                        <span class="selected-text truncate min-w-0 flex-1 block">${this.placeholder}</span>
                     </div>
-                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 shrink-0"></i>
                 </div>
                 <div class="dropdown-menu">
                     <div class="search-container">
@@ -179,11 +179,30 @@ class CustomDropdown {
     }
 
     filterStations(query) {
-        const lowerQuery = query.toLowerCase();
-        this.filteredStations = this.stations.filter(s =>
-            s.name.toLowerCase().includes(lowerQuery) ||
-            this.getTranslatedName(s.name).toLowerCase().includes(lowerQuery)
-        );
+        const q = (query || '').trim();
+        if (!q) {
+            this.filteredStations = this.stations;
+            this.renderList();
+            return;
+        }
+
+        if (typeof window.scoreStation === 'function') {
+            const scored = [];
+            this.stations.forEach(s => {
+                const score = window.scoreStation(s.name, q, this.getTranslatedName(s.name));
+                if (score > 0) {
+                    scored.push({ station: s, score });
+                }
+            });
+            scored.sort((a, b) => b.score - a.score);
+            this.filteredStations = scored.map(item => item.station);
+        } else {
+            const lowerQuery = q.toLowerCase();
+            this.filteredStations = this.stations.filter(s =>
+                s.name.toLowerCase().includes(lowerQuery) ||
+                this.getTranslatedName(s.name).toLowerCase().includes(lowerQuery)
+            );
+        }
         this.renderList();
     }
 
@@ -239,7 +258,7 @@ class CustomDropdown {
 
         this.selectedStationId = id;
         this.selectedText.textContent = this.getTranslatedName(station.name);
-        this.selectedText.classList.add('text-white', 'font-medium');
+        this.selectedText.classList.add('text-white', 'font-medium', 'truncate');
 
         this.triggerDots.innerHTML = station.lines.map(color =>
             `<span class="trigger-dot" style="background-color: ${color}"></span>`

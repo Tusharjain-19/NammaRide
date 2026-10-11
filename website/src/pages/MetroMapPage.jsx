@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { stationsData } from '../data/stationsData';
 import MetaSEO from '../components/MetaSEO';
+import { scoreStation } from '../utils/fuzzySearch';
 
 export default function MetroMapPage() {
   const { lang, t } = useLanguage();
@@ -171,14 +172,14 @@ export default function MetroMapPage() {
               {showResults && searchQuery.trim() && (
                 <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-neutral-900 border border-gray-150 dark:border-neutral-800 rounded-2xl shadow-xl z-30 max-h-60 overflow-y-auto divide-y divide-gray-100 dark:divide-neutral-800">
                   {stationsData
-                    .filter((st) => {
-                      const nameEn = st.name_en.toLowerCase();
-                      const nameKn = st.name_kn.toLowerCase();
-                      const query = searchQuery.toLowerCase();
-                      return nameEn.includes(query) || nameKn.includes(query);
-                    })
+                    .map((st) => ({
+                      st,
+                      score: scoreStation(st.name_en, searchQuery, st.name_en, st.code, st.name_kn)
+                    }))
+                    .filter((item) => item.score > 0)
+                    .sort((a, b) => b.score - a.score)
                     .slice(0, 8)
-                    .map((st) => (
+                    .map(({ st }) => (
                       <button
                         key={st.id}
                         onClick={() => {
