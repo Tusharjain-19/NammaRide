@@ -1570,6 +1570,7 @@ Support hub with contact form, FAQ, and social links.
 
 ## Testimonial Carousel
 
+{% raw %}
 ```jsx
 <Carousel 
   autoplay={true}
@@ -1586,6 +1587,7 @@ Support hub with contact form, FAQ, and social links.
   ))}
 </Carousel>
 ```
+{% endraw %}
 
 ---
 
