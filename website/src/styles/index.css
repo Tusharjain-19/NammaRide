@@ -46,12 +46,14 @@
     --radius-pill: 9999px;
   }
   
-  html {
-    scroll-behavior: smooth;
+  html, body, .scroll-container {
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
     overscroll-behavior-y: contain;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
   }
 
   html.dark, html.dark body {
@@ -64,17 +66,47 @@
     color: var(--text-primary);
     font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
-    scroll-behavior: smooth;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Force hardware acceleration on all major scrollable elements */
+  .scroll-container, main, .page-container {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Universal instant touch responsiveness (eliminates 300ms WebView delay) */
+  button, a, input, select, textarea, [role="button"], .interactive-tap {
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
+  button:active, a:active, [role="button"]:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+    transition: transform 0.08s ease, opacity 0.08s ease;
   }
 }
 
-/* ─── Smooth Theme Transition (color-only, no transform/opacity) ─── */
-body,
-body *:not(script):not(style):not(svg):not(path) {
-  transition: background-color 0.2s ease, color 0.15s ease, 
-              border-color 0.2s ease, fill 0.15s ease, stroke 0.15s ease,
-              box-shadow 0.2s ease;
+/* ─── Smooth Theme Transition (High-Performance GPU-friendly) ─── */
+body, 
+main, 
+header, 
+nav, 
+footer, 
+.glass-panel, 
+.light-glass-card, 
+.dropdown-opaque, 
+section, 
+article,
+.app-header {
+  transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.22s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Force dark mode text visibility */

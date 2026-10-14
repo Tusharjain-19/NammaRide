@@ -13,6 +13,7 @@ export class CustomDropdown {
         this.selectedValue = null;
         this.excludedStationName = null;
         this.isOpen = false;
+        this.isLooping = false;
 
         this.initData();
         this.render();
@@ -64,14 +65,12 @@ export class CustomDropdown {
     }
 
     initData() {
-        // Flatten stations from metroData
         const allStations = [];
         const seen = new Set();
 
         Object.values(metroData).forEach(line => {
             line.stations.forEach(station => {
                 if (!seen.has(station.name)) {
-                    // Find lines for this station
                     const lines = [];
                     Object.values(metroData).forEach(l => {
                         if (l.stations.some(s => s.name === station.name)) {
@@ -80,9 +79,9 @@ export class CustomDropdown {
                     });
 
                     allStations.push({
-                        id: station.id, // Use ID of first occurrence
+                        id: station.id,
                         name: station.name,
-                        lines: lines, // Array of colors
+                        lines: lines,
                         originalObj: station
                     });
                     seen.add(station.name);
@@ -122,31 +121,34 @@ export class CustomDropdown {
 
     renderOptions() {
         const list = document.getElementById(`list-${this.container.id}`);
+        if (!list) return;
+
         if (this.filteredStations.length === 0) {
             list.innerHTML = `<div class="no-results">No stations found</div>`;
             return;
         }
 
-        list.innerHTML = this.filteredStations.map(station => {
+        const displaySet = this.filteredStations;
+
+        list.innerHTML = displaySet.map(station => {
             const dots = station.lines.map(color =>
-                `<span class="dot" style="background-color: ${color}"></span>`
+                `<span class="dot" style="background-color: ${color}; width: 10px; height: 10px; min-width: 10px; min-height: 10px; max-width: 10px; max-height: 10px; border-radius: 50%; flex-shrink: 0; aspect-ratio: 1/1; display: inline-block;"></span>`
             ).join('');
 
-            // Translate name if T func exists, else raw
             const displayName = T_STATION(station.name);
             const isSelected = this.selectedValue === station.id ? 'selected' : '';
 
             return `
-                <div class="station-option ${isSelected}" data-value="${station.id}">
+                <div class="station-option ${isSelected}" data-value="${station.id}" data-station-name="${station.name}">
                      <div class="station-dots">${dots}</div>
                      <span>${displayName}</span>
                 </div>
             `;
         }).join('');
 
-        // Re-attach click listeners to options
         list.querySelectorAll('.station-option').forEach(option => {
             option.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const value = option.dataset.value;
                 this.select(value);
             });
@@ -154,16 +156,8 @@ export class CustomDropdown {
     }
 
     select(value) {
-        // Find station by ID prefix (since IDs might differ across lines for same station name, we used first occurrence ID)
-        // Actually best to select by name match to find the object in this.stations
-        // But value passed is ID.
-        // Let's find matches.
-
         let station = this.stations.find(s => s.id === value);
-        // Fallback: search by name corresponding to this ID if exact ID not in list (merged list)
         if (!station) {
-            // value might be G20 but our list has P20 for Majestic.
-            // Find in metroData to get name
             let name = null;
             for (const lineKey in metroData) {
                 const s = metroData[lineKey].stations.find(st => st.id === value);
@@ -178,14 +172,12 @@ export class CustomDropdown {
             document.getElementById(`selected-${this.container.id}`).innerHTML = displayName;
             document.getElementById(`selected-${this.container.id}`).className = "text-primary font-medium text-sm truncate min-w-0 flex-1 block";
 
-            // Update trigger dots
             const dotsContainer = document.getElementById(`dots-${this.container.id}`);
             dotsContainer.classList.remove('hidden');
             dotsContainer.innerHTML = station.lines.map(color =>
                 `<span class="trigger-dot" style="background-color: ${color}"></span>`
             ).join('');
 
-            // Highlight in list if open
             this.renderOptions();
 
             if (window.lucide) window.lucide.createIcons();
@@ -195,9 +187,20 @@ export class CustomDropdown {
         }
     }
 
-    // External select by ID
     selectById(id) {
         this.select(id);
+    }
+
+    selectByName(name) {
+        if (!name) return;
+        const cleanTarget = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const station = this.stations.find(s => 
+            s.name.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanTarget || 
+            s.name.toLowerCase().includes(name.toLowerCase())
+        );
+        if (station) {
+            this.select(station.id);
+        }
     }
 
     toggle() {
@@ -213,11 +216,13 @@ export class CustomDropdown {
             this.container.parentElement.classList.add('dropdown-open');
         }
         const searchInput = document.getElementById(`search-${this.container.id}`);
-        if (searchInput) searchInput.focus();
-
-        // Reset search
-        if (searchInput) searchInput.value = '';
-        this.filter('');
+        if (searchInput) {
+            searchInput.value = '';
+            this.filter('');
+            searchInput.focus();
+        }
+        const list = document.getElementById(`list-${this.container.id}`);
+        if (list) list.scrollTop = 0;
     }
 
     close() {
@@ -232,6 +237,7 @@ export class CustomDropdown {
 
     filter(query) {
         const q = (query || '').trim();
+        const list = document.getElementById(`list-${this.container.id}`);
         if (!q) {
             this.filteredStations = this.stations.filter(s => {
                 return !(this.excludedStationName && s.name === this.excludedStationName);
@@ -258,10 +264,10 @@ export class CustomDropdown {
         scored.sort((a, b) => b.score - a.score);
         this.filteredStations = scored.map(item => item.station);
         this.renderOptions();
+        if (list) list.scrollTop = 0;
     }
 
     refreshTranslations() {
-        // Update selected text if no selection made yet
         if (!this.selectedValue) {
             const placeholder = T(this.placeholderKey);
             const selectedEl = document.getElementById(`selected-${this.container.id}`);
@@ -270,29 +276,26 @@ export class CustomDropdown {
                 selectedEl.className = "text-primary font-medium text-sm truncate min-w-0 flex-1 block";
             }
         } else {
-            // Update selected station name to new language
             this.select(this.selectedValue);
         }
         
-        // Update search placeholder
         const searchInput = document.getElementById(`search-${this.container.id}`);
         if (searchInput) {
             searchInput.placeholder = T('navPlan') + '...';
         }
 
-        // Refresh options inside list
         this.renderOptions();
     }
 
     attachEventListeners() {
         const trigger = document.getElementById(`trigger-${this.container.id}`);
         const searchInput = document.getElementById(`search-${this.container.id}`);
+        const list = document.getElementById(`list-${this.container.id}`);
 
         trigger.addEventListener('click', (e) => {
             this.toggle();
         });
 
-        // Close when clicking outside
         document.addEventListener('click', (e) => {
             if (!this.container.contains(e.target)) {
                 this.close();
@@ -303,12 +306,41 @@ export class CustomDropdown {
             this.filter(e.target.value);
         });
 
-        // Keyboard Nav (Basic)
         trigger.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 this.toggle();
             }
         });
+
+        if (list) {
+            let isDragging = false;
+            let startY = 0;
+            let scrollTopStart = 0;
+
+            list.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.pageY - list.offsetTop;
+                scrollTopStart = list.scrollTop;
+                list.style.cursor = 'grabbing';
+                list.style.userSelect = 'none';
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    list.style.cursor = 'pointer';
+                    list.style.removeProperty('user-select');
+                }
+            });
+
+            list.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const y = e.pageY - list.offsetTop;
+                const walk = (y - startY) * 1.5;
+                list.scrollTop = scrollTopStart - walk;
+            });
+        }
     }
 }

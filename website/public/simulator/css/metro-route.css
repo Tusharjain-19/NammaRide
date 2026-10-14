@@ -233,60 +233,241 @@
     margin-top: 0.25rem;
 }
 
-/* Inline Interchange Styles */
+/* Modern High-Legibility Interchange Card */
 .interchange-info {
-    margin-top: 0.5rem;
-    border-left: 2px solid var(--line-yellow);
-    margin-left: 2px;
-    padding: 0.4rem 0.6rem;
-    padding-left: 8px;
+    margin-top: 0.6rem;
+    margin-bottom: 0.45rem;
+    border-left: 3.5px solid var(--line-yellow);
+    padding: 0.65rem 0.75rem;
     background: var(--bg-card);
-    backdrop-filter: blur(8px);
-    border-radius: 0 8px 8px 0;
-    overflow: hidden;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: 0 12px 12px 0;
+    border-top: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
-.line-purple .interchange-info {
-    border-left-color: var(--line-purple);
-}
-
+.station-item.interchange-purple-green .interchange-info,
 .line-green .interchange-info {
     border-left-color: var(--line-green);
 }
 
+.station-item.interchange-green-purple .interchange-info,
+.line-purple .interchange-info {
+    border-left-color: var(--line-purple);
+}
+
+.station-item.interchange-green-yellow .interchange-info,
+.station-item.interchange-purple-yellow .interchange-info,
 .line-yellow .interchange-info {
     border-left-color: var(--line-yellow);
+}
+
+.interchange-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
 }
 
 .interchange-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    overflow: hidden;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.interchange-row i,
+.interchange-row svg {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent-color);
+}
+
+.station-item.interchange-purple-green .interchange-row i,
+.station-item.interchange-purple-green .interchange-row svg,
+.station-item.interchange-yellow-green .interchange-row i,
+.station-item.interchange-yellow-green .interchange-row svg,
+.line-green .interchange-row i,
+.line-green .interchange-row svg {
+    color: var(--line-green);
+}
+
+.station-item.interchange-green-purple .interchange-row i,
+.station-item.interchange-green-purple .interchange-row svg,
+.station-item.interchange-yellow-purple .interchange-row i,
+.station-item.interchange-yellow-purple .interchange-row svg,
+.line-purple .interchange-row i,
+.line-purple .interchange-row svg {
+    color: var(--line-purple);
+}
+
+.station-item.interchange-green-yellow .interchange-row i,
+.station-item.interchange-green-yellow .interchange-row svg,
+.station-item.interchange-purple-yellow .interchange-row i,
+.station-item.interchange-purple-yellow .interchange-row svg,
+.line-yellow .interchange-row i,
+.line-yellow .interchange-row svg {
+    color: var(--line-yellow);
 }
 
 .interchange-row span {
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    word-break: break-word;
+}
+
+.interchange-walk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.04);
+    padding: 0.15rem 0.45rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-subtle);
     white-space: nowrap;
+    flex-shrink: 0;
+}
+
+html.dark .interchange-walk-badge,
+body.dark-mode .interchange-walk-badge {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Nav Row: Platform Pill & Towards Direction */
+.interchange-nav-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.6rem;
+    margin-top: 0.45rem;
+    width: 100%;
+}
+
+.platform-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--bg-card-hover);
+    border: 1.5px solid var(--border-color);
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.station-item.interchange-purple-green .platform-pill,
+.station-item.interchange-yellow-green .platform-pill,
+.line-green .platform-pill {
+    background: rgba(16, 185, 129, 0.14);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #059669;
+}
+html.dark .station-item.interchange-purple-green .platform-pill,
+html.dark .station-item.interchange-yellow-green .platform-pill,
+html.dark .line-green .platform-pill,
+body.dark-mode .station-item.interchange-purple-green .platform-pill,
+body.dark-mode .station-item.interchange-yellow-green .platform-pill,
+body.dark-mode .line-green .platform-pill {
+    color: #34D399;
+    border-color: rgba(52, 211, 153, 0.4);
+}
+
+.station-item.interchange-green-purple .platform-pill,
+.station-item.interchange-yellow-purple .platform-pill,
+.line-purple .platform-pill {
+    background: rgba(168, 85, 247, 0.14);
+    border-color: rgba(168, 85, 247, 0.4);
+    color: #9333EA;
+}
+html.dark .station-item.interchange-green-purple .platform-pill,
+html.dark .station-item.interchange-yellow-purple .platform-pill,
+html.dark .line-purple .platform-pill,
+body.dark-mode .station-item.interchange-green-purple .platform-pill,
+body.dark-mode .station-item.interchange-yellow-purple .platform-pill,
+body.dark-mode .line-purple .platform-pill {
+    color: #C084FC;
+    border-color: rgba(192, 132, 252, 0.4);
+}
+
+.station-item.interchange-green-yellow .platform-pill,
+.station-item.interchange-purple-yellow .platform-pill,
+.line-yellow .platform-pill {
+    background: rgba(234, 179, 8, 0.15);
+    border-color: rgba(234, 179, 8, 0.45);
+    color: #B45309;
+}
+html.dark .station-item.interchange-green-yellow .platform-pill,
+html.dark .station-item.interchange-purple-yellow .platform-pill,
+html.dark .line-yellow .platform-pill,
+body.dark-mode .station-item.interchange-green-yellow .platform-pill,
+body.dark-mode .station-item.interchange-purple-yellow .platform-pill,
+body.dark-mode .line-yellow .platform-pill {
+    color: #FBBF24;
+    border-color: rgba(251, 191, 36, 0.4);
+}
+
+.platform-pill .platform-num {
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.direction-container {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    min-width: 0;
+    flex: 1 1 auto;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.direction-towards {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+}
+
+.direction-dest {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .interchange-meta {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    margin-top: 2px;
-    margin-left: 1.35rem;
-    overflow: hidden;
+    margin-top: 4px;
+    width: 100%;
 }
 
 .interchange-meta span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline-block;
-    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .station-pulse {

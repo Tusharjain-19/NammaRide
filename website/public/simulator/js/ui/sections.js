@@ -8,6 +8,7 @@ import { safetyData } from '../data/safety.js';
 import { timingsData } from '../data/timings.js';
 import { metroData, stationTranslations } from '../data/stations.js';
 import { stationBoardImages } from '../data/stationBoardImages.js';
+import { getStationGates } from '../data/stationGates.js';
 import { matchStation } from '../utils/fuzzySearch.js';
 
 let currentLangGetter = () => 'en';
@@ -221,6 +222,32 @@ export function renderStationDetail(container, stationId) {
         </div>
     </div>`;
 
+    // Station Exit Gates & Street Directory
+    const gates = getStationGates(station.id, station.name, station.type);
+    if (gates && gates.length > 0) {
+        html += `<div class="detail-section">
+            <h4 class="detail-section-title"><i data-lucide="door-open" class="w-4 h-4 text-emerald-500"></i> Station Exit Gates & Landmarks</h4>
+            <p class="detail-section-sub">Choose the right gate to exit towards your connecting destination</p>
+            <div class="grid grid-cols-1 gap-2.5 mt-2">`;
+        gates.forEach(g => {
+            html += `
+                <div class="p-3 bg-card-subtle rounded-xl border border-subtle flex items-start gap-3 shadow-sm">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center shrink-0 border border-emerald-500/30">
+                        Gate ${g.gate}
+                    </span>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-1 flex-wrap">
+                            <span class="text-xs font-extrabold text-primary">${g.name}</span>
+                            <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">${g.landmark}</span>
+                        </div>
+                        <p class="text-[11px] text-secondary mt-1 leading-snug">${g.destination}</p>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
     // Facilities
     if (station.facilities && station.facilities.length) {
         html += `<div class="detail-section">
@@ -329,6 +356,22 @@ export function renderTimings(container) {
     let html = `<div class="section-header">
         <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
         <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
+    </div>
+
+    <!-- Last Train Interchange Advisory Banner -->
+    <div class="mb-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/30">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+        </div>
+        <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+                <h4 class="text-xs font-black text-amber-500 dark:text-amber-400 uppercase tracking-wider">Last Train Interchange Advisory</h4>
+                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-600 dark:text-amber-400">11:20 PM Cut-off</span>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed">
+                Connecting trains at <strong>Nadaprabhu Kempegowda Stn. Majestic</strong> depart at <strong>11:20 PM</strong>. To guarantee your connection between Purple and Green lines, board your initial train before <strong>10:25 PM</strong> from outer stations (Whitefield, Challaghatta, Madavara, Silk Institute).
+            </p>
+        </div>
     </div>`;
 
     Object.entries(timingsData).forEach(([key, line]) => {
@@ -452,6 +495,7 @@ function attachTimingsEvents(container) {
 }
 
 // ═══════════════════════════════════════
+// ═══════════════════════════════════════
 // SAFETY VIEW
 // ═══════════════════════════════════════
 export function renderSafety(container) {
@@ -463,9 +507,86 @@ export function renderSafety(container) {
     }
 
     let html = `<div class="section-header">
-        <h2 class="section-title">${T_fn('safetyHelp') || 'Safety & Help'}</h2>
-        <p class="section-subtitle">${T_fn('safetySub') || 'Emergency contacts & useful info'}</p>
+        <h2 class="section-title">${T_fn('safetyHelp') || 'Safety & Emergency'}</h2>
+        <p class="section-subtitle">${T_fn('safetySub') || 'Instant 1-tap emergency hotlines & women safety guide'}</p>
     </div>
+
+    <!-- FAST 1-TAP EMERGENCY HOTLINES (3 Priority Instant Dialers) -->
+    <div class="mb-4">
+        <div class="text-[10px] font-black uppercase tracking-wider text-secondary mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span>Immediate Emergency SOS</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <a href="tel:1091" class="p-3.5 rounded-2xl bg-gradient-to-br from-rose-500/20 to-pink-500/10 border-2 border-rose-500/40 hover:border-rose-500 active:scale-95 transition-all flex flex-col justify-between shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <i data-lucide="phone-call" class="w-4 h-4"></i>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500 text-white tracking-wider">24/7 SOS</span>
+                </div>
+                <div class="mt-3">
+                    <div class="text-xs font-black text-rose-600 dark:text-rose-400">Women Helpline</div>
+                    <div class="text-lg font-black text-primary tracking-tight">1091</div>
+                </div>
+            </a>
+
+            <a href="tel:112" class="p-3.5 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/10 border-2 border-blue-500/40 hover:border-blue-500 active:scale-95 transition-all flex flex-col justify-between shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-500 text-white tracking-wider">POLICE & FIRE</span>
+                </div>
+                <div class="mt-3">
+                    <div class="text-xs font-black text-blue-600 dark:text-blue-400">All Emergency</div>
+                    <div class="text-lg font-black text-primary tracking-tight">112</div>
+                </div>
+            </a>
+
+            <a href="tel:180042512345" class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border-2 border-emerald-500/40 hover:border-emerald-500 active:scale-95 transition-all flex flex-col justify-between shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <i data-lucide="train" class="w-4 h-4"></i>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500 text-white tracking-wider">TOLL-FREE</span>
+                </div>
+                <div class="mt-3">
+                    <div class="text-xs font-black text-emerald-600 dark:text-emerald-400">Metro Helpline (BMRCL)</div>
+                    <div class="text-sm font-black text-primary truncate">1800-425-12345</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- WOMEN'S SAFETY & COACH 1 PROTOCOL -->
+    <div class="mb-4 p-4 rounded-2xl bg-gradient-to-r from-pink-500/15 via-rose-500/10 to-purple-500/10 border border-pink-500/30 space-y-3 shadow-sm">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-pink-500/20 text-pink-500 flex items-center justify-center shrink-0 border border-pink-500/30">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-xs font-black text-pink-600 dark:text-pink-400 uppercase tracking-wider truncate">Coach 1: Women Reserved Protocol</h3>
+                    <p class="text-[11px] text-secondary truncate">Front car reserved exclusively for female commuters</p>
+                </div>
+            </div>
+            <span class="shrink-0 px-2.5 py-1 rounded-xl bg-pink-500/20 text-pink-600 dark:text-pink-400 font-extrabold text-[10px] uppercase tracking-wider">Coach 1</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-secondary">
+            <div class="p-2.5 bg-card-subtle/90 rounded-xl border border-pink-500/20 flex items-start gap-2">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-pink-500 shrink-0 mt-0.5"></i>
+                <span><strong>Platform Boarding:</strong> Wait at Coach 1 platform markings (front / leading car in direction of motion).</span>
+            </div>
+            <div class="p-2.5 bg-card-subtle/90 rounded-xl border border-pink-500/20 flex items-start gap-2">
+                <i data-lucide="bell" class="w-3.5 h-3.5 text-pink-500 shrink-0 mt-0.5"></i>
+                <span><strong>Emergency Alarm (PEA):</strong> Pull handle next to coach doors for instant 2-way talk with the train operator.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALL EMERGENCY DIRECTORY -->
+    <div class="text-[10px] font-black uppercase tracking-wider text-secondary mb-2">Transit & Civic Helplines</div>
     <div class="safety-list">`;
 
     safetyData.emergencyNumbers.forEach(item => {

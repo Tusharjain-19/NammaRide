@@ -6,9 +6,12 @@ import { calculateFare, calculateFareByHops, countStationHops } from './logic/pr
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
 import { stationPlaces } from './data/stationPlaces.js';
+import { getStationGates } from './data/stationGates.js';
 import { matchStation, scoreStation } from './utils/fuzzySearch.js';
+import { StorageManager } from './utils/storageManager.js';
 window.matchStation = matchStation;
 window.scoreStation = scoreStation;
+window.StorageManager = StorageManager;
 // Standalone simulation module
 
 // --- App State ---
@@ -371,68 +374,37 @@ function getDepartureTime() {
 }
 
 // --- Commuter Fast Planning & Favorites System ---
-const DEFAULT_FAVORITE_ROUTES = [
-    { startId: 'P16', endId: 'P01', startName: 'Indiranagar', endName: 'Whitefield (Kadugodi)' },
-    { startId: 'P23', endId: 'G31', startName: 'Nadaprabhu Kempegowda Stn., Majestic', endName: 'Silk Institute' },
-    { startId: 'G26', endId: 'Y09', startName: 'Rashtreeya Vidyalaya Road', endName: 'Electronic City' }
-];
-
 function getFavoriteRoutes() {
-    try {
-        const stored = localStorage.getItem('nammaride_fav_routes');
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-    } catch(e) {}
-    return DEFAULT_FAVORITE_ROUTES;
+    return StorageManager.getFavoriteRoutes();
 }
 
 function saveFavoriteRoutes(favs) {
-    try {
-        localStorage.setItem('nammaride_fav_routes', JSON.stringify(favs));
-    } catch(e) {}
+    return StorageManager.saveFavoriteRoutes(favs);
 }
 
 function isRouteFavorite(startId, endId) {
-    if (!startId || !endId) return false;
-    const favs = getFavoriteRoutes();
-    return favs.some(f => (f.startId === startId && f.endId === endId) || (f.startId === endId && f.endId === startId));
+    return StorageManager.isRouteFavorite(startId, endId);
 }
 
 function toggleFavoriteRoute(startId, endId, startName, endName) {
-    let favs = getFavoriteRoutes();
-    const existingIdx = favs.findIndex(f => (f.startId === startId && f.endId === endId) || (f.startId === endId && f.endId === startId));
-    let isAdded = false;
-    if (existingIdx >= 0) {
-        favs.splice(existingIdx, 1);
-        isAdded = false;
-    } else {
-        favs.unshift({ startId, endId, startName, endName });
-        if (favs.length > 8) favs = favs.slice(0, 8);
-        isAdded = true;
-    }
-    saveFavoriteRoutes(favs);
+    const isAdded = StorageManager.toggleFavoriteRoute(startId, endId, startName, endName);
     renderQuickCommutes();
     return isAdded;
 }
 
 function getRecentRoutes() {
-    try {
-        const stored = localStorage.getItem('nammaride_recent_routes');
-        if (stored) return JSON.parse(stored);
-    } catch(e) {}
-    return [];
+    return StorageManager.getItem('nammaride_recent_routes', []);
 }
 
 function addRecentRoute(startId, endId, startName, endName) {
     if (!startId || !endId || startId === endId) return;
     try {
         let recents = getRecentRoutes();
+        if (!Array.isArray(recents)) recents = [];
         recents = recents.filter(r => !(r.startId === startId && r.endId === endId));
         recents.unshift({ startId, endId, startName, endName, timestamp: Date.now() });
         if (recents.length > 4) recents = recents.slice(0, 4);
-        localStorage.setItem('nammaride_recent_routes', JSON.stringify(recents));
+        StorageManager.setItem('nammaride_recent_routes', recents, 7 * 24 * 60 * 60 * 1000); // 7 days TTL
         renderQuickCommutes();
     } catch(e) {}
 }
@@ -448,16 +420,185 @@ function selectQuickRoute(startId, endId) {
     }
 }
 
+// ─── Real-Time Metro Rush Hours & Forecast Feature ───
+function getMetroRushStatus() {
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const ist = new Date(utc + (3600000 * 5.5));
+    const hours = ist.getHours();
+    const minutes = ist.getMinutes();
+    const day = ist.getDay(); // 0 = Sun
+    const timeVal = hours + minutes / 60;
+    const isSunday = (day === 0);
+
+    const timeFormatted = ist.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    if (timeVal < 5.0 || timeVal >= 23.5) {
+        return {
+            timeFormatted,
+            status: 'closed',
+            badgeText: 'Closed',
+            badgeClass: 'bg-neutral-500/15 text-neutral-400 border border-neutral-500/25',
+            dotClass: 'bg-neutral-400',
+            title: 'Metro Service Closed',
+            subtitle: 'Resumes 05:00 AM (07:00 AM Sundays)'
+        };
+    }
+
+    if (isSunday) {
+        return {
+            timeFormatted,
+            status: 'sunday',
+            badgeText: 'Sunday Schedule',
+            badgeClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25',
+            dotClass: 'bg-emerald-500',
+            title: 'Sunday Leisure Schedule',
+            subtitle: 'Trains every 8–10 mins across all lines'
+        };
+    }
+
+    // Weekday Morning Peak: 8:30 AM to 10:30 AM
+    if (timeVal >= 8.5 && timeVal <= 10.5) {
+        return {
+            timeFormatted,
+            status: 'peak',
+            badgeText: 'Morning Rush',
+            badgeClass: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25',
+            dotClass: 'bg-amber-500 animate-pulse',
+            title: 'Morning Peak Rush',
+            subtitle: 'Trains every 3.5–4.5 mins • Expect Crowds'
+        };
+    }
+
+    // Weekday Evening Peak: 5:00 PM to 8:30 PM
+    if (timeVal >= 17.0 && timeVal <= 20.5) {
+        return {
+            timeFormatted,
+            status: 'peak',
+            badgeText: 'Evening Rush',
+            badgeClass: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25',
+            dotClass: 'bg-amber-500 animate-pulse',
+            title: 'Evening Peak Rush',
+            subtitle: 'Trains every 3.5–5 mins • Busy Platforms'
+        };
+    }
+
+    // Night Hours: 8:30 PM to 11:30 PM
+    if (timeVal > 20.5 && timeVal < 23.5) {
+        return {
+            timeFormatted,
+            status: 'night',
+            badgeText: 'Night Service',
+            badgeClass: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/25',
+            dotClass: 'bg-indigo-400',
+            title: 'Night Service Interval',
+            subtitle: 'Trains every 8–10 mins • Last train 11:05 PM'
+        };
+    }
+
+    // Normal daytime off-peak
+    return {
+        timeFormatted,
+        status: 'normal',
+        badgeText: 'Off-Peak',
+        badgeClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25',
+        dotClass: 'bg-emerald-500 animate-pulse',
+        title: 'Off-Peak Hours (Comfortable)',
+        subtitle: 'Trains every 6–8 mins • Seating Available'
+    };
+}
+
+function updateRushForecastUI() {
+    const rushInfo = getMetroRushStatus();
+    const dot = document.getElementById('rush-dot');
+    const title = document.getElementById('rush-title');
+    const badge = document.getElementById('rush-status-badge');
+    const subtitle = document.getElementById('rush-subtitle');
+
+    if (dot) dot.className = `w-2.5 h-2.5 rounded-full shrink-0 ${rushInfo.dotClass}`;
+    if (title) title.textContent = rushInfo.title;
+    if (badge) {
+        badge.textContent = rushInfo.badgeText;
+        badge.className = `text-[9px] px-1.5 py-0.5 rounded font-extrabold uppercase ${rushInfo.badgeClass}`;
+    }
+    if (subtitle) subtitle.textContent = rushInfo.subtitle;
+
+    const modalTime = document.getElementById('rush-modal-current-time');
+    const modalBadge = document.getElementById('rush-modal-current-badge');
+    if (modalTime) modalTime.textContent = rushInfo.timeFormatted;
+    if (modalBadge) {
+        modalBadge.textContent = rushInfo.badgeText;
+        modalBadge.className = `px-2.5 py-1 rounded-xl text-xs font-black uppercase tracking-wider ${rushInfo.badgeClass}`;
+    }
+}
+
+function openRushScheduleModal() {
+    updateRushForecastUI();
+    const modal = document.getElementById('rush-schedule-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+    }
+}
+
+function closeRushScheduleModal() {
+    const modal = document.getElementById('rush-schedule-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function openPassAdvisorModal() {
+    const modal = document.getElementById('pass-advisor-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+    }
+}
+
+function closePassAdvisorModal() {
+    const modal = document.getElementById('pass-advisor-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function initPopularStationChips() {
+    document.querySelectorAll('.popular-station-chip').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const stationName = btn.getAttribute('data-name');
+            if (!stationName) return;
+
+            const startVal = document.getElementById('start-station').value;
+            const endVal = document.getElementById('end-station').value;
+
+            if (!startVal) {
+                if (startDropdown) startDropdown.selectByName(stationName);
+            } else if (!endVal || startVal === endVal) {
+                if (endDropdown) endDropdown.selectByName(stationName);
+            } else {
+                if (endDropdown) endDropdown.selectByName(stationName);
+            }
+            handleJourneyUpdate();
+        });
+    });
+}
+
 function renderQuickCommutes() {
     const container = document.getElementById('quick-commutes-chips');
+    const wrapper = document.getElementById('quick-commutes-container');
     if (!container) return;
 
     const favs = getFavoriteRoutes();
-    const recents = getRecentRoutes();
+
+    if (!favs || favs.length === 0) {
+        if (wrapper) wrapper.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+    }
+
+    if (wrapper) wrapper.classList.remove('hidden');
 
     let html = '';
 
-    // Favorites chips
+    // Render only user-saved routes
     favs.forEach((fav) => {
         const sName = T_STATION(fav.startName);
         const eName = T_STATION(fav.endName);
@@ -467,22 +608,6 @@ function renderQuickCommutes() {
                 <span class="text-xs font-bold text-primary truncate max-w-[120px]">${sName}</span>
                 <span class="text-secondary opacity-40 text-xs font-bold">➔</span>
                 <span class="text-xs font-bold text-primary truncate max-w-[120px]">${eName}</span>
-            </button>
-        `;
-    });
-
-    // Recent routes that are not duplicate with favorites
-    recents.forEach((rec) => {
-        const isAlreadyFav = favs.some(f => (f.startId === rec.startId && f.endId === rec.endId) || (f.startId === rec.endId && f.endId === rec.startId));
-        if (isAlreadyFav) return;
-        const sName = T_STATION(rec.startName);
-        const eName = T_STATION(rec.endName);
-        html += `
-            <button type="button" class="quick-chip shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-card-subtle hover:bg-card-hover border border-subtle hover:border-emerald-500/40 rounded-xl transition-all active:scale-95 shadow-sm" data-start="${rec.startId}" data-end="${rec.endId}" title="${sName} ➔ ${eName}">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-secondary opacity-70 shrink-0"></i>
-                <span class="text-xs font-medium text-secondary group-hover:text-primary truncate max-w-[110px]">${sName}</span>
-                <span class="text-secondary opacity-40 text-xs">➔</span>
-                <span class="text-xs font-medium text-secondary group-hover:text-primary truncate max-w-[110px]">${eName}</span>
             </button>
         `;
     });
@@ -551,20 +676,21 @@ function displayJourneyResult(journey) {
             lineLabel = 'Yellow Line';
         }
         return `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border ${bg} shadow-sm">
-                <span class="w-2 h-2 rounded-full ${dot}"></span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold border ${bg} shadow-sm shrink-0 whitespace-nowrap">
+                <span class="w-1.5 h-1.5 rounded-full ${dot}"></span>
                 <span>${lineLabel}</span>
             </span>
         `;
     }).join(`<i data-lucide="arrow-right" class="w-3.5 h-3.5 text-secondary opacity-50 shrink-0"></i>`);
 
-    // Transfer text
+    // Transfer text - clean, concise, 1-line
     let transferNotice = '';
     if (interchangeCount === 0) {
-        transferNotice = `<span class="text-emerald-500 font-bold flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Direct Train • 0 Transfers</span>`;
+        transferNotice = `<span class="text-emerald-500 font-bold flex items-center gap-1 shrink-0 text-[11px]"><i data-lucide="check" class="w-3 h-3"></i> Direct Train</span>`;
     } else {
-        const interchangeStationName = parts[1]?.stations[0]?.name ? T_STATION(parts[1].stations[0].name) : 'Majestic';
-        transferNotice = `<span class="text-amber-400 font-bold flex items-center gap-1"><i data-lucide="arrow-right-left" class="w-3 h-3"></i> ${interchangeCount} Transfer at ${interchangeStationName}</span>`;
+        const rawInterchange = parts[1]?.stations[0]?.name ? T_STATION(parts[1].stations[0].name) : 'Majestic';
+        const cleanInterchange = (rawInterchange.toLowerCase().includes('majestic') || rawInterchange.toLowerCase().includes('kempegowda')) ? 'Majestic' : rawInterchange;
+        transferNotice = `<span class="text-amber-500 font-bold flex items-center gap-1 shrink-0 text-[11px]"><i data-lucide="arrow-right-left" class="w-3 h-3"></i> ${interchangeCount} Transfer • ${cleanInterchange}</span>`;
     }
 
     const startPlatform = parts[0]?.startPlatform || 1;
@@ -576,69 +702,108 @@ function displayJourneyResult(journey) {
 
         summaryText.innerHTML = `
             <!-- Top Header with Route Title & Star Bookmark -->
-            <div class="flex items-center justify-between pb-3 mb-3 border-b border-subtle">
-                <div class="flex flex-col">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-secondary opacity-70">Calculated Metro Route</span>
-                    <h3 class="text-base font-extrabold text-primary flex items-center gap-1.5 truncate max-w-[240px]">
-                        <span>${startName}</span>
+            <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-subtle">
+                <div class="flex flex-col min-w-0 pr-2">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-secondary opacity-70">Calculated Metro Route</span>
+                    <h3 class="text-base font-extrabold text-primary flex items-center gap-1.5 truncate">
+                        <span class="truncate">${startName}</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-secondary opacity-50 shrink-0"></i>
-                        <span>${endName}</span>
+                        <span class="truncate">${endName}</span>
                     </h3>
                 </div>
-                <button id="toggle-fav-btn" type="button" class="w-9 h-9 rounded-xl flex items-center justify-center bg-card-subtle hover:bg-card-hover border border-subtle active:scale-90 transition-all shadow-sm" title="${isFav ? 'Remove from favorites' : 'Save to favorites'}">
-                    <i data-lucide="star" class="w-4 h-4 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-secondary hover:text-amber-400'}"></i>
-                </button>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button id="toggle-fav-btn" type="button" class="w-8 h-8 rounded-xl flex items-center justify-center bg-card-subtle hover:bg-card-hover border border-subtle active:scale-90 transition-all shadow-sm shrink-0" title="${isFav ? 'Remove from favorites' : 'Save to favorites'}">
+                        <i data-lucide="star" class="w-4 h-4 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-secondary hover:text-amber-400'}"></i>
+                    </button>
+                    <button id="clear-route-btn" type="button" class="w-8 h-8 rounded-xl flex items-center justify-center bg-card-subtle hover:bg-card-hover text-secondary hover:text-red-500 border border-subtle active:scale-90 transition-all shadow-sm shrink-0" title="Clear Route / Back to Home">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Time & Fare Row -->
-            <div class="flex justify-between items-end mb-3">
+            <!-- Time & Fare Row with Smart Card 5% Discount -->
+            <div class="flex justify-between items-end mb-2">
                 <div>
-                    <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
+                    <p class="text-[11px] text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
                     <p class="text-2xl font-extrabold text-primary tracking-tight">${formattedTime}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
-                    <p class="text-2xl font-extrabold text-emerald-400 tracking-tight">₹${journey.fare} <span class="text-xs text-secondary opacity-70 font-normal">/ token</span></p>
+                    <p class="text-[11px] text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
+                    <div class="flex items-baseline justify-end gap-1.5">
+                        <span class="text-2xl font-extrabold text-emerald-400 tracking-tight">₹${journey.fare}</span>
+                        <span class="text-xs text-secondary opacity-70 font-normal">token</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 mt-0.5 justify-end">
+                        <i data-lucide="credit-card" class="w-3 h-3"></i>
+                        <span>Smart Card: ₹${(journey.fare * 0.95).toFixed(journey.fare * 0.95 % 1 === 0 ? 0 : 1)} (5% OFF)</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Route Badges & Stations Strip -->
-            <div class="p-3 bg-card-subtle/70 rounded-xl border border-subtle mb-3 flex flex-col gap-2">
-                <div class="flex flex-wrap items-center gap-1.5">
+            <!-- Pass & Card Savings Advisor Trigger -->
+            <button id="view-pass-advisor-btn" type="button" class="w-full mb-2.5 py-1.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 flex items-center justify-between text-xs transition-all active:scale-[0.98] group">
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+                    <span class="font-extrabold text-primary text-[11px]">Compare 1-Day Pass & Card Savings</span>
+                </div>
+                <span class="text-emerald-600 dark:text-emerald-400 font-extrabold text-[11px] flex items-center gap-0.5">
+                    <span>Advisor</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                </span>
+            </button>
+
+            <!-- Route Badges & Stations Strip (Strict 1-Line Layout) -->
+            <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-1.5 overflow-hidden">
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar whitespace-nowrap py-0.5">
                     ${lineBadges}
                 </div>
-                <div class="flex flex-wrap items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary">
-                    <span class="font-bold text-primary flex items-center gap-1">
-                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary"></i>
-                        ${journey.stationHops} ${T('stops') || 'Stops'} ${journey.distanceKm ? `(${journey.distanceKm} km)` : ''}
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary whitespace-nowrap overflow-hidden gap-1">
+                    <span class="font-bold text-primary flex items-center gap-1 shrink-0 text-[11px]">
+                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary shrink-0"></i>
+                        <span>${journey.stationHops} Stops • ${journey.distanceKm || '0'} km</span>
                     </span>
-                    ${transferNotice}
+                    <span class="truncate text-right font-medium shrink-0">${transferNotice}</span>
                 </div>
             </div>
 
-            <!-- Boarding Platform & Next Train Strip -->
-            <div class="grid grid-cols-2 gap-2 mb-3">
-                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
-                    <span class="text-[10px] text-secondary uppercase tracking-wider font-bold">Platform & Direction</span>
-                    <span class="text-xs font-bold text-primary truncate mt-0.5">Platform ${startPlatform} • ${journeyDir}</span>
+            <!-- Boarding Platform & Next Train Strip (Strict 1-Line) -->
+            <div class="grid grid-cols-2 gap-2 mb-2.5">
+                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2 rounded-xl border border-[var(--border-color)] justify-between overflow-hidden">
+                    <span class="text-[9px] text-secondary uppercase tracking-wider font-bold truncate">Platform & Direction</span>
+                    <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
+                        <span class="platform-pill text-[9px] py-0.5 px-1.5 font-black shrink-0">P${startPlatform}</span>
+                        <span class="text-xs font-bold text-primary truncate" title="${journeyDir}">${journeyDir}</span>
+                    </div>
                 </div>
-                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)]">
-                    <span class="text-[10px] text-secondary uppercase tracking-wider font-bold">${T('nextTrain')}</span>
-                    <span class="text-xs font-bold text-emerald-500 dark:text-emerald-400 truncate mt-0.5">${formatTime(journey.departureTime)}</span>
+                <div class="flex flex-col bg-[var(--bg-card-hover)] p-2 rounded-xl border border-[var(--border-color)] justify-between overflow-hidden">
+                    <span class="text-[9px] text-secondary uppercase tracking-wider font-bold truncate">${T('nextTrain')}</span>
+                    <span class="text-xs font-bold text-emerald-500 dark:text-emerald-400 mt-0.5 whitespace-nowrap">${formatTime(journey.departureTime)}</span>
                 </div>
+            </div>
+
+            <!-- Women's Coach Compact 1-Liner with Instant Emergency SOS (Strict Single Line) -->
+            <div class="mb-2 py-1 px-2.5 rounded-xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-between gap-1.5 text-[11px] text-pink-600 dark:text-pink-400 font-bold whitespace-nowrap overflow-hidden">
+                <div class="flex items-center gap-1.5 truncate">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 shrink-0 text-pink-500"></i>
+                    <span class="truncate">Coach 1: Women's Reserved (Front)</span>
+                </div>
+                <a href="tel:1091" class="shrink-0 px-2 py-0.5 rounded-lg bg-pink-500 hover:bg-pink-600 active:scale-95 text-white font-black text-[10px] flex items-center gap-1 shadow-sm transition-all" title="Call 1091 Women Helpline">
+                    <i data-lucide="phone-call" class="w-2.5 h-2.5"></i>
+                    <span>SOS 1091</span>
+                </a>
             </div>
 
             <!-- WhatsApp Ticket Booking Card -->
-            <div class="mt-2 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-3">
+            <div class="mt-1 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-2.5">
                 <div class="flex items-center justify-between">
                     <div class="flex flex-col">
-                        <span class="text-xs font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
+                        <span class="text-[10px] font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
                         <span class="text-xs text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5">Total: ₹${totalFareAmount}</span>
                     </div>
-                    <div class="flex items-center gap-2 bg-white dark:bg-neutral-900 px-3 py-1.5 rounded-xl border border-emerald-500/30 shadow-sm">
-                        <button id="p-minus-btn" type="button" class="w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">-</button>
-                        <span class="font-extrabold text-sm text-primary w-6 text-center">${passengerCount}</span>
-                        <button id="p-plus-btn" type="button" class="w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">+</button>
+                    <div class="flex items-center gap-2 bg-white dark:bg-neutral-900 px-2.5 py-1 rounded-xl border border-emerald-500/30 shadow-sm">
+                        <button id="p-minus-btn" type="button" class="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">-</button>
+                        <span class="font-extrabold text-sm text-primary w-5 text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" type="button" class="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">+</button>
                     </div>
                 </div>
 
@@ -669,6 +834,24 @@ function displayJourneyResult(journey) {
                     if (window.lucide) window.lucide.createIcons();
                     setTimeout(() => { toast.style.opacity = '0'; }, 2200);
                 }
+            });
+        }
+
+        // Clear Route / Back to Home listener
+        const clearRouteBtn = document.getElementById('clear-route-btn');
+        if (clearRouteBtn) {
+            clearRouteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetPlannerToHome();
+            });
+        }
+
+        // Pass & Card Advisor listener
+        const passAdvisorBtn = document.getElementById('view-pass-advisor-btn');
+        if (passAdvisorBtn) {
+            passAdvisorBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openPassAdvisorModal();
             });
         }
 
@@ -735,30 +918,48 @@ function displayJourneyResult(journey) {
     }
 }
 
+// ─── Instant View Switching (0ms Delay, Bulletproof State) ───
+let currentVisibleViewId = 'planner-view';
+
 function switchView(viewId) {
-    // Hide all views
-    const allViews = ['planner-view', 'map-view', 'stations-view', 'timings-view', 'explore-view', 'safety-view', 'not-found-view'];
+    const allViews = [
+        'planner-view',
+        'map-view',
+        'stations-view',
+        'timings-view',
+        'explore-view',
+        'safety-view',
+        'not-found-view'
+    ];
+
     allViews.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            el.style.display = 'none';
-            el.classList.add('hidden');
+            if (id === viewId) {
+                el.classList.remove('hidden', 'view-exiting', 'view-entering');
+                el.style.display = 'flex';
+                el.style.flexDirection = 'column';
+                el.classList.add('view-active');
+                el.scrollTop = 0;
+            } else {
+                el.classList.add('hidden');
+                el.style.display = 'none';
+                el.classList.remove('view-active', 'view-entering', 'view-exiting');
+            }
         }
     });
 
-    const target = document.getElementById(viewId);
-    if (target) {
-        target.style.display = 'flex';
-        target.style.flexDirection = 'column';
-        target.classList.remove('hidden');
-    }
+    currentVisibleViewId = viewId;
 
-    // Hide bottom nav during simulation
+    // Handle map-view simulation bottom nav visibility
     const bottomNav = document.getElementById('bottom-nav');
     if (viewId === 'map-view') {
-        bottomNav.style.display = 'none';
+        if (bottomNav) bottomNav.style.display = 'none';
     } else {
-        bottomNav.style.display = 'flex';
+        if (bottomNav) {
+            bottomNav.style.display = 'flex';
+            bottomNav.classList.remove('nav-hidden');
+        }
     }
 
     if (viewId === 'planner-view') {
@@ -767,7 +968,7 @@ function switchView(viewId) {
     }
 }
 
-// --- Bottom Navigation ---
+// ─── Instant Bottom Navigation (Fast Click & Drag/Slide to Select) ───
 function updateNavIndicator() {
     const activeBtn = document.querySelector('.nav-item.active');
     const indicator = document.getElementById('nav-indicator');
@@ -780,40 +981,201 @@ function updateNavIndicator() {
     indicator.style.width = `${width}px`;
 }
 
+let lastNavTimestamp = 0;
+function safeNavigateToView(view) {
+    if (!view) return;
+    const now = Date.now();
+    if (now - lastNavTimestamp < 220) return;
+    lastNavTimestamp = now;
+    navigateToView(view);
+}
+
 function initBottomNav() {
+    const bottomNav = document.getElementById('bottom-nav');
     const navItems = document.querySelectorAll('.nav-item');
+    if (!bottomNav) return;
+
+    // Direct, 100% Reliable Click & Tap on Every Nav Item
     navItems.forEach(item => {
-        item.addEventListener('click', () => {
+        // Fast click handler
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
             const view = item.dataset.view;
-            navigateToView(view);
+            if (view) {
+                safeNavigateToView(view);
+            }
+        });
+
+        // Instant visual feedback on touch start
+        item.addEventListener('pointerdown', () => {
+            item.classList.add('is-pressed');
+            const indicator = document.getElementById('nav-indicator');
+            if (indicator) {
+                indicator.style.transform = `translateX(${item.offsetLeft}px)`;
+                indicator.style.width = `${item.offsetWidth}px`;
+            }
+        });
+
+        item.addEventListener('pointerup', () => {
+            item.classList.remove('is-pressed');
+        });
+
+        item.addEventListener('pointercancel', () => {
+            item.classList.remove('is-pressed');
         });
     });
 
-    window.addEventListener('resize', updateNavIndicator);
+    // Drag / Slide gesture across the bottom nav bar to select buttons
+    let isNavSliding = false;
+    let lastHoveredView = null;
+    let startX = 0;
 
-    // Auto-hide bottom nav on scroll down, show on scroll up
-    const sections = document.querySelectorAll('.section-view');
-    const bottomNav = document.getElementById('bottom-nav');
-    
-    sections.forEach(section => {
-        let lastScrollTop = 0;
-        section.addEventListener('scroll', () => {
-            const st = section.scrollTop;
-            if (st > lastScrollTop && st > 30) {
-                // Scroll Down -> Hide nav
-                if (bottomNav) bottomNav.classList.add('nav-hidden');
-            } else if (st < lastScrollTop) {
-                // Scroll Up -> Show nav
-                if (bottomNav) bottomNav.classList.remove('nav-hidden');
+    const findViewAtPoint = (x, y) => {
+        const el = document.elementFromPoint(x, y);
+        const navBtn = el ? el.closest('.nav-item') : null;
+        return navBtn ? { view: navBtn.dataset.view, el: navBtn } : null;
+    };
+
+    bottomNav.addEventListener('touchstart', (e) => {
+        if (!e.touches || !e.touches[0]) return;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        isNavSliding = false;
+        const target = findViewAtPoint(touch.clientX, touch.clientY);
+        if (target) {
+            lastHoveredView = target.view;
+        }
+    }, { passive: true });
+
+    bottomNav.addEventListener('touchmove', (e) => {
+        if (!e.touches || !e.touches[0]) return;
+        const touch = e.touches[0];
+        const dx = Math.abs(touch.clientX - startX);
+        if (dx > 8) {
+            isNavSliding = true;
+        }
+
+        const target = findViewAtPoint(touch.clientX, touch.clientY);
+        if (target) {
+            lastHoveredView = target.view;
+            const indicator = document.getElementById('nav-indicator');
+            if (indicator) {
+                indicator.style.transform = `translateX(${target.el.offsetLeft}px)`;
+                indicator.style.width = `${target.el.offsetWidth}px`;
             }
-            lastScrollTop = st <= 0 ? 0 : st;
-        }, { passive: true });
-    });
+            navItems.forEach(n => {
+                if (n === target.el) {
+                    n.classList.add('is-pressed');
+                } else {
+                    n.classList.remove('is-pressed');
+                }
+            });
+        }
+    }, { passive: true });
 
+    bottomNav.addEventListener('touchend', (e) => {
+        navItems.forEach(n => n.classList.remove('is-pressed'));
+        if (isNavSliding && lastHoveredView) {
+            safeNavigateToView(lastHoveredView);
+        } else {
+            const touch = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0] : null;
+            if (touch) {
+                const target = findViewAtPoint(touch.clientX, touch.clientY);
+                if (target && target.view) {
+                    safeNavigateToView(target.view);
+                }
+            }
+        }
+        isNavSliding = false;
+        lastHoveredView = null;
+    }, { passive: true });
+
+    bottomNav.addEventListener('touchcancel', () => {
+        navItems.forEach(n => n.classList.remove('is-pressed'));
+        isNavSliding = false;
+        lastHoveredView = null;
+    }, { passive: true });
+
+    window.addEventListener('resize', updateNavIndicator);
     setTimeout(updateNavIndicator, 60);
+
+    // ─── Scroll Down Vanish, Scroll Up Show, and 3-Second Auto-Vanish ───
+    let lastScrollY = 0;
+    let navVanishTimer = null;
+
+    window.showBottomNav = function(startVanishCountdown = true) {
+        if (activeView === 'map-view') return;
+        bottomNav.classList.remove('nav-hidden');
+        clearTimeout(navVanishTimer);
+        if (startVanishCountdown) {
+            navVanishTimer = setTimeout(() => {
+                if (bottomNav && !isNavSliding && activeView !== 'map-view') {
+                    bottomNav.classList.add('nav-hidden');
+                }
+            }, 3000);
+        }
+    };
+
+    window.hideBottomNav = function() {
+        clearTimeout(navVanishTimer);
+        bottomNav.classList.add('nav-hidden');
+    };
+
+    const handleScroll = (e) => {
+        const target = e.target;
+        let currentScrollY = 0;
+        if (target && typeof target.scrollTop === 'number' && target.scrollTop > 0) {
+            currentScrollY = target.scrollTop;
+        } else {
+            currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        }
+
+        const diff = currentScrollY - lastScrollY;
+
+        // Ignore tiny jitter
+        if (Math.abs(diff) < 5) return;
+
+        if (diff > 0 && currentScrollY > 25) {
+            // Scrolling down -> vanish immediately
+            window.hideBottomNav();
+        } else if (diff < 0) {
+            // Moving / scrolling up -> show and after 3 sec vanish
+            window.showBottomNav(true);
+        }
+
+        lastScrollY = currentScrollY;
+    };
+
+    // Attach scroll listener to all section views AND capture on window/document
+    document.querySelectorAll('.section-view').forEach(view => {
+        view.addEventListener('scroll', handleScroll, { passive: true });
+    });
+    window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+    document.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+
+    // Also reveal nav if user taps or interacts near the bottom, and auto-vanish after 3s
+    window.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches[0].clientY > window.innerHeight - 85) {
+            window.showBottomNav(true);
+        }
+    }, { passive: true });
 }
 
 function navigateToView(view) {
+    if (!view) return;
+
+    const targetViewId = view === 'plan' ? 'planner-view' : `${view}-view`;
+
+    // Smoothly scroll to top ONLY if already visibly on this exact target view
+    if (activeView === view && currentVisibleViewId === targetViewId) {
+        const curEl = document.getElementById(currentVisibleViewId);
+        if (curEl) {
+            curEl.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (window.showBottomNav) window.showBottomNav(true);
+        return;
+    }
+
     activeView = view;
 
     // Send view change notification to React parent page
@@ -825,19 +1187,22 @@ function navigateToView(view) {
         console.warn("[NammaRide Simulator] parent notification failed:", e);
     }
 
-    // Reveal nav if hidden when switching tab
-    const bottomNav = document.getElementById('bottom-nav');
-    if (bottomNav) bottomNav.classList.remove('nav-hidden');
+    // Reveal nav when switching tab and start 3s timer
+    if (window.showBottomNav) {
+        window.showBottomNav(true);
+    }
 
-    // Update active nav state
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    // Update active nav state immediately
+    document.querySelectorAll('.nav-item').forEach(n => {
+        n.classList.remove('active', 'is-pressed');
+    });
     const activeBtn = document.querySelector(`.nav-item[data-view="${view}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active');
         updateNavIndicator();
     }
 
-    // Show the correct view
+    // Show the correct view with 0ms delay
     if (view === 'plan') {
         switchView('planner-view');
     } else if (view === 'stations') {
@@ -886,7 +1251,14 @@ function generateTimeline(journey) {
 
 function startSimulation(journey, useLiveLocation, startTimeOverride) {
     if (!journey) return;
+    activeView = 'map';
     switchView('map-view');
+
+    const simStatus = document.getElementById('simulation-status');
+    if (simStatus) {
+        simStatus.className = 'sticky top-0 z-40 w-full';
+        simStatus.classList.remove('hidden');
+    }
 
     simulationState.isActive = true;
     simulationState.journeyId = journey.id;
@@ -906,6 +1278,7 @@ function startSimulation(journey, useLiveLocation, startTimeOverride) {
     }));
 
     renderLiveRoute(journey, document.getElementById('route-list'), simulationState);
+    updateSimulationUI();
 
     // Geolocation high-accuracy watch position
     if (navigator.geolocation) {
@@ -1061,13 +1434,15 @@ function updateSimulationUI() {
 
     const simStatus = document.getElementById('simulation-status');
     if (!simStatus) return;
+    simStatus.className = 'sticky top-0 z-40 w-full';
+    simStatus.classList.remove('hidden');
 
     // Bind event delegation ONCE for bulletproof click handler support
     if (!simStatus.dataset.listenersBound) {
         simStatus.dataset.listenersBound = 'true';
         simStatus.addEventListener('click', (e) => {
             const finishBtn = e.target.closest('#manual-finish-btn');
-            const exitBtn = e.target.closest('#exit-journey-btn');
+            const exitBtn = e.target.closest('#exit-journey-btn, #map-back-home-btn, #map-end-trip-btn');
             const doneBtn = e.target.closest('#done-celebrate-btn');
             const exploreBtn = e.target.closest('#explore-nearby-celebrate-btn');
 
@@ -1083,7 +1458,7 @@ function updateSimulationUI() {
             } else if (exitBtn || doneBtn) {
                 e.preventDefault();
                 e.stopPropagation();
-                stopSimulation();
+                resetPlannerToHome();
             } else if (exploreBtn) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1109,54 +1484,40 @@ function updateSimulationUI() {
     let gpsWarningHtml = '';
     if (showManualFinish) {
         gpsWarningHtml = `
-            <div class="gps-warning-banner py-1 px-2.5 mt-1 text-[10px]">
-                <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-500"></i>
+            <div class="gps-warning-banner py-1 px-3 text-[10px] bg-amber-500/10 border-b border-amber-500/20 text-amber-500 flex items-center justify-center gap-1.5">
+                <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-500 shrink-0"></i>
                 <span>${T('gpsWeak') || 'GPS signal is weak. Manual override available.'}</span>
             </div>
         `;
     }
 
     simStatus.innerHTML = `
-        <div class="live-tracking-panel w-full flex flex-col p-3 px-3.5 rounded-2xl shadow-xl gap-2">
-            <!-- Row 1: Train Icon, Destination, GPS status, and Close button -->
-            <div class="flex items-center justify-between gap-2 border-b border-subtle/40 pb-2">
-                <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center justify-center shrink-0 shadow-inner">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400">
-                            <path d="M7.5 2H16.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-                            <rect x="3.5" y="4" width="17" height="17" rx="4" stroke="currentColor" stroke-width="2"/>
-                            <rect x="5.5" y="6" width="13" height="7.5" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                            <line x1="9" y1="11.5" x2="11.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                            <line x1="13" y1="11.5" x2="15.5" y2="7.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                            <rect x="5" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <rect x="15" y="15" width="4" height="2" rx="0.85" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M8 21V19C8 18.2 9.2 17.5 12 17.5C14.8 17.5 16 18.2 16 19V21" stroke="currentColor" stroke-width="1.5"/>
-                            <line x1="5.5" y1="22.5" x2="18.5" y2="22.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="flex items-center gap-1.5 min-w-0">
-                        <span class="text-[11px] uppercase tracking-wider font-extrabold text-emerald-500 truncate">${T('towards')} ${destinationName}</span>
-                        <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
-                    </div>
+        <div class="w-full flex items-center justify-between p-2.5 px-3.5 bg-card/95 backdrop-blur-md border-b border-subtle shadow-sm gap-2">
+            <!-- Left: Home / Exit Button -->
+            <button id="exit-journey-btn" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-extrabold text-xs active:scale-95 transition-all shrink-0" title="Exit Trip & Back to Home">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-emerald-500"></i>
+                <span>Home / Exit</span>
+            </button>
+
+            <!-- Center: Live Destination & Minutes -->
+            <div class="flex flex-col items-center justify-center min-w-0 px-1 text-center truncate">
+                <div class="flex items-center gap-1.5 min-w-0 justify-center">
+                    <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-primary truncate">${destinationName}</span>
+                    <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
                 </div>
-                <button id="exit-journey-btn" class="bg-card-subtle hover:bg-red-500/15 hover:text-red-400 active:scale-95 border border-subtle text-secondary font-bold p-1 rounded-lg text-xs transition-colors flex items-center justify-center shrink-0" title="${T('exitJourney') || 'Exit'}">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
+                <div class="flex items-center gap-1 text-[10px] text-secondary font-semibold justify-center">
+                    <i data-lucide="clock" class="w-3 h-3 text-emerald-500 shrink-0"></i>
+                    <span>${remainingMinutes} min remaining</span>
+                </div>
             </div>
 
-            <!-- Row 2: Remaining Time & Finish Journey Button -->
-            <div class="flex items-center justify-between gap-2 pt-0.5">
-                <div class="flex items-center gap-1.5 text-xs font-extrabold text-primary">
-                    <i data-lucide="clock" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
-                </div>
-                <button id="manual-finish-btn" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1 shrink-0">
-                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                    <span>${T('finishJourney') || 'Finish'}</span>
-                </button>
-            </div>
-            ${gpsWarningHtml}
+            <!-- Right: Finish Button -->
+            <button id="manual-finish-btn" type="button" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all shrink-0" title="Complete Trip & View Gates">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                <span>Finish</span>
+            </button>
         </div>
+        ${gpsWarningHtml}
     `;
 
     if (window.lucide) window.lucide.createIcons();
@@ -1175,46 +1536,215 @@ function showJourneyComplete(destinationName) {
         simulationState.animationFrameId = null;
     }
 
-    const simStatus = document.getElementById('simulation-status');
-    if (!simStatus) return;
+    let destinationId = '';
+    if (currentJourney && currentJourney.parts && currentJourney.parts.length > 0) {
+        const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
+        const lastSt = lastPart?.stations?.[lastPart.stations.length - 1];
+        destinationId = lastSt?.id || '';
+    }
 
-    const places = stationPlaces[destinationName] || [];
-    const hasExploreOption = places.length > 0;
+    openDestinationHubModal(destinationId, destinationName, 'places');
+}
 
-    simStatus.innerHTML = `
-        <div class="journey-complete-card">
-            <div class="confetti-container" id="celebration-confetti"></div>
-            <div class="celebration-checkmark-wrap">
-                <i data-lucide="check" class="celebration-checkmark"></i>
+function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
+    const modal = document.getElementById('station-gates-modal');
+    const content = document.getElementById('station-gates-modal-content');
+    if (!modal || !content) return;
+
+    const cleanStationName = T_STATION(stationName || 'Metro Station');
+
+    // Look up places with fuzzy matching
+    let places = stationPlaces[stationName] || [];
+    if (!places.length) {
+        const cleanKey = (stationName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const foundKey = Object.keys(stationPlaces).find(k => k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey);
+        if (foundKey) places = stationPlaces[foundKey];
+    }
+
+    // Look up gates
+    const gates = getStationGates(stationId, stationName);
+
+    content.innerHTML = `
+        <!-- Sticky Header (Adaptive Light/Dark Theme) -->
+        <div class="destination-hub-header p-3 px-4 border-b flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                    <i data-lucide="check" class="w-4 h-4 font-black"></i>
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <span class="text-[9px] uppercase font-black tracking-widest text-emerald-500">Journey Complete</span>
+                    <h3 class="text-sm sm:text-base font-extrabold truncate text-primary">${cleanStationName}</h3>
+                </div>
             </div>
-            <h3 class="font-bold text-lg text-emerald-400 mb-1">${T('journeyComplete') || 'Journey Complete!'}</h3>
-            <p class="text-sm text-primary mb-4 font-medium">${T('youHaveArrived') || 'You have arrived!'} • ${destinationName}</p>
-            
-            <div class="flex justify-center gap-3 relative z-10">
-                ${hasExploreOption ? `
-                    <button id="explore-nearby-celebrate-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-emerald-500/20">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                        ${T('exploreNearby') || 'Explore Nearby'}
+            <button id="close-hub-modal-btn" type="button" class="w-8 h-8 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle flex items-center justify-center text-secondary hover:text-primary shrink-0 active:scale-95 transition-all" title="Close & Finish">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Segmented Tab Navigation Bar -->
+        <div class="flex items-center border-b border-subtle px-3 shrink-0 bg-card">
+            <button id="hub-tab-places-btn" class="hub-tab-btn flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 ${activeTab === 'places' ? 'active' : ''}">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                <span>Nearby Places (${places.length})</span>
+            </button>
+            <button id="hub-tab-gates-btn" class="hub-tab-btn flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 ${activeTab === 'gates' ? 'active' : ''}">
+                <i data-lucide="door-open" class="w-3.5 h-3.5"></i>
+                <span>Exit Gates & Guide (${gates.length})</span>
+            </button>
+        </div>
+
+        <!-- Scrollable Tab Content Container -->
+        <div class="destination-hub-body flex-1 overflow-y-auto p-3.5 pb-24 space-y-3 custom-scrollbar">
+            ${activeTab === 'places' ? `
+                <!-- TAB 1: NEARBY PLACES TO DESTINATION -->
+                <div class="space-y-2.5">
+                    <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-2 text-xs text-primary">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                        <span>Top attractions, transit links & landmarks near <strong>${cleanStationName}</strong>.</span>
+                    </div>
+
+                    ${places.length > 0 ? places.map(p => `
+                        <div class="destination-hub-subcard p-3 rounded-2xl flex items-center justify-between gap-2.5 transition-all">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20 font-black text-xs">
+                                    <i data-lucide="${p.type === 'Shopping' ? 'shopping-bag' : p.type === 'Transit' ? 'bus' : p.type === 'Hospital' ? 'cross' : 'map-pin'}" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="text-xs sm:text-sm font-extrabold truncate text-primary">${p.name}</h4>
+                                    <div class="flex items-center gap-2 mt-0.5 text-[10px] text-secondary">
+                                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold">${p.type}</span>
+                                        <span>•</span>
+                                        <span>${p.distance_km || '0.3'} km (${p.walk_time_min || '4'} min walk)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + cleanStationName)}`}" target="_blank" class="shrink-0 px-2.5 py-1.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary flex items-center gap-1 active:scale-95 transition-all">
+                                <span>Directions</span>
+                                <i data-lucide="arrow-up-right" class="w-3 h-3 text-secondary"></i>
+                            </a>
+                        </div>
+                    `).join('') : `
+                        <div class="destination-hub-subcard p-6 rounded-2xl text-center text-xs text-secondary">
+                            <i data-lucide="compass" class="w-8 h-8 text-secondary mx-auto mb-2 opacity-50"></i>
+                            <p class="font-bold text-primary">Local Transit & Commercial Hub</p>
+                            <p class="text-[11px] mt-1">Connecting BMTC feeder buses, auto rickshaw stands, and local markets are directly outside the station gates.</p>
+                        </div>
+                    `}
+
+                    <!-- Prompt to view Exit Gates -->
+                    <button id="switch-to-gates-cta-btn" type="button" class="w-full py-2.5 px-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+                        <i data-lucide="door-open" class="w-3.5 h-3.5"></i>
+                        <span>Next: View Station Exit Gates & Directions ➔</span>
                     </button>
-                ` : ''}
-                <button id="done-celebrate-btn" class="bg-card-subtle border border-subtle text-primary font-bold px-4 py-2 rounded-lg text-xs hover:bg-hover transition-colors">
-                    Done
-                </button>
-            </div>
+                </div>
+            ` : `
+                <!-- TAB 2: STATION EXIT GATES & ROAD CROSSING GUIDE -->
+                <div class="space-y-3">
+                    <div class="p-2.5 rounded-xl bg-card-subtle border border-subtle flex items-start gap-2 text-[11px] text-secondary">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5"></i>
+                        <span>Choose your exit gate below to avoid crossing heavy Bengaluru traffic.</span>
+                    </div>
+
+                    ${gates && gates.length > 0 ? gates.map((g, idx) => `
+                        <div class="destination-hub-subcard p-3.5 rounded-2xl space-y-2.5 shadow-sm">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <span class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/25">
+                                        ${g.gate}
+                                    </span>
+                                    <div class="min-w-0">
+                                        <h4 class="text-xs sm:text-sm font-extrabold text-primary truncate">Gate ${g.gate} • ${g.name}</h4>
+                                        <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block truncate">${g.landmark}</span>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-card-subtle text-secondary border border-subtle shrink-0">
+                                    ${idx === 0 ? 'Main Entry / Exit' : 'Opposite Side Access'}
+                                </span>
+                            </div>
+
+                            <div class="destination-hub-subcard-inner p-2.5 rounded-xl space-y-1 text-xs">
+                                <div class="flex items-start gap-2 text-indigo-500 dark:text-indigo-400 font-extrabold text-[11px]">
+                                    <i data-lucide="${idx === 0 ? 'arrow-right' : 'arrow-left-right'}" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
+                                    <span>${idx === 0 ? `Use Gate ${g.gate} for Main Road, BMTC Bus Bay & Auto Stand` : `Use Foot Overbridge at Gate ${g.gate} to cross to opposite road side`}</span>
+                                </div>
+                                <p class="text-secondary text-[11px] leading-relaxed pl-5">${g.destination}</p>
+                            </div>
+
+                            <div class="flex items-center gap-3 pt-1 border-t border-subtle/50 text-[10px] text-secondary font-semibold">
+                                <span class="flex items-center gap-1"><i data-lucide="accessibility" class="w-3 h-3 text-emerald-500"></i> Ramps & Lifts</span>
+                                <span class="flex items-center gap-1"><i data-lucide="ticket" class="w-3 h-3 text-amber-500"></i> Ticket Counters</span>
+                                <span class="flex items-center gap-1"><i data-lucide="shield" class="w-3 h-3 text-blue-500"></i> Security Post</span>
+                            </div>
+                        </div>
+                    `).join('') : `
+                        <div class="p-6 text-center text-secondary text-xs">Gate directory details are being synchronized for this station.</div>
+                    `}
+                </div>
+            `}
+        </div>
+
+        <!-- Sticky Footer Action Bar -->
+        <div class="destination-hub-footer p-3 px-4 border-t flex items-center justify-between gap-2.5 shrink-0">
+            <button id="hub-footer-qr-btn" type="button" class="py-2.5 px-3.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5 text-emerald-500"></i>
+                <span>QR Ticket</span>
+            </button>
+            <button id="hub-footer-explore-btn" type="button" class="py-2.5 px-3.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500"></i>
+                <span>Explore</span>
+            </button>
+            <button id="hub-complete-trip-btn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all text-center">
+                ✓ Done
+            </button>
         </div>
     `;
 
-    document.getElementById('done-celebrate-btn').addEventListener('click', stopSimulation);
-    if (hasExploreOption) {
-        document.getElementById('explore-nearby-celebrate-btn').addEventListener('click', () => {
-            if (window.showNearbyAttractions) {
-                window.showNearbyAttractions(destinationName);
-            }
-        });
-    }
-
+    modal.classList.remove('hidden');
     if (window.lucide) window.lucide.createIcons();
-    createConfettiEffect();
+
+    // Event handlers for Hub modal
+    document.getElementById('hub-tab-places-btn')?.addEventListener('click', () => {
+        openDestinationHubModal(stationId, stationName, 'places');
+    });
+    document.getElementById('hub-tab-gates-btn')?.addEventListener('click', () => {
+        openDestinationHubModal(stationId, stationName, 'gates');
+    });
+    document.getElementById('switch-to-gates-cta-btn')?.addEventListener('click', () => {
+        openDestinationHubModal(stationId, stationName, 'gates');
+    });
+
+    // QR Ticket trigger (Single reliable trigger from footer)
+    document.getElementById('hub-footer-qr-btn')?.addEventListener('click', () => {
+        const ticketData = getActiveTicketData();
+        if (ticketData) {
+            if (window.openQRScannerModal) window.openQRScannerModal();
+        } else {
+            if (window.openTicketUploadModal) window.openTicketUploadModal();
+        }
+    });
+
+    // Close and complete trip triggers (Return to Home Page)
+    const handleCompleteTrip = (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        modal.classList.add('hidden');
+        if (window.closeQRFullscreen) window.closeQRFullscreen();
+        const qrScanModal = document.getElementById('qr-scanner-modal');
+        if (qrScanModal) qrScanModal.classList.remove('modal-active');
+        resetPlannerToHome();
+    };
+    document.getElementById('close-hub-modal-btn')?.addEventListener('click', handleCompleteTrip);
+    document.getElementById('hub-complete-trip-btn')?.addEventListener('click', handleCompleteTrip);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) handleCompleteTrip(e);
+    });
+
+    // Explore Nearby Places trigger - show nearby to destination right inside this hub
+    document.getElementById('hub-footer-explore-btn')?.addEventListener('click', () => {
+        openDestinationHubModal(stationId, stationName, 'places');
+    });
 }
 
 function createConfettiEffect() {
@@ -1244,11 +1774,86 @@ function stopSimulation() {
         navigator.geolocation.clearWatch(simulationState.locationWatcherId);
         simulationState.locationWatcherId = null;
     }
+    const simStatus = document.getElementById('simulation-status');
+    if (simStatus) {
+        simStatus.className = 'sticky top-0 z-40 w-full hidden';
+        simStatus.innerHTML = '';
+        delete simStatus.dataset.lastStateKey;
+    }
+    const routeList = document.getElementById('route-list');
+    if (routeList) routeList.innerHTML = '';
+
     sessionStorage.removeItem('activeJourney');
     sessionStorage.removeItem('simulationState');
-    sessionStorage.removeItem('activeJourneyTicketImage');
+    localStorage.removeItem('activeJourney');
+    localStorage.removeItem('simulationState');
+
+    activeView = null;
+    switchView('planner-view');
     navigateToView('plan');
 }
+
+export function resetPlannerToHome() {
+    simulationState.isActive = false;
+    if (simulationState.animationFrameId) {
+        cancelAnimationFrame(simulationState.animationFrameId);
+        simulationState.animationFrameId = null;
+    }
+    if (simulationState.locationWatcherId) {
+        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
+        simulationState.locationWatcherId = null;
+    }
+    const modal = document.getElementById('station-gates-modal');
+    if (modal) modal.classList.add('hidden');
+    if (window.closeQRFullscreen) window.closeQRFullscreen();
+    const qrScanModal = document.getElementById('qr-scanner-modal');
+    if (qrScanModal) qrScanModal.classList.remove('modal-active');
+
+    const simStatus = document.getElementById('simulation-status');
+    if (simStatus) {
+        simStatus.className = 'sticky top-0 z-40 w-full hidden';
+        simStatus.innerHTML = '';
+        delete simStatus.dataset.lastStateKey;
+    }
+    const routeList = document.getElementById('route-list');
+    if (routeList) routeList.innerHTML = '';
+
+    if (startDropdown) {
+        startDropdown.clearSelection();
+        startDropdown.setExcludedStationName(null);
+    }
+    if (endDropdown) {
+        endDropdown.clearSelection();
+        endDropdown.setExcludedStationName(null);
+    }
+    const startInput = document.getElementById('start-station');
+    if (startInput) startInput.value = '';
+    const endInput = document.getElementById('end-station');
+    if (endInput) endInput.value = '';
+    currentJourney = null;
+    passengerCount = 1;
+    displayJourneyResult(null);
+    sessionStorage.removeItem('activeJourney');
+    sessionStorage.removeItem('simulationState');
+    localStorage.removeItem('activeJourney');
+    localStorage.removeItem('simulationState');
+
+    activeView = null;
+    switchView('planner-view');
+    navigateToView('plan');
+
+    const planView = document.getElementById('planner-view');
+    if (planView) {
+        planView.scrollTop = 0;
+        planView.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) {
+        bottomNav.style.display = 'flex';
+        bottomNav.classList.remove('nav-hidden');
+    }
+}
+window.resetPlannerToHome = resetPlannerToHome;
 
 function handleJourneyUpdate() {
     const startVal = document.getElementById('start-station').value;
@@ -1406,7 +2011,7 @@ function initializeApp() {
 
     document.getElementById('board-train-btn').addEventListener('click', () => {
         if (!currentJourney) return;
-        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        const ticketData = getActiveTicketData();
         if (!ticketData) {
             window.openTicketUploadModal();
         } else {
@@ -1528,6 +2133,46 @@ function initializeApp() {
 
     // Init bottom nav
     initBottomNav();
+
+    // Map view back/end journey top bar buttons
+    document.getElementById('map-back-home-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resetPlannerToHome();
+    });
+    document.getElementById('map-end-trip-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resetPlannerToHome();
+    });
+
+    // Rush forecast & frequency guide listeners
+    updateRushForecastUI();
+    setInterval(updateRushForecastUI, 60000);
+
+    document.getElementById('metro-rush-forecast-bar')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openRushScheduleModal();
+    });
+    document.getElementById('close-rush-modal-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeRushScheduleModal();
+    });
+    document.getElementById('rush-schedule-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'rush-schedule-modal') closeRushScheduleModal();
+    });
+
+    // Pass advisor modal listeners
+    document.getElementById('close-pass-modal-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePassAdvisorModal();
+    });
+    document.getElementById('pass-advisor-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'pass-advisor-modal') closePassAdvisorModal();
+    });
+
+    // Popular stations fast-select chips
+    initPopularStationChips();
 
     // Restore state
     const savedJourneyJSON = sessionStorage.getItem('activeJourney');
@@ -1744,6 +2389,33 @@ window.showNearbyPlaceDetail = function(stationName, placeId) {
 // --- QR Ticket Vault & Gate Scanner Module ---
 let pendingTicketFile = null;
 
+export function getActiveTicketData() {
+    try {
+        return sessionStorage.getItem('activeJourneyTicketImage') || localStorage.getItem('nammaride_active_ticket') || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+export function setActiveTicketData(data) {
+    try {
+        if (data) {
+            sessionStorage.setItem('activeJourneyTicketImage', data);
+            localStorage.setItem('nammaride_active_ticket', data);
+        } else {
+            sessionStorage.removeItem('activeJourneyTicketImage');
+            localStorage.removeItem('nammaride_active_ticket');
+        }
+    } catch (e) {
+        console.warn('[TicketStorage] Storage quota/write error:', e);
+    }
+    const dot = document.getElementById('qr-pill-dot');
+    if (dot) {
+        if (data) dot.classList.remove('hidden');
+        else dot.classList.add('hidden');
+    }
+}
+
 function initTicketModule() {
     const uploadModal = document.getElementById('ticket-upload-modal');
     const dropzone = document.getElementById('ticket-dropzone');
@@ -1810,6 +2482,13 @@ function initTicketModule() {
 
     window.openTicketUploadModal = function() {
         if (!uploadModal) return;
+        const currentSaved = getActiveTicketData();
+        if (currentSaved && !pendingTicketFile) {
+            pendingTicketFile = currentSaved;
+            if (previewImg) previewImg.src = currentSaved;
+            if (previewContainer) previewContainer.classList.remove('hidden');
+            if (dropzonePrompt) dropzonePrompt.classList.add('hidden');
+        }
         uploadModal.classList.add('modal-active');
         if (window.lucide) window.lucide.createIcons();
     };
@@ -1823,24 +2502,32 @@ function initTicketModule() {
     if (skipBtn) {
         skipBtn.addEventListener('click', () => {
             window.closeTicketUploadModal();
-            if (currentJourney) startSimulation(currentJourney, false);
+            if (currentJourney && !simulationState.isActive && !simulationState.arrivedAtDestination) {
+                startSimulation(currentJourney, false);
+            }
         });
     }
 
     if (confirmBtn) {
         confirmBtn.addEventListener('click', () => {
             if (pendingTicketFile) {
-                sessionStorage.setItem('activeJourneyTicketImage', pendingTicketFile);
+                setActiveTicketData(pendingTicketFile);
             }
             window.closeTicketUploadModal();
-            if (currentJourney) startSimulation(currentJourney, false);
+            if (simulationState.arrivedAtDestination) {
+                window.openQRScannerModal();
+            } else if (currentJourney && !simulationState.isActive) {
+                startSimulation(currentJourney, false);
+            } else if (currentJourney) {
+                renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
+            }
         });
     }
 
     // Gate Scanner View Modal
     window.openQRScannerModal = function() {
         if (!qrScannerModal) return;
-        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        const ticketData = getActiveTicketData();
         const routeSubEl = document.getElementById('qr-modal-route-sub');
 
         if (currentJourney) {
@@ -1858,9 +2545,11 @@ function initTicketModule() {
                 qrModalImg.classList.remove('hidden');
             }
             if (qrEmptyState) qrEmptyState.classList.add('hidden');
+            if (openFsBtn) openFsBtn.classList.remove('hidden');
         } else {
             if (qrModalImg) qrModalImg.classList.add('hidden');
             if (qrEmptyState) qrEmptyState.classList.remove('hidden');
+            if (openFsBtn) openFsBtn.classList.add('hidden');
         }
 
         qrScannerModal.classList.add('modal-active');
@@ -1873,7 +2562,32 @@ function initTicketModule() {
         window.closeQRFullscreen();
     };
 
-    if (qrCloseBtn) qrCloseBtn.addEventListener('click', window.closeQRScannerModal);
+    if (qrCloseBtn) {
+        qrCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.closeQRScannerModal();
+        });
+    }
+
+    if (qrScannerModal) {
+        qrScannerModal.addEventListener('click', (e) => {
+            if (e.target === qrScannerModal) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.closeQRScannerModal();
+            }
+        });
+    }
+
+    const qrEmptyUploadBtn = document.getElementById('qr-empty-upload-btn');
+    if (qrEmptyUploadBtn) {
+        qrEmptyUploadBtn.addEventListener('click', () => {
+            window.closeQRScannerModal();
+            window.openTicketUploadModal();
+        });
+    }
+
     if (qrReuploadBtn) {
         qrReuploadBtn.addEventListener('click', () => {
             window.closeQRScannerModal();
@@ -1883,7 +2597,7 @@ function initTicketModule() {
 
     if (qrRemoveBtn) {
         qrRemoveBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('activeJourneyTicketImage');
+            setActiveTicketData(null);
             pendingTicketFile = null;
             if (previewImg) previewImg.src = '';
             if (previewContainer) previewContainer.classList.add('hidden');
@@ -1917,7 +2631,7 @@ function initTicketModule() {
     }
 
     window.openQRFullscreen = function() {
-        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        const ticketData = getActiveTicketData();
         if (!ticketData || !qrFullscreenOverlay) return;
 
         if (qrFsImg) qrFsImg.src = ticketData;
@@ -1945,19 +2659,42 @@ function initTicketModule() {
 
     if (openFsBtn) openFsBtn.addEventListener('click', window.openQRFullscreen);
     if (imgWrapper) imgWrapper.addEventListener('click', window.openQRFullscreen);
-    if (qrFsCloseBtn) qrFsCloseBtn.addEventListener('click', window.closeQRFullscreen);
+    if (qrFsCloseBtn) {
+        qrFsCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.closeQRFullscreen();
+        });
+    }
+    if (qrFullscreenOverlay) {
+        qrFullscreenOverlay.addEventListener('click', (e) => {
+            if (e.target === qrFullscreenOverlay) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.closeQRFullscreen();
+            }
+        });
+    }
 
     // Floating QR Button Click
     if (floatingQrBtn) {
         floatingQrBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+            const ticketData = getActiveTicketData();
             if (ticketData) {
                 window.openQRScannerModal();
             } else {
                 window.openTicketUploadModal();
             }
         });
+    }
+
+    // Initialize floating QR dot state
+    const currentTicketData = getActiveTicketData();
+    const qrDot = document.getElementById('qr-pill-dot');
+    if (qrDot) {
+        if (currentTicketData) qrDot.classList.remove('hidden');
+        else qrDot.classList.add('hidden');
     }
 }
 

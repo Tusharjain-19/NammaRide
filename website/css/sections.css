@@ -3,30 +3,34 @@
    Bottom Nav + Stations + Timings + Safety + Explore Views
    ============================================================ */
 
-/* ─── Bottom Navigation ─── */
+/* ─── Bottom Navigation (Guaranteed High Z-Index & Reliable Clickability) ─── */
 .bottom-nav {
     position: absolute;
-    bottom: calc(2.25rem + env(safe-area-inset-bottom, 24px));
-    left: 1rem;
-    right: 1rem;
+    bottom: max(0.85rem, env(safe-area-inset-bottom, 14px));
+    left: 0.85rem;
+    right: 0.85rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(10, 10, 14, 0.45);
+    background: rgba(15, 23, 42, 0.92);
     backdrop-filter: blur(32px) saturate(180%);
     -webkit-backdrop-filter: blur(32px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 1.5rem;
-    padding: 0.4rem 0.4rem;
-    z-index: 50;
-    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color var(--transition-speed), border-color var(--transition-speed);
+    padding: 0.35rem 0.35rem;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    touch-action: pan-x manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, background-color var(--transition-speed), border-color var(--transition-speed);
 }
 
 body.light-mode .bottom-nav {
-    background: rgba(255, 255, 255, 0.35);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.94);
+    border-color: rgba(226, 232, 240, 0.95);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
 }
 
 .bottom-nav.nav-hidden {
@@ -74,14 +78,19 @@ body.light-mode .nav-indicator {
     font-size: 0.65rem;
     font-weight: 500;
     cursor: pointer;
-    transition: color 0.25s ease, transform 0.15s ease;
+    transition: color 0.2s ease, transform 0.08s ease;
     border-radius: 1rem;
     flex: 1;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
 }
 
-.nav-item:active {
-    transform: scale(0.92);
+.nav-item:active,
+.nav-item.is-pressed {
+    transform: scale3d(0.92, 0.92, 1);
+    opacity: 0.8;
 }
 
 .nav-item:hover { 
@@ -97,9 +106,9 @@ body.light-mode .nav-item.active {
     color: var(--accent-color);
 }
 
-/* ─── Section Views Common ─── */
+/* ─── Section Views Common with Momentum Scrolling & Hardware-Accelerated Transitions ─── */
 .section-view {
-    padding: 1rem 1rem calc(8rem + env(safe-area-inset-bottom, 24px)) 1rem;
+    padding: 1rem 1rem 5.5rem 1rem;
     background: transparent;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -109,8 +118,31 @@ body.light-mode .nav-item.active {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    transform: translateZ(0);
-    will-change: scroll-position;
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity, scroll-position;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* GPU-accelerated enter/exit lifecycle states */
+.section-view.view-entering {
+    opacity: 0 !important;
+    transform: translate3d(0, 10px, 0) !important;
+}
+
+.section-view.view-active {
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+}
+
+.section-view.view-exiting {
+    opacity: 0 !important;
+    transform: translate3d(0, -8px, 0) !important;
+    pointer-events: none !important;
+}
+
+/* View transition states - keep pointer-events enabled for instant responsiveness */
+.is-view-transitioning {
+    pointer-events: auto !important;
 }
 
 /* Ensure all views inside section behave correctly */
@@ -764,25 +796,15 @@ body.light-mode .explore-line-btn[data-line="all"]:not(.active):hover {
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
-/* Explore & Line Filter Bars (Expanded Vertical Touch Scroll Area) */
-#explore-category-filters, #explore-line-filters, #line-filters {
+/* Explore Filter Bar */
+#explore-category-filters::-webkit-scrollbar {
+    display: none;
+}
+
+#explore-category-filters {
     -ms-overflow-style: none;
     scrollbar-width: none;
     touch-action: pan-x;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding-top: 0.65rem;
-    padding-bottom: 0.65rem;
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-    min-height: 48px;
-    align-items: center;
-}
-
-#explore-category-filters::-webkit-scrollbar,
-#explore-line-filters::-webkit-scrollbar,
-#line-filters::-webkit-scrollbar {
-    display: none;
 }
 
 .explore-cat-btn {
@@ -1588,24 +1610,28 @@ body.light-mode .gps-warning-banner {
     color: #D97706;
 }
 
+/* ─── Compact Solid Opaque Journey Complete Card (Zero Background Bleed-Through) ─── */
 .journey-complete-card {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.05) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    border-radius: 16px;
-    padding: 24px;
+    background: #0B111E !important; /* 100% Solid Deep Slate */
+    color: #FFFFFF !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.45);
+    border-radius: 24px;
+    padding: 22px 18px;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.1);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    animation: card-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    margin: 16px 0;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    animation: card-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    margin: 0 auto;
     position: relative;
     overflow: hidden;
+    max-width: 330px;
+    width: 100%;
+    z-index: 50;
 }
 body.light-mode .journey-complete-card {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.03) 100%);
-    border-color: rgba(16, 185, 129, 0.25);
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.05);
+    background: #FFFFFF !important; /* 100% Solid Crisp White */
+    color: #0F172A !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 .celebration-checkmark-wrap {
     width: 64px;
@@ -1712,3 +1738,240 @@ body.light-mode .qr-ticket-pill.has-ticket {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+
+/* ─── Destination & Arrival Hub Modal (Sync with Light and Dark Modes) ─── */
+.destination-hub-modal-card {
+    background: #0B111E !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
+    font-family: inherit;
+    max-height: 88vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+body.light-mode .destination-hub-modal-card,
+html.light .destination-hub-modal-card,
+html[data-theme="light"] .destination-hub-modal-card,
+[data-theme="light"] .destination-hub-modal-card {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+.destination-hub-header {
+    background: #0F172A !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+body.light-mode .destination-hub-header,
+html.light .destination-hub-header,
+html[data-theme="light"] .destination-hub-header,
+[data-theme="light"] .destination-hub-header {
+    background: #F8FAFC !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+}
+
+.destination-hub-body {
+    background: #070B14 !important;
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-height: calc(88vh - 120px) !important;
+    padding-bottom: 2.5rem !important;
+}
+body.light-mode .destination-hub-body,
+html.light .destination-hub-body,
+html[data-theme="light"] .destination-hub-body,
+[data-theme="light"] .destination-hub-body {
+    background: #F1F5F9 !important;
+}
+
+#simulation-status {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 45 !important;
+    width: 100% !important;
+    display: block !important;
+    padding: 0 !important;
+}
+
+#simulation-status.hidden {
+    display: none !important;
+}
+
+.destination-hub-footer {
+    background: #0F172A !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+body.light-mode .destination-hub-footer,
+html.light .destination-hub-footer,
+html[data-theme="light"] .destination-hub-footer,
+[data-theme="light"] .destination-hub-footer {
+    background: #F8FAFC !important;
+    border-top: 1px solid #E2E8F0 !important;
+}
+
+.destination-hub-subcard {
+    background: rgba(30, 41, 59, 0.75) !important;
+    color: #F8FAFC !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+body.light-mode .destination-hub-subcard,
+html.light .destination-hub-subcard,
+html[data-theme="light"] .destination-hub-subcard,
+[data-theme="light"] .destination-hub-subcard {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.destination-hub-subcard-inner {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+body.light-mode .destination-hub-subcard-inner,
+html.light .destination-hub-subcard-inner,
+html[data-theme="light"] .destination-hub-subcard-inner,
+[data-theme="light"] .destination-hub-subcard-inner {
+    background: #EDF2F7 !important;
+    border: 1px solid #E2E8F0 !important;
+}
+
+.hub-tab-btn {
+    color: #94A3B8;
+    background: transparent;
+    border-bottom: 2.5px solid transparent;
+    transition: all 0.2s ease;
+}
+body.light-mode .hub-tab-btn,
+html.light .hub-tab-btn,
+html[data-theme="light"] .hub-tab-btn,
+[data-theme="light"] .hub-tab-btn {
+    color: #64748B;
+}
+.hub-tab-btn.active {
+    color: #10B981 !important;
+    border-bottom-color: #10B981 !important;
+    font-weight: 800;
+}
+body.light-mode .hub-tab-btn.active,
+html.light .hub-tab-btn.active,
+html[data-theme="light"] .hub-tab-btn.active,
+[data-theme="light"] .hub-tab-btn.active {
+    color: #059669 !important;
+    border-bottom-color: #059669 !important;
+}
+
+/* ─── Modal Backdrop Theme Synchronization ─── */
+#qr-scanner-modal,
+#ticket-upload-modal,
+#nearest-modal {
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+body.light-mode #qr-scanner-modal,
+html.light #qr-scanner-modal,
+[data-theme="light"] #qr-scanner-modal,
+body.light-mode #ticket-upload-modal,
+html.light #ticket-upload-modal,
+[data-theme="light"] #ticket-upload-modal,
+body.light-mode #nearest-modal,
+html.light #nearest-modal,
+[data-theme="light"] #nearest-modal {
+    background: rgba(15, 23, 42, 0.45) !important;
+}
+
+/* ─── Dedicated Station Gates Modal Flex & Hidden Rules ─── */
+#station-gates-modal {
+    display: flex;
+    background: rgba(0, 0, 0, 0.82) !important;
+}
+body.light-mode #station-gates-modal,
+html.light #station-gates-modal,
+[data-theme="light"] #station-gates-modal {
+    background: rgba(15, 23, 42, 0.45) !important;
+}
+#station-gates-modal.hidden {
+    display: none !important;
+}
+
+/* ─── QR Code Scanner Modal Card (Full Light & Dark Theme Sync) ─── */
+.qr-scanner-card {
+    background: #0B111E !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+}
+body.light-mode .qr-scanner-card,
+html.light .qr-scanner-card,
+html[data-theme="light"] .qr-scanner-card,
+[data-theme="light"] .qr-scanner-card {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ─── General Modal Cards Light Mode Sync ─── */
+body.light-mode #nearest-modal-content,
+html.light #nearest-modal-content,
+[data-theme="light"] #nearest-modal-content,
+body.light-mode #ticket-upload-modal-content,
+html.light #ticket-upload-modal-content,
+[data-theme="light"] #ticket-upload-modal-content {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+body.light-mode #ticket-dropzone,
+html.light #ticket-dropzone,
+[data-theme="light"] #ticket-dropzone {
+    background: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
+}
+
+/* ─── Fullscreen QR Modal (Adaptive Light & Dark Themes) ─── */
+#qr-fullscreen-overlay {
+    background: #07090E !important;
+    color: #FFFFFF !important;
+}
+
+body.light-mode #qr-fullscreen-overlay,
+html.light #qr-fullscreen-overlay,
+html[data-theme="light"] #qr-fullscreen-overlay,
+[data-theme="light"] #qr-fullscreen-overlay {
+    background: #F8FAFC !important;
+    color: #0F172A !important;
+}
+
+body.light-mode #qr-fullscreen-overlay .border-subtle,
+html.light #qr-fullscreen-overlay .border-subtle,
+[data-theme="light"] #qr-fullscreen-overlay .border-subtle {
+    border-color: #E2E8F0 !important;
+}
+
+body.light-mode #qr-fs-route-title,
+html.light #qr-fs-route-title,
+[data-theme="light"] #qr-fs-route-title {
+    color: #0F172A !important;
+}
+
+body.light-mode #qr-fullscreen-close,
+html.light #qr-fullscreen-close,
+[data-theme="light"] #qr-fullscreen-close {
+    background: #EDF2F7 !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
+}
+
+body.light-mode #qr-fs-card,
+html.light #qr-fs-card,
+[data-theme="light"] #qr-fs-card {
+    background: #FFFFFF !important;
+    border-color: #E2E8F0 !important;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.15) !important;
+}
+

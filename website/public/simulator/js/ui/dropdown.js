@@ -125,18 +125,14 @@ export class CustomDropdown {
 
         if (this.filteredStations.length === 0) {
             list.innerHTML = `<div class="no-results">No stations found</div>`;
-            this.isLooping = false;
             return;
         }
 
-        this.isLooping = this.filteredStations.length > 4;
-        const displaySet = this.isLooping 
-            ? [...this.filteredStations, ...this.filteredStations, ...this.filteredStations]
-            : this.filteredStations;
+        const displaySet = this.filteredStations;
 
         list.innerHTML = displaySet.map(station => {
             const dots = station.lines.map(color =>
-                `<span class="dot" style="background-color: ${color}"></span>`
+                `<span class="dot" style="background-color: ${color}; width: 10px; height: 10px; min-width: 10px; min-height: 10px; max-width: 10px; max-height: 10px; border-radius: 50%; flex-shrink: 0; aspect-ratio: 1/1; display: inline-block;"></span>`
             ).join('');
 
             const displayName = T_STATION(station.name);
@@ -157,15 +153,6 @@ export class CustomDropdown {
                 this.select(value);
             });
         });
-
-        if (this.isLooping) {
-            requestAnimationFrame(() => {
-                const oneSetHeight = list.scrollHeight / 3;
-                if (list.scrollTop === 0) {
-                    list.scrollTop = oneSetHeight;
-                }
-            });
-        }
     }
 
     select(value) {
@@ -204,6 +191,18 @@ export class CustomDropdown {
         this.select(id);
     }
 
+    selectByName(name) {
+        if (!name) return;
+        const cleanTarget = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const station = this.stations.find(s => 
+            s.name.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanTarget || 
+            s.name.toLowerCase().includes(name.toLowerCase())
+        );
+        if (station) {
+            this.select(station.id);
+        }
+    }
+
     toggle() {
         if (this.isOpen) this.close(); else this.open();
     }
@@ -222,32 +221,8 @@ export class CustomDropdown {
             this.filter('');
             searchInput.focus();
         }
-
-        // Auto-scroll to currently selected station OR nearest station
         const list = document.getElementById(`list-${this.container.id}`);
-        if (list) {
-            setTimeout(() => {
-                let targetId = this.selectedValue || window.nearestStationId;
-                let targetOpt = null;
-                if (targetId) {
-                    targetOpt = list.querySelector(`.station-option[data-value="${targetId}"]`);
-                }
-                if (!targetOpt && window.nearestStationName) {
-                    const opts = Array.from(list.querySelectorAll('.station-option'));
-                    targetOpt = opts.find(opt => opt.dataset.stationName === window.nearestStationName || opt.innerText.includes(window.nearestStationName));
-                }
-
-                if (targetOpt) {
-                    const listRect = list.getBoundingClientRect();
-                    const optRect = targetOpt.getBoundingClientRect();
-                    const offset = (optRect.top - listRect.top) - (listRect.height / 2) + (optRect.height / 2);
-                    list.scrollTop += offset;
-                } else if (this.isLooping) {
-                    const oneSetHeight = list.scrollHeight / 3;
-                    list.scrollTop = oneSetHeight;
-                }
-            }, 60);
-        }
+        if (list) list.scrollTop = 0;
     }
 
     close() {
@@ -262,6 +237,7 @@ export class CustomDropdown {
 
     filter(query) {
         const q = (query || '').trim();
+        const list = document.getElementById(`list-${this.container.id}`);
         if (!q) {
             this.filteredStations = this.stations.filter(s => {
                 return !(this.excludedStationName && s.name === this.excludedStationName);
@@ -288,6 +264,7 @@ export class CustomDropdown {
         scored.sort((a, b) => b.score - a.score);
         this.filteredStations = scored.map(item => item.station);
         this.renderOptions();
+        if (list) list.scrollTop = 0;
     }
 
     refreshTranslations() {
@@ -337,18 +314,6 @@ export class CustomDropdown {
         });
 
         if (list) {
-            list.addEventListener('scroll', () => {
-                if (!this.isLooping) return;
-                const oneSetHeight = list.scrollHeight / 3;
-                if (oneSetHeight <= 0) return;
-
-                if (list.scrollTop <= 15) {
-                    list.scrollTop += oneSetHeight;
-                } else if (list.scrollTop >= (oneSetHeight * 2) - 15) {
-                    list.scrollTop -= oneSetHeight;
-                }
-            }, { passive: true });
-
             let isDragging = false;
             let startY = 0;
             let scrollTopStart = 0;

@@ -13,9 +13,10 @@
     border-radius: 0;
     border: none;
     box-shadow: var(--glass-shadow);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.26s cubic-bezier(0.4, 0, 0.2, 1), color 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.26s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     position: relative;
+    transform: translate3d(0, 0, 0);
 }
 
 /* Mobile Screens */
@@ -36,7 +37,8 @@
         right: 0;
         bottom: 0;
         z-index: 100;
-        overscroll-behavior: none;
+        overscroll-behavior: contain;
+        transform: translate3d(0, 0, 0);
     }
 
     body, html {
@@ -44,7 +46,8 @@
         padding: 0;
         background-color: var(--bg-color);
         height: 100%;
-        overflow: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
@@ -56,7 +59,7 @@
         max-height: 880px;
         border-radius: 24px;
         border: 1px solid var(--border-color);
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        box-shadow: var(--glass-shadow);
     }
 }
 
@@ -68,7 +71,7 @@
         max-height: 920px;
         border-radius: 28px;
         border: 1px solid var(--border-color);
-        box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        box-shadow: var(--glass-shadow);
     }
 }
 
@@ -81,21 +84,21 @@ body {
     background-color: var(--bg-color);
 }
 
-/* Glass Header (Status Bar Safe & Premium) */
+/* Sleek Compact Header (Status Bar Integrated) */
 .app-header {
     background-color: var(--header-bg);
     backdrop-filter: blur(28px) saturate(200%);
     -webkit-backdrop-filter: blur(28px) saturate(200%);
-    border-bottom: 1.5px solid var(--header-border);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+    border-bottom: 1px solid var(--header-border);
     position: sticky;
     top: 0;
     z-index: 50;
-    padding: 1.15rem 1.25rem 1rem 1.25rem;
-    padding-top: calc(2.25rem + env(safe-area-inset-top, 28px));
-    min-height: 82px;
+    padding: 0.5rem 1rem !important;
+    padding-top: max(1.8rem, calc(0.9rem + env(safe-area-inset-top, 24px))) !important;
+    padding-bottom: 0.5rem !important;
+    min-height: 68px;
     flex-shrink: 0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* Glass Scrollbars */
@@ -235,20 +238,24 @@ body {
 
 /* Instant Interaction Feedback */
 button:active, 
+button.is-pressed,
 .nav-item:active, 
+.nav-item.is-pressed,
 .station-option:active, 
 .dropdown-trigger:active, 
 .explore-cat-btn:active, 
 .explore-line-btn:active,
-.swap-btn:active {
-    opacity: 0.6;
-    transform: scale(0.95);
-    transition: none !important; /* Forces instant visual response */
+.swap-btn:active,
+.quick-chip:active {
+    opacity: 0.75;
+    transform: scale3d(0.95, 0.95, 1);
+    transition: transform 0.05s ease-out, opacity 0.05s ease-out;
 }
 
 /* Increase touch targets for mobile */
 @media (max-width: 600px) {
     button, .nav-item, .dropdown-trigger {
         min-height: 44px; /* Apple/Google recommended min touch target */
+        touch-action: manipulation;
     }
 }

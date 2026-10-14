@@ -1,5 +1,6 @@
 import { T, T_STATION, CONFIG, formatTime } from '../utils/helpers.js';
 import { stationPlaces } from '../data/stationPlaces.js';
+import { getStationGates } from '../data/stationGates.js';
 
 export function renderLiveRoute(journey, routeListElement, simulationState) {
     let routeHtml = '';
@@ -91,7 +92,7 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
     
     // Sync floating QR ticket pill badge state
     try {
-        const ticketData = sessionStorage.getItem('activeJourneyTicketImage');
+        const ticketData = sessionStorage.getItem('activeJourneyTicketImage') || localStorage.getItem('nammaride_active_ticket');
         const qrPillDot = document.getElementById('qr-pill-dot');
         const floatingQrBtn = document.getElementById('floating-qr-btn');
         if (qrPillDot && floatingQrBtn) {
@@ -128,30 +129,55 @@ function renderStationItem(node, details, index) {
 
     let metaInfo = '';
     if (isStart) {
-        metaInfo = `<div class="info-strip text-secondary bg-card-subtle">${T('boardAt')} ${T('platform')} ${node.part.startPlatform} <span class="text-[10px] opacity-75">(${T('towards')} ${node.part.journeyDirectionName})</span></div>`;
+        const platform = node.part.startPlatform || 1;
+        const direction = node.part.journeyDirectionName || '';
+        metaInfo = `
+            <div class="info-strip text-secondary bg-card-subtle">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="platform-pill">${T('platform')} ${platform}</span>
+                    <div class="direction-container">
+                        <span class="direction-towards">${T('towards')}</span>
+                        <span class="direction-dest">${direction}</span>
+                    </div>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30">
+                        <i data-lucide="shield-check" class="w-3 h-3"></i>
+                        <span>Coach 1: Women Reserved</span>
+                    </span>
+                </div>
+            </div>`;
     } else if (isInterchange && nextPartDetails) {
         // Explicit Platform & Direction
-        const lineName = T_STATION(nextPartDetails.stations[0].lineName);
-        const direction = nextPartDetails.journeyDirectionName;
-        const platform = nextPartDetails.startPlatform;
+        const firstStation = nextPartDetails.stations?.[0];
+        const lineName = firstStation ? T_STATION(firstStation.lineName) : T('interchange');
+        const direction = nextPartDetails.journeyDirectionName || (firstStation ? T_STATION(firstStation.name) : '');
+        const platform = nextPartDetails.startPlatform || 1;
 
         metaInfo = `
             <div class="interchange-info">
-                <div class="interchange-row text-primary font-medium">
-                     <i data-lucide="arrow-right-left" class="w-3.5 h-3.5 text-secondary"></i>
-                     <span>${T('changeTo')} ${lineName}</span>
-                </div>
-                <div class="interchange-meta flex flex-col gap-1 mt-1">
-                    <div class="flex items-center gap-1.5 text-xs text-secondary">
-                        <span class="bg-card-subtle border border-subtle px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide text-primary">${T('platform')} ${platform}</span>
-                        <span>${T('towards')} <span class="text-primary">${direction}</span></span>
+                <div class="interchange-header">
+                    <div class="interchange-row text-primary font-bold">
+                         <i data-lucide="arrow-right-left"></i>
+                         <span>${T('changeTo')} ${lineName}</span>
                     </div>
-                    <div class="text-[10px] text-secondary opacity-70 pl-0.5">~5 ${T('walkTime')}</div>
+                    <div class="interchange-walk-badge">
+                        <i data-lucide="footprints"></i>
+                        <span>~5 ${T('walkTime')}</span>
+                    </div>
+                </div>
+                <div class="interchange-nav-row">
+                    <span class="platform-pill">
+                        <span class="platform-label">${T('platform')}</span>
+                        <span class="platform-num">${platform}</span>
+                    </span>
+                    <div class="direction-container">
+                        <span class="direction-towards">${T('towards')}</span>
+                        <span class="direction-dest">${direction}</span>
+                    </div>
                 </div>
             </div>`;
     } else if (isEnd) {
         metaInfo = `
-            <div class="station-meta text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center justify-between gap-2 mt-2 w-full font-bold text-xs">
+            <div class="station-meta text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-xl flex items-center justify-between gap-2 mt-2 w-full font-bold text-xs">
                 <div class="flex items-center gap-2">
                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
                     <span>${T('arrive') || 'Arriving at'} ${formatTime(details.arrivalTime)} • ${T('destination') || 'Your Destination'}</span>

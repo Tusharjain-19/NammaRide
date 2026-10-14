@@ -348,12 +348,22 @@ export default function StationsPage() {
                 </div>
 
                 {/* Field 6: Exit Gates */}
-                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-800 space-y-2">
-                  <div className="text-gray-500 dark:text-gray-400 font-bold">🚪 Exit Gates Directory</div>
-                  <div className="space-y-1">
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-800 space-y-2.5">
+                  <div className="text-gray-900 dark:text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                    <span>🚪 Station Exit Gates & Landmarks Directory</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2">
                     {activeStationModal.exit_gates.map((g, i) => (
-                      <div key={i} className="text-gray-900 dark:text-white">
-                        <strong className="text-emerald-500">Gate {g.gate}:</strong> {g.destination}
+                      <div key={i} className="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 flex items-start gap-2.5 text-xs">
+                        <span className="px-2 py-0.5 rounded font-black text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0">
+                          Gate {g.gate}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <span className="font-bold text-gray-900 dark:text-white block leading-snug">{g.destination}</span>
+                          {g.landmark && (
+                            <span className="text-[10px] text-gray-500 dark:text-gray-400 block mt-0.5">Nearby: {g.landmark}</span>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>

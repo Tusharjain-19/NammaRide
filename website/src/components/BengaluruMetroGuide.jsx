@@ -207,6 +207,33 @@ export default function BengaluruMetroGuide() {
               </p>
             </section>
 
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-indigo-500 pl-3">
+                7. Station Exit Gates & Real-World Landmark Directory
+              </h3>
+              <p>
+                Every Namma Metro station features numbered and lettered exit gates (Gate A, Gate B, Gate C, Gate D). Knowing which gate to exit from saves 10-15 minutes of walking and brings you directly to connecting BMTC feeder bus bays, auto-rickshaw stands, or tech park campus gates (such as ITPL Main Gate at Pattandur Agrahara or SMVT Railway Station FOB at Baiyappanahalli). NammaRide provides a complete offline gate-to-destination directory for all 83+ stations.
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-pink-500 pl-3">
+                8. Women's Coach Reservation & Emergency Safety Bar
+              </h3>
+              <p>
+                For passenger comfort and safety, <strong>Coach 1 (the first / leading car in the direction of train motion)</strong> is strictly reserved for women commuters across all Purple, Green, and Yellow line trains. Platform markings and dedicated female security marshals ensure strict adherence. In addition, every coach is equipped with Passenger Emergency Alarm (PEA) handles next to the doors for instant 2-way audio communication with the train operator, backed by the 24/7 Karnataka Women Helpline (<strong>1091</strong>) and BMRCL Security (<strong>080-22969555</strong>).
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight border-l-4 border-amber-500 pl-3">
+                9. Last Train Interchange Cut-Off Protocol (Nadaprabhu Kempegowda Majestic)
+              </h3>
+              <p>
+                Commuters switching between lines at Nadaprabhu Kempegowda Station (Majestic) must note that final connecting transfer services depart at <strong>11:20 PM</strong>. If your journey begins from terminal stations like Whitefield (Kadugodi), Challaghatta, Madavara (BIEC), or Silk Institute, board your train no later than <strong>10:25 PM</strong> to ensure catching your connection before gates close.
+              </p>
+            </section>
+
             {/* English Internal Links Navigation Strip */}
             <div className="pt-4 border-t border-gray-200 dark:border-neutral-800 flex flex-wrap gap-2 text-xs font-bold">
               <Link to="/stations" className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200 hover:text-emerald-500 transition-colors border border-gray-200 dark:border-neutral-800">

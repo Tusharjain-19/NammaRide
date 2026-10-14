@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Zap, Info, Calendar, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Clock, Zap, Info, Calendar, ArrowRight, ShieldCheck, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { timingsData } from '../data/timingsData';
 import MetaSEO from '../components/MetaSEO';
@@ -53,6 +53,38 @@ export default function TimingsPage() {
           <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
             Real-time headway intervals, first and last train schedules, and weekend travel frequency across all active Bengaluru Metro corridors.
           </p>
+        </motion.div>
+
+        {/* LAST TRAIN & MAJESTIC INTERCHANGE ALERT */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="max-w-4xl mx-auto p-5 sm:p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+        >
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0 border border-amber-500/30 mt-0.5 sm:mt-0">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                  Last Train Interchange Cut-Off Advisory
+                </h3>
+                <span className="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                  Majestic 11:20 PM
+                </span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Connecting trains between <strong>Purple & Green lines</strong> at Nadaprabhu Kempegowda Stn. Majestic depart at <strong>11:20 PM</strong>. Passengers boarding at outer terminal stations (Whitefield, Challaghatta, Madavara, Silk Institute) should start before <strong>10:25 PM</strong> to safely ensure transfer.
+              </p>
+            </div>
+          </div>
+          <div className="shrink-0 self-end sm:self-center">
+            <span className="px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-neutral-900 border border-amber-500/40 text-amber-600 dark:text-amber-400">
+              100% On-Time Connection
+            </span>
+          </div>
         </motion.div>
 
         {/* Top Line Filter Selector */}

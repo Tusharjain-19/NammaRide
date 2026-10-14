@@ -36,6 +36,61 @@ export default function SafetyPage() {
           </p>
         </div>
 
+        {/* WOMEN'S COACH GUIDE & EMERGENCY SAFETY BAR */}
+        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 via-rose-500/5 to-purple-500/10 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-pink-500/20 text-pink-500 flex items-center justify-center shrink-0 border border-pink-500/30">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-600 dark:text-pink-400 text-[10px] font-black uppercase tracking-wider mb-1">
+                  High Priority Safety
+                </div>
+                <h2 className="font-heading font-black text-xl sm:text-2xl text-gray-900 dark:text-white">
+                  Coach 1: Women's Reserved Coach & Safety Bar
+                </h2>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href="tel:1091"
+                className="px-4 py-2.5 rounded-xl bg-pink-500 hover:bg-pink-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-pink-500/20 transition-all flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Women SOS 1091</span>
+              </a>
+              <a
+                href="tel:112"
+                className="px-4 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:opacity-90 active:scale-95 font-extrabold text-xs shadow-sm transition-all flex items-center gap-2"
+              >
+                <span>Police 112</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-neutral-900/70 border border-pink-500/20 space-y-2">
+              <div className="text-xs font-black uppercase text-pink-600 dark:text-pink-400">1. Platform Location</div>
+              <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Coach 1 is positioned at the <strong>front / leading end</strong> of the train in the direction of travel. Follow pink platform floor decals for boarding.
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-neutral-900/70 border border-pink-500/20 space-y-2">
+              <div className="text-xs font-black uppercase text-pink-600 dark:text-pink-400">2. Emergency PEA Intercom</div>
+              <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Passenger Emergency Alarm (PEA) handles are installed next to every door. Pull the handle to speak directly with the train operator in real time.
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-white/70 dark:bg-neutral-900/70 border border-pink-500/20 space-y-2">
+              <div className="text-xs font-black uppercase text-pink-600 dark:text-pink-400">3. BMRCL 24/7 Rapid Response</div>
+              <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Station controllers and female security marshals are stationed on all operational platforms. Dial <a href="tel:08022969555" className="text-pink-500 font-bold hover:underline">080-22969555</a> for instant help.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* EMERGENCY CONTACTS GRID */}
         <div className="space-y-4">
           <h2 className="font-heading font-bold text-xl text-gray-900 dark:text-white flex items-center gap-2">

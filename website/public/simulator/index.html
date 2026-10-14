@@ -200,12 +200,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
+    <!-- Cache Prevention for Instant WebView Updates -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <!-- CSS Structure -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/metro-route.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/base.css?v=1.6.0">
+    <link rel="stylesheet" href="css/layout.css?v=1.6.0">
+    <link rel="stylesheet" href="css/metro-route.css?v=1.6.0">
+    <link rel="stylesheet" href="css/components.css?v=1.6.0">
+    <link rel="stylesheet" href="css/sections.css?v=1.6.0">
 
     <!-- External Libs (Local for 100% Offline & Instant Loading) -->
     <script src="js/libs/lucide.min.js" defer></script>
@@ -237,7 +242,7 @@
     </script>
 
     <!-- Main Module -->
-    <script type="module" src="js/main.js" defer></script>
+    <script type="module" src="js/main.js?v=1.6.0" defer></script>
 </head>
 
 
@@ -340,141 +345,6 @@
                 </div>
             </div>
 
-            <!-- Ticket Upload Prompt Modal -->
-            <div id="ticket-upload-modal" class="absolute inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-                <div class="bg-card backdrop-blur-2xl border border-subtle rounded-[32px] p-6 w-full max-w-sm shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] transform translate-y-10 sm:translate-y-0 sm:scale-95 transition-all duration-300 opacity-0 pointer-events-none mb-2 sm:mb-0" id="ticket-upload-modal-content">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 shrink-0 border border-emerald-500/20">
-                            <i data-lucide="qr-code" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-primary tracking-tight">Attach QR Ticket</h3>
-                            <p class="text-xs text-secondary font-medium">Scan fast at turnstile gates</p>
-                        </div>
-                    </div>
-
-                    <div class="dropzone-box border-2 border-dashed border-subtle rounded-2xl p-5 mb-5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all group relative overflow-hidden" id="ticket-dropzone">
-                        <input type="file" id="ticket-file-input" accept="image/*" class="hidden">
-                        <div id="ticket-preview-container" class="hidden w-full flex-col items-center">
-                            <img id="ticket-preview-img" src="" alt="Ticket Preview" class="max-h-36 object-contain rounded-lg border border-subtle shadow-md mb-2">
-                            <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
-                                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Ticket Image Selected
-                            </span>
-                        </div>
-                        <div id="ticket-dropzone-prompt" class="flex flex-col items-center gap-2">
-                            <div class="w-10 h-10 rounded-full bg-card-subtle flex items-center justify-center text-secondary group-hover:text-emerald-400 transition-colors">
-                                <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-xs text-primary font-bold">Tap to choose ticket screenshot</p>
-                            <p class="text-[10px] text-secondary opacity-70">PNG, JPG or WhatsApp ticket screenshot</p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2.5">
-                        <button id="ticket-upload-confirm" class="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/25 transition-all text-sm flex items-center justify-center gap-2 border border-emerald-400/30">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            <span>Start Journey with Ticket</span>
-                        </button>
-                        <button id="ticket-upload-skip" class="w-full py-3 px-4 bg-card-subtle hover:bg-card-hover text-secondary hover:text-primary font-semibold rounded-xl transition-all text-xs border border-subtle">
-                            Skip for Now (Start Without Ticket)
-                        </button>
-                    </div>
-
-                    <button id="ticket-upload-close" class="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full bg-card-subtle text-secondary hover:text-primary transition-colors border border-subtle">
-                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Turnstile Gate QR Scanner Viewer Modal -->
-            <div id="qr-scanner-modal" class="absolute inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-                <div class="bg-[#0F141C]/90 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 w-full max-w-sm shadow-[0_25px_60px_rgba(0,0,0,0.8)] transform scale-95 transition-all duration-300 opacity-0 pointer-events-none flex flex-col items-center relative overflow-hidden" id="qr-scanner-modal-content">
-                    
-                    <!-- Header with Station Trip Info -->
-                    <div class="w-full flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/25">
-                                <i data-lucide="qr-code" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-emerald-400 tracking-wide uppercase">QR Ticket Saved</h4>
-                                <p class="text-[11px] text-slate-200 font-semibold truncate max-w-[200px]" id="qr-modal-route-sub">Metro Route</p>
-                            </div>
-                        </div>
-                        <button id="qr-scanner-close" class="w-8 h-8 rounded-full bg-white/10 text-secondary hover:text-white flex items-center justify-center border border-white/10 hover:bg-white/20 transition-all active:scale-95">
-                            <i data-lucide="x" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-
-                    <!-- Clean High-Contrast Bright QR Container -->
-                    <div id="qr-modal-img-wrapper" class="w-full bg-white p-3.5 rounded-2xl shadow-lg border border-slate-100 flex flex-col items-center justify-center mb-4 relative min-h-[200px] cursor-pointer group transition-all hover:scale-[1.01]" title="Tap for Fullscreen Gate Scanner">
-                        <img id="qr-modal-img" src="" alt="Metro QR Ticket" class="max-h-[240px] w-auto object-contain rounded-lg">
-                        
-                        <!-- Tap for Fullscreen Overlay Hint -->
-                        <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2 text-white font-bold text-xs">
-                            <i data-lucide="maximize-2" class="w-4 h-4 text-emerald-400"></i>
-                            <span>Tap for Fullscreen View</span>
-                        </div>
-
-                        <div id="qr-modal-empty-state" class="hidden flex-col items-center justify-center text-slate-800 p-6 text-center">
-                            <i data-lucide="image-off" class="w-10 h-10 text-slate-400 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700">No Ticket Image Attached</p>
-                            <p class="text-[10px] text-slate-500 mt-1">Upload your WhatsApp or BMRCL QR screenshot</p>
-                        </div>
-                    </div>
-
-                    <!-- Primary Action: Open Fullscreen Gate View -->
-                    <button id="open-qr-fullscreen-btn" class="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold rounded-2xl shadow-lg shadow-emerald-500/25 transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2 mb-3 border border-emerald-400/30">
-                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                        <span>Open Fullscreen Gate Scanner</span>
-                    </button>
-
-                    <!-- Action Buttons -->
-                    <div class="w-full flex gap-2">
-                        <button id="qr-modal-reupload-btn" class="flex-1 py-2.5 px-3 bg-white/5 hover:bg-white/10 text-slate-200 font-bold rounded-xl border border-white/10 text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
-                            <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i>
-                            <span>Change Ticket</span>
-                        </button>
-                        <button id="qr-modal-remove-btn" class="py-2.5 px-3 bg-red-500/15 hover:bg-red-500/25 text-red-400 font-bold rounded-xl border border-red-500/30 text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                            <span>Clear</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fullscreen QR Turnstile Scanner Overlay (Edge-to-Edge Gate View) -->
-            <div id="qr-fullscreen-overlay" class="fixed inset-0 z-[999999] bg-[#07090E] flex flex-col justify-between items-center p-5 opacity-0 pointer-events-none transition-all duration-300">
-                
-                <!-- Fullscreen Header Bar -->
-                <div class="w-full flex items-center justify-between pt-2 pb-3.5 border-b border-white/10 max-w-lg">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/25">
-                            <i data-lucide="scan-line" class="w-5 h-5"></i>
-                        </div>
-                        <h3 class="text-xs font-bold text-white tracking-tight truncate max-w-[220px] sm:max-w-xs" id="qr-fs-route-title">Turnstile Gate View</h3>
-                    </div>
-                    <button id="qr-fullscreen-close" class="w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center border border-white/10 transition-all active:scale-90 shadow-md">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
-
-                <!-- Center Enlarged Gate-Ready QR Box -->
-                <div class="w-full max-w-md my-auto flex flex-col items-center justify-center p-2">
-                    <div class="w-full bg-white p-4 sm:p-6 rounded-3xl shadow-[0_0_80px_rgba(255,255,255,0.85)] border border-slate-200 flex items-center justify-center relative overflow-hidden">
-                        <img id="qr-fs-img" src="" alt="Fullscreen QR Ticket" class="max-h-[68vh] w-auto max-w-full object-contain rounded-xl">
-                    </div>
-                </div>
-
-                <!-- Bottom Brightness Status Badge -->
-                <div class="w-full max-w-lg pb-3 flex justify-center">
-                    <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold text-xs px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-md shadow-md">
-                        <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
-                        <span>100% Brightness & Screen Awake Enabled</span>
-                    </div>
-                </div>
-            </div>
-
             <header class="app-header flex justify-between items-center px-4">
                 <h1 class="text-base font-extrabold text-primary tracking-tight flex items-center gap-2">
                     <img src="assets/images/logo_app.png" alt="NammaRide Logo" width="30" height="30" style="width: 30px; height: 30px; max-width: 30px; max-height: 30px;" class="object-contain">
@@ -518,7 +388,7 @@
                             <span id="current-lang-text">EN</span>
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </button>
-                        <div id="lang-menu" class="absolute right-0 mt-2 w-28 bg-[#181a20] dark:bg-[#181a20] border border-subtle rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-[100] overflow-hidden" style="background-color: var(--bg-color);">
+                        <div id="lang-menu" class="absolute right-0 mt-2 w-28 bg-card border border-subtle rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.25)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-[100] overflow-hidden backdrop-blur-xl">
                             <button class="lang-option w-full text-left px-4 py-3 text-sm font-semibold text-secondary hover:text-primary hover:bg-card-hover transition-colors flex items-center justify-between" data-lang="en">
                                 English
                                 <div class="w-2 h-2 rounded-full bg-emerald-500 hidden indicator"></div>
@@ -543,31 +413,29 @@
                 class="p-6 flex flex-col transition-opacity duration-300 overflow-y-auto custom-scrollbar section-view">
 
                 <div class="w-full max-w-md mx-auto pt-6 sm:pt-8 pb-10">
-                    <h2 class="text-3xl font-extrabold mb-5 text-[var(--text-primary)] tracking-tight leading-snug"
+                    <h2 class="text-3xl font-extrabold mb-3 text-[var(--text-primary)] tracking-tight leading-snug"
                         data-lang-key="planYourTrip">Where to go today?</h2>
 
-                    <!-- Live BMRCL Service Status Banner -->
-                    <div id="service-status-banner" class="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/25 rounded-2xl px-3.5 py-2.5 mb-5 backdrop-blur-md transition-all">
-                        <div class="flex items-center gap-2.5">
-                            <span class="relative flex h-2.5 w-2.5 shrink-0">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                            </span>
-                            <div class="flex flex-col">
-                                <span class="text-xs font-bold text-primary flex items-center gap-1.5 leading-none">
-                                    <span>Normal Service</span>
-                                    <span class="text-[10px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-wider bg-emerald-500/15 px-1.5 py-0.5 rounded">All Lines</span>
-                                </span>
-                                <span class="text-[10px] text-secondary opacity-75 mt-0.5">Peak headway: ~4.5 mins • Last train: 11:05 PM</span>
+                    <!-- Live Metro Rush & Train Frequency Forecast -->
+                    <div id="metro-rush-forecast-bar" class="mb-4 p-2.5 px-3.5 rounded-2xl bg-card-subtle hover:bg-card-hover border border-subtle flex items-center justify-between cursor-pointer transition-all active:scale-[0.98] group shadow-sm">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span id="rush-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse shrink-0"></span>
+                            <div class="flex flex-col min-w-0">
+                                <div class="flex items-center gap-1.5 min-w-0">
+                                    <span id="rush-title" class="text-xs font-black text-primary truncate">Live Metro Status</span>
+                                    <span id="rush-status-badge" class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-extrabold uppercase">Live</span>
+                                </div>
+                                <span id="rush-subtitle" class="text-[10px] text-secondary font-medium truncate">Checking real-time schedule...</span>
                             </div>
                         </div>
-                        <div class="text-[10px] font-bold text-emerald-500 shrink-0 bg-emerald-500/15 px-2 py-1 rounded-xl border border-emerald-500/30">
-                            Live
+                        <div class="flex items-center gap-1 text-[11px] font-bold text-emerald-500 shrink-0">
+                            <span>Schedule</span>
+                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
                         </div>
                     </div>
 
                     <!-- Compact Inputs Block -->
-                    <div id="planner-controls" class="flex flex-col gap-5 mb-5 relative px-1 py-2">
+                    <div id="planner-controls" class="flex flex-col gap-5 mb-2 relative px-1 py-2">
                         <!-- Origin -->
                         <div class="relative z-20">
                             <div id="start-station-dropdown" class="w-full"></div>
@@ -588,17 +456,27 @@
                         </div>
                     </div>
 
-                    <!-- Quick Commutes (Favorites & Recents) Chips -->
-                    <div id="quick-commutes-container" class="mb-5">
+                    <!-- Quick Popular Stations Fast-Select Bar -->
+                    <div class="mb-4 flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+                        <span class="text-[10px] text-secondary font-extrabold uppercase tracking-wide shrink-0">Popular:</span>
+                        <button type="button" class="popular-station-chip px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary shrink-0 transition-all active:scale-95" data-name="Nadaprabhu Kempegowda Stn., Majestic">Majestic</button>
+                        <button type="button" class="popular-station-chip px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary shrink-0 transition-all active:scale-95" data-name="MG Road">MG Road</button>
+                        <button type="button" class="popular-station-chip px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary shrink-0 transition-all active:scale-95" data-name="Indiranagar">Indiranagar</button>
+                        <button type="button" class="popular-station-chip px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary shrink-0 transition-all active:scale-95" data-name="Whitefield (Kadugodi)">Whitefield</button>
+                        <button type="button" class="popular-station-chip px-2.5 py-1 rounded-lg bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary shrink-0 transition-all active:scale-95" data-name="Electronic City">Electronic City</button>
+                    </div>
+
+                    <!-- Quick Commutes (Saved Routes Only) Chips - Hidden when empty -->
+                    <div id="quick-commutes-container" class="mb-5 hidden">
                         <div class="flex items-center justify-between mb-2 px-1">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
-                                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-                                <span>Quick Commutes</span>
+                                <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400"></i>
+                                <span>Saved Routes</span>
                             </span>
-                            <span class="text-[10px] text-secondary opacity-60">1-Tap Fast Plan</span>
+                            <span class="text-[10px] text-secondary opacity-60">1-Tap Plan</span>
                         </div>
                         <div id="quick-commutes-chips" class="flex items-center gap-2 overflow-x-auto pb-1.5 -mx-1 px-1 custom-scrollbar">
-                            <!-- Populated dynamically via JS -->
+                            <!-- Populated dynamically via JS only when user saves routes -->
                         </div>
                     </div>
 
@@ -657,10 +535,10 @@
 
             <!-- MAP VIEW (Live Route) -->
             <section id="map-view" class="hidden flex-grow overflow-y-auto custom-scrollbar section-view bg-card relative">
-
-                <div id="simulation-status" class="sticky top-0 z-30 p-2 px-3">
+                <!-- Single Unified Sticky Navigation Bar for Live Journey -->
+                <div id="simulation-status" class="sticky top-0 z-40 w-full">
                 </div>
-                <ul id="route-list" class="route-timeline mt-4"></ul>
+                <ul id="route-list" class="route-timeline mt-3"></ul>
 
                 <!-- Floating Actions Bar (Bottom Right) -->
                 <div id="map-floating-actions" class="sticky bottom-4 right-4 z-40 flex justify-end px-4 py-2 pointer-events-none">
@@ -753,6 +631,306 @@
 
         <div id="toast"
             class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-card text-primary px-4 py-2 rounded shadow-lg text-sm opacity-0 transition-opacity duration-300 z-50 border border-subtle">
+        </div>
+
+        <!-- RUSH HOURS & TRAIN FREQUENCY SCHEDULE MODAL -->
+        <div id="rush-schedule-modal" class="fixed inset-0 z-[200] hidden flex-col items-center justify-center p-3 sm:p-5 backdrop-blur-md transition-all duration-200">
+            <div class="destination-hub-modal-card w-full max-w-md max-h-[92vh] rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative bg-card border border-subtle">
+                <!-- Header -->
+                <div class="p-3.5 px-4 border-b flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 border border-amber-500/30 flex items-center justify-center shrink-0">
+                            <i data-lucide="clock" class="w-4 h-4 font-black"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-[9px] uppercase font-black tracking-widest text-amber-500">Live Operating Timetable</span>
+                            <h3 class="text-sm sm:text-base font-extrabold truncate text-primary">Metro Rush & Frequency Guide</h3>
+                        </div>
+                    </div>
+                    <button id="close-rush-modal-btn" type="button" class="w-8 h-8 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle flex items-center justify-center text-secondary hover:text-primary shrink-0 active:scale-95 transition-all">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <!-- Content -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-3.5 custom-scrollbar text-xs">
+                    <div class="p-3 rounded-2xl bg-card-subtle border border-subtle flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-secondary uppercase tracking-wider block">Bengaluru Local Time</span>
+                            <span id="rush-modal-current-time" class="text-base font-black text-primary">--:--</span>
+                        </div>
+                        <span id="rush-modal-current-badge" class="px-2.5 py-1 rounded-xl text-xs font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-500 border border-emerald-500/20">Checking...</span>
+                    </div>
+
+                    <!-- Weekdays -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-extrabold text-primary flex items-center gap-1.5 uppercase tracking-wide">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-500"></i>
+                            <span>Monday to Saturday Schedule</span>
+                        </h4>
+                        <div class="space-y-1.5">
+                            <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
+                                <div>
+                                    <span class="font-extrabold text-primary block text-[11px]">Morning Peak Hours</span>
+                                    <span class="text-[10px] text-secondary">08:30 AM – 10:30 AM</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-white font-black text-[10px]">Every 3.5 - 4.5 min</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
+                                <div>
+                                    <span class="font-extrabold text-primary block text-[11px]">Evening Peak Hours</span>
+                                    <span class="text-[10px] text-secondary">05:00 PM – 08:30 PM</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-white font-black text-[10px]">Every 3.5 - 5 min</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-card-subtle border border-subtle flex items-center justify-between">
+                                <div>
+                                    <span class="font-extrabold text-primary block text-[11px]">Off-Peak Daytime</span>
+                                    <span class="text-[10px] text-secondary">10:30 AM – 05:00 PM</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">Every 6 - 8 min</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-card-subtle border border-subtle flex items-center justify-between">
+                                <div>
+                                    <span class="font-extrabold text-primary block text-[11px]">Early Morning & Night</span>
+                                    <span class="text-[10px] text-secondary">05:00 – 08:30 AM & 08:30 – 11:05 PM</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-lg bg-card text-secondary font-bold text-[10px]">Every 8 - 10 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sundays & Holidays -->
+                    <div class="space-y-2 pt-2 border-t border-subtle">
+                        <h4 class="text-xs font-extrabold text-primary flex items-center gap-1.5 uppercase tracking-wide">
+                            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500"></i>
+                            <span>Sundays & Public Holidays</span>
+                        </h4>
+                        <div class="p-2.5 rounded-xl bg-card-subtle border border-subtle flex items-center justify-between">
+                            <div>
+                                <span class="font-extrabold text-primary block text-[11px]">All-Day Frequency</span>
+                                <span class="text-[10px] text-secondary">07:00 AM – 11:05 PM</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">Every 8 - 10 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMART FARE & TOURIST PASS ADVISOR MODAL -->
+        <div id="pass-advisor-modal" class="fixed inset-0 z-[200] hidden flex-col items-center justify-center p-3 sm:p-5 backdrop-blur-md transition-all duration-200">
+            <div class="destination-hub-modal-card w-full max-w-md max-h-[92vh] rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative bg-card border border-subtle">
+                <!-- Header -->
+                <div class="p-3.5 px-4 border-b flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                            <i data-lucide="credit-card" class="w-4 h-4 font-black"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-[9px] uppercase font-black tracking-widest text-emerald-500">Official BMRCL Pricing</span>
+                            <h3 class="text-sm sm:text-base font-extrabold truncate text-primary">Smart Pass & Card Savings</h3>
+                        </div>
+                    </div>
+                    <button id="close-pass-modal-btn" type="button" class="w-8 h-8 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle flex items-center justify-center text-secondary hover:text-primary shrink-0 active:scale-95 transition-all">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <!-- Content -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar text-xs">
+                    <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="percent" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                            <div>
+                                <h4 class="font-bold text-primary text-xs">5% Flat Smart Card & QR Discount</h4>
+                                <p class="text-[10px] text-secondary">Every Varshik Smart Card & WhatsApp QR ride saves 5% compared to paper tokens.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pass Option Cards -->
+                    <div class="space-y-2.5">
+                        <!-- 1-Day Pass -->
+                        <div class="p-3.5 rounded-2xl bg-card-subtle border border-subtle space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-primary text-xs flex items-center gap-1.5">
+                                    <i data-lucide="ticket" class="w-3.5 h-3.5 text-amber-500"></i>
+                                    <span>1-Day Unlimited Pass</span>
+                                </span>
+                                <span class="text-xs font-black text-emerald-500">₹200 <span class="text-[10px] text-secondary font-normal">(₹50 refundable)</span></span>
+                            </div>
+                            <p class="text-[11px] text-secondary leading-relaxed">Unlimited travel across Purple, Green & Yellow lines for 1 calendar day. Net travel cost: ₹150.</p>
+                            <span class="inline-block px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 font-bold text-[10px]">Best for 3+ rides today</span>
+                        </div>
+
+                        <!-- 3-Day Pass -->
+                        <div class="p-3.5 rounded-2xl bg-card-subtle border border-subtle space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-primary text-xs flex items-center gap-1.5">
+                                    <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-500"></i>
+                                    <span>3-Day Tourist Pass</span>
+                                </span>
+                                <span class="text-xs font-black text-emerald-500">₹400 <span class="text-[10px] text-secondary font-normal">(₹50 refundable)</span></span>
+                            </div>
+                            <p class="text-[11px] text-secondary leading-relaxed">Unlimited travel across entire Bengaluru network for 3 consecutive days. Net travel cost: ₹350.</p>
+                            <span class="inline-block px-2 py-0.5 rounded-md bg-blue-500/15 text-blue-600 dark:text-blue-400 font-bold text-[10px]">Best for weekend tourists</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Link: Official WhatsApp Bot -->
+                    <div class="pt-2">
+                        <a href="https://wa.me/918105556677?text=Hi%20Namma%20Metro" target="_blank" class="w-full py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#1DA851] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md transition-all active:scale-95">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                            <span>Chat with Official BMRCL WhatsApp Bot (+91 81055 56677)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEDICATED DESTINATION HUB & STATION EXIT GATES MODAL (LIGHT & DARK SYNC) -->
+        <div id="station-gates-modal" class="fixed inset-0 z-[200] hidden flex-col items-center justify-center p-3 sm:p-5 backdrop-blur-md transition-all duration-200">
+            <div id="station-gates-modal-content" class="destination-hub-modal-card w-full max-w-md max-h-[92vh] rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative">
+                <!-- Dynamically rendered via JS -->
+            </div>
+        </div>
+
+        <!-- TICKET UPLOAD PROMPT MODAL (TOP-LEVEL FIXED OVERLAY) -->
+        <div id="ticket-upload-modal" class="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+            <div class="bg-card backdrop-blur-2xl border border-subtle rounded-[32px] p-6 w-full max-w-sm shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] transform scale-95 transition-all duration-300 opacity-0 pointer-events-none relative" id="ticket-upload-modal-content">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center text-emerald-500 shrink-0 border border-emerald-500/20">
+                        <i data-lucide="qr-code" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-primary tracking-tight">Attach QR Ticket</h3>
+                        <p class="text-xs text-secondary font-medium">Scan fast at turnstile gates</p>
+                    </div>
+                </div>
+
+                <div class="dropzone-box border-2 border-dashed border-subtle rounded-2xl p-5 mb-5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all group relative overflow-hidden" id="ticket-dropzone">
+                    <input type="file" id="ticket-file-input" accept="image/*" class="hidden">
+                    <div id="ticket-preview-container" class="hidden w-full flex-col items-center">
+                        <img id="ticket-preview-img" src="" alt="Ticket Preview" class="max-h-36 object-contain rounded-lg border border-subtle shadow-md mb-2">
+                        <span class="text-xs text-emerald-500 font-bold flex items-center gap-1">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Ticket Image Selected
+                        </span>
+                    </div>
+                    <div id="ticket-dropzone-prompt" class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 rounded-full bg-card-subtle flex items-center justify-center text-secondary group-hover:text-emerald-500 transition-colors">
+                            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-xs text-primary font-bold">Tap to choose ticket screenshot</p>
+                        <p class="text-[10px] text-secondary opacity-70">PNG, JPG or WhatsApp ticket screenshot</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2.5">
+                    <button id="ticket-upload-confirm" type="button" class="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/25 transition-all text-sm flex items-center justify-center gap-2 border border-emerald-400/30">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>Start Journey with Ticket</span>
+                    </button>
+                    <button id="ticket-upload-skip" type="button" class="w-full py-3 px-4 bg-card-subtle hover:bg-card-hover text-secondary hover:text-primary font-semibold rounded-xl transition-all text-xs border border-subtle">
+                        Skip for Now (Start Without Ticket)
+                    </button>
+                </div>
+
+                <button id="ticket-upload-close" type="button" class="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full bg-card-subtle text-secondary hover:text-primary transition-colors border border-subtle" title="Close">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- TURNSTILE GATE QR SCANNER VIEWER MODAL (TOP-LEVEL FIXED OVERLAY, Z-INDEX ABOVE GATES) -->
+        <div id="qr-scanner-modal" class="fixed inset-0 z-[300] flex items-center justify-center p-4 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+            <div class="qr-scanner-card backdrop-blur-2xl rounded-[32px] p-6 w-full max-w-sm transform scale-95 transition-all duration-300 opacity-0 pointer-events-none flex flex-col items-center relative overflow-hidden" id="qr-scanner-modal-content">
+                
+                <!-- Header with Station Trip Info -->
+                <div class="w-full flex items-center justify-between mb-4 border-b border-subtle pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/25">
+                            <i data-lucide="qr-code" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">QR Ticket Saved</h4>
+                            <p class="text-[11px] text-primary font-semibold truncate max-w-[200px]" id="qr-modal-route-sub">Metro Route</p>
+                        </div>
+                    </div>
+                    <button id="qr-scanner-close" type="button" class="w-8 h-8 rounded-full bg-card-subtle hover:bg-card-hover text-secondary hover:text-primary flex items-center justify-center border border-subtle transition-all active:scale-95" title="Close">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Clean High-Contrast Bright QR Container -->
+                <div id="qr-modal-img-wrapper" class="w-full bg-white p-3.5 rounded-2xl shadow-md border border-subtle flex flex-col items-center justify-center mb-4 relative min-h-[200px] cursor-pointer group transition-all hover:scale-[1.01]" title="Tap for Fullscreen Gate Scanner">
+                    <img id="qr-modal-img" src="" alt="Metro QR Ticket" class="max-h-[240px] w-auto object-contain rounded-lg">
+                    
+                    <!-- Tap for Fullscreen Overlay Hint -->
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2 text-white font-bold text-xs">
+                        <i data-lucide="maximize-2" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Tap for Fullscreen View</span>
+                    </div>
+
+                    <div id="qr-modal-empty-state" class="hidden flex-col items-center justify-center text-primary p-6 text-center">
+                        <i data-lucide="image-off" class="w-10 h-10 text-secondary mb-2 opacity-60"></i>
+                        <p class="text-xs font-bold text-primary">No Ticket Image Attached</p>
+                        <p class="text-[10px] text-secondary mt-1 mb-3">Upload your WhatsApp or BMRCL QR screenshot</p>
+                        <button id="qr-empty-upload-btn" type="button" class="py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                            <span>Upload Ticket</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Primary Action: Open Fullscreen Gate View -->
+                <button id="open-qr-fullscreen-btn" type="button" class="w-full py-3.5 px-4 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold rounded-2xl shadow-lg shadow-emerald-500/25 transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2 mb-3 border border-emerald-400/30">
+                    <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                    <span>Open Fullscreen Gate Scanner</span>
+                </button>
+
+                <!-- Action Buttons -->
+                <div class="w-full flex gap-2">
+                    <button id="qr-modal-reupload-btn" type="button" class="flex-1 py-2.5 px-3 bg-card-subtle hover:bg-card-hover text-primary font-bold rounded-xl border border-subtle text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+                        <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-500"></i>
+                        <span>Change Ticket</span>
+                    </button>
+                    <button id="qr-modal-remove-btn" type="button" class="py-2.5 px-3 bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 font-bold rounded-xl border border-red-500/30 text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FULLSCREEN QR TURNSTILE SCANNER OVERLAY (TOP-LEVEL FIXED OVERLAY, ADAPTIVE LIGHT/DARK THEME) -->
+        <div id="qr-fullscreen-overlay" class="fixed inset-0 z-[400] flex flex-col justify-between items-center p-5 opacity-0 pointer-events-none transition-all duration-300">
+            
+            <!-- Fullscreen Header Bar -->
+            <div class="w-full flex items-center justify-between pt-2 pb-3.5 border-b border-subtle max-w-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/25">
+                        <i data-lucide="scan-line" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xs font-bold text-primary tracking-tight truncate max-w-[220px] sm:max-w-xs" id="qr-fs-route-title">Turnstile Gate View</h3>
+                </div>
+                <button id="qr-fullscreen-close" type="button" class="w-10 h-10 rounded-full bg-card-subtle text-primary hover:bg-card-hover flex items-center justify-center border border-subtle transition-all active:scale-90 shadow-md" title="Close Fullscreen View">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Center Enlarged Gate-Ready QR Box -->
+            <div class="w-full max-w-md my-auto flex flex-col items-center justify-center p-2">
+                <div id="qr-fs-card" class="w-full bg-white p-4 sm:p-6 rounded-3xl shadow-2xl border border-slate-200 flex items-center justify-center relative overflow-hidden">
+                    <img id="qr-fs-img" src="" alt="Fullscreen QR Ticket" class="max-h-[68vh] w-auto max-w-full object-contain rounded-xl">
+                </div>
+            </div>
+
+            <!-- Bottom Brightness Status Badge -->
+            <div class="w-full max-w-lg pb-3 flex justify-center">
+                <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold text-xs px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-md shadow-md">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+                    <span>100% Brightness & Screen Awake Enabled</span>
+                </div>
+            </div>
         </div>
     </div>
 
