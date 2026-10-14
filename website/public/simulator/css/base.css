@@ -97,8 +97,7 @@ html, body, .scroll-container {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    overscroll-behavior-y: contain;
-    touch-action: manipulation;
+    touch-action: pan-y;
 }
 
 /* Force hardware acceleration on all major scrollable elements */

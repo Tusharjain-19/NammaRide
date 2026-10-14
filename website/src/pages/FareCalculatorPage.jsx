@@ -17,7 +17,7 @@ export default function FareCalculatorPage() {
   const monthlySavings = savingsPerTrip * 2 * commuteDays;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] py-12 px-4 sm:px-6 lg:px-8 bg-ambient-grid transition-colors">
+    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-ambient-grid transition-colors">
       <MetaSEO
         title="Bengaluru Metro Fare Calculator 2026 — BMRCL Smart Card Discount Calc"
         description="Calculate exact Namma Metro ticket prices between any two stations. Compare single token cash fare against 5% Smart Card / QR discounts and monthly commuter savings."

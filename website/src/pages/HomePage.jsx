@@ -451,7 +451,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-purple-500/10 rounded-[3rem] transform rotate-3 scale-105 border border-white/20 shadow-sm z-0 blur-xl"></div>
             
             {/* Phone shell */}
-            <div className="w-[280px] h-[560px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-950 rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-800/80 transition-all duration-300">
+            <div className="w-[280px] xs:w-[310px] sm:w-[330px] h-[560px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] max-w-[calc(100vw-32px)] bg-gray-950 rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-800/80 transition-all duration-300">
               
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-800 rounded-r-md"></div>
@@ -480,35 +480,35 @@ export default function HomePage() {
 
       {/* PRD USPs COMPARISON TABLE */}
       <motion.section 
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.7 }}
-        className="py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full"
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
+        className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full"
       >
-        <div className="light-glass-card p-8 rounded-[36px] space-y-6 max-w-5xl mx-auto">
+        <div className="light-glass-card p-4 sm:p-8 rounded-[28px] sm:rounded-[36px] space-y-6 max-w-5xl mx-auto overflow-hidden">
           <div className="text-center space-y-2">
-            <h2 className="font-headline-lg text-headline-lg font-bold text-gray-900 dark:text-white">{t('whyCommutersSwitched')}</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t('whyCommutersDesc')}</p>
+            <h2 className="font-headline-lg text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">{t('whyCommutersSwitched')}</h2>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{t('whyCommutersDesc')}</p>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+          <div className="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+            <table className="w-full text-left text-xs sm:text-sm min-w-[520px]">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 uppercase font-mono text-xs">
-                  <th className="py-3 px-4">{t('feature')}</th>
-                  <th className="py-3 px-4 text-emerald-accent font-bold">{t('nammaride')}</th>
-                  <th className="py-3 px-4">{t('bmrclOfficial')}</th>
-                  <th className="py-3 px-4">{t('googleMaps')}</th>
+                  <th className="py-3 px-3 sm:px-4">{t('feature')}</th>
+                  <th className="py-3 px-3 sm:px-4 text-emerald-accent font-bold">{t('nammaride')}</th>
+                  <th className="py-3 px-3 sm:px-4">{t('bmrclOfficial')}</th>
+                  <th className="py-3 px-3 sm:px-4">{t('googleMaps')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-gray-600 dark:text-gray-300">
                 {usps.map((row, idx) => (
                   <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
-                    <td className="py-4 px-4 font-bold text-gray-900 dark:text-white">{row.feature}</td>
-                    <td className="py-4 px-4 font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20">{row.nammaride}</td>
-                    <td className="py-4 px-4 text-gray-500 dark:text-gray-400">{row.bmrcl}</td>
-                    <td className="py-4 px-4 text-gray-500 dark:text-gray-400">{row.google}</td>
+                    <td className="py-3.5 px-3 sm:px-4 font-bold text-gray-900 dark:text-white">{row.feature}</td>
+                    <td className="py-3.5 px-3 sm:px-4 font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/20">{row.nammaride}</td>
+                    <td className="py-3.5 px-3 sm:px-4 text-gray-500 dark:text-gray-400">{row.bmrcl}</td>
+                    <td className="py-3.5 px-3 sm:px-4 text-gray-500 dark:text-gray-400">{row.google}</td>
                   </tr>
                 ))}
               </tbody>
@@ -554,8 +554,8 @@ export default function HomePage() {
       </section>
 
       {/* 🚀 CRAZY SECTION 1: INTERACTIVE TECH PARK & MAJOR HUB EXPRESS NAVIGATOR */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
-        <div className="bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-purple-500/10 dark:from-emerald-950/30 dark:via-black dark:to-purple-950/30 border border-emerald-500/20 dark:border-emerald-500/30 rounded-[40px] p-8 sm:p-12 space-y-8 shadow-lg">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <div className="bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-purple-500/10 dark:from-emerald-950/30 dark:via-black dark:to-purple-950/30 border border-emerald-500/20 dark:border-emerald-500/30 rounded-[28px] sm:rounded-[40px] p-5 sm:p-10 lg:p-12 space-y-8 shadow-lg">
           
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
@@ -718,8 +718,8 @@ export default function HomePage() {
       </section>
 
       {/* 🔍 CRAZY SECTION 3: SEO & GEO-TARGETED COMMUTER TRANSIT GUIDE */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
-        <div className="bg-white dark:bg-neutral-900 rounded-[36px] border border-gray-200 dark:border-neutral-800 p-8 sm:p-12 space-y-8 shadow-sm">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <div className="bg-white dark:bg-neutral-900 rounded-[28px] sm:rounded-[36px] border border-gray-200 dark:border-neutral-800 p-5 sm:p-10 lg:p-12 space-y-8 shadow-sm">
           <div className="space-y-3">
             <h2 className="font-heading font-bold text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
               Bengaluru Namma Metro 2026 Commuter & Transit Guide
@@ -761,8 +761,8 @@ export default function HomePage() {
       <BengaluruMetroGuide />
 
       {/* 📲 CRAZY SECTION 4: SCAN QR CODE TO INSTALL NAMMARIDE APP */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
-        <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/40 dark:via-black dark:to-emerald-950/40 rounded-[36px] border border-emerald-500/30 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+      <section className="py-10 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/40 dark:via-black dark:to-emerald-950/40 rounded-[28px] sm:rounded-[36px] border border-emerald-500/30 p-5 sm:p-10 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
           <div className="space-y-3 text-center md:text-left max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
               <QrCode className="w-4 h-4" />

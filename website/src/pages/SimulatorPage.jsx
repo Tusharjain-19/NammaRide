@@ -51,6 +51,7 @@ const appTabs = [
 
 export default function SimulatorPage() {
   const [activeTab, setActiveTab] = useState('planner');
+  const [mobileInteractive, setMobileInteractive] = useState(false);
   const iframeRef = useRef(null);
   const cardRefs = useRef({});
   const { theme } = useTheme();
@@ -164,13 +165,13 @@ export default function SimulatorPage() {
         {/* Always Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 2xl:gap-16 items-start">
           
-          {/* Left Column: Phone simulator — sticky, no scroll-triggered re-animation */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center lg:sticky lg:top-24">
+          {/* Left Column: Phone simulator — sticky on desktop, scroll-safe on mobile */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center lg:sticky lg:top-24 w-full">
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, type: "spring", stiffness: 120, damping: 18 }}
-              className="w-[290px] h-[580px] sm:w-[330px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800"
+              className="w-[280px] xs:w-[310px] sm:w-[340px] h-[580px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] max-w-[calc(100vw-32px)] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800"
             >
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
@@ -185,14 +186,41 @@ export default function SimulatorPage() {
                   title="NammaRide Mobile App Simulator"
                   allow="geolocation; autoplay; clipboard-write; encrypted-media"
                   loading="eager"
-                  className="w-full h-full border-0 rounded-[38px] bg-white dark:bg-black pointer-events-auto"
+                  className={`w-full h-full border-0 rounded-[38px] bg-white dark:bg-black ${
+                    mobileInteractive ? 'pointer-events-auto' : 'pointer-events-none lg:pointer-events-auto'
+                  }`}
                   onLoad={handleIframeLoad}
                 />
+
+                {/* Mobile Scroll Safe Overlay (prevents accidental touch trap on small screens) */}
+                {!mobileInteractive && (
+                  <div
+                    onClick={() => setMobileInteractive(true)}
+                    className="lg:hidden absolute inset-0 z-30 bg-black/15 backdrop-blur-[1px] flex flex-col items-center justify-center cursor-pointer p-4 select-none"
+                  >
+                    <div className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2 transform active:scale-95 transition-all">
+                      <span>👆 Tap to Interact with App</span>
+                    </div>
+                    <span className="text-[10px] text-white font-medium bg-black/70 px-2.5 py-1 rounded-md mt-2 shadow">
+                      Swipe here to scroll page
+                    </span>
+                  </div>
+                )}
 
                 {/* Bottom indicator */}
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-32 bg-gray-400/50 dark:bg-gray-500/50 rounded-full z-40 pointer-events-none"></div>
               </div>
             </motion.div>
+
+            {/* Mobile Done Interacting Button */}
+            {mobileInteractive && (
+              <button
+                onClick={() => setMobileInteractive(false)}
+                className="lg:hidden mt-3 text-xs font-semibold px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-sm"
+              >
+                ✓ Done (Enable Page Scroll)
+              </button>
+            )}
           </div>
 
           {/* Right Column: Detailed feature explanations */}

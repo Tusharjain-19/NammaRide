@@ -67,16 +67,16 @@ export default function Navbar() {
           </Link>
  
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-3.5 xl:gap-7">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `font-label-lg text-label-lg transition-colors pb-1 border-b-2 ${
+                  `text-xs xl:text-sm transition-colors pb-1 border-b-2 whitespace-nowrap ${
                     isActive
                       ? 'text-emerald-500 font-bold border-emerald-500'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-emerald-500 border-transparent'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-emerald-500 border-transparent font-medium'
                   }`
                 }
               >
@@ -86,15 +86,15 @@ export default function Navbar() {
           </div>
  
           {/* Controls: Language Switcher, Theme Switcher, Google Play SVG */}
-          <div className="hidden sm:flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2.5 xl:gap-4 shrink-0">
             
             {/* Language Switcher Toggle (EN / ಕನ್ನಡ / हिन्दी) */}
             <button
               onClick={toggleLanguage}
-              className="px-3 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all flex items-center gap-2"
+              className="px-2.5 xl:px-3 py-1.5 xl:py-2 rounded-full border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-all flex items-center gap-1.5"
               title="Toggle Language (English / ಕನ್ನಡ / हिन्दी)"
             >
-              <Globe className="w-4 h-4 text-emerald-500" />
+              <Globe className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-emerald-500" />
               <span>{lang === 'en' ? 'ಕನ್ನಡ' : lang === 'kn' ? 'हिन्दी' : 'English'}</span>
             </button>
 
@@ -106,14 +106,14 @@ export default function Navbar() {
               href="https://play.google.com/store/apps/details?id=site.nammaride.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="h-11 inline-flex items-center justify-center transition-all hover:scale-105 active:scale-95 drop-shadow-xs"
+              className="h-9 xl:h-11 inline-flex items-center justify-center transition-all hover:scale-105 active:scale-95 drop-shadow-xs"
             >
-              <img src={googlePlayImg} alt="Get it on Google Play" className="h-11 w-auto object-contain" />
+              <img src={googlePlayImg} alt="Get it on Google Play" className="h-9 xl:h-11 w-auto object-contain" />
             </a>
           </div>
  
           {/* Mobile Navigation Controls */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-1.5 xs:gap-2">
             <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} size="small" />
             <button
               onClick={toggleLanguage}
@@ -125,23 +125,23 @@ export default function Navbar() {
  
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-full border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="p-2 rounded-full border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               aria-label="Toggle menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
  
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Dropdown Menu with full scroll support on small screens */}
       {isOpen && (
-        <div className="lg:hidden bg-white/95 dark:bg-gray-950/95 border-b border-gray-200 dark:border-gray-800 backdrop-blur-2xl px-4 py-5 space-y-2">
+        <div className="lg:hidden bg-white/95 dark:bg-gray-950/95 border-b border-gray-200 dark:border-gray-800 backdrop-blur-2xl px-4 py-5 space-y-2 max-h-[calc(100vh-5rem)] overflow-y-auto shadow-xl">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <span>{item.name}</span>
             </Link>
