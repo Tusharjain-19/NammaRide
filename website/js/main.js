@@ -479,7 +479,7 @@ function getMetroRushStatus() {
             badgeClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25',
             dotClass: 'bg-emerald-500',
             title: 'Sunday Leisure Schedule',
-            subtitle: 'Trains every 8–10 mins across all lines'
+            subtitle: 'Trains every 8-10 mins across all lines'
         };
     }
 
@@ -492,7 +492,7 @@ function getMetroRushStatus() {
             badgeClass: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25',
             dotClass: 'bg-amber-500 animate-pulse',
             title: 'Morning Peak Rush',
-            subtitle: 'Trains every 3.5–4.5 mins • Expect Crowds'
+            subtitle: 'Trains every 3.5-4.5 mins • Expect Crowds'
         };
     }
 
@@ -505,7 +505,7 @@ function getMetroRushStatus() {
             badgeClass: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/25',
             dotClass: 'bg-amber-500 animate-pulse',
             title: 'Evening Peak Rush',
-            subtitle: 'Trains every 3.5–5 mins • Busy Platforms'
+            subtitle: 'Trains every 3.5-5 mins • Busy Platforms'
         };
     }
 
@@ -518,7 +518,7 @@ function getMetroRushStatus() {
             badgeClass: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/25',
             dotClass: 'bg-indigo-400',
             title: 'Night Service Interval',
-            subtitle: 'Trains every 8–10 mins • Last train 11:05 PM'
+            subtitle: 'Trains every 8-10 mins • Last train 11:05 PM'
         };
     }
 
@@ -530,7 +530,7 @@ function getMetroRushStatus() {
         badgeClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25',
         dotClass: 'bg-emerald-500 animate-pulse',
         title: 'Off-Peak Hours (Comfortable)',
-        subtitle: 'Trains every 6–8 mins • Seating Available'
+        subtitle: 'Trains every 6-8 mins • Seating Available'
     };
 }
 

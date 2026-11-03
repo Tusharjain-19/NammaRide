@@ -15,7 +15,7 @@ export const timingsData = {
   ],
   "schedules": {
     "mon_fri": {
-      "title": "Monday – Friday (Weekdays)",
+      "title": "Monday - Friday (Weekdays)",
       "from_start": [
         {
           "range": "05:00 - 06:00",
@@ -75,7 +75,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_fri: {
-        title: "Monday – Friday (Weekdays)",
+        title: "Monday - Friday (Weekdays)",
         from_start: [ // From Whitefield
           { range: "05:00 - 05:20", frequency: "20 mins" },
           { range: "05:20 - 10:57", frequency: "10 mins" },
@@ -136,7 +136,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_fri: {
-        title: "Monday – Friday (Weekdays)",
+        title: "Monday - Friday (Weekdays)",
         from_start: [
           { range: "05:00 - 06:15", frequency: "15 mins" },
           { range: "06:15 - 10:25", frequency: "11 mins" },
@@ -199,7 +199,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_sat: {
-        title: "Monday – Saturday",
+        title: "Monday - Saturday",
         from_start: [ // From RV Road
           { range: "05:05 - 06:40", frequency: "20-30 mins" },
           { range: "06:40 - 07:37", frequency: "10-16 mins" },

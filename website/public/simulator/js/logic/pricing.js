@@ -8,14 +8,14 @@
 // 1. FARE SLAB TABLE (hop-count based, per BMRCL Fare Fixation Committee)
 export const FARE_SLABS = [
   { slab: 1,  minHops: 0,  maxHops: 0,   fare: 10,  label: "Same Station"     },
-  { slab: 2,  minHops: 1,  maxHops: 2,   fare: 10,  label: "0 – 2 km"        },
-  { slab: 3,  minHops: 3,  maxHops: 4,   fare: 20,  label: "2 – 4 km"        },
-  { slab: 4,  minHops: 5,  maxHops: 6,   fare: 30,  label: "4 – 6 km"        },
-  { slab: 5,  minHops: 7,  maxHops: 8,   fare: 40,  label: "6 – 8 km"        },
-  { slab: 6,  minHops: 9,  maxHops: 10,  fare: 50,  label: "8 – 10 km"       },
-  { slab: 7,  minHops: 11, maxHops: 15,  fare: 60,  label: "10 – 15 km"      },
-  { slab: 8,  minHops: 16, maxHops: 20,  fare: 70,  label: "15 – 20 km"      },
-  { slab: 9,  minHops: 21, maxHops: 25,  fare: 80,  label: "20 – 25 km"      },
+  { slab: 2,  minHops: 1,  maxHops: 2,   fare: 10,  label: "0 - 2 km"        },
+  { slab: 3,  minHops: 3,  maxHops: 4,   fare: 20,  label: "2 - 4 km"        },
+  { slab: 4,  minHops: 5,  maxHops: 6,   fare: 30,  label: "4 - 6 km"        },
+  { slab: 5,  minHops: 7,  maxHops: 8,   fare: 40,  label: "6 - 8 km"        },
+  { slab: 6,  minHops: 9,  maxHops: 10,  fare: 50,  label: "8 - 10 km"       },
+  { slab: 7,  minHops: 11, maxHops: 15,  fare: 60,  label: "10 - 15 km"      },
+  { slab: 8,  minHops: 16, maxHops: 20,  fare: 70,  label: "15 - 20 km"      },
+  { slab: 9,  minHops: 21, maxHops: 25,  fare: 80,  label: "20 - 25 km"      },
   { slab: 10, minHops: 26, maxHops: 999, fare: 90,  label: "Above 25 km"     },
 ];
 
@@ -34,7 +34,7 @@ export const SMART_CARD_DISCOUNTS = {
   nationalHoliday: 0.10,   // 10% all day on Republic Day, Independence Day, Gandhi Jayanti
 };
 
-// BMRCL Official Peak Hours (Mon–Sat, excludes Sundays & National Holidays)
+// BMRCL Official Peak Hours (Mon-Sat, excludes Sundays & National Holidays)
 export const PEAK_HOURS = [
   { start: "08:00", end: "12:00" },  // Morning peak
   { start: "16:00", end: "21:00" },  // Evening peak
