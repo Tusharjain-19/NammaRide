@@ -138,7 +138,7 @@ export default function SimulatorPage() {
   return (
     <div className="pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
       <MetaSEO
-        title="Interactive Web App Simulator — Test NammaRide Online"
+        title="Namma Metro Web Simulator: Interactive GPS Route and Trip Navigation"
         description="Try NammaRide's #1 Bengaluru Metro app features live in your browser. Test smart route planning, fare calculations, and station guide capabilities."
         canonicalPath="/simulator"
       />
@@ -165,13 +165,13 @@ export default function SimulatorPage() {
         {/* Always Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 2xl:gap-16 items-start">
           
-          {/* Left Column: Phone simulator — sticky on desktop, scroll-safe on mobile */}
+          {/* Left Column: Phone simulator - sticky on desktop, scroll-safe on mobile */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center lg:sticky lg:top-24 w-full">
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, type: "spring", stiffness: 120, damping: 18 }}
-              className="w-[280px] xs:w-[310px] sm:w-[340px] h-[580px] sm:h-[650px] 2xl:w-[380px] 2xl:h-[750px] 3xl:w-[410px] 3xl:h-[810px] max-w-[calc(100vw-32px)] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800"
+              className="w-[330px] xs:w-[350px] sm:w-[365px] md:w-[375px] h-[640px] sm:h-[680px] 2xl:w-[395px] 2xl:h-[780px] max-w-[calc(100vw-20px)] bg-gray-900 dark:bg-black rounded-[48px] p-2 relative shadow-[0_30px_50px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_50px_-15px_rgba(0,0,0,0.9)] flex flex-col ring-1 ring-gray-200/50 dark:ring-neutral-800"
             >
               {/* Power / Volume Buttons */}
               <div className="absolute top-28 -right-1 w-1 h-14 bg-gray-300 dark:bg-neutral-800 rounded-r-md"></div>
@@ -199,7 +199,7 @@ export default function SimulatorPage() {
                     className="lg:hidden absolute inset-0 z-30 bg-black/15 backdrop-blur-[1px] flex flex-col items-center justify-center cursor-pointer p-4 select-none"
                   >
                     <div className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2 transform active:scale-95 transition-all">
-                      <span>👆 Tap to Interact with App</span>
+                      <span> Tap to Interact with App</span>
                     </div>
                     <span className="text-[10px] text-white font-medium bg-black/70 px-2.5 py-1 rounded-md mt-2 shadow">
                       Swipe here to scroll page
@@ -218,7 +218,7 @@ export default function SimulatorPage() {
                 onClick={() => setMobileInteractive(false)}
                 className="lg:hidden mt-3 text-xs font-semibold px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-sm"
               >
-                ✓ Done (Enable Page Scroll)
+                 Done (Enable Page Scroll)
               </button>
             )}
           </div>

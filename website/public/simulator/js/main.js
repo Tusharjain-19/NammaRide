@@ -1,3 +1,29 @@
+
+// Automatic origin sanitation: purge foreign project keys (JaipurRide) on localhost
+(function purgeForeignArtifacts() {
+    try {
+        if (typeof window === 'undefined') return;
+        ['localStorage', 'sessionStorage'].forEach(storeName => {
+            const store = window[storeName];
+            if (!store) return;
+            const toRemove = [];
+            for (let i = 0; i < store.length; i++) {
+                const k = store.key(i);
+                if (!k) continue;
+                if (k.toLowerCase().includes('jaipur')) {
+                    toRemove.push(k);
+                } else {
+                    const v = store.getItem(k);
+                    if (typeof v === 'string' && v.toLowerCase().includes('jaipur')) {
+                        toRemove.push(k);
+                    }
+                }
+            }
+            toRemove.forEach(k => store.removeItem(k));
+        });
+    } catch (e) {}
+})();
+
 import { metroData, translations, stationTranslations, lineNameMap } from './data/stations.js';
 import { stationsMeta } from './data/stationsMeta.js';
 import { CustomDropdown } from './ui/dropdown.js';
@@ -232,7 +258,7 @@ function setLanguage(lang) {
                         <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
                         <p class="text-[10px] text-secondary opacity-70">${totalMinutes} ${T('minRemaining')}</p>
                     </div>
-                    <button id="exit-journey-btn" class="bg-card-subtle border border-subtle text-secondary font-medium px-3 py-1.5 rounded-md text-xs hover:text-indigo-400 transition-colors mt-0.5">${T('exitJourney')}</button>
+                    <button id="exit-journey-btn" class="bg-transparent border-0 shadow-none text-secondary hover:text-emerald-500 font-bold px-2 py-1 text-xs transition-colors mt-0.5 flex items-center gap-1 cursor-pointer"><i data-lucide="arrow-left" class="w-3.5 h-3.5 text-emerald-500"></i><span>${T('exitJourney')}</span></button>
                 </div>`;
             document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
             if (window.lucide) window.lucide.createIcons();
@@ -254,19 +280,27 @@ function precomputeJourneyData() {
             precomputedData.stations[station.id] = { ...station, lineKey, color: line.color, lineName: line.name, index };
             if (!precomputedData.graph[station.id]) precomputedData.graph[station.id] = [];
 
+            // Only add graph edges if this station and adjacent stations are operational
+            const isStationOperational = station.isActive !== false && station.status !== 'under_construction';
+            if (!isStationOperational) return;
+
             if (index > 0) {
                 const prev = line.stations[index - 1];
-                precomputedData.graph[station.id].push({ node: prev.id, weight: prev.timeToNext, distance: prev.distanceToNext, line: lineKey });
+                if (prev.isActive !== false && prev.status !== 'under_construction') {
+                    precomputedData.graph[station.id].push({ node: prev.id, weight: prev.timeToNext, distance: prev.distanceToNext, line: lineKey });
+                }
             }
             if (index < line.stations.length - 1) {
                 const next = line.stations[index + 1];
-                precomputedData.graph[station.id].push({ node: next.id, weight: station.timeToNext, distance: station.distanceToNext, line: lineKey });
+                if (next.isActive !== false && next.status !== 'under_construction') {
+                    precomputedData.graph[station.id].push({ node: next.id, weight: station.timeToNext, distance: station.distanceToNext, line: lineKey });
+                }
             }
 
             if (station.interchangeId) {
                 Object.keys(metroData).forEach(otherLineKey => {
                     if (otherLineKey !== lineKey) {
-                        const match = metroData[otherLineKey].stations.find(s => s.interchangeId === station.interchangeId);
+                        const match = metroData[otherLineKey].stations.find(s => s.interchangeId === station.interchangeId && s.isActive !== false && s.status !== 'under_construction');
                         if (match) {
                             precomputedData.graph[station.id].push({ node: match.id, weight: CONFIG.INTERCHANGE_TIME_MINUTES * 60, distance: 0, line: 'interchange' });
                         }
@@ -560,25 +594,7 @@ function closePassAdvisorModal() {
 }
 
 function initPopularStationChips() {
-    document.querySelectorAll('.popular-station-chip').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const stationName = btn.getAttribute('data-name');
-            if (!stationName) return;
-
-            const startVal = document.getElementById('start-station').value;
-            const endVal = document.getElementById('end-station').value;
-
-            if (!startVal) {
-                if (startDropdown) startDropdown.selectByName(stationName);
-            } else if (!endVal || startVal === endVal) {
-                if (endDropdown) endDropdown.selectByName(stationName);
-            } else {
-                if (endDropdown) endDropdown.selectByName(stationName);
-            }
-            handleJourneyUpdate();
-        });
-    });
+    // Popular stations fast-select bar removed as requested
 }
 
 function renderQuickCommutes() {
@@ -603,10 +619,10 @@ function renderQuickCommutes() {
         const sName = T_STATION(fav.startName);
         const eName = T_STATION(fav.endName);
         html += `
-            <button type="button" class="quick-chip group shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-card-subtle hover:bg-card-hover border border-subtle hover:border-emerald-500/40 rounded-xl transition-all active:scale-95 shadow-sm" data-start="${fav.startId}" data-end="${fav.endId}" title="${sName} ➔ ${eName}">
+            <button type="button" class="quick-chip group shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-card-subtle hover:bg-card-hover border border-subtle hover:border-emerald-500/40 rounded-xl transition-all active:scale-95 shadow-sm" data-start="${fav.startId}" data-end="${fav.endId}" title="${sName} -> ${eName}">
                 <i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0"></i>
                 <span class="text-xs font-bold text-primary truncate max-w-[120px]">${sName}</span>
-                <span class="text-secondary opacity-40 text-xs font-bold">➔</span>
+                <span class="text-secondary opacity-40 text-xs font-bold">-></span>
                 <span class="text-xs font-bold text-primary truncate max-w-[120px]">${eName}</span>
             </button>
         `;
@@ -674,6 +690,10 @@ function displayJourneyResult(journey) {
             bg = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
             dot = 'bg-amber-400';
             lineLabel = 'Yellow Line';
+        } else if (lk === 'pink') {
+            bg = 'bg-pink-500/20 text-pink-400 border-pink-500/30';
+            dot = 'bg-pink-400';
+            lineLabel = 'Pink Line';
         }
         return `
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold border ${bg} shadow-sm shrink-0 whitespace-nowrap">
@@ -695,6 +715,144 @@ function displayJourneyResult(journey) {
 
     const startPlatform = parts[0]?.startPlatform || 1;
     const journeyDir = parts[0]?.journeyDirectionName || '';
+
+    
+// Curved Line Route Workflow Generator (Non-scrolling connected metro track)
+function renderCurvedLineWorkflow(parts, journey, transferNotice) {
+    if (!parts || parts.length === 0) return '';
+    const isDirect = parts.length === 1;
+
+    if (isDirect) {
+        const p = parts[0];
+        const lk = p.stations[0]?.lineKey || 'purple';
+        const color = p.stations[0]?.color || '#8B5CF6';
+        let lineLabel = 'Purple Line';
+        if (lk === 'green') lineLabel = 'Green Line';
+        else if (lk === 'yellow') lineLabel = 'Yellow Line';
+        else if (lk === 'pink') lineLabel = 'Pink Line';
+
+        return `
+            <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full shrink-0 shadow-sm" style="background-color: ${color};"></span>
+                        <span class="text-xs font-black text-primary">${lineLabel}</span>
+                        <span class="text-[10px] text-secondary font-medium">• ${p.stations.length} stops</span>
+                    </div>
+                    <span class="text-[10px] font-extrabold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                        Direct Train
+                    </span>
+                </div>
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary">
+                    <span class="font-bold text-primary flex items-center gap-1 text-[11px]">
+                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary shrink-0"></i>
+                        <span>${journey.stationHops} Stops • ${journey.distanceKm || '0'} km</span>
+                    </span>
+                    <span class="text-emerald-500 font-bold flex items-center gap-1 text-[11px]">
+                        <i data-lucide="check" class="w-3 h-3"></i> 0 Transfers
+                    </span>
+                </div>
+            </div>
+        `;
+    }
+
+    // MULTI-LINE JOURNEY WITH TRANSFERS: Curved Line Connected Schematic
+    const lineStepsHtml = parts.map((p, idx) => {
+        const lk = p.stations[0]?.lineKey || 'purple';
+        const color = p.stations[0]?.color || '#8B5CF6';
+        let lineLabel = 'Purple Line';
+        if (lk === 'green') lineLabel = 'Green Line';
+        else if (lk === 'yellow') lineLabel = 'Yellow Line';
+        else if (lk === 'pink') lineLabel = 'Pink Line';
+
+        const stopCount = p.stations.length;
+        const fromName = p.stations[0]?.name ? T_STATION(p.stations[0].name) : '';
+        const toName = p.stations[p.stations.length - 1]?.name ? T_STATION(p.stations[p.stations.length - 1].name) : '';
+
+        let transferHtml = '';
+        if (idx < parts.length - 1) {
+            const nextPart = parts[idx + 1];
+            const transferStation = toName;
+            const nextLineKey = nextPart.stations[0]?.lineKey || 'green';
+            let nextLineLabel = 'Green Line';
+            if (nextLineKey === 'yellow') nextLineLabel = 'Yellow Line';
+            else if (nextLineKey === 'pink') nextLineLabel = 'Pink Line';
+            else if (nextLineKey === 'purple') nextLineLabel = 'Purple Line';
+
+            transferHtml = `
+                <!-- Curved Transition to Next Line -->
+                <div class="relative flex items-center gap-2 pl-3 py-1 my-0.5">
+                    <div class="absolute left-[7px] -top-2 bottom-0 w-4 pointer-events-none">
+                        <svg class="w-4 h-full overflow-visible" viewBox="0 0 16 32" fill="none">
+                            <path d="M 1 0 V 16 Q 1 24 9 24 H 14" stroke="${color}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <path d="M 14 24 L 11 21 M 14 24 L 11 27" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="ml-4 flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/25 text-[10px] text-amber-500 font-extrabold shadow-xs">
+                        <i data-lucide="arrow-right-left" class="w-3 h-3 shrink-0"></i>
+                        <span>Change at <strong class="text-primary">${transferStation}</strong> to ${nextLineLabel}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        return `
+            <!-- Line Step -->
+            <div class="flex flex-col gap-0.5">
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-card-subtle/50 border border-subtle/60 hover:bg-card-subtle transition-all cursor-pointer" onclick="window.scrollToRouteLine(${idx})" title="Click to view line segment in route list">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs" style="background-color: ${color};"></span>
+                        <span class="text-xs font-black tracking-tight" style="color: ${color};">${lineLabel}</span>
+                        <span class="text-[10px] text-secondary font-medium">(${stopCount} stops)</span>
+                    </div>
+                    <span class="text-[10px] text-secondary font-mono truncate max-w-[140px] text-right">
+                        ${fromName} <span class="opacity-50">→</span> ${toName}
+                    </span>
+                </div>
+                ${transferHtml}
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <!-- Curved Line Multi-Line Route Workflow (Non-Scrolling) -->
+        <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-2 overflow-hidden">
+            <!-- Header with Quick Summary -->
+            <div class="flex items-center justify-between pb-1.5 border-b border-subtle/50 text-[11px]">
+                <div class="flex items-center gap-1.5 font-extrabold text-primary">
+                    <i data-lucide="navigation" class="w-3.5 h-3.5 text-primary shrink-0"></i>
+                    <span>Line Workflow • ${parts.length} Lines</span>
+                </div>
+                <div class="flex items-center gap-2 text-secondary text-[11px]">
+                    <span class="font-bold text-primary">${journey.stationHops} Stops</span>
+                    <span>•</span>
+                    <span>${journey.distanceKm || '0'} km</span>
+                    <span>•</span>
+                    ${transferNotice}
+                </div>
+            </div>
+
+            <!-- Connected Curved Line Flow -->
+            <div class="space-y-0.5 pt-0.5">
+                ${lineStepsHtml}
+            </div>
+        </div>
+    `;
+}
+
+window.scrollToRouteLine = function(partIndex) {
+    try {
+        const routeList = document.getElementById('route-list');
+        if (!routeList) return;
+        const items = routeList.querySelectorAll('.station-item');
+        if (items.length > 0) {
+            const target = items[Math.min(partIndex * 6, items.length - 1)];
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    } catch(e) {}
+};
 
     const updateSummaryUI = () => {
         const totalFareAmount = journey.fare * passengerCount;
@@ -743,7 +901,6 @@ function displayJourneyResult(journey) {
             <!-- Pass & Card Savings Advisor Trigger -->
             <button id="view-pass-advisor-btn" type="button" class="w-full mb-2.5 py-1.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 flex items-center justify-between text-xs transition-all active:scale-[0.98] group">
                 <div class="flex items-center gap-1.5">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
                     <span class="font-extrabold text-primary text-[11px]">Compare 1-Day Pass & Card Savings</span>
                 </div>
                 <span class="text-emerald-600 dark:text-emerald-400 font-extrabold text-[11px] flex items-center gap-0.5">
@@ -752,19 +909,7 @@ function displayJourneyResult(journey) {
                 </span>
             </button>
 
-            <!-- Route Badges & Stations Strip (Strict 1-Line Layout) -->
-            <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-1.5 overflow-hidden">
-                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar whitespace-nowrap py-0.5">
-                    ${lineBadges}
-                </div>
-                <div class="flex items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary whitespace-nowrap overflow-hidden gap-1">
-                    <span class="font-bold text-primary flex items-center gap-1 shrink-0 text-[11px]">
-                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary shrink-0"></i>
-                        <span>${journey.stationHops} Stops • ${journey.distanceKm || '0'} km</span>
-                    </span>
-                    <span class="truncate text-right font-medium shrink-0">${transferNotice}</span>
-                </div>
-            </div>
+            ${renderCurvedLineWorkflow(parts, journey, transferNotice)}
 
             <!-- Boarding Platform & Next Train Strip (Strict 1-Line) -->
             <div class="grid grid-cols-2 gap-2 mb-2.5">
@@ -1320,7 +1465,7 @@ function triggerStationAlarm(stationName, isUnderground) {
     // Banner toast notification
     const toast = document.getElementById('toast');
     if (toast) {
-        let msg = `⚡ Arriving at ${stationName} soon!`;
+        let msg = `Arriving at ${stationName} soon!`;
         if (isUnderground) {
             msg += ` (Note: Underground section ahead - GPS signal may drop)`;
         }
@@ -1492,29 +1637,29 @@ function updateSimulationUI() {
     }
 
     simStatus.innerHTML = `
-        <div class="w-full flex items-center justify-between p-2.5 px-3.5 bg-card/95 backdrop-blur-md border-b border-subtle shadow-sm gap-2">
-            <!-- Left: Home / Exit Button -->
-            <button id="exit-journey-btn" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-extrabold text-xs active:scale-95 transition-all shrink-0" title="Exit Trip & Back to Home">
-                <i data-lucide="arrow-left" class="w-4 h-4 text-emerald-500"></i>
-                <span>Home / Exit</span>
+        <div class="w-full flex items-center justify-between py-2 pl-2 pr-3 bg-card/95 backdrop-blur-md border-b border-subtle shadow-sm gap-1.5">
+            <!-- Left: Home / Exit Button (Shifted left, transparent background, no box) -->
+            <button id="exit-journey-btn" type="button" class="flex items-center gap-1 py-1 pl-0 pr-1.5 bg-transparent border-0 shadow-none text-primary hover:text-emerald-500 font-extrabold text-xs active:scale-95 transition-all shrink-0 cursor-pointer" title="Exit Trip & Back to Home">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span class="whitespace-nowrap font-bold">${T('homeExit') || 'Home / Exit'}</span>
             </button>
 
-            <!-- Center: Live Destination & Minutes -->
-            <div class="flex flex-col items-center justify-center min-w-0 px-1 text-center truncate">
-                <div class="flex items-center gap-1.5 min-w-0 justify-center">
-                    <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-primary truncate">${destinationName}</span>
+            <!-- Center: Live Destination & Minutes (Full width flex-1, fully visible) -->
+            <div class="flex-1 min-w-0 px-1 text-center flex flex-col items-center justify-center">
+                <div class="flex items-center gap-1 min-w-0 max-w-full justify-center">
+                    <span class="text-xs sm:text-sm font-black uppercase tracking-tight text-primary truncate leading-tight">${destinationName}</span>
                     <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
                 </div>
-                <div class="flex items-center gap-1 text-[10px] text-secondary font-semibold justify-center">
+                <div class="flex items-center gap-1 text-[10.5px] text-secondary font-semibold justify-center leading-tight mt-0.5">
                     <i data-lucide="clock" class="w-3 h-3 text-emerald-500 shrink-0"></i>
-                    <span>${remainingMinutes} min remaining</span>
+                    <span class="whitespace-nowrap">${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
                 </div>
             </div>
 
             <!-- Right: Finish Button -->
-            <button id="manual-finish-btn" type="button" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all shrink-0" title="Complete Trip & View Gates">
+            <button id="manual-finish-btn" type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all shrink-0 cursor-pointer" title="Complete Trip & View Gates">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                <span>Finish</span>
+                <span>${T('finish') || 'Finish'}</span>
             </button>
         </div>
         ${gpsWarningHtml}
@@ -1572,7 +1717,7 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
                     <i data-lucide="check" class="w-4 h-4 font-black"></i>
                 </div>
                 <div class="flex flex-col min-w-0">
-                    <span class="text-[9px] uppercase font-black tracking-widest text-emerald-500">Journey Complete</span>
+                    <span class="text-[9px] uppercase font-black tracking-widest text-emerald-500">${T('journeyComplete') || 'Journey Complete'}</span>
                     <h3 class="text-sm sm:text-base font-extrabold truncate text-primary">${cleanStationName}</h3>
                 </div>
             </div>
@@ -1585,11 +1730,11 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
         <div class="flex items-center border-b border-subtle px-3 shrink-0 bg-card">
             <button id="hub-tab-places-btn" class="hub-tab-btn flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 ${activeTab === 'places' ? 'active' : ''}">
                 <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                <span>Nearby Places (${places.length})</span>
+                <span>${T('nearbyPlaces') || 'Nearby Places'} (${places.length})</span>
             </button>
             <button id="hub-tab-gates-btn" class="hub-tab-btn flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 ${activeTab === 'gates' ? 'active' : ''}">
                 <i data-lucide="door-open" class="w-3.5 h-3.5"></i>
-                <span>Exit Gates & Guide (${gates.length})</span>
+                <span>${T('exitGatesAndGuide') || 'Exit Gates & Guide'} (${gates.length})</span>
             </button>
         </div>
 
@@ -1600,7 +1745,7 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
                 <div class="space-y-2.5">
                     <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-2 text-xs text-primary">
                         <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
-                        <span>Top attractions, transit links & landmarks near <strong>${cleanStationName}</strong>.</span>
+                        <span>${T('topAttractionsNear') || 'Top attractions, transit links & landmarks near'} <strong>${cleanStationName}</strong>.</span>
                     </div>
 
                     ${places.length > 0 ? places.map(p => `
@@ -1619,7 +1764,7 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
                                 </div>
                             </div>
                             <a href="${p.maps_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + cleanStationName)}`}" target="_blank" class="shrink-0 px-2.5 py-1.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-[11px] font-bold text-primary flex items-center gap-1 active:scale-95 transition-all">
-                                <span>Directions</span>
+                                <span>${T('directions') || 'Directions'}</span>
                                 <i data-lucide="arrow-up-right" class="w-3 h-3 text-secondary"></i>
                             </a>
                         </div>
@@ -1634,7 +1779,7 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
                     <!-- Prompt to view Exit Gates -->
                     <button id="switch-to-gates-cta-btn" type="button" class="w-full py-2.5 px-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
                         <i data-lucide="door-open" class="w-3.5 h-3.5"></i>
-                        <span>Next: View Station Exit Gates & Directions ➔</span>
+                        <span>${T('nextViewGates') || 'Next: View Station Exit Gates & Directions ->'}</span>
                     </button>
                 </div>
             ` : `
@@ -1642,38 +1787,42 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
                 <div class="space-y-3">
                     <div class="p-2.5 rounded-xl bg-card-subtle border border-subtle flex items-start gap-2 text-[11px] text-secondary">
                         <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5"></i>
-                        <span>Choose your exit gate below to avoid crossing heavy Bengaluru traffic.</span>
+                        <span>${T('chooseExitGatePrompt') || 'Choose your exit gate below to avoid crossing heavy Bengaluru traffic.'}</span>
                     </div>
 
                     ${gates && gates.length > 0 ? gates.map((g, idx) => `
                         <div class="destination-hub-subcard p-3.5 rounded-2xl space-y-2.5 shadow-sm">
                             <div class="flex items-center justify-between gap-2 flex-wrap">
                                 <div class="flex items-center gap-2.5 min-w-0">
-                                    <span class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/25">
-                                        ${g.gate}
-                                    </span>
+                                    <div class="destination-hub-gate-badge relative w-11 h-11 rounded-2xl flex flex-col items-center justify-center text-white shrink-0 ring-2 ring-emerald-400/30">
+                                        <span class="text-[7px] font-black tracking-widest text-emerald-100 uppercase opacity-90 leading-none">${T('gateLabel') || 'GATE'}</span>
+                                        <span class="text-base font-black text-white leading-none mt-0.5 tracking-tight">${g.gate}</span>
+                                        <div class="destination-hub-gate-mini-icon absolute -bottom-1 -right-1 rounded-full flex items-center justify-center shadow-sm" title="${g.name}">
+                                            <i data-lucide="${g.icon || 'door-open'}" class="w-2.5 h-2.5"></i>
+                                        </div>
+                                    </div>
                                     <div class="min-w-0">
-                                        <h4 class="text-xs sm:text-sm font-extrabold text-primary truncate">Gate ${g.gate} • ${g.name}</h4>
+                                        <h4 class="text-xs sm:text-sm font-extrabold text-primary truncate">${T('gateLabel') || 'Gate'} ${g.gate} • ${g.name}</h4>
                                         <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block truncate">${g.landmark}</span>
                                     </div>
                                 </div>
                                 <span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-card-subtle text-secondary border border-subtle shrink-0">
-                                    ${idx === 0 ? 'Main Entry / Exit' : 'Opposite Side Access'}
+                                    ${idx === 0 ? (T('mainEntryExit') || 'Main Entry / Exit') : (T('oppositeSideAccess') || 'Opposite Side Access')}
                                 </span>
                             </div>
 
                             <div class="destination-hub-subcard-inner p-2.5 rounded-xl space-y-1 text-xs">
                                 <div class="flex items-start gap-2 text-indigo-500 dark:text-indigo-400 font-extrabold text-[11px]">
                                     <i data-lucide="${idx === 0 ? 'arrow-right' : 'arrow-left-right'}" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
-                                    <span>${idx === 0 ? `Use Gate ${g.gate} for Main Road, BMTC Bus Bay & Auto Stand` : `Use Foot Overbridge at Gate ${g.gate} to cross to opposite road side`}</span>
+                                    <span>${idx === 0 ? ((T('gateDirectionsMain') || 'Use Gate {gate} for Main Road, BMTC Bus Bay & Auto Stand').replace('{gate}', g.gate)) : ((T('gateDirectionsFob') || 'Use Foot Overbridge at Gate {gate} to cross to opposite road side').replace('{gate}', g.gate))}</span>
                                 </div>
                                 <p class="text-secondary text-[11px] leading-relaxed pl-5">${g.destination}</p>
                             </div>
 
                             <div class="flex items-center gap-3 pt-1 border-t border-subtle/50 text-[10px] text-secondary font-semibold">
-                                <span class="flex items-center gap-1"><i data-lucide="accessibility" class="w-3 h-3 text-emerald-500"></i> Ramps & Lifts</span>
-                                <span class="flex items-center gap-1"><i data-lucide="ticket" class="w-3 h-3 text-amber-500"></i> Ticket Counters</span>
-                                <span class="flex items-center gap-1"><i data-lucide="shield" class="w-3 h-3 text-blue-500"></i> Security Post</span>
+                                <span class="flex items-center gap-1"><i data-lucide="accessibility" class="w-3 h-3 text-emerald-500"></i> ${T('rampsAndLifts') || 'Ramps & Lifts'}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="ticket" class="w-3 h-3 text-amber-500"></i> ${T('ticketCounters') || 'Ticket Counters'}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="shield" class="w-3 h-3 text-blue-500"></i> ${T('securityPost') || 'Security Post'}</span>
                             </div>
                         </div>
                     `).join('') : `
@@ -1687,14 +1836,14 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
         <div class="destination-hub-footer p-3 px-4 border-t flex items-center justify-between gap-2.5 shrink-0">
             <button id="hub-footer-qr-btn" type="button" class="py-2.5 px-3.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all">
                 <i data-lucide="qr-code" class="w-3.5 h-3.5 text-emerald-500"></i>
-                <span>QR Ticket</span>
+                <span>${T('qrTicket') || 'QR Ticket'}</span>
             </button>
-            <button id="hub-footer-explore-btn" type="button" class="py-2.5 px-3.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+            <button id="hub-footer-explore-btn" type="button" class="py-2.5 px-3.5 rounded-xl bg-card-subtle hover:bg-card-hover border border-subtle text-primary font-bold text-xs flex items-center gap-1.5 active:scale-95 transition-all" title="Explore ${cleanStationName} Attractions & Places">
                 <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500"></i>
-                <span>Explore</span>
+                <span>${T('explore') || 'Explore'}</span>
             </button>
             <button id="hub-complete-trip-btn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all text-center">
-                ✓ Done
+                ${T('done') || 'Done'}
             </button>
         </div>
     `;
@@ -1737,13 +1886,28 @@ function openDestinationHubModal(stationId, stationName, activeTab = 'places') {
     };
     document.getElementById('close-hub-modal-btn')?.addEventListener('click', handleCompleteTrip);
     document.getElementById('hub-complete-trip-btn')?.addEventListener('click', handleCompleteTrip);
-    modal.addEventListener('click', (e) => {
+    modal.onclick = (e) => {
         if (e.target === modal) handleCompleteTrip(e);
-    });
+    };
 
-    // Explore Nearby Places trigger - show nearby to destination right inside this hub
-    document.getElementById('hub-footer-explore-btn')?.addEventListener('click', () => {
-        openDestinationHubModal(stationId, stationName, 'places');
+    // Explore Nearby Places trigger - opens full Station Explore with attractions & guide
+    document.getElementById('hub-footer-explore-btn')?.addEventListener('click', (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        modal.classList.add('hidden');
+        if (window.closeQRFullscreen) window.closeQRFullscreen();
+        const qrScanModal = document.getElementById('qr-scanner-modal');
+        if (qrScanModal) qrScanModal.classList.remove('modal-active');
+        resetPlannerToHome();
+        switchView('explore-view');
+        if (window.showExploreStation) {
+            window.showExploreStation(stationName);
+        } else {
+            const container = document.getElementById('explore-view');
+            if (container) renderExploreStation(container, stationName);
+        }
     });
 }
 
@@ -2011,12 +2175,7 @@ function initializeApp() {
 
     document.getElementById('board-train-btn').addEventListener('click', () => {
         if (!currentJourney) return;
-        const ticketData = getActiveTicketData();
-        if (!ticketData) {
-            window.openTicketUploadModal();
-        } else {
-            startSimulation(currentJourney, false);
-        }
+        startSimulation(currentJourney, false);
     });
 
     initTicketModule();
@@ -2146,21 +2305,23 @@ function initializeApp() {
         resetPlannerToHome();
     });
 
-    // Rush forecast & frequency guide listeners
-    updateRushForecastUI();
-    setInterval(updateRushForecastUI, 60000);
+    // Rush forecast & frequency guide listeners (if present)
+    if (document.getElementById('metro-rush-forecast-bar')) {
+        updateRushForecastUI();
+        setInterval(updateRushForecastUI, 60000);
 
-    document.getElementById('metro-rush-forecast-bar')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        openRushScheduleModal();
-    });
-    document.getElementById('close-rush-modal-btn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeRushScheduleModal();
-    });
-    document.getElementById('rush-schedule-modal')?.addEventListener('click', (e) => {
-        if (e.target.id === 'rush-schedule-modal') closeRushScheduleModal();
-    });
+        document.getElementById('metro-rush-forecast-bar')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openRushScheduleModal();
+        });
+        document.getElementById('close-rush-modal-btn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeRushScheduleModal();
+        });
+        document.getElementById('rush-schedule-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'rush-schedule-modal') closeRushScheduleModal();
+        });
+    }
 
     // Pass advisor modal listeners
     document.getElementById('close-pass-modal-btn')?.addEventListener('click', (e) => {
@@ -2197,8 +2358,8 @@ function initializeApp() {
     
     // Only use non-passive for the scroller containers
     const scrollFix = (e) => {
-        // Exclude touch events originating inside dropdown menus or station lists to keep dropdown touch scrolling smooth & unblocked
-        if (e.target.closest && e.target.closest('.dropdown-menu, .station-list, .custom-dropdown, .search-container')) {
+        // Exclude touch events originating inside modals, destination-hub, dropdown menus, or scrollable dialogs
+        if (e.target.closest && e.target.closest('#station-gates-modal, .destination-hub-modal-card, .destination-hub-body, .dropdown-menu, .station-list, .custom-dropdown, .search-container, .modal, [overflow*="auto"], [overflow*="scroll"]')) {
             return;
         }
 
@@ -2535,7 +2696,7 @@ function initTicketModule() {
             const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
             const endStation = lastPart?.stations[lastPart.stations.length - 1];
             if (startPart && endStation && routeSubEl) {
-                routeSubEl.innerText = `${T_STATION(startPart.name)} ➔ ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
+                routeSubEl.innerText = `${T_STATION(startPart.name)} -> ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
             }
         }
 
@@ -2642,7 +2803,7 @@ function initTicketModule() {
             const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
             const endStation = lastPart?.stations[lastPart.stations.length - 1];
             if (startPart && endStation) {
-                routeTitleEl.innerText = `${T_STATION(startPart.name)} ➔ ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
+                routeTitleEl.innerText = `${T_STATION(startPart.name)} -> ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
             }
         }
 

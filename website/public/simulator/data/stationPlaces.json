@@ -1040,24 +1040,37 @@
   ],
   "Jayadeva Hospital": [
     {
-      "id": "jayadeva_hospital",
-      "name": "Sri Jayadeva Institute of Cardiovascular Sciences and Research",
+      "id": "jayadeva_institute",
+      "name": "Sri Jayadeva Institute of Cardiovascular Sciences",
       "type": "Hospital",
       "lat": 12.9168,
       "lon": 77.6,
-      "distance_km": 0.2,
-      "walk_time_min": 3,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru"
+      "distance_km": 0.1,
+      "walk_time_min": 2,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Hospital+Bengaluru",
+      "image": "assets/images/places/jayadeva_institute.jpg"
     },
     {
-      "id": "fortis_bannerghatta",
-      "name": "Fortis Hospital Bannerghatta Road",
-      "type": "Hospital",
-      "lat": 12.9009,
-      "lon": 77.5968,
-      "distance_km": 1.8,
-      "walk_time_min": 22,
-      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru"
+      "id": "btm_layout_1",
+      "name": "BTM Layout 1st Stage Commercial Hub",
+      "type": "Transit",
+      "lat": 12.916,
+      "lon": 77.6045,
+      "distance_km": 0.4,
+      "walk_time_min": 5,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BTM+Layout+1st+Stage+Bengaluru",
+      "image": "assets/images/places/btm_layout_1.jpg"
+    },
+    {
+      "id": "yellow_line_interchange",
+      "name": "Yellow Line Platform Concourse (Y03)",
+      "type": "Transit",
+      "lat": 12.9168,
+      "lon": 77.6,
+      "distance_km": 0,
+      "walk_time_min": 1,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Jayadeva+Metro+Station+Bengaluru",
+      "image": "assets/images/places/yellow_line_interchange.jpg"
     }
   ],
   "BTM Layout": [
@@ -3525,6 +3538,236 @@
       "distance_km": 0.4,
       "walk_time_min": 5,
       "maps_link": "https://www.google.com/maps/search/?api=1&query=Bommasandra+Industrial+Area+Bengaluru"
+    }
+  ],
+  "Kalena Agrahara": [
+    {
+      "id": "royal_meenakshi_mall",
+      "name": "Royal Meenakshi Mall",
+      "type": "Mall",
+      "lat": 12.868,
+      "lon": 77.5978,
+      "distance_km": 0.4,
+      "walk_time_min": 5,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Royal+Meenakshi+Mall+Bengaluru",
+      "image": "assets/images/places/royal_meenakshi_mall.jpg"
+    },
+    {
+      "id": "gottigere_depot",
+      "name": "Gottigere BMTC Depot & Bus Hub",
+      "type": "Transit",
+      "lat": 12.8635,
+      "lon": 77.597,
+      "distance_km": 0.2,
+      "walk_time_min": 3,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Gottigere+Bus+Depot+Bengaluru",
+      "image": "assets/images/places/gottigere_depot.jpg"
+    },
+    {
+      "id": "meenakshi_temple",
+      "name": "Sri Meenakshi Sundareswarar Temple",
+      "type": "Heritage",
+      "lat": 12.8695,
+      "lon": 77.599,
+      "distance_km": 0.6,
+      "walk_time_min": 7,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Meenakshi+Sundareswarar+Temple+Hulimavu",
+      "image": "assets/images/places/meenakshi_temple.jpg"
+    },
+    {
+      "id": "amc_college",
+      "name": "AMC Engineering College",
+      "type": "University",
+      "lat": 12.852,
+      "lon": 77.592,
+      "distance_km": 1.8,
+      "walk_time_min": 22,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=AMC+Engineering+College+Bengaluru",
+      "image": "assets/images/places/amc_college.jpg"
+    }
+  ],
+  "Hulimavu": [
+    {
+      "id": "hulimavu_cave_temple",
+      "name": "Sri Ramalingeshwara Cave Temple",
+      "type": "Heritage",
+      "lat": 12.875,
+      "lon": 77.595,
+      "distance_km": 0.5,
+      "walk_time_min": 6,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Hulimavu+Cave+Temple+Bengaluru",
+      "image": "assets/images/places/hulimavu_cave_temple.jpg"
+    },
+    {
+      "id": "decathlon_bannerghatta",
+      "name": "Decathlon Bannerghatta",
+      "type": "Mall",
+      "lat": 12.8795,
+      "lon": 77.5985,
+      "distance_km": 0.3,
+      "walk_time_min": 4,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Decathlon+Bannerghatta+Bengaluru",
+      "image": "assets/images/places/decathlon_bannerghatta.jpg"
+    },
+    {
+      "id": "nano_hospitals",
+      "name": "Nano Hospitals Hulimavu",
+      "type": "Hospital",
+      "lat": 12.8805,
+      "lon": 77.6001,
+      "distance_km": 0.4,
+      "walk_time_min": 5,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nano+Hospitals+Hulimavu+Bengaluru",
+      "image": "assets/images/places/nano_hospitals.jpg"
+    },
+    {
+      "id": "bgs_school",
+      "name": "BGS National Public School",
+      "type": "University",
+      "lat": 12.874,
+      "lon": 77.602,
+      "distance_km": 0.8,
+      "walk_time_min": 10,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=BGS+National+Public+School+Bengaluru",
+      "image": "assets/images/places/bgs_school.jpg"
+    }
+  ],
+  "IIM Bangalore": [
+    {
+      "id": "iim_bangalore",
+      "name": "Indian Institute of Management Bangalore (IIM-B)",
+      "type": "University",
+      "lat": 12.895,
+      "lon": 77.6,
+      "distance_km": 0.1,
+      "walk_time_min": 2,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=IIM+Bangalore+Bannerghatta+Road",
+      "image": "assets/images/places/iim_bangalore.jpg"
+    },
+    {
+      "id": "fortis_hospital",
+      "name": "Fortis Hospital Bannerghatta Road",
+      "type": "Hospital",
+      "lat": 12.892,
+      "lon": 77.598,
+      "distance_km": 0.4,
+      "walk_time_min": 5,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fortis+Hospital+Bannerghatta+Road+Bengaluru",
+      "image": "assets/images/places/fortis_hospital.jpg"
+    },
+    {
+      "id": "apollo_hospital",
+      "name": "Apollo Hospital Bannerghatta",
+      "type": "Hospital",
+      "lat": 12.891,
+      "lon": 77.5975,
+      "distance_km": 0.5,
+      "walk_time_min": 6,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Apollo+Hospital+Bannerghatta+Road+Bengaluru",
+      "image": "assets/images/places/apollo_hospital.jpg"
+    },
+    {
+      "id": "kalyani_magnum",
+      "name": "Kalyani Magnum Tech Park",
+      "type": "IT",
+      "lat": 12.898,
+      "lon": 77.604,
+      "distance_km": 1.1,
+      "walk_time_min": 14,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Kalyani+Magnum+Tech+Park+Bengaluru",
+      "image": "assets/images/places/kalyani_magnum.jpg"
+    }
+  ],
+  "JP Nagar 4th Phase": [
+    {
+      "id": "vega_city_mall",
+      "name": "Vega City Mall",
+      "type": "Mall",
+      "lat": 12.9075,
+      "lon": 77.601,
+      "distance_km": 0.3,
+      "walk_time_min": 4,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Vega+City+Mall+Bengaluru",
+      "image": "assets/images/places/vega_city_mall.jpg"
+    },
+    {
+      "id": "shoppers_stop_bg",
+      "name": "Shoppers Stop Bannerghatta",
+      "type": "Mall",
+      "lat": 12.906,
+      "lon": 77.599,
+      "distance_km": 0.2,
+      "walk_time_min": 3,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Shoppers+Stop+Bannerghatta+Road",
+      "image": "assets/images/places/shoppers_stop_bg.jpg"
+    },
+    {
+      "id": "dollars_colony_jp",
+      "name": "Dollars Colony (JP Nagar)",
+      "type": "Transit",
+      "lat": 12.905,
+      "lon": 77.597,
+      "distance_km": 0.4,
+      "walk_time_min": 5,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Dollars+Colony+JP+Nagar+Bengaluru",
+      "image": "assets/images/places/dollars_colony_jp.jpg"
+    },
+    {
+      "id": "ranga_shankara",
+      "name": "Ranga Shankara Theatre",
+      "type": "Heritage",
+      "lat": 12.912,
+      "lon": 77.586,
+      "distance_km": 1.6,
+      "walk_time_min": 19,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Ranga+Shankara+Bengaluru",
+      "image": "assets/images/places/ranga_shankara.jpg"
+    }
+  ],
+  "Tavarekere": [
+    {
+      "id": "tavarekere_park",
+      "name": "Tavarekere Park",
+      "type": "Park",
+      "lat": 12.9265,
+      "lon": 77.606,
+      "distance_km": 0.3,
+      "walk_time_min": 4,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Tavarekere+Park+Bengaluru",
+      "image": "assets/images/places/tavarekere_park.jpg"
+    },
+    {
+      "id": "nexus_koramangala",
+      "name": "Nexus Koramangala (Forum Mall)",
+      "type": "Mall",
+      "lat": 12.934,
+      "lon": 77.611,
+      "distance_km": 1.2,
+      "walk_time_min": 15,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Nexus+Koramangala+Bengaluru",
+      "image": "assets/images/places/nexus_koramangala.jpg"
+    },
+    {
+      "id": "christ_university",
+      "name": "Christ University (Central Campus, SG Palya)",
+      "type": "University",
+      "lat": 12.934,
+      "lon": 77.605,
+      "distance_km": 0.9,
+      "walk_time_min": 11,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=Christ+University+Bengaluru",
+      "image": "assets/images/places/christ_university.jpg"
+    },
+    {
+      "id": "st_johns_hospital",
+      "name": "St. John's Medical College & Hospital",
+      "type": "Hospital",
+      "lat": 12.93,
+      "lon": 77.618,
+      "distance_km": 1.4,
+      "walk_time_min": 18,
+      "maps_link": "https://www.google.com/maps/search/?api=1&query=St+Johns+Medical+College+Bengaluru",
+      "image": "assets/images/places/st_johns_hospital.jpg"
     }
   ]
 }

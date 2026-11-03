@@ -80,8 +80,8 @@ export default function StationsPage() {
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
       <MetaSEO 
-        title="All 83+ Metro Stations Directory — Bengaluru Namma Metro"
-        description="Search complete database of Bengaluru Namma Metro stations across Purple, Green, and Yellow lines. Features GPS coordinates, elevator counts, exit gate guides, and nearby tech park connectivity."
+        title="Bengaluru Metro Stations Directory: 100 Stations Exit Gates and Facilities"
+        description="Search complete database of Bengaluru Namma Metro stations across Purple, Green, Yellow, and Pink lines. Features GPS coordinates, elevator counts, exit gate guides, and nearby tech park connectivity."
         canonicalPath="/stations"
       />
       <div className="space-y-10">
@@ -155,6 +155,16 @@ export default function StationsPage() {
             >
               Yellow Line
             </button>
+            <button
+              onClick={() => setSelectedLine('pink')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
+                selectedLine === 'pink'
+                  ? 'bg-[#EC4899] text-white border-[#EC4899] shadow-md'
+                  : 'bg-white dark:bg-neutral-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800'
+              }`}
+            >
+              Pink Line ({stationsData.filter(s => s.line_ids.includes('pink')).length})
+            </button>
           </div>
         </div>
 
@@ -185,9 +195,15 @@ export default function StationsPage() {
                       );
                     })}
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold border border-emerald-100 dark:border-emerald-800/40">
-                    Crowd: {st.crowd_level}
-                  </span>
+                  {st.is_active === false || st.status === 'under_construction' ? (
+                    <span className="px-2 py-0.5 rounded-full bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 text-[10px] font-bold border border-pink-100 dark:border-pink-800/40">
+                      Opening 2027
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold border border-emerald-100 dark:border-emerald-800/40">
+                      Crowd: {st.crowd_level}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -350,7 +366,7 @@ export default function StationsPage() {
                 {/* Field 6: Exit Gates */}
                 <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-800 space-y-2.5">
                   <div className="text-gray-900 dark:text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                    <span>🚪 Station Exit Gates & Landmarks Directory</span>
+                    <span> Station Exit Gates & Landmarks Directory</span>
                   </div>
                   <div className="grid grid-cols-1 gap-2">
                     {activeStationModal.exit_gates.map((g, i) => (

@@ -43,7 +43,7 @@ export default function BengaluruLandmarksEncyclopedia() {
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/25 transition-all active:scale-95 shrink-0 self-start md:self-auto border border-emerald-400/30"
           >
             <BookOpen className="w-4 h-4" />
-            <span>{isExpanded ? 'Collapse Full Guide' : '📖 Expand 10,000+ Word Guide'}</span>
+            <span>{isExpanded ? 'Collapse Full Guide' : ' Expand 10,000+ Word Guide'}</span>
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>

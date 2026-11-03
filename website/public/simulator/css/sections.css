@@ -1,5 +1,5 @@
 /* ============================================================
-   NammaRide — Sections CSS
+   NammaRide - Sections CSS
    Bottom Nav + Stations + Timings + Safety + Explore Views
    ============================================================ */
 
@@ -1746,10 +1746,12 @@ body.light-mode .qr-ticket-pill.has-ticket {
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
     font-family: inherit;
-    max-height: 88vh !important;
+    max-height: 90vh !important;
+    height: 85vh !important;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+    position: relative !important;
 }
 body.light-mode .destination-hub-modal-card,
 html.light .destination-hub-modal-card,
@@ -1764,6 +1766,7 @@ html[data-theme="light"] .destination-hub-modal-card,
 .destination-hub-header {
     background: #0F172A !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    flex-shrink: 0 !important;
 }
 body.light-mode .destination-hub-header,
 html.light .destination-hub-header,
@@ -1776,16 +1779,40 @@ html[data-theme="light"] .destination-hub-header,
 .destination-hub-body {
     background: #070B14 !important;
     flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    max-height: calc(88vh - 120px) !important;
-    padding-bottom: 2.5rem !important;
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain !important;
+    padding-bottom: 2rem !important;
 }
 body.light-mode .destination-hub-body,
 html.light .destination-hub-body,
 html[data-theme="light"] .destination-hub-body,
 [data-theme="light"] .destination-hub-body {
     background: #F1F5F9 !important;
+}
+
+/* Premium Gate Badge & Mini Icon */
+.destination-hub-gate-badge {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+}
+.destination-hub-gate-mini-icon {
+    background: #0F172A !important;
+    border: 1.5px solid #10B981 !important;
+    color: #34D399 !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+body.light-mode .destination-hub-gate-mini-icon,
+html.light .destination-hub-gate-mini-icon,
+[data-theme="light"] .destination-hub-gate-mini-icon {
+    background: #FFFFFF !important;
+    border: 1.5px solid #10B981 !important;
+    color: #059669 !important;
 }
 
 #simulation-status {
@@ -1887,6 +1914,9 @@ html.light #nearest-modal,
 #station-gates-modal {
     display: flex;
     background: rgba(0, 0, 0, 0.82) !important;
+    overflow-y: auto !important;
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 body.light-mode #station-gates-modal,
 html.light #station-gates-modal,

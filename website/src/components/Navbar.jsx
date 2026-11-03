@@ -44,7 +44,8 @@ export default function Navbar() {
 
   const navItems = [
     { name: t('home'), path: '/' },
-    { name: t('simulator'), path: '/simulator', badge: 'Live' },
+    { name: t('simulator'), path: '/simulator' },
+    { name: 'Pink Line', path: '/pink-line', badge: 'Nov 13' },
     { name: t('stations'), path: '/stations' },
     { name: t('map'), path: '/map' },
     { name: t('explore'), path: '/explore' },
@@ -73,14 +74,19 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-xs xl:text-sm transition-colors pb-1 border-b-2 whitespace-nowrap ${
+                  `text-xs xl:text-sm transition-colors pb-1 border-b-2 whitespace-nowrap flex items-center gap-1.5 ${
                     isActive
                       ? 'text-emerald-500 font-bold border-emerald-500'
                       : 'text-gray-600 dark:text-gray-300 hover:text-emerald-500 border-transparent font-medium'
                   }`
                 }
               >
-                {item.name}
+                <span>{item.name}</span>
+                {item.badge && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-pink-500 text-white shadow-sm">
+                    {item.badge}
+                  </span>
+                )}
               </NavLink>
             ))}
           </div>
@@ -98,7 +104,7 @@ export default function Navbar() {
               <span>{lang === 'en' ? 'ಕನ್ನಡ' : lang === 'kn' ? 'हिन्दी' : 'English'}</span>
             </button>
 
-            {/* Theme Switcher Toggle — Premium Animated */}
+            {/* Theme Switcher Toggle - Premium Animated */}
             <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
  
             {/* Google Play SVG Badge (No background box) */}
@@ -144,6 +150,11 @@ export default function Navbar() {
               className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <span>{item.name}</span>
+              {item.badge && (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-pink-500 text-white">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
           <div className="pt-2">

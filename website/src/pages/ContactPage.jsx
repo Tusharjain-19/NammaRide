@@ -136,7 +136,7 @@ export default function ContactPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="Contact & Support Hub — NammaRide Bengaluru Metro"
+        title="NammaRide Support: Commuter Feedback, Transit Assistance and Inquiries"
         description="Get in touch with NammaRide support. Report station route discrepancies, submit feature requests, or inquire about BMRCL fare updates."
         canonicalPath="/contact"
       />

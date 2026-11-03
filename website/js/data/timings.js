@@ -1,5 +1,5 @@
 // ============================================================
-// NammaRide — Bengaluru Metro Timing Data
+// NammaRide - Bengaluru Metro Timing Data
 // Source: BMRCL Official Schedule (2025-26)
 // ============================================================
 

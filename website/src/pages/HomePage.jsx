@@ -303,7 +303,7 @@ export default function HomePage() {
     {
       icon: <Zap className="w-6 h-6 text-amber-500 dark:text-amber-400" />,
       title: 'Live Fare Calculator',
-      description: 'Know your exact ticket price before you travel — from ₹10 to ₹90 across all stations, with 10% Smart Card savings shown instantly.',
+      description: 'Know your exact ticket price before you travel - from ₹10 to ₹90 across all stations, with 10% Smart Card savings shown instantly.',
       iconBg: 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-500 border-amber-500/20 dark:border-amber-500/40',
       color: 'from-amber-500/20 to-yellow-500/5',
       border: 'border-amber-500/30'
@@ -311,7 +311,7 @@ export default function HomePage() {
     {
       icon: <QrCode className="w-6 h-6 text-purple-500 dark:text-purple-400" />,
       title: 'QR Ticket at Your Fingertips',
-      description: 'Save your WhatsApp or BMRCL QR ticket inside the app. Walk up to the turnstile, scan instantly at max brightness — no fumbling.',
+      description: 'Save your WhatsApp or BMRCL QR ticket inside the app. Walk up to the turnstile, scan instantly at max brightness - no fumbling.',
       iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-500 border-purple-500/20 dark:border-purple-500/40',
       color: 'from-purple-500/20 to-indigo-500/5',
       border: 'border-purple-500/30'
@@ -343,7 +343,11 @@ export default function HomePage() {
   ];
   return (
     <div className="min-h-screen pt-32 flex flex-col relative overflow-x-hidden">
-      <MetaSEO canonicalPath="/" />
+      <MetaSEO 
+        title="Best Bengaluru Metro App: Offline GPS Route Planner, Fares and Timings"
+        description="NammaRide is rated the #1 best offline Geo GPS app for Bengaluru Namma Metro (BMRCL). Plan routes across Purple, Green, Yellow, and Pink lines with live fares, 100 stations guide, platform interchange transfer, and train timings in English and Kannada."
+        canonicalPath="/"
+      />
       
 {/* HERO SECTION */}
       <motion.section 
@@ -553,7 +557,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🚀 CRAZY SECTION 1: INTERACTIVE TECH PARK & MAJOR HUB EXPRESS NAVIGATOR */}
+      {/*  CRAZY SECTION 1: INTERACTIVE TECH PARK & MAJOR HUB EXPRESS NAVIGATOR */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-purple-500/10 dark:from-emerald-950/30 dark:via-black dark:to-purple-950/30 border border-emerald-500/20 dark:border-emerald-500/30 rounded-[28px] sm:rounded-[40px] p-5 sm:p-10 lg:p-12 space-y-8 shadow-lg">
           
@@ -691,7 +695,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 📊 CRAZY SECTION 2: BENGALURU METRO LIVE NETWORK METRICS */}
+      {/*  CRAZY SECTION 2: BENGALURU METRO LIVE NETWORK METRICS */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs">
@@ -717,7 +721,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔍 CRAZY SECTION 3: SEO & GEO-TARGETED COMMUTER TRANSIT GUIDE */}
+      {/*  CRAZY SECTION 3: SEO & GEO-TARGETED COMMUTER TRANSIT GUIDE */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="bg-white dark:bg-neutral-900 rounded-[28px] sm:rounded-[36px] border border-gray-200 dark:border-neutral-800 p-5 sm:p-10 lg:p-12 space-y-8 shadow-sm">
           <div className="space-y-3">
@@ -752,15 +756,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🌟 GOOGLE PREFERRED SOURCE BANNER */}
+      {/*  GOOGLE PREFERRED SOURCE BANNER */}
       <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <GooglePreferredSourceCard />
       </section>
 
-      {/* 📖 BENGALURU METRO BILINGUAL SEO & GEO GPS GUIDE */}
+      {/*  BENGALURU METRO BILINGUAL SEO & GEO GPS GUIDE */}
       <BengaluruMetroGuide />
 
-      {/* 📲 CRAZY SECTION 4: SCAN QR CODE TO INSTALL NAMMARIDE APP */}
+      {/*  CRAZY SECTION 4: SCAN QR CODE TO INSTALL NAMMARIDE APP */}
       <section className="py-10 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/40 dark:via-black dark:to-emerald-950/40 rounded-[28px] sm:rounded-[36px] border border-emerald-500/30 p-5 sm:p-10 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
           <div className="space-y-3 text-center md:text-left max-w-xl">

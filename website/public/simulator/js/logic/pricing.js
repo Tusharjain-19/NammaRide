@@ -1,7 +1,7 @@
 
 
 // ============================================================
-// NammaRide — BMRCL Official Fare Pricing Engine
+// NammaRide: BMRCL Official Fare Pricing Engine
 // Based on station-hop-count tariff (FFC Feb 2025 revision)
 // ============================================================
 
@@ -203,89 +203,67 @@ export function routeDistance(fromId, toId, lineData) {
 
 // ─── Hop-count calculator between any two station IDs ───
 export function countStationHops(fromId, toId, metroData) {
-  const purple = metroData.purple;
-  const green = metroData.green;
-  const yellow = metroData.yellow;
-
-  const MAJESTIC_PURPLE_ID = "P23";
-  const MAJESTIC_GREEN_ID = "G17";
-  const RV_ROAD_GREEN_ID = "G24";
-  const RV_ROAD_YELLOW_ID = "Y01";
-
-  const inLine = (id, line) => line.stations.some(s => s.id === id);
-  const indexOf = (id, line) => line.stations.findIndex(s => s.id === id);
-
-  const majesticPurpleIdx = indexOf(MAJESTIC_PURPLE_ID, purple); // 22 (0-indexed from Whitefield end)
-  const majesticGreenIdx = indexOf(MAJESTIC_GREEN_ID, green);     // 16
-  const rvRoadGreenIdx = indexOf(RV_ROAD_GREEN_ID, green);        // 23
-  const rvRoadYellowIdx = indexOf(RV_ROAD_YELLOW_ID, yellow);     // 0
-
-  const GREEN_TRUNK_HOPS = Math.abs(rvRoadGreenIdx - majesticGreenIdx); // 7
-
   if (fromId === toId) return 0;
+  if (!metroData) return 0;
 
-  const fromPurple = inLine(fromId, purple);
-  const fromGreen = inLine(fromId, green);
-  const fromYellow = inLine(fromId, yellow);
-  const toPurple = inLine(toId, purple);
-  const toGreen = inLine(toId, green);
-  const toYellow = inLine(toId, yellow);
+  // Build dynamic adjacency graph with 0-weight interchange edges
+  const adj = {};
+  const addEdge = (u, v) => {
+    if (!adj[u]) adj[u] = [];
+    if (!adj[v]) adj[v] = [];
+    if (!adj[u].includes(v)) adj[u].push(v);
+    if (!adj[v].includes(u)) adj[v].push(u);
+  };
 
-  let minHops = Infinity;
+  const activeInterchanges = {};
 
-  // Same-line direct travel
-  if (fromPurple && toPurple) {
-    minHops = Math.min(minHops, Math.abs(indexOf(fromId, purple) - indexOf(toId, purple)));
-  }
-  if (fromGreen && toGreen) {
-    minHops = Math.min(minHops, Math.abs(indexOf(fromId, green) - indexOf(toId, green)));
-  }
-  if (fromYellow && toYellow) {
-    minHops = Math.min(minHops, Math.abs(indexOf(fromId, yellow) - indexOf(toId, yellow)));
-  }
+  Object.values(metroData).forEach(line => {
+    if (!line || !line.stations) return;
+    const activeStns = line.stations.filter(s => s.isActive !== false && s.status !== 'under_construction');
+    for (let i = 0; i < activeStns.length; i++) {
+      const s = activeStns[i];
+      if (i > 0) addEdge(activeStns[i - 1].id, s.id);
+      if (s.interchangeId) {
+        if (!activeInterchanges[s.interchangeId]) activeInterchanges[s.interchangeId] = [];
+        activeInterchanges[s.interchangeId].push(s.id);
+      }
+    }
+  });
 
-  // Purple ↔ Green (via Majestic)
-  if (fromPurple && toGreen) {
-    const h = Math.abs(indexOf(fromId, purple) - majesticPurpleIdx) + Math.abs(indexOf(toId, green) - majesticGreenIdx);
-    minHops = Math.min(minHops, h);
-  }
-  if (fromGreen && toPurple) {
-    const h = Math.abs(indexOf(fromId, green) - majesticGreenIdx) + Math.abs(indexOf(toId, purple) - majesticPurpleIdx);
-    minHops = Math.min(minHops, h);
-  }
+  Object.values(activeInterchanges).forEach(ids => {
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = i + 1; j < ids.length; j++) {
+        addEdge(ids[i], ids[j]);
+      }
+    }
+  });
 
-  // Green ↔ Yellow (via RV Road)
-  if (fromGreen && toYellow) {
-    const h = Math.abs(indexOf(fromId, green) - rvRoadGreenIdx) + Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
-    minHops = Math.min(minHops, h);
-  }
-  if (fromYellow && toGreen) {
-    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx) + Math.abs(indexOf(toId, green) - rvRoadGreenIdx);
-    minHops = Math.min(minHops, h);
-  }
+  // Shortest station hops (0 for same-station interchange, 1 per station travel)
+  const dist = {};
+  dist[fromId] = 0;
+  const queue = [{ id: fromId, cost: 0 }];
 
-  // Purple ↔ Yellow (via Majestic → Green trunk → RV Road)
-  if (fromPurple && toYellow) {
-    const h = Math.abs(indexOf(fromId, purple) - majesticPurpleIdx) + GREEN_TRUNK_HOPS + Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
-    minHops = Math.min(minHops, h);
-  }
-  if (fromYellow && toPurple) {
-    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx) + GREEN_TRUNK_HOPS + Math.abs(indexOf(toId, purple) - majesticPurpleIdx);
-    minHops = Math.min(minHops, h);
-  }
+  while (queue.length > 0) {
+    queue.sort((a, b) => a.cost - b.cost);
+    const { id: u, cost } = queue.shift();
+    if (u === toId) return cost;
+    if (cost > dist[u]) continue;
 
-  // Handle interchange stations that exist on multiple lines (RV Road is G24 and Y01)
-  // If fromId is on Green and also is RV Road, try Yellow direct
-  if (fromId === RV_ROAD_GREEN_ID && toYellow) {
-    const h = Math.abs(indexOf(toId, yellow) - rvRoadYellowIdx);
-    minHops = Math.min(minHops, h);
-  }
-  if (toId === RV_ROAD_GREEN_ID && fromYellow) {
-    const h = Math.abs(indexOf(fromId, yellow) - rvRoadYellowIdx);
-    minHops = Math.min(minHops, h);
+    (adj[u] || []).forEach(v => {
+      let isInterchange = false;
+      Object.values(activeInterchanges).forEach(ids => {
+        if (ids.includes(u) && ids.includes(v)) isInterchange = true;
+      });
+      const stepCost = isInterchange ? 0 : 1;
+      const nextCost = cost + stepCost;
+      if (dist[v] === undefined || nextCost < dist[v]) {
+        dist[v] = nextCost;
+        queue.push({ id: v, cost: nextCost });
+      }
+    });
   }
 
-  return minHops === Infinity ? 0 : minHops;
+  return 0;
 }
 
 export function interLineDistance(fromId, toId, purpleLine, greenLine) {
@@ -337,7 +315,7 @@ export function evaluateTouristCard(tripDistances, days, useMobileQR = false) {
   const tokenTotal = tripDistances.reduce((sum, d) => sum + getFareByDistance(d), 0);
   const passCost = useMobileQR ? card.mobileQR : card.smartCard;
   const saving = tokenTotal - passCost;
-  return { tokenTotal, passCost, saving: saving > 0 ? saving : 0, recommendation: saving > 0 ? `✅ Buy the ${card.name} — saves ₹${saving}` : `❌ Token tickets cheaper by ₹${Math.abs(saving)}` };
+  return { tokenTotal, passCost, saving: saving > 0 ? saving : 0, recommendation: saving > 0 ? `Buy the ${card.name} - saves ₹${saving}` : `Token tickets cheaper by ₹${Math.abs(saving)}` };
 }
 
 export const FARE_CHART = {

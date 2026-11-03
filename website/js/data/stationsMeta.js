@@ -1,5 +1,5 @@
 // ============================================================
-// NammaRide — Station Metadata for Bengaluru Metro
+// NammaRide - Station Metadata for Bengaluru Metro
 // Purple Line: 37 stations | Green Line: 32 stations | Yellow Line: 16 stations
 // ============================================================
 

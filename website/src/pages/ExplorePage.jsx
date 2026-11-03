@@ -92,9 +92,9 @@ export default function ExplorePage() {
 
   return (
     <div className="pt-28 pb-12 px-4 sm:px-6 lg:px-8">
-      <MetaSEO
-        title="Explore Bengaluru Metro Attractions & Tech Parks Guide"
-        description="Find direct metro connections to ITPL, Electronic City, Manyata Tech Park, MG Road, Church Street, ISKCON, and Orion Mall across Purple, Green, and Yellow lines."
+      <MetaSEO 
+        title="Explore Bengaluru by Metro: Top Attractions, Temples, Tech Parks and Malls"
+        description="Discover famous Bengaluru landmarks, hospitals, universities, tech hubs, and heritage spots within walking distance of Namma Metro stations across Purple, Green, Yellow, and Pink lines."
         canonicalPath="/explore"
       />
       <div className="max-w-7xl mx-auto space-y-10">

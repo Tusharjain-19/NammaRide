@@ -1,9 +1,114 @@
 // ============================================================
-// NammaRide — Station Exit Gates & Landmark Directory
+// NammaRide - Station Exit Gates & Landmark Directory
 // Bengaluru Metro (BMRCL) Gate Guidance
 // ============================================================
 
 export const stationGatesData = {
+    // PINK LINE (Elevated Live - Nov 13, 2026)
+    "PK01": [
+        {
+                "gate": "A",
+                "name": "Royal Meenakshi Mall Side",
+                "destination": "Bannerghatta Main Road (West), Royal Meenakshi Mall, Gottigere BMTC Hub",
+                "landmark": "Royal Meenakshi Mall",
+                "icon": "mall"
+        },
+        {
+                "gate": "B",
+                "name": "Meenakshi Temple Side",
+                "destination": "Bannerghatta Main Road (East), Meenakshi Sundareswarar Temple, NICE Road link",
+                "landmark": "Meenakshi Temple",
+                "icon": "building"
+        }
+],
+    "PK02": [
+        {
+                "gate": "A",
+                "name": "Cave Temple / Decathlon Side",
+                "destination": "Bannerghatta Main Road (West), Hulimavu Cave Temple, Decathlon",
+                "landmark": "Hulimavu Cave Temple",
+                "icon": "building"
+        },
+        {
+                "gate": "B",
+                "name": "Nano Hospital / Akshayanagar Side",
+                "destination": "Bannerghatta Main Road (East), Nano Hospitals, Akshayanagar Road",
+                "landmark": "Nano Hospital",
+                "icon": "hospital"
+        }
+],
+    "PK03": [
+        {
+                "gate": "A",
+                "name": "IIM Bangalore Main Gate",
+                "destination": "IIMB Campus Entrance, Bilekahalli Bus Stop",
+                "landmark": "IIM Bangalore Campus",
+                "icon": "university"
+        },
+        {
+                "gate": "B",
+                "name": "Healthcare Corridor Side",
+                "destination": "Fortis Hospital, Apollo Hospital, Kalyani Magnum Tech Park",
+                "landmark": "Fortis & Apollo Hospitals",
+                "icon": "hospital"
+        }
+],
+    "PK04": [
+        {
+                "gate": "A",
+                "name": "Vega City Mall / Shoppers Stop",
+                "destination": "Vega City Mall direct access, Shoppers Stop, Dollars Colony",
+                "landmark": "Vega City Mall",
+                "icon": "mall"
+        },
+        {
+                "gate": "B",
+                "name": "4th Phase Residential Layout",
+                "destination": "JP Nagar 4th Phase, Outer Ring Road Flyover connection",
+                "landmark": "JP Nagar 4th Phase",
+                "icon": "bus"
+        }
+],
+    "PK05": [
+        {
+                "gate": "A",
+                "name": "Jayadeva Institute Main Entrance",
+                "destination": "Sri Jayadeva Cardiac Hospital, Outpatient block, Ambulance bay",
+                "landmark": "Jayadeva Hospital",
+                "icon": "hospital"
+        },
+        {
+                "gate": "B",
+                "name": "Yellow Line Concourse Connection",
+                "destination": "Direct interchange transfer to Yellow Line (Y03) for RV Road / Silk Board / Electronic City",
+                "landmark": "Yellow Line Interchange",
+                "icon": "metro"
+        },
+        {
+                "gate": "C",
+                "name": "BTM Layout Ring Road Side",
+                "destination": "BTM Layout 1st & 2nd Stage, East End Circle Jayanagar",
+                "landmark": "BTM Layout Ring Rd",
+                "icon": "bus"
+        }
+],
+    "PK06": [
+        {
+                "gate": "A",
+                "name": "Tavarekere Park / Swagath Road",
+                "destination": "Tavarekere Park, SG Palya, Christ University connection",
+                "landmark": "Tavarekere Park",
+                "icon": "park"
+        },
+        {
+                "gate": "B",
+                "name": "BTM 1st Stage / Koramangala Side",
+                "destination": "BTM 1st Stage, Dairy Circle link, Nexus Koramangala feeder",
+                "landmark": "Nexus Koramangala Link",
+                "icon": "mall"
+        }
+],
+
     // PURPLE LINE
     "P01": [ // Whitefield (Kadugodi)
         { gate: "A", name: "Kadugodi Bus Stand Side", destination: "Kadugodi Bus Stand, Whitefield Railway Station, Kadugodi Main Rd", landmark: "Kadugodi BMTC Hub", icon: "bus" },

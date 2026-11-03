@@ -46,6 +46,7 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
         const isPurple = (c) => c === '#9B59B6' || c === '#8B5CF6' || c === '#A855F7' || c === '#9333EA' || (typeof c === 'string' && c.toLowerCase().includes('purple'));
         const isGreen = (c) => c === '#2ECC71' || c === '#22C55E' || c === '#10B981' || c === '#059669' || (typeof c === 'string' && c.toLowerCase().includes('green'));
         const isYellow = (c) => c === '#FBBF24' || c === '#F1C40F' || c === '#EAB308' || c === '#F59E0B' || (typeof c === 'string' && c.toLowerCase().includes('yellow'));
+        const isPink = (c) => c === '#EC4899' || c === '#E91E63' || c === '#F43F5E' || (typeof c === 'string' && c.toLowerCase().includes('pink'));
 
         // For an interchange station, the line segment extending DOWNWARD to nextNode belongs to the OUTGOING line (nextNode.lineColor)
         const segmentColor = (node.isInterchange && nextNode) ? nextNode.lineColor : (node.lineColor || (nextNode ? nextNode.lineColor : ''));
@@ -54,6 +55,7 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
         if (isPurple(segmentColor)) colorClass = 'line-purple';
         else if (isGreen(segmentColor)) colorClass = 'line-green';
         else if (isYellow(segmentColor)) colorClass = 'line-yellow';
+        else if (isPink(segmentColor)) colorClass = 'line-pink';
 
         // Check for specific interchange types
         let interchangeClass = '';
@@ -73,6 +75,18 @@ export function renderLiveRoute(journey, routeListElement, simulationState) {
                 interchangeClass = 'interchange-purple-yellow';
             } else if (isYellow(currentLine) && isPurple(nextLine)) {
                 interchangeClass = 'interchange-yellow-purple';
+            } else if (isYellow(currentLine) && isPink(nextLine)) {
+                interchangeClass = 'interchange-yellow-pink';
+            } else if (isPink(currentLine) && isYellow(nextLine)) {
+                interchangeClass = 'interchange-pink-yellow';
+            } else if (isGreen(currentLine) && isPink(nextLine)) {
+                interchangeClass = 'interchange-green-pink';
+            } else if (isPink(currentLine) && isGreen(nextLine)) {
+                interchangeClass = 'interchange-pink-green';
+            } else if (isPurple(currentLine) && isPink(nextLine)) {
+                interchangeClass = 'interchange-purple-pink';
+            } else if (isPink(currentLine) && isPurple(nextLine)) {
+                interchangeClass = 'interchange-pink-purple';
             }
         }
 

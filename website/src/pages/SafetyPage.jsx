@@ -16,7 +16,7 @@ export default function SafetyPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] py-12 px-4 sm:px-6 lg:px-8 transition-colors">
       <MetaSEO
-        title="Safety Guidelines & Emergency Helplines — Bengaluru Namma Metro"
+        title="Bengaluru Metro Safety: Emergency Helplines and Platform Security Guidelines"
         description="Official BMRCL helpline numbers (080-4100-4100), women's safety coach details, lost & found instructions, and Divyangjan accessibility features."
         canonicalPath="/safety"
       />
@@ -131,7 +131,7 @@ export default function SafetyPage() {
         <div className="glass-panel p-8 rounded-3xl border border-gray-200 dark:border-gray-800 space-y-8">
           <h2 className="font-heading font-bold text-2xl text-gray-900 dark:text-white flex items-center gap-3">
             <HeartHandshake className="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
-            <span>Divyangjan Accessibility Features ♿</span>
+            <span>Divyangjan Accessibility Features </span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -139,7 +139,7 @@ export default function SafetyPage() {
             {/* Wheelchair */}
             <div className="space-y-3 bg-gray-50 dark:bg-neutral-900/80 p-5 rounded-2xl border border-gray-200 dark:border-gray-800">
               <h3 className="font-heading font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
-                <span>♿ Wheelchair Friendly</span>
+                <span> Wheelchair Friendly</span>
               </h3>
               <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-300 list-disc list-inside">
                 <li>3 to 6 elevator units per station</li>

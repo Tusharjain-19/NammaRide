@@ -1,5 +1,12 @@
 // Auto-generated mapping of station IDs to downloaded board images
 export const stationBoardImages = {
+  "PK01": "assets/images/stations/PK01.jpg",
+  "PK02": "assets/images/stations/PK02.jpg",
+  "PK03": "assets/images/stations/PK03.jpg",
+  "PK04": "assets/images/stations/PK04.jpg",
+  "PK05": "assets/images/stations/PK05.jpg",
+  "PK06": "assets/images/stations/PK06.jpg",
+
   "P01": "assets/images/stations/P01.jpg",
   "P02": "assets/images/stations/P02.jpg",
   "P07": "assets/images/stations/P07.jpg",

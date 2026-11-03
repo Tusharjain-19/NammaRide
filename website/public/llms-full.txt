@@ -1,4 +1,4 @@
-# NammaRide — Comprehensive Technical Knowledge Base & AI Retrieval Document (AEO / GEO / SEO)
+# NammaRide: Comprehensive Technical Knowledge Base and AI Retrieval Document (AEO / GEO / SEO)
 
 ## 1. Application Entity Overview & Metadata
 - **Entity Name**: NammaRide
@@ -155,9 +155,29 @@
 15. Hebbagodi (Biocon Park)
 16. Bommasandra
 
+### Pink Line Reach 6 (Kalena Agrahara to Tavarekere, 7.5 km, 6 Stations - Inaugurated Nov 13, 2026):
+1. Kalena Agrahara (Royal Meenakshi Mall & Gottigere Depot)
+2. Hulimavu (Hulimavu Cave Temple & Nano Hospital)
+3. IIM Bangalore - Bilekahalli (IIMB Campus, Fortis & Apollo Hospitals)
+4. JP Nagar 4th Phase (Vega City Mall & Dollars Colony)
+5. Jayadeva Hospital (Double-Decker Interchange with Yellow Line)
+6. Tavarekere - Swagath Road (Koramangala & Christ University SG Palya)
+
 ---
 
-## 5. Canonical Web Pages & Sitelinks
+## 5. Bengaluru 8 Administrative Zones (BBMP) Metro Alignment
+- **East Zone**: MG Road, Cubbon Park, Trinity, Halasuru, Indiranagar, Swami Vivekananda Road.
+- **West Zone**: Rajajinagar, Mahalakshmi, Sandal Soap Factory, Yeshwanthpur, Vijayanagar, Magadi Road.
+- **South Zone**: Jayanagar, South End Circle, RV Road, Banashankari, JP Nagar, Jayadeva Hospital.
+- **North Zone**: Peenya, Peenya Industry, Goraguntepalya, Jalahalli, Dasarahalli, Nagasandra.
+- **Mahadevapura**: Whitefield (Kadugodi), Pattandur Agrahara (ITPL), Hoodi, Garudacharpalya, KR Pura, Benniganahalli.
+- **Bommanahalli**: Central Silk Board, BTM Layout, Tavarekere, JP Nagar 4th Phase, IIMB, Hulimavu, Kalena Agrahara, Electronic City.
+- **RR Nagar**: Mysore Road, Nayandahalli, Rajarajeshwari Nagar, Jnanabharathi, Pattanagere, Kengeri, Challaghatta.
+- **Dasarahalli**: Madavara (BIEC), Chikkabidarakallu, Manjunath Nagar, Nagasandra.
+
+---
+
+## 6. Canonical Web Pages & Sitelinks
 - Primary Application Home: https://www.nammaride.site/
 - Stations Directory: https://www.nammaride.site/stations
 - Timetable Schedule: https://www.nammaride.site/timings

@@ -50,7 +50,7 @@
 }
 
 /* ═══════════════════════════════════════════
-   LIGHT MODE — Explicit (same as :root)
+   LIGHT MODE - Explicit (same as :root)
    ═══════════════════════════════════════════ */
 body.light-mode {
     --bg-color: #E8EDF5;

@@ -1,9 +1,68 @@
 // ============================================================
-// NammaRide — Bengaluru Metro Timing Data
+// NammaRide - Bengaluru Metro Timing Data
 // Source: BMRCL Official Schedule (2025-26)
 // ============================================================
 
 export const timingsData = {
+  pink: {
+  "name": "Pink Line",
+  "color": "#EC4899",
+  "route": "Kalena Agrahara ↔ Tavarekere (7.5 km Elevated)",
+  "stations": 6,
+  "notes": [
+    "Inaugurated on November 13, 2026 by Hon'ble Prime Minister Narendra Modi.",
+    "Transfer at Jayadeva Hospital for Yellow Line."
+  ],
+  "schedules": {
+    "mon_fri": {
+      "title": "Monday – Friday (Weekdays)",
+      "from_start": [
+        {
+          "range": "05:00 - 06:00",
+          "frequency": "15 mins"
+        },
+        {
+          "range": "06:00 - 08:30",
+          "frequency": "10 mins"
+        },
+        {
+          "range": "08:30 - 11:30",
+          "frequency": "8-10 mins (Peak)"
+        },
+        {
+          "range": "11:30 - 16:30",
+          "frequency": "12 mins"
+        },
+        {
+          "range": "16:30 - 20:30",
+          "frequency": "8-10 mins (Peak)"
+        },
+        {
+          "range": "20:30 - 23:00",
+          "frequency": "15 mins"
+        }
+      ]
+    },
+    "sunday": {
+      "title": "Sunday & General Holidays",
+      "from_start": [
+        {
+          "range": "07:00 - 10:00",
+          "frequency": "15 mins"
+        },
+        {
+          "range": "10:00 - 20:30",
+          "frequency": "10-12 mins"
+        },
+        {
+          "range": "20:30 - 23:00",
+          "frequency": "15 mins"
+        }
+      ]
+    }
+  }
+},
+
   purple: {
     name: "Purple Line",
     color: "#8B5CF6",

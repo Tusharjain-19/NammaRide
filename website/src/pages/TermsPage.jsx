@@ -6,7 +6,7 @@ export default function TermsPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="Terms of Service — NammaRide Bengaluru Metro App"
+        title="NammaRide Terms of Service: Commuter Transit Guide Usage Conditions"
         description="Terms of service and legal disclosures for NammaRide. Independent Bengaluru Metro commuter navigation utility."
         canonicalPath="/terms"
       />

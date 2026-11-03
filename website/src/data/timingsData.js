@@ -1,9 +1,54 @@
-// ============================================================
-// NammaRide — Bengaluru Metro Timing Data
-// Source: BMRCL Official Schedule (2025-26)
-// ============================================================
-
 export const timingsData = {
+  pink: {
+    name: "Pink Line",
+    color: "#EC4899",
+    route: "Kalena Agrahara <-> Tavarekere",
+    stations: 6,
+    notes: [
+      "Inaugurated on November 13, 2026 by Hon'ble Prime Minister Narendra Modi.",
+      "Phase 1 elevated corridor operating between Kalena Agrahara and Tavarekere.",
+      "Direct two-level interchange with Yellow Line at Jayadeva Hospital station.",
+      "CBTC modern signalling with 6-coach train sets."
+    ],
+    schedules: {
+      mon_sat: {
+        title: "Monday - Saturday",
+        from_start: [ // From Kalena Agrahara
+          { range: "05:00 - 06:00", frequency: "15 mins" },
+          { range: "06:00 - 08:30", frequency: "10 mins" },
+          { range: "08:30 - 11:30", frequency: "8-10 mins" },
+          { range: "11:30 - 16:30", frequency: "12 mins" },
+          { range: "16:30 - 20:30", frequency: "8-10 mins" },
+          { range: "20:30 - 23:00", frequency: "12-15 mins" }
+        ],
+        from_end: [ // From Tavarekere
+          { range: "05:05 - 06:00", frequency: "15 mins" },
+          { range: "06:00 - 08:30", frequency: "10 mins" },
+          { range: "08:30 - 11:30", frequency: "8-10 mins" },
+          { range: "11:30 - 16:30", frequency: "12 mins" },
+          { range: "16:30 - 20:30", frequency: "8-10 mins" },
+          { range: "20:30 - 23:05", frequency: "12-15 mins" }
+        ]
+      },
+      sunday: {
+        title: "Sunday & Public Holidays",
+        from_start: [ // From Kalena Agrahara
+          { range: "07:00 - 10:00", frequency: "15 mins" },
+          { range: "10:00 - 20:30", frequency: "10-12 mins" },
+          { range: "20:30 - 23:00", frequency: "15 mins" }
+        ],
+        from_end: [ // From Tavarekere
+          { range: "07:05 - 10:00", frequency: "15 mins" },
+          { range: "10:00 - 20:30", frequency: "10-12 mins" },
+          { range: "20:30 - 23:05", frequency: "15 mins" }
+        ]
+      }
+    },
+    weekday: { firstTrain: { from_start: "05:00 AM", from_end: "05:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, peakFrequency: "8-10 min", offPeakFrequency: "12-15 min", peakHours: "08:30-11:30 & 16:30-20:30" },
+    weekend: { firstTrain: { from_start: "07:00 AM", from_end: "07:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, frequency: "10-12 min" },
+    holiday: { firstTrain: { from_start: "07:00 AM", from_end: "07:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, frequency: "15 min" }
+  },
+
   purple: {
     name: "Purple Line",
     color: "#A855F7", // standard design system purple
@@ -16,7 +61,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_fri: {
-        title: "Monday – Friday (Weekdays)",
+        title: "Monday - Friday (Weekdays)",
         from_start: [ // From Whitefield
           { range: "05:00 - 05:20", frequency: "20 mins" },
           { range: "05:20 - 10:57", frequency: "10 mins" },
@@ -77,7 +122,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_fri: {
-        title: "Monday – Friday (Weekdays)",
+        title: "Monday - Friday (Weekdays)",
         from_start: [
           { range: "05:00 - 06:15", frequency: "15 mins" },
           { range: "06:15 - 10:25", frequency: "11 mins" },
@@ -140,7 +185,7 @@ export const timingsData = {
     ],
     schedules: {
       mon_sat: {
-        title: "Monday – Saturday",
+        title: "Monday - Saturday",
         from_start: [ // From RV Road
           { range: "05:05 - 06:40", frequency: "20-30 mins" },
           { range: "06:40 - 07:37", frequency: "10-16 mins" },

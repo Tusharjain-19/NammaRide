@@ -66,7 +66,7 @@ export default function FeaturesPage() {
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10">
       <MetaSEO
-        title="Features & Key Capabilities — NammaRide Bengaluru Metro App"
+        title="NammaRide App Features: Offline Satellite GPS, Turnstile Mode and Fares"
         description="Explore NammaRide features: 100% offline Geo GPS station detection, turnstile QR ticket storage, fare savings engine, platform directions, and multilingual support."
         canonicalPath="/features"
       />

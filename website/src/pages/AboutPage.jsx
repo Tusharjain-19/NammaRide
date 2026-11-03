@@ -65,7 +65,7 @@ export default function AboutPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="About NammaRide & Founder Tushar Jain — BMSCE Bengaluru"
+        title="About NammaRide: Independent Offline Transit Companion for Bengaluru Metro"
         description="Learn about NammaRide's mission: privacy-first, 100% offline Bengaluru Metro navigation created by BMSCE student Tushar Jain for 500,000+ daily commuters."
         canonicalPath="/about"
       />

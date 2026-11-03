@@ -1,9 +1,121 @@
 // ============================================================
-// NammaRide — Station Metadata for Bengaluru Metro
+// NammaRide - Station Metadata for Bengaluru Metro
 // Purple Line: 37 stations | Green Line: 32 stations | Yellow Line: 16 stations
 // ============================================================
 
 export const stationsMeta = [
+  // ═══════════════════════════════════════
+  // PINK LINE STATIONS (PK01 - PK18)
+  // Elevated: PK01-PK06 (Live Nov 13, 2026) | Underground: PK07-PK18 (2027)
+  // ═══════════════════════════════════════
+  { id:"PK01", name:"Kalena Agrahara", name_kn:"ಕಾಳೇನ ಅಗ್ರಹಾರ", code:"KLNA", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Parking"], 
+    connectivity:["BMTC Bannerghatta Hub","Auto rickshaw stand","Taxi / Cab pickup","NICE Road Corridor Link"], location:{lat:12.8647,lon:77.5975}},
+
+  { id:"PK02", name:"Hulimavu", name_kn:"ಹುಳಿಮಾವು", code:"HLMV", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Toilets","Escalator","Elevator","Ticket Counter","Wheelchair Access"], 
+    connectivity:["BMTC Bus Stop","Auto rickshaw stand","Decathlon feeder connection"], location:{lat:12.8782,lon:77.5982}},
+
+  { id:"PK03", name:"IIM Bangalore", name_kn:"ಐಐಎಂ ಬೆಂಗಳೂರು", code:"IIMB", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Accessible Counter"], 
+    connectivity:["IIMB Bus Shelter","BMTC Feeder routes","Apollo/Fortis emergency transit access","Auto stand"], location:{lat:12.8931,lon:77.599}},
+
+  { id:"PK04", name:"JP Nagar 4th Phase", name_kn:"ಜೆಪಿ ನಗರ ೪ನೇ ಹಂತ", code:"JPN4", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Parking"], 
+    connectivity:["Vega City Mall Pedestrian Walkway","BMTC Ring Road Feeder","Auto rickshaw stand","Cab pickup bay"], location:{lat:12.9068,lon:77.5998}},
+
+  { id:"PK05", name:"Jayadeva Hospital", name_kn:"ಜಯದೇವ ಆಸ್ಪತ್ರೆ", code:"JYDV", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Interchange Concourse","Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Medical First Aid Post"], 
+    connectivity:["Yellow Line (RV Road - Bommasandra)","BTM Ring Road Bus Station","Jayanagar 9th Block link","Auto bay","Ambulance Priority Lane"], location:{lat:12.9161,lon:77.6015}},
+
+  { id:"PK06", name:"Tavarekere", name_kn:"ತಾವರೆಕೆರೆ", code:"TVRK", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+    isActive: true, status: "operational", phase: "Phase 1 Elevated",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access"], 
+    connectivity:["Swagath Road BMTC Stop","Koramangala Feeder Buses","Auto rickshaw stand","Cab pickup zone"], location:{lat:12.9258,lon:77.6052}},
+
+  { id:"PK07", name:"Dairy Circle", name_kn:"ಡೈರಿ ವೃತ್ತ", code:"DRYC", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Dairy Circle Bus Terminus","Hosur Road link"], location:{lat:12.9372,lon:77.6004}},
+
+  { id:"PK08", name:"Lakkasandra", name_kn:"ಲಕ್ಕಸಂದ್ರ", code:"LKSD", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Hosur Main Road BMTC"], location:{lat:12.9472,lon:77.5986}},
+
+  { id:"PK09", name:"Langford Town", name_kn:"ಲ್ಯಾಂಗ್‌ಫೋರ್ಡ್ ಟೌನ್", code:"LNTN", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Richmond Circle Feeder"], location:{lat:12.9592,lon:77.6041}},
+
+  { id:"PK10", name:"Rashtriya Military School", name_kn:"ರಾಷ್ಟ್ರೀಯ ಮಿಲಿಟರಿ ಶಾಲೆ", code:"RMSC", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Hosur Road / Vellara Junction Bus Hub"], location:{lat:12.968,lon:77.6067}},
+
+  { id:"PK11", name:"MG Road", name_kn:"ಮಹಾತ್ಮ ಗಾಂಧಿ ರಸ್ತೆ", code:"MGRD", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Interchange Concourse","Elevators","Escalators"], 
+    connectivity:["Purple Line Metro Transfer","CBD Bus Hub"], location:{lat:12.9754,lon:77.6068}},
+
+  { id:"PK12", name:"Shivajinagar", name_kn:"ಶಿವಾಜಿನಗರ", code:"SHVJ", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Major BMTC Transit Terminus (TTMC)"], location:{lat:12.9863,lon:77.6042}},
+
+  { id:"PK13", name:"Cantonment Railway Station", name_kn:"ಕಂಟೋನ್ಮೆಂಟ್ ರೈಲ್ವೆ ನಿಲ್ದಾಣ", code:"CNTM", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Direct Pedestrian Sub-way to Railway Platforms","Elevator","Escalator"], 
+    connectivity:["Indian Railways Mainline trains","BMTC Cantonment Station stop"], location:{lat:12.9937,lon:77.6001}},
+
+  { id:"PK14", name:"Pottery Town", name_kn:"ಪಾಟರಿ ಟೌನ್", code:"PTRT", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["BMTC Local stops"], location:{lat:13.0033,lon:77.6057}},
+
+  { id:"PK15", name:"Tannery Road", name_kn:"ಟ್ಯಾನರಿ ರಸ್ತೆ", code:"TNRY", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Tannery Road BMTC Services"], location:{lat:13.0112,lon:77.6148}},
+
+  { id:"PK16", name:"Venkateshpura", name_kn:"ವೆಂಕಟೇಶಪುರ", code:"VNKT", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["BMTC Kadugondanahalli Corridor"], location:{lat:13.0203,lon:77.6202}},
+
+  { id:"PK17", name:"Kadugondanahalli", name_kn:"ಕಾಡುಗೊಂಡನಹಳ್ಳಿ", code:"KDGH", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Planned Underground Metro Facilities","Elevator","Escalator"], 
+    connectivity:["Nagawara - Shivajinagar BMTC Trunk route"], location:{lat:13.0315,lon:77.6247}},
+
+  { id:"PK18", name:"Nagawara", name_kn:"ನಾಗವಾರ", code:"NGWR", line:"Pink Line", type:"Underground", platforms:"3", metroInfo:{operator:"BMRCL",opened:"Upcoming (2027)"}, 
+    isActive: false, status: "under_construction", phase: "Phase 2 Underground (Opening 2027)",
+    accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
+    facilities:["Multi-Corridor Interchange Concourse","Direct Pedestrian Skywalk to Manyata Tech Park","Elevators","Escalators"], 
+    connectivity:["Blue Line Airport Metro (Phase 2B)","Outer Ring Road BMTC Hub","Airport Express buses"], location:{lat:13.0456,lon:77.6265}},
+
   // ═══════════════════════════════════════
   // PURPLE LINE STATIONS (P01 - P37)
   // ═══════════════════════════════════════

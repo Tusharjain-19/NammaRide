@@ -1,7 +1,7 @@
 
 
 // ============================================================
-// NammaRide — BMRCL Official Fare Pricing Engine
+// NammaRide: BMRCL Official Fare Pricing Engine
 // Based on station-hop-count tariff (FFC Feb 2025 revision)
 // ============================================================
 
@@ -337,7 +337,7 @@ export function evaluateTouristCard(tripDistances, days, useMobileQR = false) {
   const tokenTotal = tripDistances.reduce((sum, d) => sum + getFareByDistance(d), 0);
   const passCost = useMobileQR ? card.mobileQR : card.smartCard;
   const saving = tokenTotal - passCost;
-  return { tokenTotal, passCost, saving: saving > 0 ? saving : 0, recommendation: saving > 0 ? `✅ Buy the ${card.name} — saves ₹${saving}` : `❌ Token tickets cheaper by ₹${Math.abs(saving)}` };
+  return { tokenTotal, passCost, saving: saving > 0 ? saving : 0, recommendation: saving > 0 ? `Buy the ${card.name} - saves ₹${saving}` : `Token tickets cheaper by ₹${Math.abs(saving)}` };
 }
 
 export const FARE_CHART = {

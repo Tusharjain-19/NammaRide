@@ -26,7 +26,7 @@
     display: none;
 }
 
-/* The Line Segment — perfectly centered on the 16px dot */
+/* The Line Segment - perfectly centered on the 16px dot */
 .station-item::before {
     content: '';
     position: absolute;
@@ -58,7 +58,7 @@
     box-shadow: 0 0 8px rgba(234, 179, 8, 0.4);
 }
 
-/* The Dot — 16px circle, border-box so border is inside */
+/* The Dot - 16px circle, border-box so border is inside */
 .station-dot {
     position: absolute;
     left: 0;
@@ -103,7 +103,7 @@
     opacity: 0.6;
 }
 
-/* Current station — 22px dot, re-centered on the same axis */
+/* Current station - 22px dot, re-centered on the same axis */
 .station-item.current .station-dot {
     width: 22px;
     height: 22px;
@@ -114,7 +114,7 @@
     box-shadow: 0 0 15px currentColor, 0 0 0 4px var(--border-subtle);
 }
 
-/* Interchange Node — 26px dot, re-centered on the same axis */
+/* Interchange Node - 26px dot, re-centered on the same axis */
 .station-item.interchange .station-dot {
     width: 26px;
     height: 26px;
@@ -199,7 +199,7 @@
     border-left-color: var(--line-purple);
 }
 
-/* Station Content — text area beside the dot */
+/* Station Content - text area beside the dot */
 .station-content {
     width: 100%;
     min-width: 0;
@@ -489,4 +489,56 @@ body.dark-mode .line-yellow .platform-pill {
         transform: scale(1);
         box-shadow: 0 0 0 0 transparent;
     }
+}
+
+/* Pink Line Styles */
+:root {
+    --line-pink: #EC4899;
+}
+
+.station-item.line-pink::before,
+.line-pink .station-item::before {
+    background-color: #EC4899 !important;
+    box-shadow: 0 0 8px rgba(236, 72, 153, 0.4) !important;
+}
+
+.station-item.line-pink .station-dot,
+.line-pink .station-dot {
+    border-color: #EC4899 !important;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.4) !important;
+}
+
+.station-item.interchange-yellow-pink .interchange-info,
+.station-item.interchange-pink-yellow .interchange-info,
+.station-item.interchange-green-pink .interchange-info,
+.station-item.interchange-pink-green .interchange-info,
+.station-item.interchange-purple-pink .interchange-info,
+.station-item.interchange-pink-purple .interchange-info,
+.line-pink .interchange-info {
+    border-left-color: #EC4899 !important;
+}
+
+.station-item.interchange-yellow-pink .interchange-row i,
+.station-item.interchange-yellow-pink .interchange-row svg,
+.station-item.interchange-pink-yellow .interchange-row i,
+.station-item.interchange-pink-yellow .interchange-row svg,
+.station-item.interchange-green-pink .interchange-row i,
+.station-item.interchange-green-pink .interchange-row svg,
+.station-item.interchange-pink-green .interchange-row i,
+.station-item.interchange-pink-green .interchange-row svg,
+.line-pink .interchange-row i,
+.line-pink .interchange-row svg {
+    color: #EC4899 !important;
+}
+
+
+/* Cross-browser scrollbar suppression */
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+.no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
 }

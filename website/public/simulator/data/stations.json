@@ -886,7 +886,9 @@
           "platforms": {
             "forward": 2,
             "backward": 1
-          }
+          },
+          "interchange": true,
+          "interchangeId": "jayadeva"
         },
         {
           "id": "Y04",
@@ -1045,6 +1047,303 @@
           }
         }
       ]
+    },
+    "pink": {
+      "name": "Pink Line",
+      "color": "#EC4899",
+      "stations": [
+        {
+          "id": "PK01",
+          "name": "Kalena Agrahara",
+          "lat": 12.8647,
+          "lon": 77.5975,
+          "timeToNext": 130,
+          "distanceToNext": 1.5,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK02",
+          "name": "Hulimavu",
+          "lat": 12.8782,
+          "lon": 77.5982,
+          "timeToNext": 135,
+          "distanceToNext": 1.6,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK03",
+          "name": "IIM Bangalore",
+          "lat": 12.8931,
+          "lon": 77.599,
+          "timeToNext": 125,
+          "distanceToNext": 1.4,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK04",
+          "name": "JP Nagar 4th Phase",
+          "lat": 12.9068,
+          "lon": 77.5998,
+          "timeToNext": 120,
+          "distanceToNext": 1.3,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK05",
+          "name": "Jayadeva Hospital",
+          "lat": 12.9161,
+          "lon": 77.6015,
+          "timeToNext": 120,
+          "distanceToNext": 1.2,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": true,
+          "interchangeId": "jayadeva",
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK06",
+          "name": "Tavarekere",
+          "lat": 12.9258,
+          "lon": 77.6052,
+          "timeToNext": 130,
+          "distanceToNext": 1.3,
+          "isActive": true,
+          "status": "operational",
+          "phase": "Phase 1 Elevated",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK07",
+          "name": "Dairy Circle",
+          "lat": 12.9372,
+          "lon": 77.6004,
+          "timeToNext": 120,
+          "distanceToNext": 1.2,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK08",
+          "name": "Lakkasandra",
+          "lat": 12.9472,
+          "lon": 77.5986,
+          "timeToNext": 125,
+          "distanceToNext": 1.3,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK09",
+          "name": "Langford Town",
+          "lat": 12.9592,
+          "lon": 77.6041,
+          "timeToNext": 115,
+          "distanceToNext": 1.1,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK10",
+          "name": "Rashtriya Military School",
+          "lat": 12.968,
+          "lon": 77.6067,
+          "timeToNext": 110,
+          "distanceToNext": 1,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK11",
+          "name": "MG Road",
+          "lat": 12.9754,
+          "lon": 77.6068,
+          "timeToNext": 125,
+          "distanceToNext": 1.2,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": true,
+          "interchangeId": "mg_road",
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK12",
+          "name": "Shivajinagar",
+          "lat": 12.9863,
+          "lon": 77.6042,
+          "timeToNext": 115,
+          "distanceToNext": 1.1,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK13",
+          "name": "Cantonment Railway Station",
+          "lat": 12.9937,
+          "lon": 77.6001,
+          "timeToNext": 120,
+          "distanceToNext": 1.2,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK14",
+          "name": "Pottery Town",
+          "lat": 13.0033,
+          "lon": 77.6057,
+          "timeToNext": 110,
+          "distanceToNext": 1,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK15",
+          "name": "Tannery Road",
+          "lat": 13.0112,
+          "lon": 77.6148,
+          "timeToNext": 120,
+          "distanceToNext": 1.2,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK16",
+          "name": "Venkateshpura",
+          "lat": 13.0203,
+          "lon": 77.6202,
+          "timeToNext": 125,
+          "distanceToNext": 1.3,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK17",
+          "name": "Kadugondanahalli",
+          "lat": 13.0315,
+          "lon": 77.6247,
+          "timeToNext": 135,
+          "distanceToNext": 1.4,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": false,
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        },
+        {
+          "id": "PK18",
+          "name": "Nagawara",
+          "lat": 13.0456,
+          "lon": 77.6265,
+          "timeToNext": 0,
+          "distanceToNext": 0,
+          "isActive": false,
+          "status": "under_construction",
+          "phase": "Phase 2 Underground (Opening 2027)",
+          "interchange": true,
+          "interchangeId": "nagawara",
+          "platforms": {
+            "forward": 1,
+            "backward": 2
+          }
+        }
+      ]
     }
   },
   "translations": {
@@ -1134,7 +1433,8 @@
       "typeMarket": "Market",
       "typePark": "Park",
       "typeLake": "Lake",
-      "typeIT": "IT Hub"
+      "typeIT": "IT Hub",
+      "linePink": "Pink Line"
     },
     "hi": {
       "appName": "NammaRide",
@@ -1218,7 +1518,8 @@
       "typeMarket": "बाजार",
       "typePark": "पार्क",
       "typeLake": "झील",
-      "typeIT": "आईटी हब"
+      "typeIT": "आईटी हब",
+      "linePink": "पिंक लाइन"
     },
     "kn": {
       "appName": "NammaRide",
@@ -1302,7 +1603,8 @@
       "typeMarket": "ಮಾರುಕಟ್ಟೆ",
       "typePark": "ಉದ್ಯಾನ",
       "typeLake": "ಕೆರೆ",
-      "typeIT": "ಐಟಿ ಹಬ್"
+      "typeIT": "ಐಟಿ ಹಬ್",
+      "linePink": "ಪಿಂಕ್ ಲೈನ್"
     }
   },
   "stationTranslations": {
@@ -1587,8 +1889,8 @@
       "kn": "ರಾಗಿಗುಡ್ಡ"
     },
     "Jayadeva Hospital": {
-      "hi": "जयदेवा हॉस्पिटल",
-      "kn": "ಜಯದೇವ ಆಸ್ಪತ್ರೆ"
+      "kn": "ಜಯದೇವ ಆಸ್ಪತ್ರೆ",
+      "hi": "जयदेव अस्पताल"
     },
     "BTM Layout": {
       "hi": "बीटीएम लेआउट",
@@ -1653,11 +1955,80 @@
     "Yellow Line": {
       "hi": "येलो लाइन",
       "kn": "ಹಳದಿ ಮಾರ್ಗ"
+    },
+    "Kalena Agrahara": {
+      "kn": "ಕಾಳೇನ ಅಗ್ರಹಾರ",
+      "hi": "कालेना अग्रहारा"
+    },
+    "Hulimavu": {
+      "kn": "ಹುಳಿಮಾವು",
+      "hi": "हुलीमावु"
+    },
+    "IIM Bangalore": {
+      "kn": "ಐಐಎಂ ಬೆಂಗಳೂರು",
+      "hi": "आईआईएम बैंगलोर"
+    },
+    "JP Nagar 4th Phase": {
+      "kn": "ಜೆಪಿ ನಗರ ೪ನೇ ಹಂತ",
+      "hi": "जेपी नगर चौथा चरण"
+    },
+    "Tavarekere": {
+      "kn": "ತಾವರೆಕೆರೆ",
+      "hi": "तवारेकेरे"
+    },
+    "Dairy Circle": {
+      "kn": "ಡೈರಿ ವೃತ್ತ",
+      "hi": "डेयरी सर्कल"
+    },
+    "Lakkasandra": {
+      "kn": "ಲಕ್ಕಸಂದ್ರ",
+      "hi": "लक्कासंद्र"
+    },
+    "Langford Town": {
+      "kn": "ಲ್ಯಾಂಗ್‌ಫೋರ್ಡ್ ಟೌನ್",
+      "hi": "लैंगफोर्ड टाउन"
+    },
+    "Rashtriya Military School": {
+      "kn": "ರಾಷ್ಟ್ರೀಯ ಮಿಲಿಟರಿ ಶಾಲೆ",
+      "hi": "राष्ट्रीय मिलिट्री स्कूल"
+    },
+    "MG Road": {
+      "kn": "ಮಹಾತ್ಮ ಗಾಂಧಿ ರಸ್ತೆ",
+      "hi": "एमजी रोड"
+    },
+    "Shivajinagar": {
+      "kn": "ಶಿವಾಜಿನಗರ",
+      "hi": "शिवाजीनगर"
+    },
+    "Cantonment Railway Station": {
+      "kn": "ಕಂಟೋನ್ಮೆಂಟ್ ರೈಲ್ವೆ ನಿಲ್ದಾಣ",
+      "hi": "छावनी रेलवे स्टेशन"
+    },
+    "Pottery Town": {
+      "kn": "ಪಾಟರಿ ಟೌನ್",
+      "hi": "पोटरी टाउन"
+    },
+    "Tannery Road": {
+      "kn": "ಟ್ಯಾನರಿ ರಸ್ತೆ",
+      "hi": "टैनरी रोड"
+    },
+    "Venkateshpura": {
+      "kn": "ವೆಂಕಟೇಶಪುರ",
+      "hi": "वेंकटेशपुरा"
+    },
+    "Kadugondanahalli": {
+      "kn": "ಕಾಡುಗೊಂಡನಹಳ್ಳಿ",
+      "hi": "कडुगोंडनहल्ली"
+    },
+    "Nagawara": {
+      "kn": "ನಾಗವಾರ",
+      "hi": "नागवारा"
     }
   },
   "lineNameMap": {
     "Purple Line": "Purple Line",
     "Green Line": "Green Line",
-    "Yellow Line": "Yellow Line"
+    "Yellow Line": "Yellow Line",
+    "Pink Line": "Pink Line"
   }
 }

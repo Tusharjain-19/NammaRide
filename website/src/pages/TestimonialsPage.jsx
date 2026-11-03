@@ -8,7 +8,7 @@ export default function TestimonialsPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="User Reviews & Testimonials — NammaRide Metro App"
+        title="NammaRide Reviews: Commuter Feedback and Top Rated Transit Experience"
         description="Read verified commuter reviews and ratings for NammaRide, rated #1 offline Geo GPS metro app for Bengaluru."
         canonicalPath="/testimonials"
       />

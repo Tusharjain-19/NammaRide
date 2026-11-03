@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="Privacy Policy — NammaRide Bengaluru Metro App"
+        title="NammaRide Privacy Policy: Zero Data Collection and Offline Navigation"
         description="NammaRide privacy policy: Zero personal data collection, zero tracking, 100% offline local GPS processing, and zero third-party ads."
         canonicalPath="/privacy"
       />

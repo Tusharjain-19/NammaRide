@@ -72,16 +72,27 @@ export class CustomDropdown {
             line.stations.forEach(station => {
                 if (!seen.has(station.name)) {
                     const lines = [];
+                    let hasActiveLine = false;
+
                     Object.values(metroData).forEach(l => {
-                        if (l.stations.some(s => s.name === station.name)) {
+                        const match = l.stations.find(s => s.name === station.name);
+                        if (match) {
                             lines.push(l.color);
+                            if (match.isActive !== false && match.status !== 'under_construction') {
+                                hasActiveLine = true;
+                            }
                         }
                     });
+
+                    // Omit unopened/under-construction stations completely from dropdown selection
+                    if (!hasActiveLine) return;
 
                     allStations.push({
                         id: station.id,
                         name: station.name,
                         lines: lines,
+                        isActive: hasActiveLine,
+                        status: station.status || 'operational',
                         originalObj: station
                     });
                     seen.add(station.name);
@@ -137,6 +148,7 @@ export class CustomDropdown {
 
             const displayName = T_STATION(station.name);
             const isSelected = this.selectedValue === station.id ? 'selected' : '';
+            const isInactive = station.isActive === false;
 
             return `
                 <div class="station-option ${isSelected}" data-value="${station.id}" data-station-name="${station.name}">
@@ -149,6 +161,11 @@ export class CustomDropdown {
         list.querySelectorAll('.station-option').forEach(option => {
             option.addEventListener('click', (e) => {
                 e.stopPropagation();
+                if (option.dataset.disabled === 'true') {
+                    const stName = option.dataset.stationName;
+                    alert(`${stName} is an underground Pink Line station currently under construction (Opening in Phase 2B, 2027). Please select an operational station.`);
+                    return;
+                }
                 const value = option.dataset.value;
                 this.select(value);
             });

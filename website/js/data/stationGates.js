@@ -1,5 +1,5 @@
 // ============================================================
-// NammaRide — Station Exit Gates & Landmark Directory
+// NammaRide - Station Exit Gates & Landmark Directory
 // Bengaluru Metro (BMRCL) Gate Guidance
 // ============================================================
 

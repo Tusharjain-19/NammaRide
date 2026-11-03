@@ -1,5 +1,5 @@
 // ============================================================
-// NammaRide — Section Views (Stations, Timings, Safety, Explore)
+// NammaRide - Section Views (Stations, Timings, Safety, Explore)
 // ============================================================
 
 import { stationsMeta } from '../data/stationsMeta.js';
@@ -82,7 +82,8 @@ export function renderStationsList(container) {
     const lines = [
         { key: 'purple', name: 'Purple Line', color: '#8B5CF6' },
         { key: 'green', name: 'Green Line', color: '#22C55E' },
-        { key: 'yellow', name: 'Yellow Line', color: '#FBBF24' }
+        { key: 'yellow', name: 'Yellow Line', color: '#FBBF24' },
+        { key: 'pink', name: 'Pink Line', color: '#EC4899' }
     ];
 
     const l = lang();
@@ -105,6 +106,7 @@ export function renderStationsList(container) {
             <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">${T_fn('linePurple') || 'Purple'}</button>
             <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">${T_fn('lineGreen') || 'Green'}</button>
             <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FBBF24]/10 text-[#D97706] border border-[#FBBF24]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Yellow Line">${T_fn('lineYellow') || 'Yellow'}</button>
+            <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#EC4899]/10 text-[#EC4899] border border-[#EC4899]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Pink Line">${T_fn('linePink') || 'Pink'}</button>
         </div>
     </div>
     <div id="stations-list-content">`;
@@ -131,6 +133,7 @@ export function renderStationsList(container) {
                 <div class="station-card-info">
                     <div class="station-card-name">${translatedName}</div>
                     ${knName && l === 'en' ? `<div class="station-card-sub">${knName}</div>` : ''}
+                    ${station.isActive === false || station.status === 'under_construction' ? `<div class="mt-1"><span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-pink-500/10 text-pink-500 border border-pink-500/25">Upcoming (Phase 2 Underground 2027)</span></div>` : ''}
                     <div class="station-card-type flex items-center gap-1"><i data-lucide="${station.type === 'Elevated' ? 'arrow-up-circle' : 'arrow-down-circle'}" class="w-3 h-3 text-secondary"></i> ${station.type}</div>
                 </div>
                 <i data-lucide="chevron-right" class="w-4 h-4 text-secondary"></i>
@@ -642,6 +645,7 @@ export function renderExplore(container) {
             <button class="explore-line-btn" data-line="purple">${T_fn('linePurple') || 'Purple Line'}</button>
             <button class="explore-line-btn" data-line="green">${T_fn('lineGreen') || 'Green Line'}</button>
             <button class="explore-line-btn" data-line="yellow">${T_fn('lineYellow') || 'Yellow Line'}</button>
+            <button class="explore-line-btn" data-line="pink">${T_fn('linePink') || 'Pink Line'}</button>
         </div>
     </div>
     <div id="explore-list-content">`;

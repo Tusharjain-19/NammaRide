@@ -1,4 +1,4 @@
-# NammaRide Design System — Bengaluru City Metro (Namma Metro)
+# NammaRide Design System - Bengaluru City Metro (Namma Metro)
 
 ## 1. Overview
 The design system for **NammaRide** is inspired by the city of Bengaluru and its iconic BMRCL Namma Metro network. It combines a deep pitch-black dark mode with vibrant, authentic Namma Metro line colors and high-contrast, non-glassy controls for ultimate legibility and seamless navigation.
@@ -19,7 +19,7 @@ The design system for **NammaRide** is inspired by the city of Bengaluru and its
 - **Primary Background**: `#000000` (Pure Pitch Black)
 - **Surface & Cards**: Translucent Onyx `rgba(18, 18, 22, 0.75)` with subtle frosted blur.
 - **Header & Navigation Bar**: Deep Midnight `#080B10` with subtle border divider.
-- **Dropdown & Select Controls**: **Solid Dark Cobalt Blue (`#141E2D` / `#1E293B`)** — strictly opaque with crisp border and subtle shadow for maximum legibility (no transparency or glass blur).
+- **Dropdown & Select Controls**: **Solid Dark Cobalt Blue (`#141E2D` / `#1E293B`)** - strictly opaque with crisp border and subtle shadow for maximum legibility (no transparency or glass blur).
 
 ---
 
@@ -34,7 +34,7 @@ The design system for **NammaRide** is inspired by the city of Bengaluru and its
 ---
 
 ## 4. Typography & Icons
-- **Heading / Signage Font**: `'Outfit', sans-serif` — geometric modern transit font inspired by BMRCL signage & station displays.
-- **Body & Content Font**: `'Plus Jakarta Sans', sans-serif` — sleek, high-legibility tech hub font.
-- **Monospace / Clock & Codes**: `'Space Grotesk', monospace` — sharp, modern digital display font.
+- **Heading / Signage Font**: `'Outfit', sans-serif` - geometric modern transit font inspired by BMRCL signage & station displays.
+- **Body & Content Font**: `'Plus Jakarta Sans', sans-serif` - sleek, high-legibility tech hub font.
+- **Monospace / Clock & Codes**: `'Space Grotesk', monospace` - sharp, modern digital display font.
 - **Iconography**: Lucide SVG Icons, mapped to line-specific colors.

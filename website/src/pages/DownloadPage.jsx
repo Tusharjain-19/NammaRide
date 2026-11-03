@@ -7,7 +7,7 @@ export default function DownloadPage() {
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
       <MetaSEO
-        title="Download NammaRide Android App — #1 Offline Bengaluru Metro GPS App"
+        title="Download Namma Metro App: Offline Satellite GPS Navigation APK"
         description="Download NammaRide Android application for Bengaluru Namma Metro. 100% offline satellite Geo GPS station tracking, zero data usage, and instant fare calculator."
         canonicalPath="/download"
       />

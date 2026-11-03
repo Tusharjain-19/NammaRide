@@ -19,7 +19,7 @@ export default function FareCalculatorPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-ambient-grid transition-colors">
       <MetaSEO
-        title="Bengaluru Metro Fare Calculator 2026 — BMRCL Smart Card Discount Calc"
+        title="Bengaluru Metro Fare Calculator: 2026 Ticket Prices and Smart Card Discounts"
         description="Calculate exact Namma Metro ticket prices between any two stations. Compare single token cash fare against 5% Smart Card / QR discounts and monthly commuter savings."
         canonicalPath="/fare-calculator"
       />
@@ -52,8 +52,8 @@ export default function FareCalculatorPage() {
                 className="w-full p-4 rounded-2xl dropdown-opaque font-bold text-sm focus:outline-none transition-colors shadow-md"
               >
                 {stationsData.map((st) => (
-                  <option key={st.id} value={st.id}>
-                    {lang === 'kn' ? st.name_kn : st.name_en} ({st.code})
+                  <option key={st.id} value={st.id} disabled={st.is_active === false}>
+                    {lang === 'kn' ? st.name_kn : st.name_en} ({st.code}){st.is_active === false ? ' [Upcoming 2027]' : ''}
                   </option>
                 ))}
               </select>
@@ -68,8 +68,8 @@ export default function FareCalculatorPage() {
                 className="w-full p-4 rounded-2xl dropdown-opaque font-bold text-sm focus:outline-none transition-colors shadow-md"
               >
                 {stationsData.map((st) => (
-                  <option key={st.id} value={st.id}>
-                    {lang === 'kn' ? st.name_kn : st.name_en} ({st.code})
+                  <option key={st.id} value={st.id} disabled={st.is_active === false}>
+                    {lang === 'kn' ? st.name_kn : st.name_en} ({st.code}){st.is_active === false ? ' [Upcoming 2027]' : ''}
                   </option>
                 ))}
               </select>

@@ -1,5 +1,5 @@
 // ============================================================
-// NammaRide — Safety & Emergency Data for Bengaluru
+// NammaRide - Safety & Emergency Data for Bengaluru
 // ============================================================
 
 export const safetyData = {

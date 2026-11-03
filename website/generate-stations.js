@@ -21,7 +21,8 @@ try {
   const linesConfig = [
     { key: 'purple', id: 'purple', name: 'Purple Line' },
     { key: 'green', id: 'green', name: 'Green Line' },
-    { key: 'yellow', id: 'yellow', name: 'Yellow Line' }
+    { key: 'yellow', id: 'yellow', name: 'Yellow Line' },
+    { key: 'pink', id: 'pink', name: 'Pink Line' }
   ];
 
   // First pass to find bounding box
@@ -65,12 +66,19 @@ try {
             existingSt.line_ids.push(line.id);
             existingSt.lines.push(line.name);
           }
+          if (st.interchange) existingSt.interchange = true;
         } else {
+          // Check Kannada translation from stationTranslations
+          let knName = st.name;
+          if (data.stationTranslations && data.stationTranslations[st.name] && data.stationTranslations[st.name].kn) {
+            knName = data.stationTranslations[st.name].kn;
+          }
+
           allStations.push({
             id: st.interchangeId || st.id.toLowerCase(),
             code: st.id,
             name_en: st.name,
-            name_kn: st.name + ' (kn)', // Default fallback since we don't have kn translation in JSON
+            name_kn: knName,
             line_ids: [line.id],
             lines: [line.name],
             latitude: st.lat,
@@ -78,6 +86,9 @@ try {
             cx: cx,
             cy: cy,
             interchange: st.interchange || false,
+            is_active: st.isActive !== false,
+            status: st.status || 'operational',
+            phase: st.phase || 'operational',
             operating_hours: { first_train: '05:00 AM', last_train: '11:00 PM' },
             platform_count: st.platforms ? (st.platforms.forward + st.platforms.backward) : 2,
             accessibility: {
@@ -106,7 +117,7 @@ try {
               { gate: 'A', destination: 'Main Road' },
               { gate: 'B', destination: 'Residential Area' }
             ],
-            nearby_landmarks: ['Local Shops', 'Parks'],
+            nearby_landmarks: ['Transit Corridor', 'Key Road Junction'],
             crowd_level: 'Moderate'
           });
         }
@@ -114,7 +125,7 @@ try {
     }
   }
 
-  // Kannada Translations for some major stations (if match)
+  // Kannada Translations for some major stations
   const knTranslations = {
     "Nadaprabhu Kempegowda Stn., Majestic": "ನಾಡಪ್ರಭು ಕೆಂಪೇಗೌಡ ನಿಲ್ದಾಣ (ಮೆಜೆಸ್ಟಿಕ್)",
     "MG Road": "ಎಮ್ಜಿ ರಸ್ತೆ",
@@ -123,15 +134,20 @@ try {
     "Whitefield (Kadugodi)": "ವೈಟ್‌ಫೀಲ್ಡ್ (ಕಾಡುಗೋಡಿ)",
     "Electronic City": "ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ",
     "Rashtreeya Vidyalaya Road": "ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾಲಯ ರಸ್ತೆ",
-    "Vijayanagar": "ವಿಜಯನಗರ"
+    "Vijayanagar": "ವಿಜಯನಗರ",
+    "Jayadeva Hospital": "ಜಯದೇವ ಆಸ್ಪತ್ರೆ",
+    "Kalena Agrahara": "ಕಾಳೇನ ಅಗ್ರಹಾರ",
+    "Hulimavu": "ಹುಳಿಮಾವು",
+    "IIM Bangalore": "ಐಐಎಂ ಬೆಂಗಳೂರು",
+    "JP Nagar 4th Phase": "ಜೆಪಿ ನಗರ ೪ನೇ ಹಂತ",
+    "Tavarekere": "ತಾವರೆಕೆರೆ"
   };
 
   allStations.forEach(st => {
     if (knTranslations[st.name_en]) {
       st.name_kn = knTranslations[st.name_en];
-    } else {
-       // rough fallback: just remove "(kn)"
-       st.name_kn = st.name_en;
+    } else if (data.stationTranslations && data.stationTranslations[st.name_en] && data.stationTranslations[st.name_en].kn) {
+      st.name_kn = data.stationTranslations[st.name_en].kn;
     }
   });
 
@@ -142,7 +158,7 @@ try {
       linePaths[line.id] = data.metroData[line.key].stations.map(st => {
         const cx = Math.round(((st.lon - minLon) / (maxLon - minLon)) * svgWidth);
         const cy = Math.round(svgHeight - ((st.lat - minLat) / (maxLat - minLat)) * svgHeight);
-        return { cx, cy };
+        return { cx, cy, id: st.id, name: st.name, isActive: st.isActive !== false };
       });
     }
   }

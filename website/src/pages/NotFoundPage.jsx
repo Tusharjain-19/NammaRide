@@ -138,7 +138,7 @@ export default function NotFoundPage() {
   return (
     <div className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-black dark:via-neutral-950 dark:to-black flex items-center justify-center transition-colors duration-300">
       <MetaSEO
-        title="404 — Page Not Found | NammaRide Bengaluru Metro"
+        title="404 Page Not Found: Transit Route or Station Missing"
         description="The page or station route you requested was not found. Search Bengaluru Metro stations, fares, or maps on NammaRide."
         canonicalPath="/404"
       />

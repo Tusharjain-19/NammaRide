@@ -14,6 +14,7 @@ import MetroMapPage from './pages/MetroMapPage';
 import ExplorePage from './pages/ExplorePage';
 import FareCalculatorPage from './pages/FareCalculatorPage';
 import TimingsPage from './pages/TimingsPage';
+import PinkLinePage from './pages/PinkLinePage';
 import SafetyPage from './pages/SafetyPage';
 import DownloadPage from './pages/DownloadPage';
 import AboutPage from './pages/AboutPage';
@@ -58,6 +59,7 @@ function AnimatedRoutes() {
             <Route path="/explore" element={<ExplorePage />} />
             <Route path="/fare-calculator" element={<FareCalculatorPage />} />
             <Route path="/timings" element={<TimingsPage />} />
+            <Route path="/pink-line" element={<PinkLinePage />} />
             <Route path="/safety" element={<SafetyPage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/download" element={<DownloadPage />} />

@@ -108,9 +108,9 @@ export default function MetroMapPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
-      <MetaSEO
-        title="High-Res Interactive Bengaluru Metro Map 2026 — Vector PDF Download"
-        description="Explore official 2026 BMRCL Bengaluru Metro map covering Purple, Green, Yellow, Blue (Airport), and Pink lines. Features high-res zoom, dark mode inversion, and PDF download."
+      <MetaSEO 
+        title="Bengaluru Metro Route Map: High Resolution 2026 Interactive Network"
+        description="Explore official Bengaluru Namma Metro map covering Purple, Green, Yellow, and Pink line corridors with interchange junctions and touch-friendly zoom."
         canonicalPath="/map"
       />
       <div className="space-y-8">
@@ -315,7 +315,7 @@ export default function MetroMapPage() {
                   onError={() => setImageError(true)}
                 />
                 <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5 border border-white/10">
-                  <span>📷 Station Photo</span>
+                  <span> Station Photo</span>
                 </div>
               </div>
             )}
@@ -327,7 +327,7 @@ export default function MetroMapPage() {
                 </span>
                 {activeStation.interchange && (
                   <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 font-mono text-xs font-black border border-purple-500/20">
-                    🔄 Interchange Station
+                     Interchange Station
                   </span>
                 )}
               </div>
@@ -400,7 +400,7 @@ export default function MetroMapPage() {
 
               {/* Field 6: Exit Gates */}
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-900 space-y-2">
-                <div className="text-gray-400 font-bold">🚪 Exit Gates Directory</div>
+                <div className="text-gray-400 font-bold"> Exit Gates Directory</div>
                 <div className="space-y-1">
                   {activeStation.exit_gates.map((g, i) => (
                     <div key={i} className="text-gray-900 dark:text-white text-xs">

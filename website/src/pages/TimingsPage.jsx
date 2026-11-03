@@ -13,7 +13,8 @@ export default function TimingsPage() {
   const [activeDays, setActiveDays] = useState({
     purple: 'mon_fri',
     green: 'mon_fri',
-    yellow: 'mon_sat'
+    yellow: 'mon_sat',
+    pink: 'mon_sat'
   });
 
   const handleDayChange = (lineKey, dayKey) => {
@@ -30,8 +31,8 @@ export default function TimingsPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="Official Bengaluru Metro First & Last Train Timings 2026"
-        description="Check live operating schedule, first train (05:00 AM) and last train (11:05 PM) departures for all lines (Purple, Green, Yellow) on weekdays and Sundays."
+        title="Namma Metro Train Timings: First and Last Departure Schedules 2026"
+        description="Check live operating schedule, first train (05:00 AM) and last train (11:05 PM) departures for all lines (Purple, Green, Yellow, and Pink) on weekdays and Sundays."
         canonicalPath="/timings"
       />
       <div className="max-w-7xl mx-auto space-y-12">
@@ -102,7 +103,7 @@ export default function TimingsPage() {
                 : 'bg-white dark:bg-black text-gray-600 dark:text-gray-400 border-gray-200 dark:border-neutral-800 hover:border-emerald-500/50'
             }`}
           >
-            All Lines (3)
+            All Lines (4)
           </button>
           <button
             onClick={() => setSelectedLineFilter('purple')}
@@ -134,17 +135,27 @@ export default function TimingsPage() {
           >
             Yellow Line
           </button>
+          <button
+            onClick={() => setSelectedLineFilter('pink')}
+            className={`px-6 py-3 rounded-none text-xs font-black uppercase tracking-wider transition-all border ${
+              selectedLineFilter === 'pink'
+                ? 'bg-[#EC4899] text-white border-[#EC4899] shadow-md'
+                : 'bg-white dark:bg-black text-gray-600 dark:text-gray-400 border-gray-200 dark:border-neutral-800 hover:border-pink-500/50'
+            }`}
+          >
+            Pink Line (New)
+          </button>
         </motion.div>
 
         {/* TIMING CARDS GRID */}
-        <div className={`grid grid-cols-1 ${selectedLineFilter === 'all' ? 'lg:grid-cols-3' : 'lg:grid-cols-1 max-w-4xl mx-auto'} gap-8 items-stretch`}>
+        <div className={`grid grid-cols-1 ${selectedLineFilter === 'all' ? 'lg:grid-cols-2' : 'lg:grid-cols-1 max-w-4xl mx-auto'} gap-8 items-stretch`}>
           {filteredLines.map(([key, line], index) => {
-            const activeDayKey = activeDays[key];
-            const schedule = line.schedules[activeDayKey];
+            const activeDayKey = activeDays[key] || (line.schedules ? Object.keys(line.schedules)[0] : 'mon_sat');
+            const schedule = line.schedules ? (line.schedules[activeDayKey] || Object.values(line.schedules)[0]) : null;
             
-            const firstTrainStart = line.weekday.firstTrain.from_start;
-            const lastTrainEnd = line.weekday.lastTrain.from_end;
-            const peakFreq = line.weekday.peakFrequency;
+            const firstTrainStart = line.weekday?.firstTrain?.from_start || '05:00 AM';
+            const lastTrainEnd = line.weekday?.lastTrain?.from_end || '11:00 PM';
+            const peakFreq = line.weekday?.peakFrequency || '8-10 min';
 
             return (
               <motion.div
@@ -202,7 +213,7 @@ export default function TimingsPage() {
 
                   {/* Schedule Selection Tabs (Rectangular Uniform Buttons) */}
                   <div className="flex flex-wrap gap-2 pt-1 pb-2 border-b border-gray-200 dark:border-neutral-800">
-                    {Object.keys(line.schedules).map((dayKey) => {
+                    {line.schedules && Object.keys(line.schedules).map((dayKey) => {
                       const daySchedule = line.schedules[dayKey];
                       const isActive = activeDayKey === dayKey;
                       const dayTitle = daySchedule.title.split(' (')[0];
@@ -227,7 +238,7 @@ export default function TimingsPage() {
                   {schedule && (
                     <div className="space-y-4 pt-1 flex-grow">
                       {(() => {
-                        const terminals = line.route.split(' ↔ ');
+                        const terminals = line.route.includes('↔') ? line.route.split(' ↔ ') : line.route.split(' <-> ');
                         const termA = terminals[0]?.trim() || 'Terminal A';
                         const termB = terminals[1]?.trim() || 'Terminal B';
 
@@ -244,13 +255,13 @@ export default function TimingsPage() {
                                 {schedule.from_start.map((item, idx) => (
                                   <div key={idx} className="flex justify-between items-center py-2 text-xs h-9 gap-2">
                                     <span className="text-gray-700 dark:text-gray-300 font-mono font-bold whitespace-nowrap shrink-0">
-                                      {item.range.replace('-', '–')}
+                                      {item.range.replace('-', '-')}
                                     </span>
                                     <span 
                                       className="px-2.5 py-1 rounded-none font-extrabold text-[11px] tracking-wide whitespace-nowrap shrink-0 text-center min-w-[72px]"
                                       style={{ backgroundColor: `${line.color}15`, color: line.color, border: `1px solid ${line.color}30` }}
                                     >
-                                      {item.frequency.replace('-', '–')}
+                                      {item.frequency.replace('-', '-')}
                                     </span>
                                   </div>
                                 ))}
@@ -267,13 +278,13 @@ export default function TimingsPage() {
                                 {schedule.from_end.map((item, idx) => (
                                   <div key={idx} className="flex justify-between items-center py-2 text-xs h-9 gap-2">
                                     <span className="text-gray-700 dark:text-gray-300 font-mono font-bold whitespace-nowrap shrink-0">
-                                      {item.range.replace('-', '–')}
+                                      {item.range.replace('-', '-')}
                                     </span>
                                     <span 
                                       className="px-2.5 py-1 rounded-none font-extrabold text-[11px] tracking-wide whitespace-nowrap shrink-0 text-center min-w-[72px]"
                                       style={{ backgroundColor: `${line.color}15`, color: line.color, border: `1px solid ${line.color}30` }}
                                     >
-                                      {item.frequency.replace('-', '–')}
+                                      {item.frequency.replace('-', '-')}
                                     </span>
                                   </div>
                                 ))}
@@ -332,7 +343,7 @@ export default function TimingsPage() {
                 <span>Peak Hours (Mon - Fri)</span>
               </h4>
               <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                08:00 AM – 11:30 AM & 05:00 PM – 08:30 PM. Maximum operational capacity with reduced headway intervals to serve tech park and central business district commuters.
+                08:00 AM - 11:30 AM & 05:00 PM - 08:30 PM. Maximum operational capacity with reduced headway intervals to serve tech park and central business district commuters.
               </p>
             </div>
             <div className="p-6 rounded-none bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 space-y-2">

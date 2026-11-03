@@ -94,8 +94,8 @@ export const translations = {
     timingsDesc: 'Check first & last train departure times from terminal stations across Purple, Green, and Yellow lines.',
     weekdaySatSchedule: 'Monday to Saturday Schedule',
     sundaySchedule: 'Sunday & Public Holiday Schedule',
-    peakFrequency: 'Peak Hours Frequency (3–5 min)',
-    offPeakFrequency: 'Off-Peak Hours Frequency (8–12 min)',
+    peakFrequency: 'Peak Hours Frequency (3-5 min)',
+    offPeakFrequency: 'Off-Peak Hours Frequency (8-12 min)',
 
     // Explore City Page
     exploreCityTitle: 'Explore Bengaluru City via Metro',
@@ -354,8 +354,8 @@ export const translations = {
     timingsDesc: 'पर्पल, ग्रीन और येलो लाइन के टर्मिनल स्टेशनों से पहली और आखिरी ट्रेन का समय जांचें।',
     weekdaySatSchedule: 'सोमवार से शनिवार समय सारणी',
     sundaySchedule: 'रविवार व सार्वजनिक अवकाश समय',
-    peakFrequency: 'पीक ऑवर्स फ्रीक्वेंसी (3–5 मिनट)',
-    offPeakFrequency: 'सामान्य समय फ्रीक्वेंसी (8–12 मिनट)',
+    peakFrequency: 'पीक ऑवर्स फ्रीक्वेंसी (3-5 मिनट)',
+    offPeakFrequency: 'सामान्य समय फ्रीक्वेंसी (8-12 मिनट)',
 
     // Explore City Page
     exploreCityTitle: 'मेट्रो द्वारा बेंगलुरु शहर का भ्रमण करें',
