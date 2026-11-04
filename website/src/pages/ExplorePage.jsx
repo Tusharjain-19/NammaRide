@@ -135,7 +135,7 @@ export default function ExplorePage() {
 
           {/* Category Tabs & Station Filter */}
           <div className="flex flex-col xl:flex-row items-center gap-4 justify-between w-full">
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar justify-start sm:justify-center w-full xl:w-auto">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 smooth-pill-scroll justify-start sm:justify-center w-full xl:w-auto">
               {landmarkCategories.map((cat) => (
                 <button
                   key={cat.id}

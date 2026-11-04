@@ -1,3 +1,50 @@
+// Smooth Momentum & Drag Horizontal Scroll Helper
+function makeSmoothScrollable(el) {
+    if (!el || el._smoothScrollEnabled) return;
+    el._smoothScrollEnabled = true;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasMoved = false;
+
+    el.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isDown = true;
+        hasMoved = false;
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+    });
+
+    const finishDrag = () => {
+        if (!isDown) return;
+        isDown = false;
+        setTimeout(() => { hasMoved = false; }, 50);
+    };
+
+    el.addEventListener('mouseleave', finishDrag);
+    el.addEventListener('mouseup', finishDrag);
+
+    el.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 1.6;
+        if (Math.abs(walk) > 4) {
+            hasMoved = true;
+            e.preventDefault();
+            el.scrollLeft = scrollLeft - walk;
+        }
+    });
+
+    // Support horizontal wheel event
+    el.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0 && el.scrollWidth > el.clientWidth) {
+            e.preventDefault();
+            el.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
+}
+
 
 function getStationPlatformLayout(station) {
     if (!station) return null;
@@ -241,7 +288,7 @@ export function renderStationsList(container) {
             <input type="text" id="stations-search" placeholder="${T_fn('searchStations') || 'Search stations...'}" class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
-        <div class="flex gap-2 mt-3 overflow-x-auto pb-1 custom-scrollbar" id="line-filters">
+        <div class="flex gap-2 mt-3 overflow-x-auto pb-1 smooth-pill-scroll" id="line-filters">
             <button class="line-filter-btn active shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20" data-line="all">${T_fn('lineAll') || 'All'}</button>
             <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Purple Line">${T_fn('linePurple') || 'Purple'}</button>
             <button class="line-filter-btn shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20 transition-opacity opacity-70 hover:opacity-100" data-line="Green Line">${T_fn('lineGreen') || 'Green'}</button>
@@ -550,9 +597,18 @@ export function renderTimings(container) {
             return;
         }
 
+        const activeTimingLine = container._activeTimingLine || 'all';
+
         let html = `<div class="section-header">
             <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
             <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
+            <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 smooth-pill-scroll" id="timing-line-filters">
+                <button class="timing-line-btn ${activeTimingLine === 'all' ? 'active' : ''}" data-line="all">${T_fn('lineAll') || 'All Lines'}</button>
+                <button class="timing-line-btn ${activeTimingLine === 'pink' ? 'active' : ''}" data-line="pink">${T_fn('linePink') || 'Pink Line'}</button>
+                <button class="timing-line-btn ${activeTimingLine === 'purple' ? 'active' : ''}" data-line="purple">${T_fn('linePurple') || 'Purple Line'}</button>
+                <button class="timing-line-btn ${activeTimingLine === 'green' ? 'active' : ''}" data-line="green">${T_fn('lineGreen') || 'Green Line'}</button>
+                <button class="timing-line-btn ${activeTimingLine === 'yellow' ? 'active' : ''}" data-line="yellow">${T_fn('lineYellow') || 'Yellow Line'}</button>
+            </div>
         </div>
 
         <!-- Last Train Interchange Advisory Banner -->
@@ -600,7 +656,7 @@ export function renderTimings(container) {
                 peakFreq = line.weekday.peakFrequency;
             }
 
-            html += `<div class="timing-card" style="border-left: 3px solid ${line.color || '#10B981'}">
+            html += `<div class="timing-card" data-timing-line="${key}" style="border-left: 3px solid ${line.color || '#10B981'}">
                 <div class="timing-card-header">
                     <span class="line-dot" style="background:${line.color || '#10B981'}"></span>
                     <div class="flex-grow">
@@ -705,6 +761,49 @@ export function renderTimings(container) {
 
 function attachTimingsEvents(container) {
     if (!container) return;
+
+    // Line Filter Handling
+    const timingFilterBar = container.querySelector('#timing-line-filters');
+    if (timingFilterBar) {
+        makeSmoothScrollable(timingFilterBar);
+        const filterBtns = timingFilterBar.querySelectorAll('.timing-line-btn');
+        const cards = container.querySelectorAll('.timing-card');
+
+        function applyTimingFilter(targetLine) {
+            container._activeTimingLine = targetLine;
+            filterBtns.forEach(b => {
+                if (b.dataset.line === targetLine) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            cards.forEach(card => {
+                if (targetLine === 'all' || card.dataset.timingLine === targetLine) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const line = btn.dataset.line;
+                applyTimingFilter(line);
+                btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+        });
+
+        if (container._activeTimingLine) {
+            applyTimingFilter(container._activeTimingLine);
+        }
+    }
+
+    // Enable smooth scrolling on tab strips
+    container.querySelectorAll('.timing-tabs').forEach(tabStrip => {
+        makeSmoothScrollable(tabStrip);
+    });
+
     container.querySelectorAll('.timing-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -857,7 +956,7 @@ export function renderExplore(container) {
             <input type="text" id="explore-search" placeholder="${T_fn('searchExplore') || 'Search by station or place...'}" class="w-full bg-card-subtle text-primary text-sm py-2.5 pl-9 pr-4 rounded-xl border border-subtle focus:outline-none focus:border-indigo-500 transition-colors">
             <i data-lucide="search" class="w-4 h-4 text-secondary absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
-        <div class="flex gap-2.5 mt-4 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-category-filters">
+        <div class="flex gap-2.5 mt-4 overflow-x-auto py-1 px-1 smooth-pill-scroll" id="explore-category-filters">
             <button class="explore-cat-btn active" data-cat="all">${T_fn('catAll') || 'All Categories'}</button>
             <button class="explore-cat-btn" data-cat="hospital"><i data-lucide="hospital" class="w-3 h-3"></i> ${T_fn('catHospital') || 'Hospital'}</button>
             <button class="explore-cat-btn" data-cat="heritage"><i data-lucide="palmtree" class="w-3 h-3"></i> ${T_fn('catHeritage') || 'Tourism'}</button>
@@ -867,7 +966,7 @@ export function renderExplore(container) {
             <button class="explore-cat-btn" data-cat="stadium"><svg class="w-3 h-3 inline-block relative -top-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14v4c0 2.2-4.5 4-10 4s-10-1.8-10-4v-4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M10 21v-3h4v3"/><path d="M5 17h2v1H5zM17 17h2v1h-2z"/><path d="M12 8V4M8 8.5V4.5M16 8.5V4.5"/><path d="M10 2h4v2h-4zM5 2.5h4v2H5zM15 2.5h4v2h-4z"/></svg> ${T_fn('catStadium') || 'Stadium'}</button>
             <button class="explore-cat-btn" data-cat="station"><i data-lucide="train" class="w-3 h-3"></i> ${T_fn('catTransit') || 'Transit'}</button>
         </div>
-        <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 custom-scrollbar" id="explore-line-filters">
+        <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 smooth-pill-scroll" id="explore-line-filters">
             <button class="explore-line-btn active" data-line="all">${T_fn('lineAll') || 'All Lines'}</button>
             <button class="explore-line-btn" data-line="purple">${T_fn('linePurple') || 'Purple Line'}</button>
             <button class="explore-line-btn" data-line="green">${T_fn('lineGreen') || 'Green Line'}</button>
@@ -1000,6 +1099,11 @@ function attachExploreEvents(container) {
 
     if (searchInput) searchInput.addEventListener('input', filterExplore);
 
+    const catFilters = container.querySelector('#explore-category-filters');
+    const lineFilters = container.querySelector('#explore-line-filters');
+    if (catFilters) makeSmoothScrollable(catFilters);
+    if (lineFilters) makeSmoothScrollable(lineFilters);
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             filterBtns.forEach(b => b.classList.remove('active'));
@@ -1007,6 +1111,7 @@ function attachExploreEvents(container) {
             clickedBtn.classList.add('active');
             currentCategory = clickedBtn.dataset.cat;
             filterExplore();
+            clickedBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         });
     });
 
@@ -1017,6 +1122,7 @@ function attachExploreEvents(container) {
             clickedBtn.classList.add('active');
             currentLine = clickedBtn.dataset.line;
             filterExplore();
+            clickedBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         });
     });
 }

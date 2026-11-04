@@ -2026,3 +2026,203 @@ html.light #qr-fs-card,
     box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.15) !important;
 }
 
+
+
+/* ═════════════════════════════════════════════════════════════════════
+   ULTRA-SMOOTH HORIZONTAL FILTER PILL SCROLLING (ZERO SCROLLBAR CLUTTER)
+   ═════════════════════════════════════════════════════════════════════ */
+.smooth-filter-scroll,
+.smooth-pill-scroll,
+#explore-category-filters,
+#explore-line-filters,
+#timing-line-filters,
+#line-filters,
+.timing-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+    overscroll-behavior-x: contain !important;
+    touch-action: pan-x pan-y !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.45rem !important;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    scroll-snap-type: x proximity;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.smooth-filter-scroll:active,
+.smooth-pill-scroll:active,
+#explore-category-filters:active,
+#explore-line-filters:active,
+#timing-line-filters:active,
+#line-filters:active,
+.timing-tabs:active {
+    cursor: grabbing;
+}
+
+.smooth-filter-scroll::-webkit-scrollbar,
+.smooth-pill-scroll::-webkit-scrollbar,
+#explore-category-filters::-webkit-scrollbar,
+#explore-line-filters::-webkit-scrollbar,
+#timing-line-filters::-webkit-scrollbar,
+#line-filters::-webkit-scrollbar,
+.timing-tabs::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.smooth-filter-scroll > *,
+.smooth-pill-scroll > *,
+#explore-category-filters > *,
+#explore-line-filters > *,
+#timing-line-filters > *,
+#line-filters > *,
+.timing-tabs > * {
+    flex-shrink: 0 !important;
+    scroll-snap-align: start;
+}
+
+/* ─── Timings Line Filter Pill Styling ─── */
+.timing-line-btn {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    cursor: pointer;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.timing-line-btn:focus,
+.timing-line-btn:focus-visible,
+.timing-line-btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.timing-line-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.timing-line-btn.active,
+body.light-mode .timing-line-btn.active {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    border-color: #10B981 !important;
+    box-shadow: none !important;
+    transform: scale(1.02);
+}
+
+.timing-line-btn[data-line="purple"].active,
+body.light-mode .timing-line-btn[data-line="purple"].active { 
+    background: #A855F7 !important; 
+    color: #FFFFFF !important; 
+    border-color: #A855F7 !important;
+    box-shadow: none !important;
+}
+
+.timing-line-btn[data-line="green"].active,
+body.light-mode .timing-line-btn[data-line="green"].active { 
+    background: #10B981 !important; 
+    color: #FFFFFF !important; 
+    border-color: #10B981 !important;
+    box-shadow: none !important;
+}
+
+.timing-line-btn[data-line="yellow"].active,
+body.light-mode .timing-line-btn[data-line="yellow"].active { 
+    background: #EAB308 !important; 
+    color: #000000 !important; 
+    border-color: #EAB308 !important;
+    box-shadow: none !important;
+}
+
+.timing-line-btn[data-line="pink"].active,
+body.light-mode .timing-line-btn[data-line="pink"].active { 
+    background: #EC4899 !important; 
+    color: #FFFFFF !important; 
+    border-color: #EC4899 !important;
+    box-shadow: none !important;
+}
+
+/* Inactive Line-Specific Pill Colors */
+.timing-line-btn[data-line="purple"]:not(.active),
+body.light-mode .timing-line-btn[data-line="purple"]:not(.active) {
+    color: #A855F7 !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+    background: rgba(168, 85, 247, 0.08) !important;
+}
+.timing-line-btn[data-line="purple"]:not(.active):hover,
+body.light-mode .timing-line-btn[data-line="purple"]:not(.active):hover {
+    border-color: #A855F7 !important;
+    background: rgba(168, 85, 247, 0.16) !important;
+}
+
+.timing-line-btn[data-line="green"]:not(.active),
+body.light-mode .timing-line-btn[data-line="green"]:not(.active) {
+    color: #10B981 !important;
+    border-color: rgba(168, 85, 129, 0.35) !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+.timing-line-btn[data-line="green"]:not(.active):hover,
+body.light-mode .timing-line-btn[data-line="green"]:not(.active):hover {
+    border-color: #10B981 !important;
+    background: rgba(16, 185, 129, 0.16) !important;
+}
+
+.timing-line-btn[data-line="yellow"]:not(.active) {
+    color: #EAB308 !important;
+    border-color: rgba(234, 179, 8, 0.35) !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+}
+body.light-mode .timing-line-btn[data-line="yellow"]:not(.active) {
+    color: #D97706 !important;
+    border-color: rgba(217, 119, 6, 0.35) !important;
+    background: rgba(234, 179, 8, 0.08) !important;
+}
+.timing-line-btn[data-line="yellow"]:not(.active):hover,
+body.light-mode .timing-line-btn[data-line="yellow"]:not(.active):hover {
+    border-color: #EAB308 !important;
+    background: rgba(234, 179, 8, 0.18) !important;
+}
+
+.timing-line-btn[data-line="pink"]:not(.active),
+body.light-mode .timing-line-btn[data-line="pink"]:not(.active) {
+    color: #EC4899 !important;
+    border-color: rgba(236, 72, 153, 0.35) !important;
+    background: rgba(236, 72, 153, 0.08) !important;
+}
+.timing-line-btn[data-line="pink"]:not(.active):hover,
+body.light-mode .timing-line-btn[data-line="pink"]:not(.active):hover {
+    border-color: #EC4899 !important;
+    background: rgba(236, 72, 153, 0.18) !important;
+}
+
+body.light-mode .timing-line-btn[data-line="all"]:not(.active) {
+    background: #FFFFFF;
+    color: #334155;
+    border-color: rgba(0, 0, 0, 0.12);
+}

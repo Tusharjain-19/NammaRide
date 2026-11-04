@@ -312,3 +312,35 @@ article,
   display: inline-block;
   animation: nr-pulse 1.3s infinite ease-in-out;
 }
+
+/* Smooth Horizontal Filter Pill Scrolling */
+.smooth-filter-scroll,
+.smooth-pill-scroll {
+  display: flex !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  overscroll-behavior-x: contain !important;
+  touch-action: pan-x pan-y !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.5rem !important;
+  scroll-snap-type: x proximity;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.smooth-filter-scroll::-webkit-scrollbar,
+.smooth-pill-scroll::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.smooth-filter-scroll > *,
+.smooth-pill-scroll > * {
+  flex-shrink: 0 !important;
+  scroll-snap-align: start;
+}
