@@ -722,30 +722,44 @@ function renderCurvedLineWorkflow(parts, journey, transferNotice) {
     if (!parts || parts.length === 0) return '';
     const isDirect = parts.length === 1;
 
+    const getLineColor = (lk) => {
+        if (lk === 'green') return '#10B981';
+        if (lk === 'yellow') return '#EAB308';
+        if (lk === 'pink') return '#EC4899';
+        return '#A855F7'; // purple
+    };
+
+    const getLineName = (lk) => {
+        if (lk === 'green') return (typeof T_fn === 'function' ? T_fn('lineGreen') : null) || 'Green Line';
+        if (lk === 'yellow') return (typeof T_fn === 'function' ? T_fn('lineYellow') : null) || 'Yellow Line';
+        if (lk === 'pink') return (typeof T_fn === 'function' ? T_fn('linePink') : null) || 'Pink Line';
+        return (typeof T_fn === 'function' ? T_fn('linePurple') : null) || 'Purple Line';
+    };
+
     if (isDirect) {
         const p = parts[0];
         const lk = p.stations[0]?.lineKey || 'purple';
-        const color = p.stations[0]?.color || '#8B5CF6';
-        let lineLabel = 'Purple Line';
-        if (lk === 'green') lineLabel = 'Green Line';
-        else if (lk === 'yellow') lineLabel = 'Yellow Line';
-        else if (lk === 'pink') lineLabel = 'Pink Line';
+        const color = getLineColor(lk);
+        const lineLabel = getLineName(lk);
+        const stopCount = p.stations.length;
 
         return `
-            <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-2">
+            <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-1.5">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full shrink-0 shadow-sm" style="background-color: ${color};"></span>
-                        <span class="text-xs font-black text-primary">${lineLabel}</span>
-                        <span class="text-[10px] text-secondary font-medium">• ${p.stations.length} stops</span>
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs" style="background-color: ${color};"></span>
+                        <span class="text-xs font-black" style="color: ${color};">${lineLabel}</span>
+                        <span class="text-xs font-bold text-secondary px-2 py-0.5 rounded-md bg-card-hover border border-subtle/50">
+                            ${stopCount} ${stopCount === 1 ? 'stop' : 'stops'}
+                        </span>
                     </div>
                     <span class="text-[10px] font-extrabold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                        Direct Train
+                        Direct
                     </span>
                 </div>
-                <div class="flex items-center justify-between text-xs pt-1 border-t border-subtle/50 text-secondary">
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-subtle/40 text-secondary">
                     <span class="font-bold text-primary flex items-center gap-1 text-[11px]">
-                        <i data-lucide="map-pin" class="w-3 h-3 text-secondary shrink-0"></i>
+                        <i data-lucide="navigation" class="w-3 h-3 text-secondary shrink-0"></i>
                         <span>${journey.stationHops} Stops • ${journey.distanceKm || '0'} km</span>
                     </span>
                     <span class="text-emerald-500 font-bold flex items-center gap-1 text-[11px]">
@@ -756,57 +770,62 @@ function renderCurvedLineWorkflow(parts, journey, transferNotice) {
         `;
     }
 
-    // MULTI-LINE JOURNEY WITH TRANSFERS: Curved Line Connected Schematic
+    // MULTI-LINE JOURNEY: Clean One-Liner Line Steps & Two-Tone Gradient Change Track
     const lineStepsHtml = parts.map((p, idx) => {
         const lk = p.stations[0]?.lineKey || 'purple';
-        const color = p.stations[0]?.color || '#8B5CF6';
-        let lineLabel = 'Purple Line';
-        if (lk === 'green') lineLabel = 'Green Line';
-        else if (lk === 'yellow') lineLabel = 'Yellow Line';
-        else if (lk === 'pink') lineLabel = 'Pink Line';
-
+        const color = getLineColor(lk);
+        const lineLabel = getLineName(lk);
         const stopCount = p.stations.length;
-        const fromName = p.stations[0]?.name ? T_STATION(p.stations[0].name) : '';
-        const toName = p.stations[p.stations.length - 1]?.name ? T_STATION(p.stations[p.stations.length - 1].name) : '';
+        const toName = p.stations[p.stations.length - 1]?.name ? (typeof T_STATION === 'function' ? T_STATION(p.stations[p.stations.length - 1].name) : p.stations[p.stations.length - 1].name) : '';
 
         let transferHtml = '';
         if (idx < parts.length - 1) {
             const nextPart = parts[idx + 1];
+            const nextLk = nextPart.stations[0]?.lineKey || 'green';
+            const nextColor = getLineColor(nextLk);
+            const nextLineLabel = getLineName(nextLk);
             const transferStation = toName;
-            const nextLineKey = nextPart.stations[0]?.lineKey || 'green';
-            let nextLineLabel = 'Green Line';
-            if (nextLineKey === 'yellow') nextLineLabel = 'Yellow Line';
-            else if (nextLineKey === 'pink') nextLineLabel = 'Pink Line';
-            else if (nextLineKey === 'purple') nextLineLabel = 'Purple Line';
 
             transferHtml = `
-                <!-- Curved Transition to Next Line -->
+                <!-- Two-Tone Gradient Transfer Mix (e.g. Purple to Green) -->
                 <div class="relative flex items-center gap-2 pl-3 py-1 my-0.5">
                     <div class="absolute left-[7px] -top-2 bottom-0 w-4 pointer-events-none">
                         <svg class="w-4 h-full overflow-visible" viewBox="0 0 16 32" fill="none">
-                            <path d="M 1 0 V 16 Q 1 24 9 24 H 14" stroke="${color}" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                            <path d="M 14 24 L 11 21 M 14 24 L 11 27" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="trans-grad-${idx}" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="${color}"/>
+                                    <stop offset="100%" stop-color="${nextColor}"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 1 0 V 16 Q 1 24 9 24 H 14" stroke="url(#trans-grad-${idx})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <path d="M 14 24 L 11 21 M 14 24 L 11 27" stroke="${nextColor}" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div class="ml-4 flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/25 text-[10px] text-amber-500 font-extrabold shadow-xs">
-                        <i data-lucide="arrow-right-left" class="w-3 h-3 shrink-0"></i>
-                        <span>Change at <strong class="text-primary">${transferStation}</strong> to ${nextLineLabel}</span>
+                    <div class="ml-4 flex items-center gap-2 px-2.5 py-1 rounded-lg border text-[11px] font-bold shadow-xs"
+                         style="background: linear-gradient(90deg, ${color}18, ${nextColor}18); border-color: ${color}45;">
+                        <span class="flex items-center gap-1 shrink-0">
+                            <span class="w-2 h-2 rounded-full shadow-xs" style="background-color: ${color};"></span>
+                            <i data-lucide="arrow-right" class="w-2.5 h-2.5 text-secondary opacity-70"></i>
+                            <span class="w-2 h-2 rounded-full shadow-xs" style="background-color: ${nextColor};"></span>
+                        </span>
+                        <span class="text-primary">
+                            Change at <strong>${transferStation}</strong> to <span style="color: ${nextColor}; font-weight: 800;">${nextLineLabel}</span>
+                        </span>
                     </div>
                 </div>
             `;
         }
 
         return `
-            <!-- Line Step -->
+            <!-- Line Step (Strict One-Liner: Dot + Line Name | Stops Count) -->
             <div class="flex flex-col gap-0.5">
-                <div class="flex items-center justify-between p-1.5 rounded-lg bg-card-subtle/50 border border-subtle/60 hover:bg-card-subtle transition-all cursor-pointer" onclick="window.scrollToRouteLine(${idx})" title="Click to view line segment in route list">
-                    <div class="flex items-center gap-2 min-w-0">
+                <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-card-subtle/50 border border-subtle/60 hover:bg-card-subtle transition-all cursor-pointer" onclick="window.scrollToRouteLine(${idx})" title="Click to view line segment in route list">
+                    <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs" style="background-color: ${color};"></span>
                         <span class="text-xs font-black tracking-tight" style="color: ${color};">${lineLabel}</span>
-                        <span class="text-[10px] text-secondary font-medium">(${stopCount} stops)</span>
                     </div>
-                    <span class="text-[10px] text-secondary font-mono truncate max-w-[140px] text-right">
-                        ${fromName} <span class="opacity-50">→</span> ${toName}
+                    <span class="text-xs font-bold text-secondary px-2 py-0.5 rounded-md bg-card-hover border border-subtle/50">
+                        ${stopCount} ${stopCount === 1 ? 'stop' : 'stops'}
                     </span>
                 </div>
                 ${transferHtml}
@@ -815,15 +834,15 @@ function renderCurvedLineWorkflow(parts, journey, transferNotice) {
     }).join('');
 
     return `
-        <!-- Curved Line Multi-Line Route Workflow (Non-Scrolling) -->
+        <!-- Connected Metro Lines -->
         <div class="p-2.5 bg-card-subtle/70 rounded-xl border border-subtle mb-2.5 flex flex-col gap-2 overflow-hidden">
-            <!-- Header with Quick Summary -->
+            <!-- Header with Clean Line Count & Summary -->
             <div class="flex items-center justify-between pb-1.5 border-b border-subtle/50 text-[11px]">
                 <div class="flex items-center gap-1.5 font-extrabold text-primary">
                     <i data-lucide="navigation" class="w-3.5 h-3.5 text-primary shrink-0"></i>
-                    <span>Line Workflow • ${parts.length} Lines</span>
+                    <span>${parts.length} Lines</span>
                 </div>
-                <div class="flex items-center gap-2 text-secondary text-[11px]">
+                <div class="flex items-center gap-1.5 text-secondary text-[11px]">
                     <span class="font-bold text-primary">${journey.stationHops} Stops</span>
                     <span>•</span>
                     <span>${journey.distanceKm || '0'} km</span>
@@ -860,7 +879,7 @@ window.scrollToRouteLine = function(partIndex) {
 
         summaryText.innerHTML = `
             <!-- Top Header with Route Title & Star Bookmark -->
-            <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-subtle">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-subtle">
                 <div class="flex flex-col min-w-0 pr-2">
                     <span class="text-[9px] font-bold uppercase tracking-wider text-secondary opacity-70">Calculated Metro Route</span>
                     <h3 class="text-base font-extrabold text-primary flex items-center gap-1.5 truncate">
@@ -879,40 +898,25 @@ window.scrollToRouteLine = function(partIndex) {
                 </div>
             </div>
 
-            <!-- Time & Fare Row with Smart Card 5% Discount -->
-            <div class="flex justify-between items-end mb-2">
+            <!-- Clean Time & Fare Row (No Smart Card / Advisor Clutter) -->
+            <div class="flex justify-between items-end mb-2.5">
                 <div>
-                    <p class="text-[11px] text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
+                    <p class="text-[10px] text-secondary uppercase tracking-wide font-bold">${T('totalTime')}</p>
                     <p class="text-2xl font-extrabold text-primary tracking-tight">${formattedTime}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[11px] text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
+                    <p class="text-[10px] text-secondary uppercase tracking-wide font-bold">${T('estFare')}</p>
                     <div class="flex items-baseline justify-end gap-1.5">
                         <span class="text-2xl font-extrabold text-emerald-400 tracking-tight">₹${journey.fare}</span>
                         <span class="text-xs text-secondary opacity-70 font-normal">token</span>
                     </div>
-                    <div class="flex items-center gap-1 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 mt-0.5 justify-end">
-                        <i data-lucide="credit-card" class="w-3 h-3"></i>
-                        <span>Smart Card: ₹${(journey.fare * 0.95).toFixed(journey.fare * 0.95 % 1 === 0 ? 0 : 1)} (5% OFF)</span>
-                    </div>
                 </div>
             </div>
-
-            <!-- Pass & Card Savings Advisor Trigger -->
-            <button id="view-pass-advisor-btn" type="button" class="w-full mb-2.5 py-1.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 flex items-center justify-between text-xs transition-all active:scale-[0.98] group">
-                <div class="flex items-center gap-1.5">
-                    <span class="font-extrabold text-primary text-[11px]">Compare 1-Day Pass & Card Savings</span>
-                </div>
-                <span class="text-emerald-600 dark:text-emerald-400 font-extrabold text-[11px] flex items-center gap-0.5">
-                    <span>Advisor</span>
-                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
-                </span>
-            </button>
 
             ${renderCurvedLineWorkflow(parts, journey, transferNotice)}
 
             <!-- Boarding Platform & Next Train Strip (Strict 1-Line) -->
-            <div class="grid grid-cols-2 gap-2 mb-2.5">
+            <div class="grid grid-cols-2 gap-2 mb-2">
                 <div class="flex flex-col bg-[var(--bg-card-hover)] p-2 rounded-xl border border-[var(--border-color)] justify-between overflow-hidden">
                     <span class="text-[9px] text-secondary uppercase tracking-wider font-bold truncate">Platform & Direction</span>
                     <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
@@ -926,37 +930,23 @@ window.scrollToRouteLine = function(partIndex) {
                 </div>
             </div>
 
-            <!-- Women's Coach Compact 1-Liner with Instant Emergency SOS (Strict Single Line) -->
-            <div class="mb-2 py-1 px-2.5 rounded-xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-between gap-1.5 text-[11px] text-pink-600 dark:text-pink-400 font-bold whitespace-nowrap overflow-hidden">
-                <div class="flex items-center gap-1.5 truncate">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 shrink-0 text-pink-500"></i>
-                    <span class="truncate">Coach 1: Women's Reserved (Front)</span>
-                </div>
-                <a href="tel:1091" class="shrink-0 px-2 py-0.5 rounded-lg bg-pink-500 hover:bg-pink-600 active:scale-95 text-white font-black text-[10px] flex items-center gap-1 shadow-sm transition-all" title="Call 1091 Women Helpline">
-                    <i data-lucide="phone-call" class="w-2.5 h-2.5"></i>
-                    <span>SOS 1091</span>
-                </a>
-            </div>
-
-            <!-- WhatsApp Ticket Booking Card -->
-            <div class="mt-1 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col gap-2.5">
-                <div class="flex items-center justify-between">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-bold text-primary uppercase tracking-wider">${T('passengers') || 'Passengers'}</span>
-                        <span class="text-xs text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5">Total: ₹${totalFareAmount}</span>
+            <!-- Compact WhatsApp Ticket Booking Strip (Single Slim Row) -->
+            <div class="p-2 px-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-secondary uppercase font-bold tracking-wider">${T('passengers') || 'Qty'}</span>
+                    <div class="flex items-center bg-card-subtle px-1.5 py-0.5 rounded-lg border border-subtle shadow-xs">
+                        <button id="p-minus-btn" type="button" class="w-5 h-5 flex items-center justify-center rounded text-secondary hover:text-primary font-bold text-xs active:scale-90">-</button>
+                        <span class="font-extrabold text-xs text-primary w-4 text-center">${passengerCount}</span>
+                        <button id="p-plus-btn" type="button" class="w-5 h-5 flex items-center justify-center rounded text-secondary hover:text-primary font-bold text-xs active:scale-90">+</button>
                     </div>
-                    <div class="flex items-center gap-2 bg-white dark:bg-neutral-900 px-2.5 py-1 rounded-xl border border-emerald-500/30 shadow-sm">
-                        <button id="p-minus-btn" type="button" class="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">-</button>
-                        <span class="font-extrabold text-sm text-primary w-5 text-center">${passengerCount}</span>
-                        <button id="p-plus-btn" type="button" class="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-sm hover:bg-emerald-500 hover:text-white transition-all active:scale-95">+</button>
-                    </div>
+                    <span class="text-xs font-black text-emerald-500 dark:text-emerald-400 ml-1">₹${totalFareAmount}</span>
                 </div>
 
-                <button id="whatsapp-book-btn" type="button" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition-all active:scale-95 text-xs uppercase tracking-wider">
-                    <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <button id="whatsapp-book-btn" type="button" class="flex items-center gap-1.5 bg-[#25D366] hover:bg-[#1DA851] active:scale-95 text-white font-extrabold py-1.5 px-3 rounded-lg shadow-xs transition-all text-[11px] shrink-0">
+                    <svg class="w-3.5 h-3.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
                         <path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.01zm-7.01 15.24h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.198 8.198 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.97-.15.17-.3.19-.55.07-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.4-.42-.56-.43-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
                     </svg>
-                    <span>Book Ticket on WhatsApp</span>
+                    <span>WhatsApp Ticket</span>
                 </button>
             </div>
         `;
