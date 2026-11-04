@@ -30,7 +30,7 @@ export default function FeaturesPage() {
       icon: <Clock className="w-7 h-7 text-blue-500 dark:text-blue-400" />,
       iconBg: 'bg-blue-500/10 border-blue-500/30',
       title: 'First & Last Train Schedules',
-      description: 'Accurate morning 05:00 AM start times and late night 11:05 PM terminal departure schedules across Purple, Green, and Yellow lines.',
+      description: 'Accurate morning 05:00 AM start times and late night 11:05 PM terminal departure schedules across Purple, Green, Yellow, and Pink lines.',
       badge: 'Timings'
     },
     {

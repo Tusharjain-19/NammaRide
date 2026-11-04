@@ -20,6 +20,7 @@ export default function BlogPage() {
     { id: 'app', label: 'Best App Guides' },
     { id: 'guide', label: 'Commuter Guides' },
     { id: 'tech', label: 'Tech & Careers' },
+    { id: 'geo-guide', label: 'Geo Navigation Guide (ಕನ್ನಡ / EN / हिन्दी)' },
     { id: 'kannada', label: 'ಕನ್ನಡ ಮಾಹಿತಿ' }
   ];
 
@@ -319,7 +320,15 @@ export default function BlogPage() {
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => {
+                if (cat.id === 'geo-guide') {
+                  setSelectedCategory('all');
+                  const el = document.getElementById('geo-guide');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  setSelectedCategory(cat.id);
+                }
+              }}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 selectedCategory === cat.id
                   ? 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20'
@@ -428,8 +437,8 @@ export default function BlogPage() {
           })}
         </div>
 
-        {/* Interactive Bengaluru Metro Guide Component */}
-        <div className="pt-8">
+        {/* Interactive Bengaluru Metro Guide Component - Authoritative AEO/GEO Commuter Publication */}
+        <div id="geo-guide" className="pt-8 scroll-mt-24">
           <BengaluruMetroGuide />
         </div>
 

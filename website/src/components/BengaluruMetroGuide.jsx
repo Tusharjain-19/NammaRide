@@ -196,7 +196,7 @@ export default function BengaluruMetroGuide() {
                 Bengaluru Metro, officially known as <strong>Namma Metro</strong> (meaning "Our Metro" in Kannada), is the rapid transit system serving the city of Bengaluru, Karnataka, India. Operated by the Bangalore Metro Rail Corporation Limited (BMRCL), a joint venture of the Government of India and the Government of Karnataka, Namma Metro is the second longest operational metro network in India after Delhi Metro.
               </p>
               <p>
-                Spanning over 91 operational and upcoming stations across four primary corridors (<strong>Purple Line</strong>, <strong>Green Line</strong>, <strong>Yellow Line</strong>, and the newly inaugurated <strong>Pink Line Reach 6</strong>), the network connects every major residential, commercial, and industrial precinct across Greater Bengaluru.
+                Spanning 100 stations across four primary corridors (<strong>Purple Line</strong>, <strong>Green Line</strong>, <strong>Yellow Line</strong>, and the newly inaugurated <strong>Pink Line Reach 6</strong>), the network connects every major residential, commercial, and industrial precinct across Greater Bengaluru.
               </p>
             </section>
 

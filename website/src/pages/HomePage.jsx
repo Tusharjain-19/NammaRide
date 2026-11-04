@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Download, Zap, Navigation, MapPin, QrCode, Clock, Compass, ShieldCheck, ChevronRight, CheckCircle2, ChevronDown, Smartphone, Sparkles, ArrowRight, Shield, Globe, Lock, WifiOff, Accessibility, Phone, XCircle, AlertTriangle, Search, Menu, Filter, ArrowDownUp, Route, Star, Sun, Moon } from 'lucide-react';
+import { 
+  Download, Zap, Navigation, MapPin, QrCode, Clock, Compass, ShieldCheck, 
+  ChevronRight, CheckCircle2, ChevronDown, Smartphone, Sparkles, ArrowRight, 
+  Shield, Globe, Lock, WifiOff, Accessibility, Phone, XCircle, AlertTriangle, 
+  Search, Menu, Filter, ArrowDownUp, Route, Star, Sun, Moon, Radio, Layers, 
+  Train, Award, BookOpen, ExternalLink, Activity
+} from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
-import BengaluruMetroGuide from '../components/BengaluruMetroGuide';
 import GooglePreferredSourceCard from '../components/GooglePreferredSourceCard';
 import MetaSEO from '../components/MetaSEO';
 import googlePlayImg from '../../assets/images/google play.svg';
@@ -221,13 +226,13 @@ function HeroSimulation() {
           <p className="text-[10px] font-medium mb-4" style={{ color: t.textSec }}>First & last train schedule for all lines</p>
 
           {/* Line Selector Pills */}
-          <div className="flex gap-2 mb-4">
-            {[{ name: 'Purple', color: '#A855F7', active: true }, { name: 'Green', color: '#10B981' }, { name: 'Yellow', color: '#EAB308' }].map((line) => (
-              <span key={line.name} className="px-3.5 py-1.5 rounded-full text-[10px] font-bold" style={{
+          <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 no-scrollbar">
+            {[{ name: 'Purple', color: '#A855F7', active: true }, { name: 'Green', color: '#10B981' }, { name: 'Yellow', color: '#EAB308' }, { name: 'Pink', color: '#EC4899' }].map((line) => (
+              <span key={line.name} className="px-2.5 py-1 rounded-full text-[9px] font-bold shrink-0" style={{
                 background: line.active ? line.color : (isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)'),
                 color: line.active ? '#fff' : t.textSec,
                 border: line.active ? 'none' : `1px solid ${t.border}`,
-              }}>{line.name} Line</span>
+              }}>{line.name}</span>
             ))}
           </div>
 
@@ -255,7 +260,7 @@ function HeroSimulation() {
           </div>
 
           <div className="mt-auto pt-3">
-            <p className="text-center text-[9px]" style={{ color: t.textSec, opacity: 0.5 }}>Weekday schedule · BMRCL 2025</p>
+            <p className="text-center text-[9px]" style={{ color: t.textSec, opacity: 0.5 }}>Weekday schedule · BMRCL 2026</p>
           </div>
         </div>
       </div>
@@ -419,27 +424,39 @@ export default function HomePage() {
               </Link>
             </motion.div>
             
-            {/* Quick Links */}
+            {/* Quick Links for All 4 Lines */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800"
             >
-              <p className="font-label-sm text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">{t('all3Lines')}</p>
-              <div className="flex flex-wrap gap-4">
-                <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-purple-line shadow-xs">
-                  <span className="w-3 h-3 rounded-full bg-purple-line"></span>
+              <p className="font-label-sm text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
+                {t('allLines') || t('all3Lines')}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/stations?line=purple" className="light-glass-card rounded-full px-4 py-2 flex items-center gap-2.5 border-l-4 border-l-purple-line shadow-xs hover:scale-105 transition-transform">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-line"></span>
                   <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('purpleLine')}</span>
-                </div>
-                <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-emerald-500 shadow-xs">
-                  <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-mono">37 Stns</span>
+                </Link>
+                <Link to="/stations?line=green" className="light-glass-card rounded-full px-4 py-2 flex items-center gap-2.5 border-l-4 border-l-emerald-500 shadow-xs hover:scale-105 transition-transform">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                   <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('greenLine')}</span>
-                </div>
-                <div className="light-glass-card rounded-full px-4 py-2 flex items-center gap-3 border-l-4 border-l-yellow-line shadow-xs">
-                  <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-mono">32 Stns</span>
+                </Link>
+                <Link to="/stations?line=yellow" className="light-glass-card rounded-full px-4 py-2 flex items-center gap-2.5 border-l-4 border-l-yellow-line shadow-xs hover:scale-105 transition-transform">
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
                   <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('yellowLine')}</span>
-                </div>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 font-mono">16 Stns</span>
+                </Link>
+                <Link to="/pink-line" className="light-glass-card rounded-full px-4 py-2 flex items-center gap-2.5 border-l-4 border-l-pink-500 shadow-xs hover:scale-105 transition-transform bg-pink-500/5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+                  <span className="font-label-lg text-xs font-bold text-gray-900 dark:text-white">{t('pinkLine')}</span>
+                  <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-pink-500 text-white shadow-xs">
+                    Reach 6
+                  </span>
+                </Link>
               </div>
             </motion.div>
 
@@ -695,88 +712,558 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/*  CRAZY SECTION 2: BENGALURU METRO LIVE NETWORK METRICS */}
+      {/* ─── CRAZY SECTION 2: BENGALURU METRO LIVE NETWORK METRICS ─── */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs">
-            <div className="text-3xl sm:text-4xl font-mono font-bold text-emerald-500">83</div>
-            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Active Stations</div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400">Purple, Green & Yellow Lines</p>
+          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs hover:border-emerald-500/40 transition-colors">
+            <div className="text-3xl sm:text-4xl font-mono font-bold text-emerald-500">{t('activeStationsCount')}</div>
+            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{t('activeStationsLabel')}</div>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">{t('activeStationsSub')}</p>
           </div>
-          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs">
-            <div className="text-3xl sm:text-4xl font-mono font-bold text-purple-500">100%</div>
-            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Offline First</div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400">Zero Internet Required</p>
+          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs hover:border-purple-500/40 transition-colors">
+            <div className="text-3xl sm:text-4xl font-mono font-bold text-purple-500">{t('offlineFirstCount')}</div>
+            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{t('offlineFirstLabel')}</div>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">{t('offlineFirstSub')}</p>
           </div>
-          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs">
-            <div className="text-3xl sm:text-4xl font-mono font-bold text-amber-500">10%</div>
-            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Smart Card Savings</div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400">Instant Discount Rates</p>
+          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs hover:border-amber-500/40 transition-colors">
+            <div className="text-3xl sm:text-4xl font-mono font-bold text-amber-500">{t('smartCardSavingsCount')}</div>
+            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{t('smartCardSavingsLabel')}</div>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">{t('smartCardSavingsSub')}</p>
           </div>
-          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs">
-            <div className="text-3xl sm:text-4xl font-mono font-bold text-blue-500">0 KB</div>
-            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Data Tracking</div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400">Strict Privacy Guarantee</p>
+          <div className="bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-gray-200 dark:border-neutral-800 space-y-2 shadow-xs hover:border-blue-500/40 transition-colors">
+            <div className="text-3xl sm:text-4xl font-mono font-bold text-blue-500">{t('zeroDataTrackingCount')}</div>
+            <div className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{t('zeroDataTrackingLabel')}</div>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">{t('zeroDataTrackingSub')}</p>
           </div>
         </div>
       </section>
 
-      {/*  CRAZY SECTION 3: SEO & GEO-TARGETED COMMUTER TRANSIT GUIDE */}
+      {/* ─── 4 CORRIDORS NETWORK & INTERCHANGE NAVIGATOR ─── */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
-        <div className="bg-white dark:bg-neutral-900 rounded-[28px] sm:rounded-[36px] border border-gray-200 dark:border-neutral-800 p-5 sm:p-10 lg:p-12 space-y-8 shadow-sm">
-          <div className="space-y-3">
-            <h2 className="font-heading font-bold text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
-              Bengaluru Namma Metro 2026 Commuter & Transit Guide
+        <div className="bg-white dark:bg-neutral-900 rounded-[28px] sm:rounded-[36px] border border-gray-200 dark:border-neutral-800 p-6 sm:p-10 lg:p-12 space-y-10 shadow-sm">
+          
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/20">
+              <Route className="w-4 h-4" />
+              <span>{t('corridorsExplorer')}</span>
+            </div>
+            <h2 className="font-heading font-black text-2xl sm:text-4xl text-gray-900 dark:text-white tracking-tight">
+              {lang === 'kn' ? 'ಬೆಂಗಳೂರಿನ ಎಲ್ಲಾ 4 ಮೆಟ್ರೋ ಮಾರ್ಗಗಳು ಮತ್ತು ಇಂಟರ್‌ಚೇಂಜ್' : lang === 'hi' ? 'बेंगलुरु के चारों मेट्रो कॉरिडोर और इंटरचेंज' : 'Master Transit Across All 4 Corridors'}
             </h2>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl">
-              NammaRide is the ultimate privacy-first offline guide for the Bengaluru Namma Metro transit network (operated by BMRCL). Whether you commute daily between <strong>Whitefield (Kadugodi) and Challaghatta</strong> on the Purple Line, or travel from <strong>Nagasandra to Silk Institute</strong> on the Green Line, NammaRide provides real-time route calculations, first/last train timetables, and platform interchange directions.
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+              {t('corridorsSubtitle')}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-gray-100 dark:border-neutral-800">
-            <div className="space-y-2">
-              <h3 className="font-heading font-bold text-sm text-purple-600 dark:text-purple-400 uppercase tracking-wider">Purple Line Route & Fares</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Connects East and West Bengaluru from Whitefield (Kadugodi), ITPL, Hoodi, Benniganahalli, Indiranagar, MG Road, Nadaprabhu Kempegowda Station Majestic, Vijayanagar, Kengeri to Challaghatta. Smart card fares start from ₹9.50.
-              </p>
+          {/* 4 Line Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Purple Line */}
+            <div className="p-6 rounded-3xl bg-purple-500/5 border border-purple-500/20 space-y-4 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-3.5 h-3.5 rounded-full bg-purple-line shadow-xs"></span>
+                    <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                      {lang === 'kn' ? 'ನೇರಳೆ ಮಾರ್ಗ (Purple Line)' : lang === 'hi' ? 'पर्पल लाइन (Purple Line)' : 'Purple Line Corridor'}
+                    </h3>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-500 text-white">
+                    37 Stations · 43.5 km
+                  </span>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1.5">
+                  <div className="font-semibold text-purple-700 dark:text-purple-300">
+                    Whitefield (Kadugodi) ↔ Challaghatta
+                  </div>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <strong>Key Hubs:</strong> ITPL Skywalk, Bagmane Constellation Tech Park, Indiranagar 100ft Rd, MG Road CBD, Vidhana Soudha, Nadaprabhu Kempegowda Majestic.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-purple-500/15 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Interchange at Majestic</span>
+                <Link to="/stations?line=purple" className="font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
+                  View Stations <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-heading font-bold text-sm text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Green Line Route & Fares</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Connects North and South Bengaluru from Nagasandra, Yeshwanthpur, Malleshwaram, Chikpet, National College, Jayanagar, Banashankari, JP Nagar, to Silk Institute. Full interchange support at Nadaprabhu Kempegowda Station Majestic.
-              </p>
+
+            {/* Green Line */}
+            <div className="p-6 rounded-3xl bg-emerald-500/5 border border-emerald-500/20 space-y-4 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-xs"></span>
+                    <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                      {lang === 'kn' ? 'ಹಸಿರು ಮಾರ್ಗ (Green Line)' : lang === 'hi' ? 'ग्रीन लाइन (Green Line)' : 'Green Line Corridor'}
+                    </h3>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500 text-white">
+                    32 Stations · 33.4 km
+                  </span>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1.5">
+                  <div className="font-semibold text-emerald-700 dark:text-emerald-300">
+                    Madavara (BIEC) ↔ Silk Institute
+                  </div>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <strong>Key Hubs:</strong> BIEC Exhibition Centre, IKEA Nagasandra, Peenya Industrial, ISKCON / Orion Mall, Mantri Malleshwaram, Lalbagh, South End Circle.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-emerald-500/15 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Interchange at Majestic & RV Rd</span>
+                <Link to="/stations?line=green" className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1">
+                  View Stations <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-heading font-bold text-sm text-amber-600 dark:text-amber-400 uppercase tracking-wider">Yellow Line Tech Park Extension</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Elevated transit line connecting RV Road, Central Silk Board, HSR Layout, Electronic City Phase 1 & 2, and Bommasandra. Direct access to IT corridors with integrated skywalk exits.
-              </p>
+
+            {/* Yellow Line */}
+            <div className="p-6 rounded-3xl bg-amber-500/5 border border-amber-500/20 space-y-4 hover:border-amber-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-xs"></span>
+                    <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                      {lang === 'kn' ? 'ಹಳದಿ ಮಾರ್ಗ (Yellow Line)' : lang === 'hi' ? 'येलो लाइन (Yellow Line)' : 'Yellow Line (Driverless CBTC)'}
+                    </h3>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500 text-black">
+                    16 Stations · 18.8 km
+                  </span>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1.5">
+                  <div className="font-semibold text-amber-700 dark:text-amber-400">
+                    RV Road ↔ Bommasandra
+                  </div>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <strong>Key Hubs:</strong> Central Silk Board, HSR Layout, Electronic City Phase 1 & 2, Infosys, Wipro, Biocon Park, elevated skywalk concourses.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-amber-500/15 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Interchange at RV Rd & Jayadeva</span>
+                <Link to="/stations?line=yellow" className="font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1">
+                  View Stations <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Pink Line Reach 6 */}
+            <div className="p-6 rounded-3xl bg-pink-500/5 border border-pink-500/30 space-y-4 hover:border-pink-500/50 transition-all flex flex-col justify-between relative overflow-hidden">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-3.5 h-3.5 rounded-full bg-pink-500 shadow-xs"></span>
+                    <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                      {lang === 'kn' ? 'ಪಿಂಕ್ ಮಾರ್ಗ ರೀಚ್ 6 (Pink Line)' : lang === 'hi' ? 'पिंक लाइन रीच 6 (Pink Line)' : 'Pink Line Reach 6'}
+                    </h3>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-pink-500 text-white animate-pulse">
+                    Reach 6 Active · 7.5 km
+                  </span>
+                </div>
+                <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1.5">
+                  <div className="font-semibold text-pink-700 dark:text-pink-300">
+                    Kalena Agrahara ↔ Tavarekere (Bannerghatta Rd)
+                  </div>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <strong>Key Hubs:</strong> Royal Meenakshi Mall, Hulimavu Cave, IIM Bangalore, JP Nagar 4th Phase, Vega City Mall, Jayadeva Multi-Level Elevated Transfer.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-pink-500/20 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-bold text-pink-600 dark:text-pink-400">Jayadeva Double-Decker Interchange</span>
+                <Link to="/pink-line" className="font-bold text-pink-600 dark:text-pink-400 hover:underline flex items-center gap-1">
+                  Pink Line Guide <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Major Interchanges Quick Architecture Breakdown */}
+          <div className="pt-4 border-t border-gray-100 dark:border-neutral-800 space-y-5">
+            <div className="flex items-center justify-between">
+              <h3 className="font-heading font-bold text-lg sm:text-xl text-gray-900 dark:text-white flex items-center gap-2">
+                <Layers className="w-5 h-5 text-emerald-500" />
+                <span>{t('interchangesTitle')}</span>
+              </h3>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Under 3 min transfers</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-200/80 dark:border-neutral-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <strong className="text-gray-900 dark:text-white font-bold text-sm">Kempegowda Majestic</strong>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400">Subterranean</span>
+                </div>
+                <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Interchange between <strong>Purple Line (Level 2)</strong> and <strong>Green Line (Level 3)</strong>. High-capacity escalators enable connection in 3 to 4 minutes without re-tapping fare gates.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-200/80 dark:border-neutral-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <strong className="text-gray-900 dark:text-white font-bold text-sm">Jayadeva Hospital</strong>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-pink-500/10 text-pink-600 dark:text-pink-400">Multi-Level</span>
+                </div>
+                <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Bengaluru's premier elevated double-decker hub: <strong>Yellow Line on Level 1</strong> and <strong>Pink Line on Level 2</strong>. Direct transfer in under 2 minutes.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-950 border border-gray-200/80 dark:border-neutral-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <strong className="text-gray-900 dark:text-white font-bold text-sm">Rashtreeya Vidyalaya (RV Rd)</strong>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400">Skybridge</span>
+                </div>
+                <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Cross-platform link between <strong>Green Line</strong> and <strong>Yellow Line</strong> terminal concourse, seamlessly bridging South Bengaluru with Electronic City.
+                </p>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
 
-      {/*  GOOGLE PREFERRED SOURCE BANNER */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+      {/* ─── UI/UX DEEP-DIVE: ENGINEERED FOR BENGALURU COMMUTERS ─── */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <div className="space-y-12">
+          
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/20">
+              <Sparkles className="w-4 h-4" />
+              <span>{lang === 'kn' ? 'ಅತ್ಯುತ್ತಮ ಬಳಕೆದಾರ ಅನುಭವ' : lang === 'hi' ? 'सर्वश्रेष्ठ यूआई व यूएक्स अनुभव' : 'Superior Commuter UX'}</span>
+            </div>
+            <h2 className="font-heading font-black text-2xl sm:text-4xl text-gray-900 dark:text-white tracking-tight">
+              {t('appUiUxExplanationTitle')}
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+              {t('appUiUxExplanationSub')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Feature 1: 100% Offline Subterranean GPS */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                    <WifiOff className="w-5 h-5" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                    0 KB Data Required
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? '100% ಆಫ್‌ಲೈನ್ ಉಪಗ್ರಹ ಜಿಪಿಎಸ್ ರೇಡಾರ್' : lang === 'hi' ? '100% ऑफ़लाइन सैटेलाइट जीपीएस रडार' : '100% Offline Subterranean GPS Radar'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವಿಲ್ಲದಿದ್ದರೂ ಮೊಬೈಲ್‌ನ ಉಪಗ್ರಹ ಜಿಪಿಎಸ್ ಹಾರ್ಡ್‌ವೇರ್ ಮೂಲಕ ಸಮೀಪದ ನಿಲ್ದಾಣವನ್ನು 120ms ನಲ್ಲಿ ಪತ್ತೆಹಚ್ಚುತ್ತದೆ.'
+                    : lang === 'hi'
+                    ? 'भूमिगत सुरंगों में इंटरनेट फेल होने पर भी मोबाइल के सैटेलाइट जीपीएस से 120ms में निकटतम स्टेशन की सटीक पहचान।'
+                    : 'Interfaces directly with device satellite GPS hardware without cellular polling. Instant 120ms station lookup inside Majestic, Cubbon Park, and underground tunnels.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> Works inside subway tunnels
+              </div>
+            </div>
+
+            {/* Feature 2: Proximity Vibration Arrival Alarm */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-purple-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center border border-purple-500/20">
+                    <Radio className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400">
+                    Haptic Geofencing
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? 'ವೈಬ್ರೇಶನ್ ಆಗಮನ ಅಲರ್ಟ್' : lang === 'hi' ? 'प्रॉक्सिमिटी वाइब्रेशन अलार्म' : 'Proximity Vibration Arrival Alarm'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ಹಾಡುಗಳನ್ನು ಕೇಳುತ್ತಿರಲಿ ಅಥವಾ ಪುಸ್ತಕ ಓದುತ್ತಿರಲಿ, ನಿಮ್ಮ ನಿಲ್ದಾಣ ತಲುಪುವ 1-2 ನಿಮಿಷಗಳ ಮುಂಚೆಯೇ ಫೋನ್ ನಿಧಾನವಾಗಿ ವೈಬ್ರೇಟ್ ಆಗುತ್ತದೆ.'
+                    : lang === 'hi'
+                    ? 'सफर में गाने सुनते या किताब पढ़ते समय आपका स्टॉप छूटने का कोई डर नहीं। स्टेशन से 1-2 स्टॉप पहले फोन वाइब्रेट होता है।'
+                    : 'Background geofencing alerts trigger a gentle pocket vibration 1 to 2 stations before your stop or interchange, so you never miss a destination.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> Zero missed interchanges
+              </div>
+            </div>
+
+            {/* Feature 3: Hop Tariff & 5% Smart Card Discount */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-amber-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-500/20">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                    5% Smart Savings
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? '2026 ದರ ಮತ್ತು 5% ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ರಿಯಾಯಿತಿ' : lang === 'hi' ? '2026 किराया व 5% स्मार्ट कार्ड बचत' : '2026 Hop Tariff & 5% Smart Card Matrix'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ಅಧಿಕೃತ ದೂರದ ಆಧಾರದ ಮೇಲೆ ಕನಿಷ್ಠ ₹10 ರಿಂದ ಗರಿಷ್ಠ ₹65 ವರೆಗಿನ ದರ ಮತ್ತು ಬಿಎಂಆರ್‌ಸಿಎಲ್ ಕಾರ್ಡ್ ರಿಯಾಯಿತಿ ದರವನ್ನು ತಕ್ಷಣ ಲೆಕ್ಕಹಾಕಿ.'
+                    : lang === 'hi'
+                    ? 'आधिकारिक बीएमआरसीएल दूरी नियमों पर आधारित सटीक ₹10 से ₹65 किराया और 5% वार्षिक स्मार्ट कार्ड बचत का लाइव कैलकुलेटर।'
+                    : 'Calculates exact station-to-station hop tariffs alongside BMRCL Varshik Smart Card 5% discount rates, ensuring riders always save on daily commute.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> Side-by-side fare comparison
+              </div>
+            </div>
+
+            {/* Feature 4: Turnstile QR Ticket Vault */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-blue-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-500/20">
+                    <QrCode className="w-5 h-5" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-500/15 text-blue-600 dark:text-blue-400">
+                    100% Brightness Boost
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? 'ಟರ್ನ್‌ಸ್ಟೈಲ್ QR ಕೋಡ್ ವಾಲ್ಟ್' : lang === 'hi' ? 'टर्नस्टाइल QR टिकट वॉल्ट' : 'Turnstile QR Ticket Vault'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ನಿಮ್ಮ ವಾಟ್ಸಾಪ್ ಅಥವಾ ಟಿಕೆಟ್ QR ಕೋಡ್ ಅನ್ನು ಆಪ್‌ನಲ್ಲಿ ಉಳಿಸಿ. ಗೇಟ್‌ ಬಳಿ ಒಂದೇ ಕ್ಲಿಕ್‌ನಲ್ಲಿ ಗರಿಷ್ಠ ಪರದೆಯ ಬೆಳಕಿನಲ್ಲಿ ಸುಲಭವಾಗಿ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ.'
+                    : lang === 'hi'
+                    ? 'गैलरी में टिकट खोजने की परेशानी खत्म। वॉट्सऐप या बीएमआरसीएल क्यूआर टिकट सेव करें और 100% ब्राइटनेस में तुरंत स्कैन करें।'
+                    : 'Store WhatsApp QR tickets locally. One tap instantly launches full brightness mode for frictionless gate barrier scanning with zero reflections.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> Fast-track gate passage
+              </div>
+            </div>
+
+            {/* Feature 5: Divyangjan Access & Exit Gates */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-teal-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center border border-teal-500/20">
+                    <Accessibility className="w-5 h-5" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-teal-500/15 text-teal-600 dark:text-teal-400">
+                    100% Accessible
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? 'ಗೇಟ್ ವಿವರ ಮತ್ತು ದಿವ್ಯಾಂಗ ಸೌಲಭ್ಯ' : lang === 'hi' ? 'गेट विवरण व दिव्यांगजन सुविधाएं' : 'Exit Gates & Divyangjan Accessibility'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ಪ್ರತಿ ನಿಲ್ದಾಣದ ಲಿಫ್ಟ್‌ಗಳು, ಎಸ್ಸಲೇಟರ್‌ಗಳು, ವೀಲ್‌ಚೇರ್ ರ‍್ಯಾಂಪ್‌ಗಳು ಮತ್ತು ಐಟಿಪಿಎಲ್, ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ ಸ್ಕೈವಾಕ್ ಗೇಟ್‌ಗಳ ನಿಖರ ಮಾಹಿತಿ.'
+                    : lang === 'hi'
+                    ? 'हर स्टेशन के लिफ्ट, एस्केलेटर, व्हीलचेयर रैंप, सुलभ शौचालय और सीधे आईटी पार्क्स से जुड़ने वाले गेट A/B/C की सटीक जानकारी।'
+                    : 'Exact lift and escalator counts, tactile walking guidance, wheelchair ramps, and Gate A/B/C skywalk blueprints to tech parks and malls.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> Fully inclusive transit
+              </div>
+            </div>
+
+            {/* Feature 6: Authentic Trilingual Localization */}
+            <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 border border-gray-200 dark:border-neutral-800 space-y-4 shadow-xs hover:border-rose-500/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-500/20">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400">
+                    ಕನ್ನಡ · EN · हिन्दी
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white">
+                  {lang === 'kn' ? 'ಅಪ್ಪಟ ಕನ್ನಡ ಮತ್ತು ಬಹುಭಾಷಾ ಬೆಂಬಲ' : lang === 'hi' ? 'प्रामाणिक त्रिभाषी स्थानीयकरण' : 'Native Trilingual Localization'}
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                  {lang === 'kn'
+                    ? 'ಯಂತ್ರ ಅನುವಾದವಲ್ಲದೇ ಸ್ಥಳೀಯ ಭಾಷಾ ತಜ್ಞರಿಂದ ಸಿದ್ಧಪಡಿಸಲಾದ ಅಪ್ಪಟ ಕನ್ನಡ ಲಿಪಿಯ ನಿಲ್ದಾಣಗಳು, ಮಾರ್ಗಗಳು ಮತ್ತು ಸಹಾಯ ವಿವರಣೆ.'
+                    : lang === 'hi'
+                    ? 'कन्नड़, हिंदी और अंग्रेजी में सहज स्विचिंग। स्टेशन के नाम, समय सारणी और सुरक्षा निर्देश आपकी अपनी भाषा में उपलब्ध।'
+                    : 'Not awkward machine translation. Authentic, human-reviewed vernacular localization across Kannada, Hindi, and English for all 100 stations.'}
+                </p>
+              </div>
+              <div className="pt-3 border-t border-gray-100 dark:border-neutral-800 text-[11px] font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" /> 1-Click instant toggle
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── GOOGLE PREFERRED SOURCE BANNER ─── */}
+      <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <GooglePreferredSourceCard />
       </section>
 
-      {/*  BENGALURU METRO BILINGUAL SEO & GEO GPS GUIDE */}
-      <BengaluruMetroGuide />
+      {/* ─── BENGALURU METRO COMMUTER GUIDES & KNOWLEDGE HUB (EDITORIAL TEASER TO BLOG) ─── */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
+        <div className="bg-white dark:bg-neutral-900 rounded-[28px] sm:rounded-[36px] border border-gray-200 dark:border-neutral-800 p-6 sm:p-10 lg:p-12 space-y-8 shadow-sm">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-100 dark:border-neutral-800 pb-6">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>{t('blogGuideHubTitle')}</span>
+              </div>
+              <h2 className="font-heading font-black text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
+                {lang === 'kn' ? 'ನಮ್ಮ ಮೆಟ್ರೋ ಸಮಗ್ರ ಲೇಖನಗಳು ಮತ್ತು ಮಾರ್ಗದರ್ಶಿಗಳು' : lang === 'hi' ? 'नम्मा मेट्रो संपूर्ण लेख और गाइड हब' : 'Bengaluru Metro Essential Commuter Guides'}
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+                {t('blogGuideHubSub')}
+              </p>
+            </div>
 
-      {/*  CRAZY SECTION 4: SCAN QR CODE TO INSTALL NAMMARIDE APP */}
+            <Link
+              to="/blog"
+              className="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-500/20 transition-all self-start md:self-auto shrink-0"
+            >
+              <span>{t('viewAllBlogPosts')}</span>
+            </Link>
+          </div>
+
+          {/* 4 Featured Publication Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Guide 1: Pink Line */}
+            <Link
+              to="/blog#namma-metro-pink-line-inauguration-guide-2026"
+              className="group p-5 rounded-3xl bg-gray-50/70 dark:bg-neutral-950/60 border border-gray-200/80 dark:border-neutral-800/80 hover:border-pink-500/40 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/20">
+                    Reach 6 Launch
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">9 min read</span>
+                </div>
+                <h3 className="font-heading font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors leading-snug">
+                  Pink Line Inauguration: Kalena Agrahara to Tavarekere Opening Guide 2026
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                  Full coverage of 6 elevated stations, Jayadeva multi-level interchange, first & last train timetables, and feeder buses.
+                </p>
+              </div>
+              <div className="pt-2 text-xs font-bold text-pink-600 dark:text-pink-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Read Full Article</span> <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </Link>
+
+            {/* Guide 2: Best App */}
+            <Link
+              to="/blog#why-nammaride-is-the-best-metro-app-for-bengaluru"
+              className="group p-5 rounded-3xl bg-gray-50/70 dark:bg-neutral-950/60 border border-gray-200/80 dark:border-neutral-800/80 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    Architectural Review
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">7 min read</span>
+                </div>
+                <h3 className="font-heading font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
+                  Why NammaRide is Rated the Best Namma Metro App for Bengaluru
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                  Objective benchmark comparing offline satellite GNSS, 0 KB telemetry, zero ad clutter, and 120ms station lookup.
+                </p>
+              </div>
+              <div className="pt-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Read Full Article</span> <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </Link>
+
+            {/* Guide 3: 100 Stations Directory */}
+            <Link
+              to="/stations"
+              className="group p-5 rounded-3xl bg-gray-50/70 dark:bg-neutral-950/60 border border-gray-200/80 dark:border-neutral-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                    100 Stations
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">Complete Directory</span>
+                </div>
+                <h3 className="font-heading font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug">
+                  Bengaluru Metro 100 Stations: Exit Gate Maps & Accessibility
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                  Detailed platform maps, wheelchair accessibility, elevator counts, parking spaces, and direct skywalk exits.
+                </p>
+              </div>
+              <div className="pt-2 text-xs font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Explore Stations</span> <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </Link>
+
+            {/* Guide 4: Geo GPS Guide in Blog */}
+            <Link
+              to="/blog#geo-guide"
+              className="group p-5 rounded-3xl bg-gray-50/70 dark:bg-neutral-950/60 border border-gray-200/80 dark:border-neutral-800/80 hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    ಕನ್ನಡ / EN / हिन्दी
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">8 BBMP Zones</span>
+                </div>
+                <h3 className="font-heading font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors leading-snug">
+                  Bengaluru Metro Complete Commuter & Geo Navigation Guide
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                  Trilingual master directory covering all 8 BBMP administrative zones, BMTC feeder bus numbers, and platform transfers.
+                </p>
+              </div>
+              <div className="pt-2 text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Open Master Guide</span> <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </Link>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SCAN QR CODE TO INSTALL NAMMARIDE APP ─── */}
       <section className="py-10 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full">
         <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-950/40 dark:via-black dark:to-emerald-950/40 rounded-[28px] sm:rounded-[36px] border border-emerald-500/30 p-5 sm:p-10 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
           <div className="space-y-3 text-center md:text-left max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
               <QrCode className="w-4 h-4" />
-              <span>Instant Google Play Scan</span>
+              <span>{t('instantPlayScan')}</span>
             </div>
             <h2 className="font-heading font-black text-2xl sm:text-3xl text-gray-900 dark:text-white tracking-tight">
-              Scan QR Code & Get NammaRide Android App
+              {t('scanQrSubTitle')}
             </h2>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
-              Point your smartphone camera at the QR code to open the Google Play Store directly. Enjoy 100% offline transit guidance, platform interchange maps, and automatic station alerts.
+              {t('scanQrDesc')}
             </p>
             <div className="pt-2">
               <a
@@ -794,7 +1281,7 @@ export default function HomePage() {
             <div className="p-3 bg-gray-50 dark:bg-neutral-900 rounded-2xl border border-gray-200 dark:border-neutral-800 shadow-md glow-button">
               <img src="/assets/images/nammaride_qr.png" alt="Scan QR Code to Download NammaRide App" className="w-36 h-36 object-contain rounded-xl" />
             </div>
-            <p className="text-xs font-mono font-bold text-gray-900 dark:text-white">Scan with Camera or Lens</p>
+            <p className="text-xs font-mono font-bold text-gray-900 dark:text-white">{t('scanWithCamera')}</p>
           </div>
         </div>
       </section>

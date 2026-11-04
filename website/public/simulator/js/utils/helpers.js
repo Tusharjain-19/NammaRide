@@ -30,16 +30,22 @@ export function setCurrentLang(lang) {
 // --- Translation Helpers ---
 export function T(key) {
     const lang = getCurrentLang();
-    return (translations[lang] && translations[lang][key]) ? translations[lang][key] : key;
+    if (translations[lang] && translations[lang][key]) return translations[lang][key];
+    if (translations.en && translations.en[key]) return translations.en[key];
+    return key;
 }
 
 export function T_STATION(name) {
+    if (!name) return '';
     const lang = getCurrentLang();
     if (lineNameMap[name]) {
         const k = lineNameMap[name];
-        return (stationTranslations[k] && stationTranslations[k][lang]) ? stationTranslations[k][lang] : name;
+        if (stationTranslations[k] && stationTranslations[k][lang]) return stationTranslations[k][lang];
     }
-    return (stationTranslations[name] && stationTranslations[name][lang]) ? stationTranslations[name][lang] : name;
+    if (stationTranslations[name] && stationTranslations[name][lang]) {
+        return stationTranslations[name][lang];
+    }
+    return name;
 }
 
 // --- Utility Functions ---

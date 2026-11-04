@@ -360,4 +360,24 @@ export class CustomDropdown {
             });
         }
     }
+
+    refreshTranslations() {
+        const placeholder = T(this.placeholderKey);
+        const selectedEl = document.getElementById(`selected-${this.container.id}`);
+        if (selectedEl) {
+            if (this.selectedValue) {
+                const station = this.stations.find(s => s.id === this.selectedValue);
+                if (station) {
+                    selectedEl.innerHTML = T_STATION(station.name);
+                }
+            } else {
+                selectedEl.innerHTML = placeholder;
+            }
+        }
+        const searchInput = document.getElementById(`search-${this.container.id}`);
+        if (searchInput) {
+            searchInput.placeholder = T('searchStations') || 'Search stations...';
+        }
+        this.renderOptions();
+    }
 }

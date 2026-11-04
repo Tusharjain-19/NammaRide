@@ -114,7 +114,7 @@ export default function ExplorePage() {
             {t('explore')}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-base">
-            Discover top tech hubs, shopping malls, heritage spots, cafes, and nightlife connected directly via active Purple, Green, and Yellow Metro lines.
+            Discover top tech hubs, shopping malls, heritage spots, cafes, and nightlife connected directly via active Purple, Green, Yellow, and Pink Metro lines.
           </p>
         </motion.div>
 

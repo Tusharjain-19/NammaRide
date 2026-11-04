@@ -130,7 +130,7 @@ export default function FareCalculatorPage() {
                 <span className="text-emerald-500 font-mono font-black text-xl">₹150</span>
               </div>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                Unlimited metro rides across Purple, Green & Yellow lines for 1 full calendar day. ₹50 refundable card deposit included.
+                Unlimited metro rides across Purple, Green, Yellow & Pink lines for 1 full calendar day. ₹50 refundable card deposit included.
               </p>
             </div>
 

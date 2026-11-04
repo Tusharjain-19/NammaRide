@@ -3,6 +3,7 @@ import { Smartphone, Monitor, RefreshCw, ExternalLink, Download, Zap, Navigation
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import MetaSEO from '../components/MetaSEO';
 import googlePlayImg from '../../assets/images/google play.svg';
 
@@ -11,7 +12,7 @@ const appTabs = [
     id: 'planner',
     label: 'Journey Planner',
     icon: <Navigation className="w-5 h-5" />,
-    description: 'Plan routes between any two Bengaluru Metro stations with real-time fare estimates, travel duration, interchange guidance, and platform directions. The algorithm calculates the optimal path across Purple, Green, and Yellow lines.',
+    description: 'Plan routes between any two Bengaluru Metro stations with real-time fare estimates, travel duration, interchange guidance, and platform directions. The algorithm calculates the optimal path across Purple, Green, Yellow, and Pink lines.',
     nativeBenefit: 'GPS-Powered Nearest Station Detection',
     features: ['Multi-line interchange routing', 'Real-time fare calculation', 'Platform & exit gate directions', 'Offline route cache']
   },
@@ -19,9 +20,9 @@ const appTabs = [
     id: 'stations',
     label: 'Metro Stations',
     icon: <MapPin className="w-5 h-5" />,
-    description: 'Browse all 83 stations across 3 metro lines with detailed information including accessibility features, nearby landmarks, exit gates, ATM locations, and real-time crowd levels.',
+    description: 'Browse all 100 stations across 4 metro lines with detailed information including accessibility features, nearby landmarks, exit gates, ATM locations, and real-time crowd levels.',
     nativeBenefit: 'Location-Based Station Proximity Alerts',
-    features: ['83 stations with full details', 'Accessibility & facility info', 'Exit gate navigation', 'Nearby landmark discovery']
+    features: ['100 stations with full details', 'Accessibility & facility info', 'Exit gate navigation', 'Nearby landmark discovery']
   },
   {
     id: 'timings',
@@ -55,12 +56,24 @@ export default function SimulatorPage() {
   const iframeRef = useRef(null);
   const cardRefs = useRef({});
   const { theme } = useTheme();
+  const { lang, setLang } = useLanguage();
 
+  // Sync language to simulator iframe when language changes
+  useEffect(() => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      try {
+        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_LANG_CHANGED', lang: lang }, '*');
+      } catch (e) {
+        // Safe fallback
+      }
+    }
+  }, [lang]);
   // Sync theme to simulator iframe when theme changes
   useEffect(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       try {
         iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_THEME_CHANGED', theme: theme }, '*');
+        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_LANG_CHANGED', lang: lang }, '*');
       } catch (e) {
         // Safe fallback
       }
@@ -70,6 +83,11 @@ export default function SimulatorPage() {
   // Sync state from iframe view updates (e.g. clicking bottom navigation inside mockup)
   useEffect(() => {
     const handleMessage = (event) => {
+      if (event.data && event.data.type === 'NAMMARIDE_LANG_CHANGED' && event.data.lang) {
+        if (event.data.lang !== lang) {
+          setLang(event.data.lang);
+        }
+      }
       if (event.data && event.data.type === 'NAMMARIDE_VIEW_CHANGED') {
         const view = event.data.view;
         const tabId = view === 'plan' ? 'planner' : view;
@@ -387,7 +405,7 @@ export default function SimulatorPage() {
                   Ready for the Full Offline Experience?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed font-medium">
-                  Download the official NammaRide app from Google Play or scan the QR code to unlock continuous location proximity alerts, platform interchange guidance, and offline route calculations across Purple, Green, and Yellow lines.
+                  Download the official NammaRide app from Google Play or scan the QR code to unlock continuous location proximity alerts, platform interchange guidance, and offline route calculations across Purple, Green, Yellow, and Pink lines.
                 </p>
               </div>
 

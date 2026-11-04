@@ -29,11 +29,14 @@ export const translations = {
     heroTitle1: 'Navigate Bengaluru Metro',
     heroTitleHighlight: 'Smartly',
     heroTitle2: 'Offline Always',
-    heroDesc: 'Your daily Bengaluru Metro companion: plan routes in seconds, save on fares with Smart Card tips, and navigate 83 stations effortlessly. No internet needed.',
-    all3Lines: 'All 3 Lines Covered',
+    heroDesc: 'Your daily Bengaluru Metro companion: plan routes in seconds, save on fares with Smart Card tips, and navigate 100 stations across 4 lines effortlessly. No internet needed.',
+    all3Lines: 'All 4 Lines Covered',
+    allLines: 'All 4 Lines Covered',
     purpleLine: 'Purple Line',
     greenLine: 'Green Line',
     yellowLine: 'Yellow Line',
+    pinkLine: 'Pink Line',
+    pinkLineBadge: 'Reach 6 Active',
     liveSimulationRunning: 'Live Simulation Running',
 
     // Feature Highlights & USPs Comparison Table
@@ -45,6 +48,17 @@ export const translations = {
     bmrclOfficial: 'BMRCL Official',
     googleMaps: 'Google Maps',
 
+    // 4 Corridors Explorer & Network
+    corridorsExplorer: 'Bengaluru Metro 4-Line Network Explorer',
+    corridorsSubtitle: 'Explore key stations, route length, interchanges, and landmark connections across all active lines.',
+    interchangesTitle: 'Major Transit Interchanges',
+    appUiUxExplanationTitle: 'Engineered for the Modern Bengaluru Commuter',
+    appUiUxExplanationSub: 'See how NammaRide solves everyday Bengaluru transit challenges with offline GPS hardware integration, zero battery drain, and native trilingual clarity.',
+    blogGuideHubTitle: 'Commuter Guides & Knowledge Publication',
+    blogGuideHubSub: 'In-depth transit reports, exit gate blueprints, last-mile feeder buses, and verified inauguration schedules.',
+    readFullGuideBtn: 'Read Detailed Guide in Blog',
+    viewAllBlogPosts: 'Explore All Commuter Guides on Blog →',
+
     // Express Tech Park Navigator
     techParkExpress: 'Tech Park & Commute Hub Express',
     techParkExpressTitle: 'Direct Metro Routes to Bengaluru\'s Top Tech Hubs',
@@ -55,15 +69,15 @@ export const translations = {
     estTicketFare: 'Est. Ticket Fare',
 
     // Live Metrics Dashboard
-    activeStationsCount: '83',
-    activeStationsLabel: 'Active Stations',
-    activeStationsSub: 'Purple, Green & Yellow Lines',
+    activeStationsCount: '100',
+    activeStationsLabel: 'Stations Directory',
+    activeStationsSub: 'Purple, Green, Yellow & Pink Lines',
     offlineFirstCount: '100%',
     offlineFirstLabel: 'Offline First',
     offlineFirstSub: 'Zero Internet Required',
-    smartCardSavingsCount: '10%',
+    smartCardSavingsCount: '5% - 10%',
     smartCardSavingsLabel: 'Smart Card Savings',
-    smartCardSavingsSub: 'Instant Discount Rates',
+    smartCardSavingsSub: 'BMRCL Varshik Discounts',
     zeroDataTrackingCount: '0 KB',
     zeroDataTrackingLabel: 'Data Tracking',
     zeroDataTrackingSub: 'Strict Privacy Guarantee',
@@ -78,7 +92,7 @@ export const translations = {
 
     // Stations Page
     browseStationsTitle: 'Bengaluru Metro Stations Directory',
-    browseStationsDesc: 'Explore detailed platform maps, wheelchair accessibility, elevator locations, and connecting bus routes for all 83 stations.',
+    browseStationsDesc: 'Explore detailed platform maps, wheelchair accessibility, elevator locations, and connecting bus routes for all 100 stations across 4 lines.',
     searchStationPlaceholder: 'Search station by name, line, or landmark...',
     allLinesFilter: 'All Metro Lines',
     stationFacilities: 'Station Facilities',
@@ -91,7 +105,7 @@ export const translations = {
 
     // Timings Page
     timingsTitle: 'Bengaluru Namma Metro Train Schedules & Frequencies',
-    timingsDesc: 'Check first & last train departure times from terminal stations across Purple, Green, and Yellow lines.',
+    timingsDesc: 'Check first & last train departure times from terminal stations across Purple, Green, Yellow, and Pink lines.',
     weekdaySatSchedule: 'Monday to Saturday Schedule',
     sundaySchedule: 'Sunday & Public Holiday Schedule',
     peakFrequency: 'Peak Hours Frequency (3-5 min)',
@@ -159,11 +173,14 @@ export const translations = {
     heroTitle1: 'ಬೆಂಗಳೂರು ಮೆಟ್ರೋ ಪ್ರಯಾಣ',
     heroTitleHighlight: 'ಬುದ್ಧಿವಂತಿಕೆಯಿಂದ',
     heroTitle2: 'ಸದಾ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ',
-    heroDesc: 'ನಿಮ್ಮ ದಿನನಿತ್ಯದ ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋ ಸಂಗಾತಿ: ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮಾರ್ಗ ಯೋಜಿಸಿ, ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ರಿಯಾಯಿತಿ ಪಡೆಯಿರಿ ಮತ್ತು 83 ನಿಲ್ದಾಣಗಳನ್ನು ಸುಲಭವಾಗಿ ಅನ್ವೇಷಿಸಿ. ಇಂಟರ್ನೆಟ್ ಅಗತ್ಯವಿಲ್ಲ.',
-    all3Lines: 'ಎಲ್ಲಾ 3 ಮಾರ್ಗಗಳ ಮಾಹಿತಿ',
+    heroDesc: 'ನಿಮ್ಮ ದಿನನಿತ್ಯದ ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋ ಸಂಗಾತಿ: ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮಾರ್ಗ ಯೋಜಿಸಿ, ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ರಿಯಾಯಿತಿ ಪಡೆಯಿರಿ ಮತ್ತು 4 ಮಾರ್ಗಗಳ 100 ನಿಲ್ದಾಣಗಳನ್ನು ಸುಲಭವಾಗಿ ಅನ್ವೇಷಿಸಿ. ಇಂಟರ್ನೆಟ್ ಅಗತ್ಯವಿಲ್ಲ.',
+    all3Lines: 'ಎಲ್ಲಾ 4 ಮಾರ್ಗಗಳ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ',
+    allLines: 'ಎಲ್ಲಾ 4 ಮಾರ್ಗಗಳ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ',
     purpleLine: 'ನೇರಳೆ ಮಾರ್ಗ',
     greenLine: 'ಹಸಿರು ಮಾರ್ಗ',
     yellowLine: 'ಹಳದಿ ಮಾರ್ಗ',
+    pinkLine: 'ಪಿಂಕ್ ಮಾರ್ಗ',
+    pinkLineBadge: 'ರೀಚ್ 6 ಸಕ್ರಿಯ',
     liveSimulationRunning: 'ಲೈವ್ ಸಿಮ್ಯುಲೇಶನ್ ಚಾಲನೆಯಲ್ಲಿದೆ',
 
     // Feature Highlights & USPs Comparison Table
@@ -175,6 +192,17 @@ export const translations = {
     bmrclOfficial: 'BMRCL ಅಧಿಕೃತ',
     googleMaps: 'ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್',
 
+    // 4 Corridors Explorer & Network
+    corridorsExplorer: 'ಬೆಂಗಳೂರು ಮೆಟ್ರೋ 4 ಮಾರ್ಗಗಳ ಜಾಲ ಪರಿಶೋಧಕ',
+    corridorsSubtitle: 'ಎಲ್ಲಾ ಸಕ್ರಿಯ ಮಾರ್ಗಗಳ ಪ್ರಮುಖ ನಿಲ್ದಾಣಗಳು, ದೂರ, ಇಂಟರ್‌ಚೇಂಜ್ ಮತ್ತು ಪ್ರಮುಖ ಸ್ಥಳಗಳ ವಿವರಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.',
+    interchangesTitle: 'ಪ್ರಮುಖ ಮೆಟ್ರೋ ಇಂಟರ್‌ಚೇಂಜ್ ಕೇಂದ್ರಗಳು',
+    appUiUxExplanationTitle: 'ಬೆಂಗಳೂರಿನ ನೈಜ ಪ್ರಯಾಣಿಕರಿಗಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ',
+    appUiUxExplanationSub: 'ಆಫ್‌ಲೈನ್ ಜಿಪಿಎಸ್ ಹಾರ್ಡ್‌ವೇರ್, ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಮತ್ತು ಅಪ್ಪಟ ಕನ್ನಡ ಬೆಂಬಲದೊಂದಿಗೆ ನಮ್ಮರೈಡ್ ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಹೇಗೆ ಸುಲಭಗೊಳಿಸುತ್ತದೆ ಎಂಬುದನ್ನು ನೋಡಿ.',
+    blogGuideHubTitle: 'ಪ್ರಯಾಣಿಕರ ಮಾರ್ಗದರ್ಶಿ ಮತ್ತು ಮಾಹಿತಿ ಕೇಂದ್ರ',
+    blogGuideHubSub: 'ನಿಲ್ದಾಣದ ಗೇಟ್‌ಗಳು, ಬಿಎಂಟಿಸಿ ಫೀಡರ್ ಬಸ್‌ಗಳು ಮತ್ತು ಉದ್ಘಾಟನಾ ವೇಳಾಪಟ್ಟಿಯ ಸಮಗ್ರ ವರದಿಗಳು.',
+    readFullGuideBtn: 'ಬ್ಲಾಗ್‌ನಲ್ಲಿ ಸಮಗ್ರ ವಿವರ ಓದಿ',
+    viewAllBlogPosts: 'ಎಲ್ಲಾ ಬ್ಲಾಗ್ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ವೀಕ್ಷಿಸಿ →',
+
     // Express Tech Park Navigator
     techParkExpress: 'ಟೆಕ್ ಪಾರ್ಕ್ ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಮಾರ್ಗದರ್ಶಿ',
     techParkExpressTitle: 'ಬೆಂಗಳೂರಿನ ಪ್ರಮುಖ ಟೆಕ್ ಪಾರ್ಕ್‌ಗಳಿಗೆ ಮೆಟ್ರೋ ಮಾರ್ಗಗಳು',
@@ -185,15 +213,15 @@ export const translations = {
     estTicketFare: 'ಅಂದಾಜು ಟಿಕೆಟ್ ದರ',
 
     // Live Metrics Dashboard
-    activeStationsCount: '83',
-    activeStationsLabel: 'ಸಕ್ರಿಯ ನಿಲ್ದಾಣಗಳು',
-    activeStationsSub: 'ನೇರಳೆ, ಹಸಿರು ಮತ್ತು ಹಳದಿ ಮಾರ್ಗಗಳು',
+    activeStationsCount: '100',
+    activeStationsLabel: 'ನಿಲ್ದಾಣಗಳ ಜಾಲ',
+    activeStationsSub: 'ನೇರಳೆ, ಹಸಿರು, ಹಳದಿ ಮತ್ತು ಪಿಂಕ್ ಮಾರ್ಗಗಳು',
     offlineFirstCount: '100%',
     offlineFirstLabel: 'ಸದಾ ಆಫ್‌ಲೈನ್',
     offlineFirstSub: 'ಇಂಟರ್ನೆಟ್ ಅಗತ್ಯವಿಲ್ಲ',
-    smartCardSavingsCount: '10%',
+    smartCardSavingsCount: '5% - 10%',
     smartCardSavingsLabel: 'ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ಉಳಿತಾಯ',
-    smartCardSavingsSub: 'ತ್ವರಿತ ರಿಯಾಯಿತಿ ದರಗಳು',
+    smartCardSavingsSub: 'ಬಿಎಂಆರ್‌ಸಿಎಲ್ ರಿಯಾಯಿತಿಗಳು',
     zeroDataTrackingCount: '0 KB',
     zeroDataTrackingLabel: 'ಡೇಟಾ ಟ್ರ್ಯಾಕಿಂಗ್',
     zeroDataTrackingSub: 'ಸಂಪೂರ್ಣ ಗೌಪ್ಯತೆಯ ಭರವಸೆ',
@@ -208,7 +236,7 @@ export const translations = {
 
     // Stations Page
     browseStationsTitle: 'ಬೆಂಗಳೂರು ಮೆಟ್ರೋ ನಿಲ್ದಾಣಗಳ ಪಟ್ಟಿ',
-    browseStationsDesc: 'ಎಲ್ಲಾ 83 ನಿಲ್ದಾಣಗಳ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ನಕ್ಷೆಗಳು, ವೀಲ್‌ಚೇರ್ ಸೌಲಭ್ಯಗಳು, ಲಿಫ್ಟ್‌ಗಳು ಮತ್ತು ಬಸ್ ಸಂಪರ್ಕಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.',
+    browseStationsDesc: 'ಎಲ್ಲಾ 4 ಮಾರ್ಗಗಳ 100 ನಿಲ್ದಾಣಗಳ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ನಕ್ಷೆಗಳು, ವೀಲ್‌ಚೇರ್ ಸೌಲಭ್ಯಗಳು, ಲಿಫ್ಟ್‌ಗಳು ಮತ್ತು ಬಸ್ ಸಂಪರ್ಕಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.',
     searchStationPlaceholder: 'ನಿಲ್ದಾಣದ ಹೆಸರು ಅಥವಾ ಮಾರ್ಗದಿಂದ ಹುಡುಕಿ...',
     allLinesFilter: 'ಎಲ್ಲಾ ಮೆಟ್ರೋ ಮಾರ್ಗಗಳು',
     stationFacilities: 'ನಿಲ್ದಾಣದ ಸೌಲಭ್ಯಗಳು',
@@ -221,7 +249,7 @@ export const translations = {
 
     // Timings Page
     timingsTitle: 'ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋ ರೈಲು ಸಮಯ ಮತ್ತು ಆವರ್ತನ',
-    timingsDesc: 'ನೇರಳೆ, ಹಸಿರು ಮತ್ತು ಹಳದಿ ಮಾರ್ಗಗಳ ಟರ್ಮಿನಲ್ ನಿಲ್ದಾಣಗಳಿಂದ ಮೊದಲ ಮತ್ತು ಕೊನೆಯ ರೈಲು ಹೊರಡುವ ಸಮಯವನ್ನು ಪರಿಶೀಲಿಸಿ.',
+    timingsDesc: 'ನೇರಳೆ, ಹಸಿರು, ಹಳದಿ ಮತ್ತು ಪಿಂಕ್ ಮಾರ್ಗಗಳ ಟರ್ಮಿನಲ್ ನಿಲ್ದಾಣಗಳಿಂದ ಮೊದಲ ಮತ್ತು ಕೊನೆಯ ರೈಲು ಹೊರಡುವ ಸಮಯವನ್ನು ಪರಿಶೀಲಿಸಿ.',
     weekdaySatSchedule: 'ಸೋಮವಾರದಿಂದ ಶನಿವಾರದವರೆಗೆ ಸಮಯ',
     sundaySchedule: 'ಭಾನುವಾರ ಮತ್ತು ಸಾರ್ವಜನಿಕ ರಜಾದಿನಗಳ ಸಮಯ',
     peakFrequency: 'ಪೀಕ್ ಅವಧಿಯ ಆವರ್ತನ (3-5 ನಿಮಿಷ)',
@@ -289,11 +317,14 @@ export const translations = {
     heroTitle1: 'बेंगलुरु नम्मा मेट्रो यात्रा',
     heroTitleHighlight: 'स्मार्टली',
     heroTitle2: 'हमेशा ऑफ़लाइन',
-    heroDesc: 'आपका दैनिक बेंगलुरु मेट्रो साथी: कुछ ही सेकंड में मार्ग खोजें, स्मार्ट कार्ड टिप्स से बचत करें, और 83 स्टेशनों पर आसानी से घूमें। इंटरनेट की कोई आवश्यकता नहीं।',
-    all3Lines: 'तीनों मेट्रो लाइनें शामिल',
+    heroDesc: 'आपका दैनिक बेंगलुरु मेट्रो साथी: कुछ ही सेकंड में मार्ग खोजें, स्मार्ट कार्ड टिप्स से बचत करें, और 4 लाइनों के 100 स्टेशनों पर आसानी से घूमें। इंटरनेट की कोई आवश्यकता नहीं।',
+    all3Lines: 'चारों मेट्रो लाइनें शामिल',
+    allLines: 'चारों मेट्रो लाइनें शामिल',
     purpleLine: 'पर्पल लाइन',
     greenLine: 'ग्रीन लाइन',
     yellowLine: 'येलो लाइन',
+    pinkLine: 'पिंक लाइन',
+    pinkLineBadge: 'रीच 6 सक्रिय',
     liveSimulationRunning: 'लाइव सिम्युलेशन सक्रिय',
 
     // Feature Highlights & USPs Comparison Table
@@ -305,6 +336,17 @@ export const translations = {
     bmrclOfficial: 'BMRCL आधिकारिक',
     googleMaps: 'गूगल मैप्स',
 
+    // 4 Corridors Explorer & Network
+    corridorsExplorer: 'बेंगलुरु मेट्रो 4-लाइन नेटवर्क एक्सप्लोरर',
+    corridorsSubtitle: 'सभी सक्रिय लाइनों के प्रमुख स्टेशन, दूरी, इंटरचेंज और प्रमुख स्थलों के विवरण देखें।',
+    interchangesTitle: 'प्रमुख मेट्रो इंटरचेंज जंक्शन',
+    appUiUxExplanationTitle: 'बेंगलुरु के आधुनिक यात्रियों के लिए विशेष रूप से निर्मित',
+    appUiUxExplanationSub: 'देखें कि नम्मा राइड ऑफ़लाइन जीपीएस, शून्य बैटरी खपत और बहुभाषी स्पष्टता के साथ आपके दैनिक सफर को कैसे आसान बनाता है।',
+    blogGuideHubTitle: 'यात्री गाइड और मेट्रो समाचार केंद्र',
+    blogGuideHubSub: 'स्टेशन गेट मैप्स, फीडर बसें और उद्घाटन समय सारणी की विस्तृत मार्गदर्शिका।',
+    readFullGuideBtn: 'ब्लॉग में पूरी गाइड पढ़ें',
+    viewAllBlogPosts: 'सभी ब्लॉग गाइड्स और समाचार देखें →',
+
     // Express Tech Park Navigator
     techParkExpress: 'टेक पार्क एक्सप्रेस नेविगेटर',
     techParkExpressTitle: 'बेंगलुरु के प्रमुख टेक हब्स के लिए सीधी मेट्रो',
@@ -315,15 +357,15 @@ export const translations = {
     estTicketFare: 'अनुमानित किराया',
 
     // Live Metrics Dashboard
-    activeStationsCount: '83',
-    activeStationsLabel: 'सक्रिय स्टेशन',
-    activeStationsSub: 'पर्पल, ग्रीन और येलो लाइन',
+    activeStationsCount: '100',
+    activeStationsLabel: 'स्टेशन नेटवर्क',
+    activeStationsSub: 'पर्पल, ग्रीन, येलो व पिंक लाइन',
     offlineFirstCount: '100%',
     offlineFirstLabel: 'पूर्णतः ऑफ़लाइन',
     offlineFirstSub: 'शून्य इंटरनेट डेटा आवश्यक',
-    smartCardSavingsCount: '10%',
+    smartCardSavingsCount: '5% - 10%',
     smartCardSavingsLabel: 'स्मार्ट कार्ड बचत',
-    smartCardSavingsSub: 'त्वरित छूट दरें',
+    smartCardSavingsSub: 'BMRCL त्वरित छूट दरें',
     zeroDataTrackingCount: '0 KB',
     zeroDataTrackingLabel: 'डेटा ट्रैकिंग',
     zeroDataTrackingSub: 'पूर्ण गोपनीयता गारंटी',
@@ -338,7 +380,7 @@ export const translations = {
 
     // Stations Page
     browseStationsTitle: 'बेंगलुरु मेट्रो स्टेशन सूची',
-    browseStationsDesc: 'सभी 83 स्टेशनों के लिए प्लेटफॉर्म मैप्स, व्हीलचेयर सुविधा, लिफ्ट, एस्केलेटर और बस कनेक्टिविटी देखें।',
+    browseStationsDesc: 'सभी 4 लाइनों के 100 स्टेशनों के लिए प्लेटफॉर्म मैप्स, व्हीलचेयर सुविधा, लिफ्ट, एस्केलेटर और बस कनेक्टिविटी देखें।',
     searchStationPlaceholder: 'स्टेशन का नाम या लाइन खोजें...',
     allLinesFilter: 'सभी मेट्रो लाइनें',
     stationFacilities: 'स्टेशन सुविधाएं',
@@ -351,7 +393,7 @@ export const translations = {
 
     // Timings Page
     timingsTitle: 'बेंगलुरु नम्मा मेट्रो ट्रेन समय सारणी व फ्रीक्वेंसी',
-    timingsDesc: 'पर्पल, ग्रीन और येलो लाइन के टर्मिनल स्टेशनों से पहली और आखिरी ट्रेन का समय जांचें।',
+    timingsDesc: 'पर्पल, ग्रीन, येलो और पिंक लाइन के टर्मिनल स्टेशनों से पहली और आखिरी ट्रेन का समय जांचें।',
     weekdaySatSchedule: 'सोमवार से शनिवार समय सारणी',
     sundaySchedule: 'रविवार व सार्वजनिक अवकाश समय',
     peakFrequency: 'पीक ऑवर्स फ्रीक्वेंसी (3-5 मिनट)',
@@ -407,6 +449,8 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     try {
       localStorage.setItem('nammaride_lang', lang);
+      localStorage.setItem('appLang', lang);
+      window.dispatchEvent(new CustomEvent('nammaride_lang_updated', { detail: { lang } }));
     } catch (e) {
       console.warn('LocalStorage unavailable', e);
     }

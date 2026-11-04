@@ -56,6 +56,11 @@ export default function AboutPage() {
       desc: 'Public release of NammaRide Android App on Google Play Store with zero ads, 100% offline navigation, and live updates.' 
     },
     { 
+      date: 'November 2026', 
+      title: 'Pink Line Reach 6 & 100 Stations Expansion', 
+      desc: 'Seamless integration of the 7.5-km elevated Pink Line (Kalena Agrahara to Tavarekere), Jayadeva multi-level interchange, and 100-station network directory.' 
+    },
+    { 
       date: '2027 & Beyond', 
       title: 'National Metro Expansion', 
       desc: 'Expanding offline route engines, iOS app release, and mapping new metro extensions across major Indian cities.' 
