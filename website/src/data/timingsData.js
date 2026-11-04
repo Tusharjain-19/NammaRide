@@ -2,7 +2,7 @@ export const timingsData = {
   pink: {
     name: "Pink Line",
     color: "#EC4899",
-    route: "Kalena Agrahara <-> Tavarekere",
+    route: "Kalena Agrahara ↔ Tavarekere",
     stations: 6,
     notes: [
       "Inaugurated on November 13, 2026 by Hon'ble Prime Minister Narendra Modi.",

@@ -348,140 +348,177 @@ export function renderStationDetail(container, stationId) {
 // TIMINGS VIEW
 // ═══════════════════════════════════════
 export function renderTimings(container) {
-    const l = lang();
-    if (viewCache.timings.lang === l && viewCache.timings.html) {
-        container.innerHTML = viewCache.timings.html;
-        attachTimingsEvents(container);
-        if (window.lucide) window.lucide.createIcons();
-        return;
-    }
+    if (!container) container = document.getElementById('timings-view');
+    if (!container) return;
 
-    let html = `<div class="section-header">
-        <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
-        <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
-    </div>
+    try {
+        const l = lang();
+        if (viewCache.timings.lang === l && viewCache.timings.html) {
+            container.innerHTML = viewCache.timings.html;
+            attachTimingsEvents(container);
+            if (window.lucide) window.lucide.createIcons();
+            return;
+        }
 
-    <!-- Last Train Interchange Advisory Banner -->
-    <div class="mb-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-        <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/30">
-            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+        let html = `<div class="section-header">
+            <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
+            <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
         </div>
-        <div class="space-y-1">
-            <div class="flex items-center gap-2 flex-wrap">
-                <h4 class="text-xs font-black text-amber-500 dark:text-amber-400 uppercase tracking-wider">Last Train Interchange Advisory</h4>
-                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-600 dark:text-amber-400">11:20 PM Cut-off</span>
+
+        <!-- Last Train Interchange Advisory Banner -->
+        <div class="mb-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/30">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
             </div>
-            <p class="text-xs text-secondary leading-relaxed">
-                Connecting trains at <strong>Nadaprabhu Kempegowda Stn. Majestic</strong> depart at <strong>11:20 PM</strong>. To guarantee your connection between Purple and Green lines, board your initial train before <strong>10:25 PM</strong> from outer stations (Whitefield, Challaghatta, Madavara, Silk Institute).
-            </p>
-        </div>
-    </div>`;
-
-    Object.entries(timingsData).forEach(([key, line]) => {
-        const firstTrainStart = line.schedules?.mon_fri?.from_start?.[0]?.range?.split('-')[0]?.trim() || '05:00 AM';
-        const lastTrainEnd = line.schedules?.mon_fri?.from_end?.slice(-1)[0]?.range?.split('-')[1]?.trim() || '11:05 PM';
-        const peakFreq = line.schedules?.mon_fri?.from_start?.[2]?.frequency || '5-8 min';
-
-        html += `<div class="timing-card" style="border-left: 3px solid ${line.color}">
-            <div class="timing-card-header">
-                <span class="line-dot" style="background:${line.color}"></span>
-                <div class="flex-grow">
-                    <h4 class="timing-line-name">${T_STATION_fn(line.name)}</h4>
-                    <p class="timing-route">${line.route}</p>
-                    <p class="timing-stations">${line.stations} stations</p>
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="text-xs font-black text-amber-500 dark:text-amber-400 uppercase tracking-wider">Last Train Interchange Advisory</h4>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-600 dark:text-amber-400">11:20 PM Cut-off</span>
                 </div>
+                <p class="text-xs text-secondary leading-relaxed">
+                    Connecting trains at <strong>Nadaprabhu Kempegowda Stn. Majestic</strong> depart at <strong>11:20 PM</strong>. To guarantee your connection between Purple and Green lines, board your initial train before <strong>10:25 PM</strong> from outer stations (Whitefield, Challaghatta, Madavara, Silk Institute).
+                </p>
             </div>
+        </div>`;
 
-            <!-- First/Last Train Quick Summary Grid -->
-            <div class="grid grid-cols-3 gap-2 mt-3 mb-4">
-                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
-                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">First Train</div>
-                    <div class="text-xs font-extrabold text-emerald-400 mt-0.5">${firstTrainStart}</div>
+        Object.entries(timingsData || {}).forEach(([key, line]) => {
+            const primarySched = line.schedules?.mon_fri || line.schedules?.mon_sat || (line.schedules ? Object.values(line.schedules)[0] : null);
+            
+            let firstTrainStart = '05:00 AM';
+            if (primarySched?.from_start?.[0]?.range) {
+                firstTrainStart = primarySched.from_start[0].range.split('-')[0].trim();
+            } else if (line.weekday?.firstTrain?.from_start) {
+                firstTrainStart = line.weekday.firstTrain.from_start;
+            }
+
+            let lastTrainEnd = '11:05 PM';
+            const endArr = primarySched?.from_end || primarySched?.from_start;
+            if (endArr && endArr.length > 0) {
+                const lastItem = endArr[endArr.length - 1];
+                if (lastItem?.range) {
+                    const parts = lastItem.range.split('-');
+                    lastTrainEnd = parts[parts.length - 1].trim();
+                }
+            } else if (line.weekday?.lastTrain?.from_end || line.weekday?.lastTrain?.from_start) {
+                lastTrainEnd = line.weekday.lastTrain.from_end || line.weekday.lastTrain.from_start;
+            }
+
+            let peakFreq = '5-10 min';
+            if (primarySched?.from_start && primarySched.from_start.length > 2 && primarySched.from_start[2]?.frequency) {
+                peakFreq = primarySched.from_start[2].frequency;
+            } else if (line.weekday?.peakFrequency) {
+                peakFreq = line.weekday.peakFrequency;
+            }
+
+            html += `<div class="timing-card" style="border-left: 3px solid ${line.color || '#10B981'}">
+                <div class="timing-card-header">
+                    <span class="line-dot" style="background:${line.color || '#10B981'}"></span>
+                    <div class="flex-grow">
+                        <h4 class="timing-line-name">${T_STATION_fn(line.name)}</h4>
+                        <p class="timing-route">${line.route || ''}</p>
+                        <p class="timing-stations">${line.stations || 0} stations</p>
+                    </div>
                 </div>
-                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
-                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Last Train</div>
-                    <div class="text-xs font-extrabold text-amber-400 mt-0.5">${lastTrainEnd}</div>
-                </div>
-                <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
-                    <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Peak Freq</div>
-                    <div class="text-xs font-extrabold text-indigo-400 mt-0.5">${peakFreq}</div>
-                </div>
-            </div>`;
 
-        // Day Selection Tabs for this line (Consolidated)
-        html += `<div class="timing-tabs flex gap-2 px-1 overflow-x-auto pb-2 custom-scrollbar" id="tabs-${key}">`;
-        Object.keys(line.schedules).forEach((dayKey, idx) => {
-            const dayTitle = line.schedules[dayKey].title;
-            html += `<button class="timing-tab-btn ${idx === 0 ? 'active' : ''}" data-line="${key}" data-day="${dayKey}">${dayTitle}</button>`;
-        });
-        html += `</div>`;
+                <!-- First/Last Train Quick Summary Grid -->
+                <div class="grid grid-cols-3 gap-2 mt-3 mb-4">
+                    <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                        <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">First Train</div>
+                        <div class="text-xs font-extrabold text-emerald-400 mt-0.5">${firstTrainStart}</div>
+                    </div>
+                    <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                        <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Last Train</div>
+                        <div class="text-xs font-extrabold text-amber-400 mt-0.5">${lastTrainEnd}</div>
+                    </div>
+                    <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle text-center">
+                        <div class="text-[9px] uppercase font-bold text-secondary tracking-wider">Peak Freq</div>
+                        <div class="text-xs font-extrabold text-indigo-400 mt-0.5">${peakFreq}</div>
+                    </div>
+                </div>`;
 
-        // Schedule Content (First day visible by default)
-        html += `<div class="timing-schedule-container mt-2" id="schedule-container-${key}">`;
-        Object.entries(line.schedules).forEach(([dayKey, schedule], idx) => {
-            const terminals = line.route.split(' ↔ ');
-            const termA = terminals[0] ? terminals[0].trim() : 'Terminal A';
-            const termB = terminals[1] ? terminals[1].trim() : 'Terminal B';
+            // Day Selection Tabs for this line (Consolidated)
+            html += `<div class="timing-tabs flex gap-2 px-1 overflow-x-auto pb-2 custom-scrollbar" id="tabs-${key}">`;
+            Object.keys(line.schedules || {}).forEach((dayKey, idx) => {
+                const dayTitle = line.schedules[dayKey]?.title || dayKey;
+                html += `<button class="timing-tab-btn ${idx === 0 ? 'active' : ''}" data-line="${key}" data-day="${dayKey}">${dayTitle}</button>`;
+            });
+            html += `</div>`;
 
-            html += `<div class="timing-day-schedule ${idx === 0 ? '' : 'hidden'}" id="schedule-${key}-${dayKey}">
-                <div class="timing-table-wrapper">
-                    <div class="grid grid-cols-2 gap-3 p-3 bg-card-subtle rounded-xl border border-subtle">
-                        <!-- Direction A -->
-                        <div>
-                            <div class="text-[10px] sub-heading uppercase font-bold text-emerald-400 mb-2 truncate">From ${termB}</div>
-                            <div class="space-y-1.5">
-                                ${schedule.from_start.map(item => `
-                                    <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
-                                        <span class="text-primary font-semibold">${item.range}</span>
-                                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold text-[10px]">${item.frequency}</span>
-                                    </div>
-                                `).join('')}
+            // Schedule Content (First day visible by default)
+            html += `<div class="timing-schedule-container mt-2" id="schedule-container-${key}">`;
+            Object.entries(line.schedules || {}).forEach(([dayKey, schedule], idx) => {
+                const terminals = (line.route || '').split(/ ↔ | <-> /);
+                const termA = terminals[0] ? terminals[0].trim() : 'Terminal A';
+                const termB = terminals[1] ? terminals[1].trim() : 'Terminal B';
+
+                const startList = schedule.from_start || [];
+                const endList = schedule.from_end || schedule.from_start || [];
+
+                html += `<div class="timing-day-schedule ${idx === 0 ? '' : 'hidden'}" id="schedule-${key}-${dayKey}">
+                    <div class="timing-table-wrapper">
+                        <div class="grid grid-cols-2 gap-3 p-3 bg-card-subtle rounded-xl border border-subtle">
+                            <!-- Direction A -->
+                            <div>
+                                <div class="text-[10px] sub-heading uppercase font-bold text-emerald-400 mb-2 truncate">From ${termB}</div>
+                                <div class="space-y-1.5">
+                                    ${startList.map(item => `
+                                        <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
+                                            <span class="text-primary font-semibold">${item.range}</span>
+                                            <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold text-[10px]">${item.frequency}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Direction B -->
-                        <div>
-                            <div class="text-[10px] sub-heading uppercase font-bold text-indigo-400 mb-2 truncate">From ${termA}</div>
-                            <div class="space-y-1.5">
-                                ${schedule.from_end.map(item => `
-                                    <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
-                                        <span class="text-primary font-semibold">${item.range}</span>
-                                        <span class="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold text-[10px]">${item.frequency}</span>
-                                    </div>
-                                `).join('')}
+                            <!-- Direction B -->
+                            <div>
+                                <div class="text-[10px] sub-heading uppercase font-bold text-indigo-400 mb-2 truncate">From ${termA}</div>
+                                <div class="space-y-1.5">
+                                    ${endList.map(item => `
+                                        <div class="flex justify-between items-center py-1 border-b border-subtle/40 text-[11px]">
+                                            <span class="text-primary font-semibold">${item.range}</span>
+                                            <span class="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold text-[10px]">${item.frequency}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>`;
+                </div>`;
+            });
+            html += `</div>`; // End schedule-container
+
+            // Notes section for this line
+            if (line.notes && line.notes.length) {
+                html += `<div class="timing-notes mt-3 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-amber-500"></i>
+                        <span class="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Operational Notes</span>
+                    </div>
+                    ${line.notes.map(note => `<p class="text-[11px] text-primary/70 leading-relaxed mb-1 last:mb-0">• ${note}</p>`).join('')}
+                </div>`;
+            }
+
+            html += `</div>`; // End timing-card
         });
-        html += `</div>`; // End schedule-container
 
-        // Notes section for this line
-        if (line.notes && line.notes.length) {
-            html += `<div class="timing-notes mt-3 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <i data-lucide="info" class="w-3.5 h-3.5 text-amber-500"></i>
-                    <span class="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Operational Notes</span>
-                </div>
-                ${line.notes.map(note => `<p class="text-[11px] text-primary/70 leading-relaxed mb-1 last:mb-0">• ${note}</p>`).join('')}
-            </div>`;
-        }
+        container.innerHTML = html;
+        viewCache.timings.lang = l;
+        viewCache.timings.html = html;
 
-        html += `</div>`; // End timing-card
-    });
-
-    container.innerHTML = html;
-    viewCache.timings.lang = l;
-    viewCache.timings.html = html;
-
-    if (window.lucide) window.lucide.createIcons();
-    attachTimingsEvents(container);
+        if (window.lucide) window.lucide.createIcons();
+        attachTimingsEvents(container);
+    } catch (err) {
+        console.error('[NammaRide] Error rendering timings section:', err);
+    }
 }
 
 function attachTimingsEvents(container) {
+    if (!container) return;
     container.querySelectorAll('.timing-tab-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             const line = btn.dataset.line;
             const day = btn.dataset.day;
 

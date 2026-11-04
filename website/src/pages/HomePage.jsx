@@ -16,15 +16,18 @@ import googlePlayImg from '../../assets/images/google play.svg';
 
 function HeroSimulation() {
   const [activeStep, setActiveStep] = useState(0);
+  const [timingLine, setTimingLine] = useState('Purple');
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
   const { theme } = useTheme();
   const isLight = theme === 'light';
 
   useEffect(() => {
+    if (isUserInteracting) return;
     const timer = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % 4);
-    }, 4000);
+    }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [isUserInteracting]);
 
   // Real app color tokens synced to website theme
   const t = {
@@ -38,20 +41,53 @@ function HeroSimulation() {
     accent: '#10B981',
   };
 
-  // Bottom Nav (matches real app: Plan, Stations, Timings, Explore, Safety)
+  const lineTheme = {
+    Purple: { color: '#A855F7', bg: 'rgba(168,85,247,0.12)' },
+    Green: { color: '#10B981', bg: 'rgba(16,185,129,0.12)' },
+    Yellow: { color: '#EAB308', bg: 'rgba(234,179,8,0.12)' },
+    Pink: { color: '#EC4899', bg: 'rgba(236,72,153,0.12)' },
+  };
+
+  const timingSchedules = {
+    Purple: [
+      { name: 'Whitefield (Kadugodi)', first: '05:00', last: '23:00' },
+      { name: 'Indiranagar', first: '05:15', last: '23:15' },
+      { name: 'Majestic (Interchange)', first: '05:00', last: '23:05' },
+      { name: 'Challaghatta', first: '05:00', last: '23:00' },
+    ],
+    Green: [
+      { name: 'Madavara (BIEC)', first: '05:00', last: '23:00' },
+      { name: 'Majestic (Interchange)', first: '05:00', last: '23:05' },
+      { name: 'RV Road (Interchange)', first: '05:15', last: '23:15' },
+      { name: 'Silk Institute', first: '05:00', last: '23:00' },
+    ],
+    Yellow: [
+      { name: 'RV Road (Interchange)', first: '05:00', last: '23:00' },
+      { name: 'Jayadeva (Interchange)', first: '05:08', last: '23:08' },
+      { name: 'Central Silk Board', first: '05:15', last: '23:15' },
+      { name: 'Bommasandra', first: '05:00', last: '23:00' },
+    ],
+    Pink: [
+      { name: 'Kalena Agrahara', first: '05:00', last: '23:00' },
+      { name: 'IIM Bangalore', first: '05:06', last: '23:06' },
+      { name: 'Jayadeva (Interchange)', first: '05:10', last: '23:10' },
+      { name: 'Tavarekere', first: '05:00', last: '23:00' },
+    ],
+  };
+
+  // Bottom Nav (matches real app: Plan, Route, Timings, Explore)
   const navTabs = [
     { icon: <Route className="w-[18px] h-[18px]" />, label: 'Plan', frame: 0 },
-    { icon: <MapPin className="w-[18px] h-[18px]" />, label: 'Stations', frame: -1 },
+    { icon: <MapPin className="w-[18px] h-[18px]" />, label: 'Route', frame: 1 },
     { icon: <Clock className="w-[18px] h-[18px]" />, label: 'Timings', frame: 3 },
     { icon: <Compass className="w-[18px] h-[18px]" />, label: 'Explore', frame: 2 },
-    { icon: <ShieldCheck className="w-[18px] h-[18px]" />, label: 'Safety', frame: -1 },
   ];
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden" style={{ background: t.bg, transition: 'background 0.4s ease' }}>
+    <div className="absolute inset-0 w-full h-full overflow-hidden select-none" style={{ background: t.bg, transition: 'background 0.4s ease' }}>
 
       {/* ─── App Header Bar ─── */}
-      <div className="absolute top-0 inset-x-0 z-30 flex justify-between items-center px-4 py-3" style={{ background: isLight ? 'rgba(240,244,248,0.85)' : 'rgba(0,0,0,0.75)', borderBottom: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
+      <div className="absolute top-0 inset-x-0 z-30 flex justify-between items-center px-4 py-3 pointer-events-auto" style={{ background: isLight ? 'rgba(240,244,248,0.85)' : 'rgba(0,0,0,0.75)', borderBottom: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
         <div className="flex items-center gap-2">
           <img src="/simulator/assets/images/logo_app.png" alt="NammaRide" className="w-6 h-6 object-contain" />
           <span className="font-bold text-sm tracking-tight" style={{ color: t.text }}>NammaRide</span>
@@ -64,38 +100,49 @@ function HeroSimulation() {
         </div>
       </div>
 
-      {/* ─── FRAME 0: Plan Trip (the main screen) ─── */}
-      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 ${activeStep === 0 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
+      {/* ─── FRAME 0: Plan Trip ─── */}
+      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 ${activeStep === 0 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
         <div className="flex-grow flex flex-col pt-4 max-w-full">
           <h2 className="text-2xl font-extrabold tracking-tight mb-6 leading-tight" style={{ color: t.text }}>Where to go<br/>today?</h2>
           
           {/* Station Inputs */}
           <div className="relative flex flex-col gap-4 mb-5">
-            {/* Origin */}
             <div className="flex items-center gap-3 p-3.5 rounded-2xl" style={{ background: t.inputBg, border: `1px solid ${t.border}` }}>
               <span className="w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)] shrink-0"></span>
               <span className="text-sm font-medium" style={{ color: t.text }}>Attiguppe</span>
             </div>
-            {/* Swap */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center z-10">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-md" style={{ background: t.cardSolid, border: `1px solid ${t.border}` }}>
+              <button 
+                type="button"
+                onClick={() => { setIsUserInteracting(true); setActiveStep(1); }}
+                className="w-9 h-9 rounded-full flex items-center justify-center shadow-md cursor-pointer transition-transform active:scale-90" 
+                style={{ background: t.cardSolid, border: `1px solid ${t.border}` }}
+              >
                 <ArrowDownUp className="w-4 h-4" style={{ color: t.textSec }} />
-              </div>
+              </button>
             </div>
-            {/* Destination */}
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl" style={{ background: t.inputBg, border: `1px solid ${t.border}` }}>
+            <button 
+              type="button"
+              onClick={() => { setIsUserInteracting(true); setActiveStep(1); }}
+              className="flex items-center gap-3 p-3.5 rounded-2xl text-left cursor-pointer transition-all hover:opacity-90 active:scale-98" 
+              style={{ background: t.inputBg, border: `1px solid ${t.border}` }}
+            >
               <span className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] shrink-0"></span>
-              <span className="text-sm font-medium animate-pulse" style={{ color: t.textSec }}>Select destination...</span>
-            </div>
+              <span className="text-sm font-medium animate-pulse" style={{ color: t.textSec }}>Select destination (Yelachenahalli)...</span>
+            </button>
           </div>
 
-          {/* Journey Summary Hint */}
           <div className="p-3.5 rounded-xl mb-5 text-center" style={{ background: t.card, border: `1px solid ${t.border}` }}>
             <span className="text-xs font-medium" style={{ color: t.textSec }}>Select stations to see the fastest route.</span>
           </div>
 
           {/* I am at... Card */}
-          <div className="flex items-center justify-between p-4 rounded-2xl" style={{ background: isLight ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
+          <button 
+            type="button"
+            onClick={() => { setIsUserInteracting(true); setActiveStep(1); }}
+            className="flex items-center justify-between p-4 rounded-2xl text-left cursor-pointer transition-all hover:scale-[1.02] active:scale-98" 
+            style={{ background: isLight ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
                 <Navigation className="w-5 h-5" />
@@ -108,7 +155,7 @@ function HeroSimulation() {
             <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.2)' }}>
               <ChevronRight className="w-4 h-4 text-emerald-400" />
             </div>
-          </div>
+          </button>
 
           <div className="mt-auto pt-4">
             <p className="text-center text-[9px] font-medium" style={{ color: t.textSec, opacity: 0.6 }}>Disclaimer: Timings and fare are estimates.</p>
@@ -117,9 +164,8 @@ function HeroSimulation() {
       </div>
 
       {/* ─── FRAME 1: Route Result ─── */}
-      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 1 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
+      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 1 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
         <div className="flex-grow flex flex-col pt-3">
-          {/* Trip Summary Card */}
           <div className="p-5 rounded-3xl mb-4 shadow-lg" style={{ background: t.card, border: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
             <div className="flex justify-between items-end mb-3">
               <div>
@@ -164,8 +210,15 @@ function HeroSimulation() {
             </div>
           </div>
 
-          {/* QR Ticket Floating Button */}
-          <div className="flex justify-end mt-3">
+          {/* Plan New Route Link */}
+          <div className="flex justify-between items-center mt-3">
+            <button
+              type="button"
+              onClick={() => { setIsUserInteracting(true); setActiveStep(0); }}
+              className="text-xs font-semibold text-emerald-500 hover:underline cursor-pointer"
+            >
+              ← Back to Plan
+            </button>
             <div className="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg text-xs font-bold" style={{ background: t.card, border: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
               <QrCode className="w-4 h-4 text-emerald-400" />
               <span style={{ color: t.text }}>QR Ticket</span>
@@ -176,14 +229,13 @@ function HeroSimulation() {
       </div>
 
       {/* ─── FRAME 2: Explore Screen ─── */}
-      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 2 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
+      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 2 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
         <div className="flex-grow flex flex-col pt-3">
           <h2 className="text-xl font-extrabold tracking-tight mb-1" style={{ color: t.text }}>Explore Bengaluru</h2>
           <p className="text-[10px] font-medium mb-4 flex items-center gap-1.5" style={{ color: t.accent }}>
             <Compass className="w-3 h-3" /> Discover nearby landmarks
           </p>
 
-          {/* Category Pills */}
           <div className="flex gap-2 mb-4 overflow-hidden">
             {['All', 'Tech Hubs', 'Shopping', 'Heritage'].map((cat, i) => (
               <span key={cat} className="px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap shrink-0" style={{
@@ -194,7 +246,6 @@ function HeroSimulation() {
             ))}
           </div>
 
-          {/* Explore Cards */}
           <div className="space-y-3 flex-grow">
             {[
               { name: 'Orion Mall', station: 'Sandal Soap Factory', line: 'Green Line', dist: '300m', lineColor: '#10B981' },
@@ -220,37 +271,56 @@ function HeroSimulation() {
       </div>
 
       {/* ─── FRAME 3: Timings Screen ─── */}
-      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 3 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
+      <div className={`absolute inset-0 pt-14 pb-16 px-5 flex flex-col transition-opacity duration-700 overflow-hidden ${activeStep === 3 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
         <div className="flex-grow flex flex-col pt-3">
-          <h2 className="text-xl font-extrabold tracking-tight mb-1" style={{ color: t.text }}>Train Timings</h2>
-          <p className="text-[10px] font-medium mb-4" style={{ color: t.textSec }}>First & last train schedule for all lines</p>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-xl font-extrabold tracking-tight" style={{ color: t.text }}>Train Timings</h2>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: lineTheme[timingLine].bg, color: lineTheme[timingLine].color }}>
+              {timingLine} Line
+            </span>
+          </div>
+          <p className="text-[10px] font-medium mb-3" style={{ color: t.textSec }}>First & last train schedule · 2026 Timetable</p>
 
           {/* Line Selector Pills */}
-          <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 no-scrollbar">
-            {[{ name: 'Purple', color: '#A855F7', active: true }, { name: 'Green', color: '#10B981' }, { name: 'Yellow', color: '#EAB308' }, { name: 'Pink', color: '#EC4899' }].map((line) => (
-              <span key={line.name} className="px-2.5 py-1 rounded-full text-[9px] font-bold shrink-0" style={{
-                background: line.active ? line.color : (isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)'),
-                color: line.active ? '#fff' : t.textSec,
-                border: line.active ? 'none' : `1px solid ${t.border}`,
-              }}>{line.name}</span>
-            ))}
+          <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1 no-scrollbar">
+            {[
+              { name: 'Purple', color: '#A855F7' },
+              { name: 'Green', color: '#10B981' },
+              { name: 'Yellow', color: '#EAB308' },
+              { name: 'Pink', color: '#EC4899' },
+            ].map((line) => {
+              const isSelected = timingLine === line.name;
+              return (
+                <button
+                  key={line.name}
+                  type="button"
+                  onClick={() => {
+                    setIsUserInteracting(true);
+                    setTimingLine(line.name);
+                  }}
+                  className="px-2.5 py-1 rounded-full text-[9px] font-bold shrink-0 transition-all active:scale-95 cursor-pointer"
+                  style={{
+                    background: isSelected ? line.color : (isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)'),
+                    color: isSelected ? '#fff' : t.textSec,
+                    border: isSelected ? 'none' : `1px solid ${t.border}`,
+                  }}
+                >
+                  {line.name}
+                </button>
+              );
+            })}
           </div>
 
           {/* Mini Timetable */}
-          <div className="rounded-2xl overflow-hidden" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+          <div className="rounded-2xl overflow-hidden shadow-sm" style={{ background: t.card, border: `1px solid ${t.border}` }}>
             {/* Table Header */}
-            <div className="grid grid-cols-3 text-[9px] font-bold uppercase tracking-wider px-4 py-2.5" style={{ background: isLight ? 'rgba(168,85,247,0.08)' : 'rgba(168,85,247,0.15)', color: '#A855F7' }}>
+            <div className="grid grid-cols-3 text-[9px] font-bold uppercase tracking-wider px-4 py-2.5 transition-colors" style={{ background: lineTheme[timingLine].bg, color: lineTheme[timingLine].color }}>
               <span>Station</span>
               <span className="text-center">First</span>
               <span className="text-right">Last</span>
             </div>
             {/* Rows */}
-            {[
-              { name: 'Whitefield', first: '05:00', last: '23:00' },
-              { name: 'Majestic', first: '05:00', last: '23:05' },
-              { name: 'Mysuru Road', first: '05:12', last: '23:10' },
-              { name: 'Kengeri', first: '05:00', last: '23:00' },
-            ].map((row, i) => (
+            {(timingSchedules[timingLine] || timingSchedules.Purple).map((row, i) => (
               <div key={row.name} className="grid grid-cols-3 px-4 py-2.5 text-[11px]" style={{ borderTop: `1px solid ${t.border}`, background: i % 2 === 0 ? 'transparent' : (isLight ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)') }}>
                 <span className="font-semibold truncate pr-1" style={{ color: t.text }}>{row.name}</span>
                 <span className="text-center font-mono font-medium" style={{ color: t.textSec }}>{row.first}</span>
@@ -259,27 +329,37 @@ function HeroSimulation() {
             ))}
           </div>
 
-          <div className="mt-auto pt-3">
-            <p className="text-center text-[9px]" style={{ color: t.textSec, opacity: 0.5 }}>Weekday schedule · BMRCL 2026</p>
+          <div className="mt-auto pt-2 flex items-center justify-between">
+            <p className="text-[9px]" style={{ color: t.textSec, opacity: 0.7 }}>4-line schedule · BMRCL 2026</p>
+            <Link to="/timings" className="text-[9px] font-bold text-emerald-500 hover:underline">Full Schedule →</Link>
           </div>
         </div>
       </div>
 
       {/* ─── Bottom Navigation Bar (matches real app) ─── */}
-      <div className="absolute bottom-0 inset-x-0 z-30 flex items-center justify-around px-1 pt-2 pb-4" style={{ background: isLight ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.92)', borderTop: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
+      <div className="absolute bottom-0 inset-x-0 z-30 flex items-center justify-around px-1 pt-2 pb-4 pointer-events-auto" style={{ background: isLight ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.92)', borderTop: `1px solid ${t.border}`, backdropFilter: 'blur(20px)' }}>
         {navTabs.map((tab) => {
           const isActive = tab.frame === activeStep;
           return (
-            <div key={tab.label} className="flex flex-col items-center gap-0.5" style={{ color: isActive ? t.accent : t.textSec }}>
+            <button
+              key={tab.label}
+              type="button"
+              onClick={() => {
+                setIsUserInteracting(true);
+                setActiveStep(tab.frame);
+              }}
+              className="flex flex-col items-center gap-0.5 cursor-pointer p-1 transition-transform active:scale-90"
+              style={{ color: isActive ? t.accent : t.textSec }}
+            >
               {tab.icon}
               <span className="text-[9px] font-semibold" style={{ color: isActive ? t.accent : t.textSec }}>{tab.label}</span>
-            </div>
+            </button>
           );
         })}
       </div>
 
       {/* Android bottom nav indicator */}
-      <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-28 rounded-full z-40" style={{ background: isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)' }}></div>
+      <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-28 rounded-full z-40 pointer-events-none" style={{ background: isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)' }}></div>
     </div>
   );
 }

@@ -4,9 +4,59 @@
 // ============================================================
 
 export const timingsData = {
+  pink: {
+    name: "Pink Line",
+    color: "#EC4899",
+    route: "Kalena Agrahara ↔ Tavarekere",
+    stations: 6,
+    notes: [
+      "Inaugurated on November 13, 2026 by Hon'ble Prime Minister Narendra Modi.",
+      "Phase 1 elevated corridor operating between Kalena Agrahara and Tavarekere.",
+      "Direct two-level interchange with Yellow Line at Jayadeva Hospital station.",
+      "CBTC modern signalling with 6-coach train sets."
+    ],
+    schedules: {
+      mon_sat: {
+        title: "Monday - Saturday",
+        from_start: [ // From Kalena Agrahara
+          { range: "05:00 - 06:00", frequency: "15 mins" },
+          { range: "06:00 - 08:30", frequency: "10 mins" },
+          { range: "08:30 - 11:30", frequency: "8-10 mins" },
+          { range: "11:30 - 16:30", frequency: "12 mins" },
+          { range: "16:30 - 20:30", frequency: "8-10 mins" },
+          { range: "20:30 - 23:00", frequency: "12-15 mins" }
+        ],
+        from_end: [ // From Tavarekere
+          { range: "05:05 - 06:00", frequency: "15 mins" },
+          { range: "06:00 - 08:30", frequency: "10 mins" },
+          { range: "08:30 - 11:30", frequency: "8-10 mins" },
+          { range: "11:30 - 16:30", frequency: "12 mins" },
+          { range: "16:30 - 20:30", frequency: "8-10 mins" },
+          { range: "20:30 - 23:05", frequency: "12-15 mins" }
+        ]
+      },
+      sunday: {
+        title: "Sunday & Public Holidays",
+        from_start: [ // From Kalena Agrahara
+          { range: "07:00 - 10:00", frequency: "15 mins" },
+          { range: "10:00 - 20:30", frequency: "10-12 mins" },
+          { range: "20:30 - 23:00", frequency: "15 mins" }
+        ],
+        from_end: [ // From Tavarekere
+          { range: "07:05 - 10:00", frequency: "15 mins" },
+          { range: "10:00 - 20:30", frequency: "10-12 mins" },
+          { range: "20:30 - 23:05", frequency: "15 mins" }
+        ]
+      }
+    },
+    weekday: { firstTrain: { from_start: "05:00 AM", from_end: "05:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, peakFrequency: "8-10 min", offPeakFrequency: "12-15 min", peakHours: "08:30-11:30 & 16:30-20:30" },
+    weekend: { firstTrain: { from_start: "07:00 AM", from_end: "07:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, frequency: "10-12 min" },
+    holiday: { firstTrain: { from_start: "07:00 AM", from_end: "07:05 AM" }, lastTrain: { from_start: "11:00 PM", from_end: "11:05 PM" }, frequency: "15 min" }
+  },
+
   purple: {
     name: "Purple Line",
-    color: "#8B5CF6",
+    color: "#A855F7", // standard design system purple
     route: "Challaghatta ↔ Whitefield (Kadugodi)",
     stations: 37,
     notes: [
@@ -68,7 +118,7 @@ export const timingsData = {
   },
   green: {
     name: "Green Line",
-    color: "#22C55E",
+    color: "#10B981", // standard design system green
     route: "Madavara ↔ Silk Institute",
     stations: 32,
     notes: [
@@ -131,7 +181,7 @@ export const timingsData = {
   },
   yellow: {
     name: "Yellow Line",
-    color: "#FBBF24",
+    color: "#EAB308", // standard design system yellow
     route: "RV Road ↔ Bommasandra",
     stations: 16,
     notes: [
