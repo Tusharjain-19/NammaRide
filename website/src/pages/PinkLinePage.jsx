@@ -87,7 +87,7 @@ export default function PinkLinePage() {
       type: "Multi-Level Elevated Interchange",
       lat: 12.9161,
       lon: 77.6015,
-      platforms: "Level 2 (Pink Line): Plat 1 & 2 • Level 1 (Yellow Line Y03): Plat 3 & 4",
+      platforms: "Pink Line (Level 6): Platform 3 (Northbound to Tavarekere / Nagawara), Platform 4 (Southbound to JP Nagar 4th Phase / Kalena Agrahara) • Yellow Line (Level 5): Platform 1 (Westbound to RV Road), Platform 2 (Eastbound to Bommasandra / Electronic City)",
       landmarks: ["Sri Jayadeva Institute of Cardiovascular Sciences", "Yellow Line Interchange", "BTM Layout 1st & 2nd Stage", "East End Circle Jayanagar"],
       gates: [
         { gate: "A", name: "Jayadeva Cardiac Institute main entrance & emergency bay" },
@@ -104,7 +104,7 @@ export default function PinkLinePage() {
       type: "Elevated Station (Phase 1 Terminus)",
       lat: 12.9258,
       lon: 77.6052,
-      platforms: "Plat 1: Reversal & Arrival • Plat 2: Towards Kalena Agrahara",
+      platforms: "Platform 1 (Northbound): For trains heading toward Nagawara • Platform 2 (Southbound): For trains heading toward Kalena Agrahara (via Jayadeva Hospital)",
       landmarks: ["Tavarekere Park", "Nexus Koramangala (Forum Mall)", "Christ University (SG Palya)", "St. John's Medical College", "Madiwala"],
       gates: [
         { gate: "A", name: "Tavarekere Park & SG Palya / Christ University link" },
@@ -140,7 +140,7 @@ export default function PinkLinePage() {
     },
     {
       q: "How does the interchange work at Jayadeva Hospital station?",
-      a: "Jayadeva Hospital is a massive multi-level elevated interchange station. Level 1 accommodates the Yellow Line (RV Road to Bommasandra / Electronic City), while Level 2 hosts the Pink Line (Kalena Agrahara to Tavarekere). Commuters can transfer between lines within 2-3 minutes using high-speed elevators and dedicated escalators without exiting the fare gates."
+      a: "Jayadeva Hospital is a massive multi-level elevated interchange station. Level 5 accommodates the Yellow Line (Platform 1 for RV Road Westbound, Platform 2 for Bommasandra / Electronic City Eastbound), while Level 6 hosts the Pink Line (Platform 3 for Tavarekere / Nagawara Northbound, Platform 4 for JP Nagar 4th Phase / Kalena Agrahara Southbound). Commuters can transfer between lines within 2-3 minutes using high-speed elevators and dedicated escalators without exiting the fare gates."
     },
     {
       q: "What are the first and last train timings on the Pink Line?",
@@ -284,7 +284,7 @@ export default function PinkLinePage() {
             Jayadeva Hospital Multi-Level Interchange Station
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed">
-            Bengaluru’s tallest metro station structure connects the <strong>Pink Line (Level 2)</strong> with the <strong>Yellow Line (Level 1)</strong>. Commuters from Bannerghatta Road can smoothly change trains to reach <strong>Silk Board, Electronic City, BTM Layout, and RV Road</strong> in under 3 minutes walking transfer time.
+            Bengaluru’s tallest metro station structure connects the <strong>Pink Line (Level 6)</strong> with the <strong>Yellow Line (Level 5)</strong>. <strong>Pink Line (Level 6):</strong> Platform 3 for Tavarekere / Nagawara (Northbound) and Platform 4 for JP Nagar 4th Phase / Kalena Agrahara (Southbound). <strong>Yellow Line (Level 5):</strong> Platform 1 for RV Road (Westbound) and Platform 2 for Bommasandra / Electronic City (Eastbound). Commuters from Bannerghatta Road can smoothly change trains to reach <strong>Silk Board, Electronic City, BTM Layout, and RV Road</strong> in under 3 minutes walking transfer time.
           </p>
         </div>
         <div className="shrink-0 flex flex-col sm:flex-row gap-3 w-full md:w-auto">

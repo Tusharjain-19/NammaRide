@@ -1128,8 +1128,8 @@ export const metroData = {
                 "interchange": true,
                 "interchangeId": "jayadeva",
                 "platforms": {
-                    "forward": 1,
-                    "backward": 2
+                    "forward": 3,
+                    "backward": 4
                 }
             },
             {

@@ -1,3 +1,143 @@
+
+function getStationPlatformLayout(station) {
+    if (!station) return null;
+    const name = station.name || '';
+    const id = station.id || '';
+
+    // Jayadeva Hospital (Interchange between Pink Line Level 6 and Yellow Line Level 5)
+    if (name === 'Jayadeva Hospital' || id === 'PK05' || id === 'Y03') {
+        return {
+            isMultiLevel: true,
+            title: 'Platform Layout',
+            subtitle: 'Jayadeva Multi-Tier Elevated Interchange',
+            levels: [
+                {
+                    levelName: 'Pink Line (Level 6)',
+                    lineName: 'Pink Line',
+                    color: '#EC4899',
+                    corridor: 'North-South along Bannerghatta Road',
+                    platforms: [
+                        {
+                            number: '3',
+                            direction: 'Northbound',
+                            destination: 'For trains heading towards Tavarekere / Nagawara',
+                            badgeClass: 'bg-pink-500 text-white'
+                        },
+                        {
+                            number: '4',
+                            direction: 'Southbound',
+                            destination: 'For trains heading towards JP Nagar 4th Phase / Kalena Agrahara',
+                            badgeClass: 'bg-pink-500 text-white'
+                        }
+                    ]
+                },
+                {
+                    levelName: 'Yellow Line (Level 5)',
+                    lineName: 'Yellow Line',
+                    color: '#EAB308',
+                    corridor: 'East-West along Outer Ring Road & Hosur Road',
+                    platforms: [
+                        {
+                            number: '1',
+                            direction: 'Westbound',
+                            destination: 'For trains heading towards RV Road',
+                            badgeClass: 'bg-yellow-500 text-black'
+                        },
+                        {
+                            number: '2',
+                            direction: 'Eastbound',
+                            destination: 'For trains heading towards Bommasandra / Electronic City',
+                            badgeClass: 'bg-yellow-500 text-black'
+                        }
+                    ]
+                }
+            ]
+        };
+    }
+
+    // Tavarekere (Pink Line Elevated Terminus)
+    if (name === 'Tavarekere' || id === 'PK06') {
+        return {
+            isMultiLevel: false,
+            title: 'Tavarekere Station Platform Layout',
+            subtitle: 'Pink Line Elevated Terminus',
+            platforms: [
+                {
+                    number: '1',
+                    direction: 'Northbound',
+                    destination: 'For trains heading toward Nagawara',
+                    badgeClass: 'bg-pink-500 text-white'
+                },
+                {
+                    number: '2',
+                    direction: 'Southbound',
+                    destination: 'For trains heading toward Kalena Agrahara (via Jayadeva Hospital)',
+                    badgeClass: 'bg-pink-500 text-white'
+                }
+            ]
+        };
+    }
+
+    // Majestic (Nadaprabhu Kempegowda Stn. Majestic)
+    if (name.includes('Majestic') || name.includes('Kempegowda') || id === 'P16' || id === 'G12') {
+        return {
+            isMultiLevel: true,
+            title: 'Platform Layout',
+            subtitle: 'Majestic Underground Interchange',
+            levels: [
+                {
+                    levelName: 'Purple Line (Underground Level 2)',
+                    lineName: 'Purple Line',
+                    color: '#A855F7',
+                    corridor: 'East-West Corridor',
+                    platforms: [
+                        { number: '1', direction: 'Eastbound', destination: 'For trains heading towards Whitefield (Kadugodi)', badgeClass: 'bg-purple-500 text-white' },
+                        { number: '2', direction: 'Westbound', destination: 'For trains heading towards Challaghatta', badgeClass: 'bg-purple-500 text-white' }
+                    ]
+                },
+                {
+                    levelName: 'Green Line (Underground Level 1)',
+                    lineName: 'Green Line',
+                    color: '#10B981',
+                    corridor: 'North-South Corridor',
+                    platforms: [
+                        { number: '1', direction: 'Northbound', destination: 'For trains heading towards Madavara (BIEC)', badgeClass: 'bg-emerald-500 text-white' },
+                        { number: '2', direction: 'Southbound', destination: 'For trains heading towards Silk Institute', badgeClass: 'bg-emerald-500 text-white' }
+                    ]
+                }
+            ]
+        };
+    }
+
+    // Standard 2-Platform Stations
+    const lineKey = (station.line || '').toLowerCase();
+    let termA = 'Terminal A', termB = 'Terminal B';
+    if (lineKey.includes('pink')) { termA = 'Kalena Agrahara'; termB = 'Tavarekere / Nagawara'; }
+    else if (lineKey.includes('yellow')) { termA = 'RV Road'; termB = 'Bommasandra / Electronic City'; }
+    else if (lineKey.includes('green')) { termA = 'Silk Institute'; termB = 'Madavara'; }
+    else { termA = 'Challaghatta'; termB = 'Whitefield (Kadugodi)'; }
+
+    return {
+        isMultiLevel: false,
+        title: 'Platform Layout',
+        subtitle: `${station.line || 'Metro'} Platform Guide`,
+        platforms: [
+            {
+                number: '1',
+                direction: 'Platform 1',
+                destination: `For trains heading towards ${termB}`,
+                badgeClass: 'bg-emerald-500 text-white'
+            },
+            {
+                number: '2',
+                direction: 'Platform 2',
+                destination: `For trains heading towards ${termA}`,
+                badgeClass: 'bg-emerald-500 text-white'
+            }
+        ]
+    };
+}
+
 // ============================================================
 // NammaRide - Section Views (Stations, Timings, Safety, Explore)
 // ============================================================
@@ -224,6 +364,56 @@ export function renderStationDetail(container, stationId) {
             <i data-lucide="${station.type === 'Elevated' ? 'arrow-up-circle' : 'arrow-down-circle'}" class="w-3.5 h-3.5"></i> ${station.type} Metro Station
         </div>
     </div>`;
+
+    // Station Platform Layout
+    const platformLayout = getStationPlatformLayout(station);
+    if (platformLayout) {
+        if (platformLayout.isMultiLevel) {
+            html += `<div class="detail-section">
+                <h4 class="detail-section-title"><i data-lucide="layers" class="w-4 h-4 text-primary"></i> ${platformLayout.title}</h4>
+                <p class="detail-section-sub">${platformLayout.subtitle}</p>
+                <div class="space-y-3 pt-1">
+                    ${platformLayout.levels.map(lvl => `
+                        <div class="p-3 rounded-2xl bg-card-subtle border border-subtle" style="border-left: 3px solid ${lvl.color};">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black uppercase tracking-wider flex items-center gap-1.5" style="color: ${lvl.color};">
+                                    <span class="w-2 h-2 rounded-full" style="background:${lvl.color}"></span> ${lvl.levelName}
+                                </span>
+                                <span class="text-[10px] font-bold text-secondary">${lvl.corridor}</span>
+                            </div>
+                            <div class="space-y-2">
+                                ${lvl.platforms.map(p => `
+                                    <div class="p-2 bg-card rounded-xl border border-subtle flex items-start gap-2.5">
+                                        <span class="platform-pill text-[10px] py-0.5 px-2 font-black shrink-0 ${p.badgeClass}">P${p.number}</span>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-xs font-black text-primary">${p.direction}</div>
+                                            <p class="text-[11px] text-secondary mt-0.5">${p.destination}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>`;
+        } else {
+            html += `<div class="detail-section">
+                <h4 class="detail-section-title"><i data-lucide="train" class="w-4 h-4 text-primary"></i> ${platformLayout.title}</h4>
+                <p class="detail-section-sub">${platformLayout.subtitle}</p>
+                <div class="space-y-2 pt-1">
+                    ${platformLayout.platforms.map(p => `
+                        <div class="p-2.5 bg-card-subtle rounded-xl border border-subtle flex items-start gap-2.5">
+                            <span class="platform-pill text-[10px] py-1 px-2 font-black shrink-0 ${p.badgeClass}">Platform ${p.number}</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs font-black text-primary">${p.direction}</div>
+                                <p class="text-[11px] text-secondary mt-0.5">${p.destination}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>`;
+        }
+    }
 
     // Station Exit Gates & Street Directory
     const gates = getStationGates(station.id, station.name, station.type);

@@ -47,7 +47,7 @@ export default function BlogPage() {
         },
         {
           heading: '3. Jayadeva Hospital Multi-Level Interchange Architecture',
-          text: 'Jayadeva Hospital station represents one of the most advanced engineering feats in Indian urban transit. The station features a multi-tiered layout where the Yellow Line (RV Road to Bommasandra) operates on Level 1 and the Pink Line (Kalena Agrahara to Tavarekere) runs on Level 2. Commuters can transfer between the two lines in under three minutes via dedicated high-capacity escalators and elevators without passing back through fare gates.'
+          text: 'Jayadeva Hospital station represents one of the most advanced engineering feats in Indian urban transit. The station features an iconic multi-tiered layout where the Yellow Line operates on Level 5 with Platform 1 (Westbound to RV Road) and Platform 2 (Eastbound to Bommasandra / Electronic City), while the Pink Line operates on Level 6 with Platform 3 (Northbound to Tavarekere / Nagawara) and Platform 4 (Southbound to JP Nagar 4th Phase / Kalena Agrahara). Tavarekere station operates Platform 1 (Northbound towards Nagawara) and Platform 2 (Southbound towards Kalena Agrahara via Jayadeva Hospital). Commuters can transfer between the two lines in under three minutes via dedicated high-capacity escalators and elevators without passing back through fare gates.'
         },
         {
           heading: '4. BMTC Feeder Bus Routes and Multi-Modal Connectivity',

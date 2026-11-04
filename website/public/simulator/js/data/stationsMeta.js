@@ -32,13 +32,13 @@ export const stationsMeta = [
     facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Parking"], 
     connectivity:["Vega City Mall Pedestrian Walkway","BMTC Ring Road Feeder","Auto rickshaw stand","Cab pickup bay"], location:{lat:12.9068,lon:77.5998}},
 
-  { id:"PK05", name:"Jayadeva Hospital", name_kn:"ಜಯದೇವ ಆಸ್ಪತ್ರೆ", code:"JYDV", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+  { id:"PK05", name:"Jayadeva Hospital", name_kn:"ಜಯದೇವ ಆಸ್ಪತ್ರೆ", code:"JYDV", line:"Pink Line", type:"Elevated", platforms:"4", metroInfo:{operator:"BMRCL",opened:"2026"}, 
     isActive: true, status: "operational", phase: "Phase 1 Elevated",
     accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
     facilities:["Interchange Concourse","Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access","Medical First Aid Post"], 
     connectivity:["Yellow Line (RV Road - Bommasandra)","BTM Ring Road Bus Station","Jayanagar 9th Block link","Auto bay","Ambulance Priority Lane"], location:{lat:12.9161,lon:77.6015}},
 
-  { id:"PK06", name:"Tavarekere", name_kn:"ತಾವರೆಕೆರೆ", code:"TVRK", line:"Pink Line", type:"Elevated", platforms:"3", metroInfo:{operator:"BMRCL",opened:"2026"}, 
+  { id:"PK06", name:"Tavarekere", name_kn:"ತಾವರೆಕೆರೆ", code:"TVRK", line:"Pink Line", type:"Elevated", platforms:"2", metroInfo:{operator:"BMRCL",opened:"2026"}, 
     isActive: true, status: "operational", phase: "Phase 1 Elevated",
     accessibility: { wheelchair: true, elevator: true, lifts: "Standard BMRCL lift parameters compliant with ADA", escalators: true, escalatorInfo: "Concourse to platform level" },
     facilities:["Toilets","Escalator","Elevator","Ticket Counter","Smart Card Recharge","Wheelchair Access"], 

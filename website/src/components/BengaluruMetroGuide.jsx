@@ -257,7 +257,7 @@ export default function BengaluruMetroGuide() {
                 Inaugurated by Hon'ble Prime Minister Narendra Modi on November 13, 2026, the 7.5-km elevated section of the <strong>Pink Line</strong> serves the critical Bannerghatta Road corridor. It encompasses six operational stations: <strong>Kalena Agrahara</strong>, <strong>Hulimavu</strong>, <strong>IIM Bangalore (Bilekahalli)</strong>, <strong>JP Nagar 4th Phase</strong>, <strong>Jayadeva Hospital (Interchange)</strong>, and <strong>Tavarekere</strong>.
               </p>
               <p>
-                At <strong>Jayadeva Hospital</strong>, commuters experience Bengaluru's premier multi-level elevated interchange station: Level 1 accommodates the Yellow Line (RV Road to Bommasandra), while Level 2 hosts the Pink Line (Kalena Agrahara to Tavarekere). Passengers transfer between corridors in under 3 minutes without exiting fare gates.
+                At <strong>Jayadeva Hospital</strong>, commuters experience Bengaluru's premier multi-level elevated interchange station: Level 5 accommodates the Yellow Line with Platform 1 (Westbound to RV Road) and Platform 2 (Eastbound to Bommasandra / Electronic City), while Level 6 hosts the Pink Line with Platform 3 (Northbound to Tavarekere / Nagawara) and Platform 4 (Southbound to JP Nagar 4th Phase / Kalena Agrahara). Tavarekere station features Platform 1 (Northbound to Nagawara) and Platform 2 (Southbound to Kalena Agrahara via Jayadeva). Passengers transfer between corridors in under 3 minutes without exiting fare gates.
               </p>
             </section>
 
