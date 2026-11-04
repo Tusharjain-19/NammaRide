@@ -336,6 +336,26 @@ export default function PinkLinePage() {
         {/* Active Station Card Detail */}
         {currentStnObj && (
           <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-xl space-y-6">
+            {/* Station Real Photo Banner */}
+            <div className="w-full h-48 sm:h-72 rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 relative shadow-md">
+              <img 
+                src={`/simulator/assets/images/stations/${currentStnObj.id}.jpg`} 
+                alt={currentStnObj.name_en} 
+                className="w-full h-full object-cover"
+                onError={(e) => { e.target.onerror = null; e.target.src = '/simulator/assets/images/stations/PK03.jpg'; }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-[#EC4899] shadow-sm"></span>
+                  <span className="font-extrabold text-sm sm:text-base drop-shadow-md">{currentStnObj.name_en} Metro Station</span>
+                </div>
+                <span className="text-[11px] font-mono bg-black/60 px-2 py-0.5 rounded border border-white/20 backdrop-blur-xs">
+                  {currentStnObj.code}
+                </span>
+              </div>
+            </div>
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-neutral-800 pb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">

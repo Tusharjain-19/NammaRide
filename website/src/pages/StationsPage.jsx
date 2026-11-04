@@ -368,10 +368,10 @@ export default function StationsPage() {
                   <div className="text-gray-900 dark:text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
                     <span> Station Exit Gates & Landmarks Directory</span>
                   </div>
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="divide-y divide-gray-200 dark:divide-neutral-800 pt-1">
                     {activeStationModal.exit_gates.map((g, i) => (
-                      <div key={i} className="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 flex items-start gap-2.5 text-xs">
-                        <span className="px-2 py-0.5 rounded font-black text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0">
+                      <div key={i} className="py-2.5 flex items-start gap-3 text-xs first:pt-1 last:pb-1">
+                        <span className="px-2.5 py-1 rounded-md font-black text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
                           Gate {g.gate}
                         </span>
                         <div className="min-w-0 flex-1">

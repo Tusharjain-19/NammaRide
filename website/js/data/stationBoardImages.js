@@ -6,6 +6,8 @@ export const stationBoardImages = {
   "PK04": "assets/images/stations/PK04.jpg",
   "PK05": "assets/images/stations/PK05.jpg",
   "PK06": "assets/images/stations/PK06.jpg",
+  "PK07": "assets/images/stations/PK07.jpg",
+  "PK18": "assets/images/stations/PK18.jpg",
 
   "P01": "assets/images/stations/P01.jpg",
   "P02": "assets/images/stations/P02.jpg",

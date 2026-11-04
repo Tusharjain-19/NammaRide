@@ -231,19 +231,19 @@ export function renderStationDetail(container, stationId) {
         html += `<div class="detail-section">
             <h4 class="detail-section-title"><i data-lucide="door-open" class="w-4 h-4 text-emerald-500"></i> Station Exit Gates & Landmarks</h4>
             <p class="detail-section-sub">Choose the right gate to exit towards your connecting destination</p>
-            <div class="grid grid-cols-1 gap-2.5 mt-2">`;
+            <div class="divide-y divide-subtle/40 pt-1">`;
         gates.forEach(g => {
             html += `
-                <div class="p-3 bg-card-subtle rounded-xl border border-subtle flex items-start gap-3 shadow-sm">
-                    <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center shrink-0 border border-emerald-500/30">
+                <div class="py-2.5 flex items-start gap-3 first:pt-1 last:pb-1">
+                    <span class="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-black text-xs whitespace-nowrap shrink-0 border border-emerald-500/30 flex items-center justify-center">
                         Gate ${g.gate}
                     </span>
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between gap-1 flex-wrap">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
                             <span class="text-xs font-extrabold text-primary">${g.name}</span>
-                            <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">${g.landmark}</span>
+                            <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full shrink-0">${g.landmark}</span>
                         </div>
-                        <p class="text-[11px] text-secondary mt-1 leading-snug">${g.destination}</p>
+                        <p class="text-[11px] text-secondary mt-1 leading-relaxed">${g.destination}</p>
                     </div>
                 </div>
             `;
