@@ -1571,6 +1571,7 @@ Support hub with contact form, FAQ, and social links.
 ## Testimonial Carousel
 
 ```jsx
+{% raw %}
 <Carousel 
   autoplay={true}
   autoplayInterval={5000}
@@ -1585,6 +1586,7 @@ Support hub with contact form, FAQ, and social links.
     <TestimonialCard key={testimonial.id} {...testimonial} />
   ))}
 </Carousel>
+{% endraw %}
 ```
 
 ---
