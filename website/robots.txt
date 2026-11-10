@@ -50,11 +50,5 @@ Allow: /
 User-agent: Baiduspider
 Allow: /
 
-# XML Sitemaps & LLM Manifests
+# Canonical XML Sitemap
 Sitemap: https://www.nammaride.site/sitemap.xml
-Sitemap: https://nammaride.site/sitemap.xml
-Sitemap: https://nammaride.vercel.app/sitemap.xml
-
-# LLM AI Context Manifests
-# https://www.nammaride.site/llms.txt
-# https://www.nammaride.site/llms-full.txt

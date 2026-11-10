@@ -5,10 +5,10 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- 1. Primary Canonical Home Page with Trilingual Annotations -->
+  <!-- Primary Canonical Domain Pages (https://www.nammaride.site) -->
   <url>
     <loc>https://www.nammaride.site/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/" />
@@ -17,21 +17,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nammaride.site/" />
   </url>
 
-  <!-- 2. High-Priority Breaking Hub: Pink Line Inauguration -->
+  <!-- Namma Metro Pink Line Hub (High Priority SEO) -->
   <url>
     <loc>https://www.nammaride.site/pink-line</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>hourly</changefreq>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.00</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/pink-line" />
     <xhtml:link rel="alternate" hreflang="kn" href="https://www.nammaride.site/pink-line?lang=kn" />
     <xhtml:link rel="alternate" hreflang="hi" href="https://www.nammaride.site/pink-line?lang=hi" />
   </url>
 
-  <!-- 3. High-Intent Core Transit Pages -->
   <url>
     <loc>https://www.nammaride.site/stations</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/stations" />
@@ -41,7 +40,7 @@
 
   <url>
     <loc>https://www.nammaride.site/timings</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/timings" />
@@ -51,7 +50,7 @@
 
   <url>
     <loc>https://www.nammaride.site/fare-calculator</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/fare-calculator" />
@@ -61,7 +60,7 @@
 
   <url>
     <loc>https://www.nammaride.site/map</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/map" />
@@ -71,14 +70,14 @@
 
   <url>
     <loc>https://www.nammaride.site/simulator</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/explore</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/explore" />
@@ -88,15 +87,14 @@
 
   <url>
     <loc>https://www.nammaride.site/download</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
-  <!-- 4. Authoritative Editorial Blog & Commuter Publications -->
   <url>
     <loc>https://www.nammaride.site/blog</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nammaride.site/blog" />
@@ -105,86 +103,50 @@
   </url>
 
   <url>
-    <loc>https://www.nammaride.site/blog#namma-metro-pink-line-inauguration-guide-2026</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.95</priority>
-  </url>
-
-  <url>
-    <loc>https://www.nammaride.site/blog#why-nammaride-is-the-best-metro-app-for-bengaluru</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://www.nammaride.site/blog#bangalore-metro-route-map-and-complete-station-guide-2026</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://www.nammaride.site/blog#bengaluru-tech-park-metro-commuter-guide</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://www.nammaride.site/blog#namma-metro-kannada-complete-commuter-guide</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- 5. Support, Safety, Features & Trust Pages -->
-  <url>
     <loc>https://www.nammaride.site/features</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/safety</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/about</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/testimonials</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/contact</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/privacy</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
 
   <url>
     <loc>https://www.nammaride.site/terms</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
