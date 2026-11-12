@@ -222,7 +222,7 @@ export default function PinkLinePage() {
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-400 text-xs font-black uppercase tracking-wider">
             <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
-            <span>Grand Inauguration: November 13, 2026</span>
+            <span>Dedicated to Nation by PM Narendra Modi: November 13, 2026</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
@@ -230,7 +230,7 @@ export default function PinkLinePage() {
           </h1>
 
           <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
-            The <strong>7.5-km elevated stretch</strong> from <strong>Kalena Agrahara to Tavarekere</strong> brings rapid rail transit to Bannerghatta Road, unlocking hassle-free travel to Vega City, IIMB, Fortis, Apollo, and creating a seamless interchange with the Yellow Line at <strong>Jayadeva Hospital</strong>.
+            Hon'ble Prime Minister Narendra Modi officially inaugurates the <strong>7.5-km elevated Pink Line section</strong> from <strong>Kalena Agrahara to Tavarekere</strong> on November 13, 2026. Bringing rapid rail transit to Bannerghatta Road, unlocking high-speed travel to Royal Meenakshi Mall, IIMB, Fortis, Apollo, Vega City, and the multi-level interchange with the Yellow Line at <strong>Jayadeva Hospital</strong>.
           </p>
 
           {/* Quick Metrics Bar */}

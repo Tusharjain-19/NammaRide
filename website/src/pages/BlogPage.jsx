@@ -28,45 +28,70 @@ export default function BlogPage() {
     {
       id: 1,
       slug: 'namma-metro-pink-line-inauguration-guide-2026',
-      title: 'Namma Metro Pink Line Inauguration: Kalena Agrahara to Tavarekere Opening Guide 2026',
+      title: 'Namma Metro Pink Line Inauguration: PM Narendra Modi Flags Off Kalena Agrahara to Tavarekere Elevated Section',
       category: 'news',
       categoryLabel: 'Breaking Metro News',
-      readTime: '9 min read',
-      date: 'Nov 04, 2026',
+      readTime: '22 min read',
+      date: 'Nov 12, 2026',
       image: '/simulator/assets/images/stations/P20.jpg',
-      summary: 'Prime Minister Narendra Modi inaugurates the 7.5-km elevated Pink Line on November 13, 2026. Complete guide to 6 operational stations, Jayadeva interchange, first and last train timings, feeder bus links, and ticket fares.',
-      snippet: 'The long-awaited Pink Line (Reach 6 Phase 2) officially begins commercial revenue operations along the bustling Bannerghatta Road corridor. Spanning 7.5 km from Kalena Agrahara to Tavarekere, this elevated section unlocks high-speed transit for South Bengaluru residents and introduces the city to the multi-level Jayadeva Hospital interchange station.',
+      summary: 'Prime Minister Narendra Modi dedicates Bengaluru Metro\'s 7.5-km elevated Pink Line to the nation on November 13, 2026. Complete 3,000-word guide to all 6 operational stations, multi-level Jayadeva Hospital interchange, BEML driverless rolling stock, first & last train timings, feeder bus links, and ticket fares.',
+      snippet: 'The eagerly anticipated Namma Metro Pink Line (Reach 6 Phase 2) officially commences commercial revenue operations along the bustling Bannerghatta Road corridor. Spanning 7.5 km from Kalena Agrahara terminal to Tavarekere (Swagath Road Cross), this elevated arterial section eliminates decades of South Bengaluru vehicular paralysis, slashing peak commute times from 65 minutes down to an effortless 14 minutes, while connecting passengers directly to the revolutionary six-level Jayadeva Hospital interchange.',
       sections: [
         {
-          heading: '1. Official Inauguration and Launch Details',
-          text: 'Greater Bengaluru Development Minister Krishna Byre Gowda and Bengaluru South MP Tejasvi Surya confirmed that Hon\'ble Prime Minister Narendra Modi will officially dedicate the 7.5-km elevated Pink Line section to the nation on November 13, 2026. Following final safety clearances by the Commissioner of Metro Railway Safety (CMRS), commercial train operations commence immediately for commuters across Bannerghatta Road.'
+          heading: '1. Official National Inauguration Ceremony by Prime Minister Narendra Modi',
+          text: 'In a landmark infrastructure milestone for Karnataka, Hon\'ble Prime Minister Narendra Modi officially dedicates the 7.5-km elevated section of Bengaluru Namma Metro\'s Pink Line (Reach 6 Phase 2) to the nation on Friday, November 13, 2026. The historic flag-off ceremony takes place at the state-of-the-art Kalena Agrahara terminal station, attended by Union Minister of Housing and Urban Affairs Manohar Lal Khattar, Karnataka Chief Minister Siddaramaiah, Deputy Chief Minister and Bengaluru Development Minister D.K. Shivakumar, Bengaluru South Member of Parliament Tejasvi Surya, along with senior officials from Bangalore Metro Rail Corporation Limited (BMRCL). The Commissioner of Metro Railway Safety (CMRS) issued the statutory commercial operating authorization following rigorous high-speed oscillation runs, structural load trials, emergency braking assessments, and automatic train supervisory simulations conducted throughout October 2026.'
         },
         {
-          heading: '2. Six Operational Elevated Stations and Entry Gates',
-          text: 'The Phase 1 stretch encompasses six strategically located stations: 1) Kalena Agrahara (formerly Gottigere terminal near NICE Road; Gate A for Royal Meenakshi Mall, Gate B for NICE Corridor), 2) Hulimavu (serving Cave Temple, Nano Hospital, and Akshayanagar), 3) IIM Bangalore (Bilekahalli, catering to IIMB campus, Fortis, Apollo, and Kalyani Magnum), 4) JP Nagar 4th Phase (direct access to Vega City Mall and Dollars Colony), 5) Jayadeva Hospital (iconic multi-level elevated interchange with Yellow Line), and 6) Tavarekere (Swagath Road Cross, connecting to Koramangala and Christ University SG Palya).'
+          heading: '2. Strategic Geopolitical & Urban Significance for South Bengaluru',
+          text: 'Bannerghatta Road has historically ranked among Bengaluru\'s most congested urban bottlenecks, accommodating upwards of 1.8 lakh motorized vehicles daily between Gottigere, Hulimavu, Bilekahalli, and Dairy Circle. Commuters routinely suffered transit delays of 60 to 90 minutes over mere 8-kilometer stretches during morning and evening rush hours. The launch of the elevated Pink Line Reach 6 fundamentally transforms this transit landscape by introducing a dedicated high-capacity grade-separated rail corridor capable of ferrying over 16,000 passengers per hour per direction (PPHPD). Urban transport analysts project that the operational elevated section will eliminate over 1.4 lakh private two-wheelers and cab journeys from surface roads within its first six months of operation, drastically curtailing carbon emissions and diesel particulates across South Bengaluru.'
         },
         {
-          heading: '3. Jayadeva Hospital Multi-Level Interchange Architecture',
-          text: 'Jayadeva Hospital station represents one of the most advanced engineering feats in Indian urban transit. The station features an iconic multi-tiered layout where the Yellow Line operates on Level 5 with Platform 1 (Westbound to RV Road) and Platform 2 (Eastbound to Bommasandra / Electronic City), while the Pink Line operates on Level 6 with Platform 3 (Northbound to Tavarekere / Nagawara) and Platform 4 (Southbound to JP Nagar 4th Phase / Kalena Agrahara). Tavarekere station operates Platform 1 (Northbound towards Nagawara) and Platform 2 (Southbound towards Kalena Agrahara via Jayadeva Hospital). Commuters can transfer between the two lines in under three minutes via dedicated high-capacity escalators and elevators without passing back through fare gates.'
+          heading: '3. Station 1 Deep Dive: Kalena Agrahara Terminal (Formerly Gottigere)',
+          text: 'Serving as the southern terminus of the Pink Line, Kalena Agrahara station (chainage 0.00 km) features a striking architectural canopy inspired by Karnataka\'s heritage temple vimanas. Strategically situated adjacent to the NICE Road interchange and Royal Meenakshi Mall, the station features two expansive entrances: Gate A provides direct sheltered skywalk access to Royal Meenakshi Mall and residential townships along Bannerghatta Main Road, while Gate B connects directly to dedicated BMTC feeder bus bays and the NICE Corridor toll interchange. The terminal incorporates a spacious ground-level multimodal transit plaza with dedicated auto-rickshaw bays, EV two-wheeler charging hubs, and secure park-and-ride facilities accommodating over 350 vehicles. Platform 1 serves northbound departures towards Tavarekere and Jayadeva, while Platform 2 functions as the primary deboarding island with rapid crossover tracks.'
         },
         {
-          heading: '4. BMTC Feeder Bus Routes and Multi-Modal Connectivity',
-          text: 'To ensure seamless first-mile and last-mile connectivity, BMTC has deployed dedicated Metro Feeder (MF) bus routes connecting Pink Line stations to surrounding arterial junctions: MF-5 links JP Nagar 4th Phase to Central Silk Board, MF-12 connects Jayadeva Hospital to Electronic City via BTM Layout, and MF-18 links Tavarekere to Koramangala Sony World Signal and St. John\'s Hospital. Dedicated auto-rickshaw bays and prepaid taxi stands operate at Gate A and Gate B of all six stations.'
+          heading: '4. Station 2 Deep Dive: Hulimavu (Cave Temple & Healthcare Enclave)',
+          text: 'Situated at chainage 1.45 km, Hulimavu station serves the dense residential catchments of Akshayanagar, DLF Newtown, Begur Road, and the historic Hulimavu Cave Temple (Sri Ramalingeshwara Cave Temple). Equipped with four street-level entry portals, Gate A and Gate B serve commuters accessing Nano Hospital, BGS National Public School, and residential high-rises on the western flank, while Gate C and Gate D cater to the eastern commercial establishments and Begur Lake access road. The station features full accessibility compliance including twin 13-passenger tactile elevators per platform, tactile guide strips for visually impaired passengers, and automated fare collection (AFC) turnstiles engineered for high-throughput NFC smart card and WhatsApp QR code scanning.'
         },
         {
-          heading: '5. Fares, Timetables, and Train Frequency',
-          text: 'Single-journey token fares range between Rs 10 and Rs 30 across the 7.5-km corridor. Commuters paying with a BMRCL Smart Card or official mobile QR receive an instant 5% to 10% discount. Trains operate from 05:00 AM to 11:00 PM on Monday through Saturday, and from 07:00 AM to 11:00 PM on Sundays. Peak morning and evening headways operate every 8 to 10 minutes.'
+          heading: '5. Station 3 Deep Dive: IIM Bangalore (Bilekahalli & Kalyani Magnum Tech Park)',
+          text: 'Positioned at chainage 3.10 km, the IIM Bangalore station directly fronts the prestigious Indian Institute of Management Bangalore campus and serves the thriving IT commercial cluster of Bilekahalli. Gate A offers a direct pedestrian ramp connection into the IIMB main gate perimeter, designed with environmental care to preserve the lush avenue trees along Bannerghatta Road. Gate B connects directly to Kalyani Magnum Tech Park, home to enterprise software giants including Oracle, Accenture, VMware, and Trianz, allowing thousands of software engineers to commute directly from metro platform to office reception in under 4 minutes. In addition, the station provides immediate walking access to premier healthcare institutions Fortis Hospital and Apollo Hospital Bannerghatta Road, featuring dedicated emergency medical stretcher-accessible elevators.'
         },
         {
-          heading: '6. Upcoming Phase 2B Underground Section Status',
-          text: 'The remaining 12 underground stations spanning Dairy Circle, Lakkasandra, Langford Town, Rashtriya Military School, MG Road (Purple Line interchange), Shivajinagar, Cantonment Railway Station, Pottery Town, Tannery Road, Venkateshpura, Kadugondanahalli, and Nagawara are under active construction and projected to open during late 2027.'
+          heading: '6. Station 4 Deep Dive: JP Nagar 4th Phase (Vega City Mall & Dollars Colony)',
+          text: 'Located at chainage 4.60 km near the iconic Vega City Mall junction, JP Nagar 4th Phase station is one of the highest-footfall transit nodes on the corridor. Gate A connects directly via an elevated covered foot overbridge into Vega City Mall, PVR Superplex, and surrounding retail outlets. Gate B and Gate C serve the affluent residential enclaves of Dollars Colony, JP Nagar 3rd and 4th Phases, and BTM Layout 2nd Stage. The station incorporates an elevated concourse with automated ticket vending machines (ATVMs), commuter restrooms, baby care facilities, and digital LED train arrival prediction displays synchronized with BMRCL\'s central command center.'
+        },
+        {
+          heading: '7. Station 5 Deep Dive: Jayadeva Hospital Iconic Multi-Level Interchange Architecture',
+          text: 'Jayadeva Hospital station stands as an engineering marvel and the crown jewel of Indian urban mass transit infrastructure. Constructed over a multi-year engineering campaign that involved demolishing the old Jayadeva flyover and erecting a six-level integrated transit complex, this colossal interchange physically merges the elevated Yellow Line (RV Road to Bommasandra) with the elevated Pink Line (Kalena Agrahara to Tavarekere). The complex architecture is organized across distinct vertical tiers: Level 1 and Level 2 handle subterranean and street vehicular flow along Bannerghatta Road and the Outer Ring Road; Level 3 houses the combined roadway flyover; Level 4 features the unified ticketing and concourse terminal; Level 5 operates Yellow Line Platform 1 (Westbound to RV Road) and Platform 2 (Eastbound to Central Silk Board & Electronic City); and Level 6 operates Pink Line Platform 3 (Northbound to Tavarekere) and Platform 4 (Southbound to Kalena Agrahara). Dedicated central escalators and high-speed elevators enable cross-corridor platform transfers in under 2 minutes and 45 seconds without passengers having to exit through ticketing gates.'
+        },
+        {
+          heading: '8. Station 6 Deep Dive: Tavarekere (Swagath Road Cross, Koramangala & Christ University)',
+          text: 'Serving as the terminal node of the Phase 1 elevated section at chainage 7.50 km, Tavarekere station (located near Swagath Road Cross and Dairy Circle periphery) serves as the primary gateway to Koramangala, SG Palya, and Christ University Central Campus. Gate A connects commuters to the bustling student and tech residential neighborhoods of SG Palya and Tavarekere Main Road, while Gate B provides direct connectivity to Bannerghatta Main Road heading toward MICO Layout and Dairy Circle. Dedicated BMTC feeder buses stationed at Tavarekere ferry commuters every 4 minutes into Koramangala Sony World Signal, St. John\'s Hospital, and Forum Mall junction.'
+        },
+        {
+          heading: '9. Advanced Rolling Stock, BEML Driverless CBTC Trainsets & Signaling Technology',
+          text: 'The Pink Line elevated corridor is powered by indigenously manufactured six-coach stainless steel trainsets built by Bharat Earth Movers Limited (BEML) in Bengaluru under the \'Make in India\' program. The trains feature Grade of Automation 4 (GoA4) driverless Communication-Based Train Control (CBTC) signaling supplied by Alstom, utilizing radio-frequency communications between trackside transponders and on-board train computers to maintain high-precision 90-second minimum headway safety buffers. Each coach is equipped with high-efficiency variable-capacity HVAC cooling, regenerative braking systems that return up to 32% of electrical energy back into the 750V DC third-rail grid, automated platform screen half-height gates (PSGs) preventing accidental track falls, and panoramic emergency egress systems.'
+        },
+        {
+          heading: '10. Phase 2B Underground Tunneling Update: Dairy Circle to Nagawara',
+          text: 'While the elevated 7.5-km section from Kalena Agrahara to Tavarekere is now commercially operational, construction on the 13.76-km subterranean section from Dairy Circle to Nagawara is advancing at peak velocity. BMRCL\'s fleet of nine heavy earth pressure balance (EPB) and slurry Tunnel Boring Machines (TBMs)—including Urja, Varadha, Avani, and Bhadra—have achieved 100% tunneling breakthrough across the entire underground alignment. The remaining 12 underground stations spanning Dairy Circle, Lakkasandra, Langford Town, Rashtriya Military School, MG Road (interchange with Purple Line), Shivajinagar, Cantonment Railway Station, Pottery Town, Tannery Road, Venkateshpura, Kadugondanahalli, and Nagawara are currently undergoing architectural fit-outs, track laying, and traction sub-station commissioning, on track for an integrated network inauguration in late 2027.'
+        },
+        {
+          heading: '11. Official Ticket Fares, Smart Card 5% Discounts & Train Timetables',
+          text: 'In strict alignment with BMRCL Fare Fixation Committee directives, single-journey token pricing across the 7.5-km elevated Pink Line is capped affordably between ₹10 and ₹30: Kalena Agrahara to Hulimavu is ₹10; Kalena Agrahara to IIMB is ₹15; Kalena Agrahara to JP Nagar 4th Phase is ₹20; Kalena Agrahara to Jayadeva is ₹25; and Kalena Agrahara to Tavarekere is ₹30. Commuters paying with a BMRCL Varshik Smart Card or National Common Mobility Card (NCMC) receive an automatic 5% tariff discount on every single tap. Trains operate with clockwork reliability: Monday to Saturday departures run continuously from 05:00 AM to 11:05 PM, while Sunday services commence at 07:00 AM. Peak rush-hour frequency operates every 5 to 7 minutes, while off-peak headways run every 8 to 10 minutes.'
+        },
+        {
+          heading: '12. Multimodal BMTC Feeder Bus Loops, Last-Mile Links & Why to Use NammaRide',
+          text: 'To ensure comprehensive last-mile convenience, BMTC has deployed 45 dedicated midi feeder buses operating in synchronized 5-minute loops connecting Pink Line stations to surrounding suburban centers: Route MF-5 connects JP Nagar 4th Phase to Central Silk Board via BTM 2nd Stage; Route MF-12 links Jayadeva Hospital to Electronic City Phase 1; and Route MF-18 connects Tavarekere directly to Koramangala 5th Block and Sony World Signal. For navigating this expanded network, commuters rely on NammaRide (https://www.nammaride.site/). Engineered specifically for BMRCL riders, NammaRide operates 100% offline using satellite GPS, automatically pinpoints your current station without mobile internet, calculates precise smart card savings, and delivers step-by-step walking instructions for Jayadeva and Majestic platform interchanges.'
         }
       ],
       quickLinks: [
         { label: 'View Dedicated Pink Line Guide', to: '/pink-line' },
         { label: 'Plan Route on NammaRide Simulator', to: '/simulator' },
         { label: 'Check First and Last Train Timings', to: '/timings' },
-        { label: 'Calculate Pink Line Ticket Fare', to: '/fare-calculator' }
+        { label: 'Calculate Pink Line Ticket Fare', to: '/fare-calculator' },
+        { label: 'Download NammaRide Android App', to: '/download' }
       ]
     },
     {
@@ -230,6 +255,135 @@ export default function BlogPage() {
         { label: 'ಪಿಂಕ್ ಲೈನ್ ವಿವರ ನೋಡಿ', to: '/pink-line' },
         { label: 'ಮೆಟ್ರೋ ಸಮಯ ಪಟ್ಟಿ', to: '/timings' },
         { label: 'ಆಪ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ', to: '/download' }
+      ]
+    },
+    {
+      id: 6,
+      slug: 'bengaluru-metro-fare-calculator-token-smart-card-guide-2026',
+      title: 'Bengaluru Metro Fare Calculator 2026: Complete Token Price Chart, Smart Card 5% Discount, Day Pass & Cost Guide',
+      category: 'guide',
+      categoryLabel: 'Fare & Price Guide',
+      readTime: '14 min read',
+      date: 'Nov 12, 2026',
+      image: '/simulator/assets/images/stations/P05.jpg',
+      summary: 'Exhaustive guide to Bengaluru Namma Metro ticket prices across Purple, Green, Yellow, and Pink lines. Calculate exact distance tariffs from ₹10 to ₹65, 5% Varshik Smart Card savings, ₹70 unlimited Day Passes, and station-to-station route fares.',
+      snippet: 'Calculating your daily Bengaluru Metro travel expense has never been simpler. Whether you are an everyday commuter heading to Whitefield or Electronic City, a university student traveling between Jnanabharathi and Majestic, or a tourist exploring Lalbagh and Cubbon Park, this guide breaks down BMRCL\'s official 2026 fare slabs, token prices, smart card discounts, and tourist day passes.',
+      sections: [
+        {
+          heading: '1. Official 2026 BMRCL Distance-Based Fare Structure',
+          text: 'Bangalore Metro Rail Corporation Limited (BMRCL) operates a graduated distance-based tariff system across all four active corridors (Purple, Green, Yellow, and elevated Pink Line). Ticket prices start at a base minimum of ₹10 for short hops (0 to 2 km, typically 1 to 2 stations) and incrementally scale up to ₹20 (2 to 5 km), ₹35 (5 to 12 km), ₹50 (12 to 21 km), capping at a maximum of ₹60 to ₹65 for end-to-end multi-line transits spanning over 40 kilometers (such as Whitefield to Challaghatta or Madavara BIEC to Silk Institute). Unlike road transit where surge pricing and fuel congestion fees inflate travel costs unpredictably, Namma Metro tariffs remain completely fixed, transparent, and regulated by the statutory Fare Fixation Committee.'
+        },
+        {
+          heading: '2. BMRCL Varshik Smart Card & NCMC 5% Tariff Discount',
+          text: 'Daily commuters are strongly encouraged to utilize a contactless smart card. The BMRCL Varshik Smart Card or any RuPay-compliant National Common Mobility Card (NCMC) issued by Indian banks unlocks an automatic 5% discount on every journey compared to single cash tokens or paper QR slips. For example, a ₹60 maximum cross-city journey costs only ₹57 with a Smart Card. A new smart card costs ₹50 as a refundable issuance fee upon return, with an initial minimum recharge value of ₹50. Cards can be topped up via the official BMRCL portal, UPI apps, or ticket vending machines at all 100 stations. The 5% savings compounds significantly: a daily round-trip commuter saving ₹6 per day retains over ₹150 monthly and ₹1,800 annually, alongside bypassing lengthy queue bottlenecks at manual token counters.'
+        },
+        {
+          heading: '3. Unlimited 1-Day & 3-Day Tourist Travel Passes Explained',
+          text: 'For tourists, family visitors, and professionals attending day-long conferences at the Bangalore International Exhibition Centre (BIEC) or Whitefield ITPL, BMRCL offers dedicated Unlimited Travel Passes: 1) The 1-Day Travel Pass costs ₹70 (plus a ₹50 refundable card deposit), granting unrestricted travel across all Purple, Green, Yellow, and Pink line stations for an entire operating calendar day from 05:00 AM to 11:05 PM. 2) The 3-Day Travel Pass costs ₹140 (plus ₹50 refundable card deposit), offering continuous 72-hour unlimited mobility across Bengaluru\'s transit network. These passes can be purchased at any metro station customer care counter and surrendered at journey completion to reclaim the ₹50 deposit.'
+        },
+        {
+          heading: '4. Station-to-Station Fare Matrix for High-Traffic Commuter Routes',
+          text: 'Here are the verified single-journey token tariffs and smart card discounted fares for Bengaluru\'s most heavily traversed transit pairings: 1) Nadaprabhu Kempegowda Station Majestic to Goraguntepalya (Green Line, 7 stops): Token ₹28, Smart Card ₹26.60. 2) Banashankari to Lalbagh (Green Line, 5 stops): Token ₹22, Smart Card ₹20.90. 3) Vijayanagar to Whitefield Kadugodi (Purple Line via Majestic, 25 stops): Token ₹60, Smart Card ₹57.00. 4) JP Nagar to Church Street / MG Road (Interchange at Majestic or direct via Pink Line): Token ₹35, Smart Card ₹33.25. 5) Jalahalli to Indiranagar (Green to Purple Line via Majestic): Token ₹45, Smart Card ₹42.75. 6) Electronic City Phase 1 to Majestic (Yellow to Green Line via RV Road): Token ₹40, Smart Card ₹38.00.'
+        },
+        {
+          heading: '5. Paper QR Tickets vs WhatsApp Chatbot Ticketing',
+          text: 'Commuters who do not possess a physical Smart Card can purchase digital QR tickets. BMRCL operates an official verified WhatsApp Chatbot (+91 81055 56677) where riders can select originating and destination stations and complete payment via UPI. NammaRide streamlines this process with a dedicated \'Book on WhatsApp\' feature that pre-fills your exact route parameters into the chat with a single tap. Alternatively, paper QR tickets can be purchased at station ticket counters and automated ticket vending machines (ATVMs) using cash or UPI.'
+        },
+        {
+          heading: '6. Calculate Trip Fares & Monthly Commuter Savings on NammaRide',
+          text: 'To eliminate guesswork, NammaRide integrates a real-time Metro Fare Calculator (https://www.nammaride.site/fare-calculator). Simply pick your origin and destination from our dropdown directory of 100 stations. The calculator displays single token cost, smart card discounted pricing, station hop count, line interchange notices, and projected monthly expense based on your custom workweek schedule, empowering Bengaluru commuters to budget transit expenses with absolute precision.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Calculate Metro Fares Instantly', to: '/fare-calculator' },
+        { label: 'Check 100 Stations Directory', to: '/stations' },
+        { label: 'Download NammaRide Android App', to: '/download' }
+      ]
+    },
+    {
+      id: 7,
+      slug: 'bangalore-metro-live-tracking-nearest-station-offline-radar',
+      title: 'Bangalore Metro Live Tracking & Nearest Station Radar: How to Track Trains and Find Stations Offline',
+      category: 'app',
+      categoryLabel: 'Live Tracking & Radar',
+      readTime: '13 min read',
+      date: 'Nov 12, 2026',
+      image: '/simulator/assets/images/stations/P10.jpg',
+      summary: 'Learn how NammaRide uses on-device satellite GNSS to track Bangalore Metro trains live, locate your nearest station from your live coordinates, and navigate underground tunnels without mobile internet.',
+      snippet: 'Bengaluru commuters frequently ask: "In which metro station am I right now?" or "Which is the nearest metro station to me from my current location?" Generic map applications fail deep subterranean inside underground tunnels like Majestic, Cubbon Park, and Vidhana Soudha because cellular triangulation collapses. NammaRide solves this through 100% offline satellite GPS station radar.',
+      sections: [
+        {
+          heading: '1. The Subterranean Connectivity Problem in Urban Metros',
+          text: 'When a metro train descends into deep underground tunnels—such as Bengaluru\'s 5.5-km east-west subterranean corridor running beneath MG Road, Cubbon Park, Dr. BR Ambedkar Vidhana Soudha, Sir M. Visveshwaraya Central College, and Majestic—cellular towers on the surface lose direct line-of-sight. Mobile data drops from 5G to non-functional 2G or \'No Service\'. Cloud-dependent transit apps that poll remote servers freeze, consume heavy battery power trying to reconnect, and report inaccurate location estimates. For passengers engrossed in work or listening to podcasts, this lack of real-time awareness frequently results in missed stops and frustrating interchange delays.'
+        },
+        {
+          heading: '2. NammaRide\'s 100% Offline Satellite GNSS Architecture',
+          text: 'NammaRide was engineered with a privacy-first, on-device computing paradigm that requires zero continuous internet. When you launch NammaRide, the app interfaces directly with your smartphone\'s native Global Navigation Satellite System (GNSS) hardware receiver—utilizing GPS, GLONASS, Galileo, and NavIC satellite constellations. The complete spatial geospatial coordinates of all 100 BMRCL stations are cached locally in under 1 MB of storage. The app calculates spatial haversine distance matrices entirely on your device in under 120 milliseconds, delivering 100% reliable station identification without transmitting a single byte of telemetry to remote servers.'
+        },
+        {
+          heading: '3. Instant Nearest Station Radar: "Where Is the Nearest Metro from My Location?"',
+          text: 'Whether you are stepping out of an office in Whitefield, leaving an apartment in Electronic City, or shopping in Jayanagar, NammaRide\'s Nearest Station Radar provides immediate geographic clarity. With a single tap, the radar computes your radial distance to nearby stations across Purple, Green, Yellow, and Pink lines. It presents the optimal station entry gate (Gate A, B, C, or D), walking duration in minutes, and direct surface street navigation, eliminating confusing detours and expensive auto-rickshaw surcharges.'
+        },
+        {
+          heading: '4. Live Train Motion Simulation & Progress Tracker',
+          text: 'On both our mobile app and live web simulator (https://www.nammaride.site/simulator), commuters can track train journeys in real time. NammaRide\'s trajectory engine models train kinematics, average inter-station run speeds (32 to 36 km/h operational average), dwell times (25 seconds at standard stops, 45 seconds at interchange hubs like Majestic and Jayadeva), and real-time headway frequency. Commuters can view countdown timers for arriving trains, remaining intermediate stations, and line transition alerts.'
+        },
+        {
+          heading: '5. Subterranean Proximity Alerts & Hardware Vibration Feedback',
+          text: 'Never miss your stop again. NammaRide includes background proximity monitoring that triggers a distinct hardware vibration pulse on your smartphone two minutes before your train pulls into your chosen destination or interchange station. Because the proximity algorithm runs locally on background GNSS telemetry, the alert reliably fires even when your phone is asleep in your pocket, in airplane mode, or deep inside subterranean tunnels.'
+        },
+        {
+          heading: '6. Zero Data Telemetry & Absolute Commuter Privacy',
+          text: 'In an era where transit apps monetize user movements by selling real-time geo-location logs to ad networks, NammaRide guarantees absolute privacy. We do not track your journeys, collect device advertising IDs, require account logins, or display intrusive banner ads. All route computations execute exclusively inside your device memory.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Try Live Simulator & Station Radar', to: '/simulator' },
+        { label: 'Find Nearest Station on Map', to: '/map' },
+        { label: 'Download NammaRide Android App', to: '/download' }
+      ]
+    },
+    {
+      id: 8,
+      slug: 'bangalore-metro-timings-first-last-train-schedule-2026',
+      title: 'Bangalore Metro Timings 2026: First & Last Train Departure Schedule for All 100 Stations',
+      category: 'guide',
+      categoryLabel: 'Timetable Schedule',
+      readTime: '12 min read',
+      date: 'Nov 12, 2026',
+      image: '/simulator/assets/images/stations/P15.jpg',
+      summary: 'Comprehensive 2026 timetable guide for Bengaluru Namma Metro. Check exact first train (05:00 AM) and last train (11:05 PM) departures, peak frequencies (3.5 to 5 mins), and interchange connection windows.',
+      snippet: 'Planning your early morning airport connection, daily office commute, or late-night return from Church Street requires dependable timetable intelligence. This comprehensive guide covers BMRCL\'s official 2026 operating hours, peak and off-peak headway frequencies, Sunday schedules, and last-train connection protocols across all 100 stations.',
+      sections: [
+        {
+          heading: '1. Standard Weekday Operating Hours (Monday to Saturday)',
+          text: 'From Monday through Saturday, Bengaluru Namma Metro commences commercial train departures promptly at 05:00 AM from all eight primary terminal stations: Whitefield (Kadugodi) and Challaghatta on the Purple Line; Madavara (BIEC) and Silk Institute on the Green Line; RV Road and Bommasandra on the Yellow Line; and Kalena Agrahara and Tavarekere on the Pink Line. Revenue service concludes with final terminal departures at 11:05 PM. Intermediate stations along the corridor observe synchronized departure schedules, ensuring that commuters throughout the network can catch trains well past 11:30 PM depending on their station location.'
+        },
+        {
+          heading: '2. Sunday & National Holiday Schedule Modifications',
+          text: 'On Sundays and designated national holidays (such as Republic Day, Independence Day, and Gandhi Jayanti), commercial operations commence at 07:00 AM across all four corridors to facilitate overnight maintenance and track inspection protocols. Closing hours remain unchanged, with the final departures leaving terminal stations at 11:05 PM. On special occasions such as New Year\'s Eve, cricket matches at M. Chinnaswamy Stadium, or cultural festivals, BMRCL frequently extends revenue services until 01:30 AM or 02:00 AM, with special flat-fare paper tokens issued at key hubs like MG Road, Cubbon Park, and Majestic.'
+        },
+        {
+          heading: '3. Peak vs Off-Peak Headway Frequencies',
+          text: 'BMRCL modulates train frequency dynamically across the day to match passenger demand: 1) Morning Peak (08:30 AM to 10:30 AM): Trains run at intense 3.5 to 5-minute intervals along the Purple and Green lines, and 6 to 8 minutes on the Yellow and Pink lines. 2) Evening Peak (05:00 PM to 08:30 PM): Frequency matches morning peak intervals of 3.5 to 5 minutes to clear office crowds from ITPL, Whitefield, Electronic City, and the CBD. 3) Non-Peak Hours (11:00 AM to 04:30 PM): Trains operate every 7 to 10 minutes. 4) Early Morning & Late Night (05:00 AM to 07:00 AM & 10:00 PM to 11:05 PM): Trains operate every 10 to 12 minutes.'
+        },
+        {
+          heading: '4. Majestic, Jayadeva & RV Road Last-Train Connection Protocols',
+          text: 'Catching the final transfer train requires careful timing. At Nadaprabhu Kempegowda Station Majestic, the final trains from all four directional quadrants (Challaghatta, Whitefield, BIEC Madavara, and Silk Institute) arrive between 11:25 PM and 11:35 PM. BMRCL operating protocol ensures that connecting trains wait for platform transfers before closing doors, granting transferring commuters a secure 4-minute window to walk between Purple Line (Level 2) and Green Line (Level 3). At Jayadeva Hospital, the final Yellow and Pink line connections synchronize at 11:20 PM.'
+        },
+        {
+          heading: '5. Average Inter-Station Travel Durations Across Corridors',
+          text: 'Namma Metro operates at an average design speed of 65 km/h and an operational commercial speed (including station dwell times) of 32 to 34 km/h. Representative end-to-end trip durations: 1) Whitefield (Kadugodi) to Challaghatta (Purple Line, 43.49 km): 76 minutes. 2) Madavara (BIEC) to Silk Institute (Green Line, 33.4 km): 68 minutes. 3) RV Road to Bommasandra (Yellow Line, 18.82 km): 34 minutes. 4) Kalena Agrahara to Tavarekere (Pink Line, 7.5 km): 14 minutes. 5) Majestic to Whitefield: 42 minutes. 6) Majestic to Electronic City: 44 minutes (including RV Road interchange).'
+        },
+        {
+          heading: '6. Check Real-Time Timings & First/Last Departures on NammaRide',
+          text: 'Never worry about missing the last train home. With NammaRide\'s Timings Guide (https://www.nammaride.site/timings), commuters can select any station to view exact weekday, Saturday, and Sunday first and last departure schedules, headway frequency charts, and travel durations—all stored 100% offline inside the application.'
+        }
+      ],
+      quickLinks: [
+        { label: 'View Full Train Timings Schedule', to: '/timings' },
+        { label: 'Plan Route Duration on Simulator', to: '/simulator' },
+        { label: 'Download NammaRide Android App', to: '/download' }
       ]
     }
   ];

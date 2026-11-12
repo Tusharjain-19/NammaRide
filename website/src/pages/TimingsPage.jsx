@@ -31,8 +31,9 @@ export default function TimingsPage() {
   return (
     <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <MetaSEO
-        title="Namma Metro Train Timings: First and Last Departure Schedules 2026"
-        description="Check live operating schedule, first train (05:00 AM) and last train (11:05 PM) departures for all lines (Purple, Green, Yellow, and Pink) on weekdays and Sundays."
+        title="Bangalore Metro Timings: First & Last Train Schedules 2026 | NammaRide"
+        description="Check complete Bengaluru & Bangalore Namma Metro timings: first train (05:00 AM) and last train (11:05 PM) departures, peak frequencies (3-5 mins), and travel durations for all 100 stations."
+        keywords="app to check metro timings, how to check metro timings, bangalore metro time calculator, metro time calculator bangalore, how to see metro timings, metro travel time calculator, metro timings app, namma metro timings 2026, majestic last train timings, live train timings"
         canonicalPath="/timings"
       />
       <div className="max-w-7xl mx-auto space-y-12">

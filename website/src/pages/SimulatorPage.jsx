@@ -156,8 +156,9 @@ export default function SimulatorPage() {
   return (
     <div className="pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-gradient-to-b from-gray-50 to-white dark:from-black dark:to-black min-h-screen transition-colors duration-300">
       <MetaSEO
-        title="Namma Metro Web Simulator: Interactive GPS Route and Trip Navigation"
-        description="Try NammaRide's #1 Bengaluru Metro app features live in your browser. Test smart route planning, fare calculations, and station guide capabilities."
+        title="Bangalore Metro Live Tracking: Map Simulator & Offline Station Detector | NammaRide"
+        description="Track Bengaluru Namma Metro trains live in your browser with real-time motion simulation, offline GPS station detector, nearest station radar, and platform interchange directions."
+        keywords="metro live tracking, live metro tracking, bangalore metro live tracking app, bangalore metro live tracking map, in which metro station i am right now, nearest metro station to me from my location, metro near me, live metro tracking bangalore, metro tracking bangalore, metro tracker, where is my metro, can we track metro train, how to track metro train in bangalore, metro live location app"
         canonicalPath="/simulator"
       />
       <div className="max-w-container-max 3xl:max-w-[1720px] mx-auto space-y-12 2xl:space-y-16">

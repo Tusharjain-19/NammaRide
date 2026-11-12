@@ -19,8 +19,9 @@ export default function FareCalculatorPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-ambient-grid transition-colors">
       <MetaSEO
-        title="Bengaluru Metro Fare Calculator: 2026 Ticket Prices and Smart Card Discounts"
-        description="Calculate exact Namma Metro ticket prices between any two stations. Compare single token cash fare against 5% Smart Card / QR discounts and monthly commuter savings."
+        title="Bengaluru Metro Fare Calculator 2026: BMRCL Ticket Prices & Smart Card Discounts"
+        description="Calculate exact Bengaluru & Bangalore Namma Metro ticket prices between all 100 stations. Compare single token cash fare against Smart Card discounts, Day Pass rates, and monthly savings."
+        keywords="metro fare calculator, namma metro fare calculator, metro price calculator, bangalore metro fare calculator, metro cost calculator, bangalore metro price calculator, bangalore metro ticket price calculator, bmrcl fare calculator, metro ticket calculator, metro smart card price, metro day pass cost, calculate metro fare, metro fare finder, metro card fare calculator, metro charges calculator, metro train fare calculator, metro fare calc"
         canonicalPath="/fare-calculator"
       />
       <div className="max-w-4xl mx-auto space-y-10">

@@ -372,37 +372,58 @@ export default function HomePage() {
     {
       q: "Which is the best app for Bengaluru (Bangalore) Namma Metro?",
       a: "NammaRide is rated the #1 transit navigation app for Bengaluru Namma Metro (BMRCL). It operates 100% offline using satellite GPS to automatically detect stations, navigate Purple, Green, Yellow, and Pink lines, calculate smart card fares, and guide platform interchanges at Majestic and Jayadeva without cellular data.",
-      tag: "Best App",
+      tag: "Best Metro App",
       link: "/download",
       linkText: "Download Android App"
     },
     {
-      q: "In which metro station am I right now? How to check offline?",
-      a: "You can find your current station instantly using NammaRide's offline Geo GPS station detector. It accesses your phone's satellite GNSS receiver directly to pinpoint your current station, line color, and remaining stops—working seamlessly inside deep underground tunnels like Majestic and Cubbon Park without requiring mobile data.",
-      tag: "Offline GPS",
-      link: "/simulator",
-      linkText: "Test Offline Station Detector"
+      q: "How to use the Bangalore Metro Fare Calculator & check ticket prices?",
+      a: "Use NammaRide's Fare Calculator to select your departure and arrival stations across Purple, Green, Yellow, or Pink lines. BMRCL token fares range from ₹10 to ₹65 based on distance. Smart Card and NCMC users receive an instant 5% discount on every trip. Compare single token vs. smart card savings instantly.",
+      tag: "Fare & Price Calculator",
+      link: "/fare-calculator",
+      linkText: "Open Metro Fare Calculator"
     },
     {
-      q: "Is there a live tracking app for Bangalore Metro trains?",
-      a: "Yes! NammaRide provides a real-time live simulation and station progress radar across Purple, Green, Yellow, and Pink lines. It tracks station hops, calculates journey durations, and provides proximity vibration alerts before your transfer or destination stop.",
-      tag: "Live Tracking",
+      q: "How to find the nearest metro station to me from my current location?",
+      a: "Open NammaRide's offline station radar to instantly detect the closest station from your live location. It calculates direct walking distance, estimated travel time, exit gates, and feeder bus connections—operating 100% offline without draining mobile data.",
+      tag: "Nearest Metro Station",
+      link: "/simulator",
+      linkText: "Find Nearest Metro to Me"
+    },
+    {
+      q: "Is there a live tracking app or map for Bangalore Metro trains?",
+      a: "Yes! NammaRide provides a real-time live simulation and station progress radar across all operational lines. It tracks train movement along Purple, Green, Yellow, and Pink corridors, calculates travel time countdowns, and triggers proximity vibration alerts before your transfer or destination stop.",
+      tag: "Live Metro Tracking",
       link: "/map",
       linkText: "View Live Network Map"
     },
     {
+      q: "In which metro station am I right now? How to check offline?",
+      a: "You can find your current station instantly using NammaRide's offline Geo GPS station detector. It accesses your phone's satellite GNSS receiver directly to pinpoint your current station, line color, and remaining stops—working seamlessly inside deep underground tunnels like Majestic and Cubbon Park without requiring mobile data.",
+      tag: "Current Station Radar",
+      link: "/simulator",
+      linkText: "Test Offline Station Detector"
+    },
+    {
       q: "What are the first and last train timings of Bengaluru Namma Metro?",
       a: "Trains run from 05:00 AM to 11:05 PM (Monday to Saturday) and from 07:00 AM to 11:05 PM (Sundays). Peak rush-hour frequency is every 3.5 to 5 minutes, and off-peak frequency is every 8 to 12 minutes. Check complete terminal timetables on NammaRide Timings.",
-      tag: "Timetables",
+      tag: "Train Timetables",
       link: "/timings",
       linkText: "View Train Timings"
     },
     {
-      q: "How to calculate Namma Metro fares and Smart Card discounts?",
-      a: "BMRCL token fares range from ₹10 to ₹65 based on distance. Commuters paying with a BMRCL Varshik Smart Card or NCMC card receive an automatic 5% to 10% discount on every trip. Use NammaRide's Fare Calculator to view exact token costs and monthly savings.",
-      tag: "Fare & Discount",
+      q: "What is the cost of Bangalore Metro Smart Card, Day Pass, and tariffs?",
+      a: "A new BMRCL Varshik Smart Card costs ₹50 (refundable upon surrender) with a minimum first recharge of ₹50. The BMRCL 1-Day Unlimited Travel Pass costs ₹70 (plus ₹50 refundable card deposit), and the 3-Day Pass costs ₹140. Smart card holders save 5% on every trip compared to paper QR or token tickets.",
+      tag: "Smart Card & Day Pass",
       link: "/fare-calculator",
-      linkText: "Calculate Fare & Savings"
+      linkText: "Check Smart Card Rates"
+    },
+    {
+      q: "What are popular station-to-station ticket prices in Bangalore?",
+      a: "Popular single-journey fares include: Majestic to Goraguntepalya (₹28, 7 stops), Banashankari to Lalbagh (₹22, 5 stops), Vijayanagar to Whitefield (₹60, interchange at Majestic), JP Nagar to Church Street/MG Road (₹35), and Jalahalli to Indiranagar (₹45). Exact fares and interchange guidance can be calculated in seconds on NammaRide.",
+      tag: "Popular Route Prices",
+      link: "/fare-calculator",
+      linkText: "Calculate Any Route Price"
     },
     {
       q: "How do I switch lines at Majestic and Jayadeva interchange stations?",
@@ -475,8 +496,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen pt-32 flex flex-col relative overflow-x-hidden">
       <MetaSEO 
-        title="Best Bengaluru Metro App: Offline GPS Route Planner, Fares and Timings"
-        description="NammaRide is rated the #1 best offline Geo GPS app for Bengaluru Namma Metro (BMRCL). Plan routes across Purple, Green, Yellow, and Pink lines with live fares, 100 stations guide, platform interchange transfer, and train timings in English and Kannada."
+        title="Best Bengaluru Metro App: Fare Calculator, Live Tracking & Timings"
+        description="NammaRide is rated the #1 transit app for Bengaluru & Bangalore Namma Metro (BMRCL). Features 2026 Metro Fare & Price Calculator with Smart Card discounts, Live Train Tracking Map, Station Timings, and Nearest Metro Station Radar in English and Kannada."
+        keywords="metro fare calculator, namma metro fare calculator, metro live tracking, live metro tracking bangalore, bangalore metro live tracking app, bangalore metro live tracking map, nearest metro station to me from my location, metro price calculator, bangalore metro fare calculator, metro cost calculator, metro smart card price, in which metro station i am right now, app to check metro timings, best app for bangalore metro, namma transit, namma ride"
         canonicalPath="/"
       />
       

@@ -80,8 +80,9 @@ export default function StationsPage() {
   return (
     <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
       <MetaSEO 
-        title="Bengaluru Metro Stations Directory: 100 Stations Exit Gates and Facilities"
-        description="Search complete database of Bengaluru Namma Metro stations across Purple, Green, Yellow, and Pink lines. Features GPS coordinates, elevator counts, exit gate guides, and nearby tech park connectivity."
+        title="Bangalore Metro Stations Directory & Nearest Station Finder | NammaRide"
+        description="Find nearest metro stations from your current location in Bangalore. Complete guide to 100 stations across Purple, Green, Yellow, and Pink lines with exit gates, parking, lifts, and interchange directions."
+        keywords="nearest metro station to me from my location, metro near me, nearest metro, nearest metro station from my current location, nearest metro station bangalore, nearest metro to my location, nearest metro station to current location, where is my metro, how to find nearest metro station, closest metro station to my current location, bangalore metro stations directory"
         canonicalPath="/stations"
       />
       <div className="space-y-10">
