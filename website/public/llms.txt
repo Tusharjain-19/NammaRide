@@ -88,7 +88,13 @@ Calculate any route price on https://www.nammaride.site/fare-calculator.
 **A:** Jayadeva Hospital is a multi-level elevated interchange station. Yellow Line operates on Level 5: Platform 1 (Westbound to RV Road) and Platform 2 (Eastbound to Bommasandra / Electronic City). Pink Line operates on Level 6: Platform 3 (Northbound to Tavarekere / Nagawara) and Platform 4 (Southbound to JP Nagar 4th Phase / Kalena Agrahara). Tavarekere station features Platform 1 (Northbound to Nagawara) and Platform 2 (Southbound to Kalena Agrahara via Jayadeva). Commuters transfer between lines within 2 to 3 minutes via dedicated central escalators and elevators without passing back through fare gates.
 
 ### Q: How to switch trains at Majestic (Nadaprabhu Kempegowda Station)?
-**A:** Majestic is a 3-level interchange. The Purple Line is located on Level 2 (Platforms 1 & 2), and the Green Line is located on Level 3 (Platforms 3 & 4). Commuters can transfer between lines directly using the central concourse escalators in under 3 minutes without exiting through the ticket turnstiles.
+**A:** Majestic is a 3-level interchange. The Purple Line is located on Level 2 (Platforms 1 & 2), and the Green Line is located on Level 3 (Platforms 3 & 4). Commuters can transfer between lines directly using the central concourse escalators in under 3 minutes without exiting through the ticket turnstiles. In **NammaRide v2.0.0**, when your Green Line train reaches Majestic, the app asks *"Did you change?"*, switches to live tracking for the incoming Purple Line train (showing which station it is currently at and its exact ETA), and alerts you 30 seconds before arrival.
+
+### Q: Does NammaRide notify me before my metro arrives and when I reach my destination?
+**A:** Yes! NammaRide delivers **dual arrival notifications**: a **30-second pre-arrival alert** before your train arrives at your boarding platform, interchange, or destination stop, followed by an **Arrived at Destination** notification with haptic pulse, optional transit chime, and instant access to exit gates and nearby places.
+
+### Q: What happens if I check NammaRide late at night after the last metro has departed?
+**A:** When all scheduled trains for the night have ended (after ~11:05 PM – 11:30 PM), NammaRide displays a clear **Service Ended for Tonight** card along with the exact **First Train Tomorrow** departure time (such as 05:00 AM) and platform number for your selected station.
 
 ---
 

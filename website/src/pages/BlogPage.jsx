@@ -385,6 +385,102 @@ export default function BlogPage() {
         { label: 'Plan Route Duration on Simulator', to: '/simulator' },
         { label: 'Download NammaRide Android App', to: '/download' }
       ]
+    },
+    {
+      id: 9,
+      slug: 'nammaride-v2-interchange-live-tracking-dual-alerts-cache-guide',
+      title: 'NammaRide v2.0.0 Deep Dive: Live Interchange Tracking at Majestic & Jayadeva, 30-Second + Arrival Alerts, Centered Train Radar & Late-Night First-Train Guide',
+      category: 'app',
+      categoryLabel: 'v2.0.0 Feature Guide',
+      readTime: '14 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/logo_app.png',
+      summary: 'Complete 1,100-word commuter and technical guide to NammaRide v2.0.0: interactive interchange confirmation ("Did you change?"), live connecting train location tracking, pixel-centered moving train sprite, dual 30-second and destination arrival notifications, late-night next-day train fallback, and 4-tier offline cache architecture.',
+      snippet: 'Daily Bengaluru Namma Metro commuters frequently travel across multiple corridors—switching between the Green Line and Purple Line at Nadaprabhu Kempegowda Station Majestic, connecting from Green Line to Yellow Line at Rashtreeya Vidyalaya (RV) Road, or transferring between Yellow Line and Pink Line at Jayadeva Hospital. NammaRide v2.0.0 introduces an intelligent, end-to-end trip state machine that guides you not only on your first train, but through every interchange transfer, final arrival, and late-night edge case—even with zero cellular connectivity.',
+      sections: [
+        {
+          heading: '1. Interactive Interchange Navigation: Answering "Did You Change?" at Majestic, RV Road & Jayadeva',
+          text: 'Most transit apps treat a multi-line metro journey as one static timetable, leaving commuters guessing once they step off their first train. Suppose you board the Green Line at National College or Jayanagar and ride north toward Nadaprabhu Kempegowda Station, Majestic, where you need to switch to the Purple Line bound for Indiranagar or Whitefield (Kadugodi). The moment your train reaches the interchange node in NammaRide v2.0.0, the live boarding HUD pauses progression and displays a dedicated Interchange Confirmation card: "Reached Majestic · Did you change?" alongside a live preview of the next Purple Line departure and its platform number. If you are still seated on the Green Line because of a minor delay, tapping "Still on train" steps your tracker back cleanly by one stop without forcing a premature transfer. Once you step off and tap "Yes, changing to Purple Line", NammaRide immediately transitions your journey into Interchange Waiting mode and locks onto the connecting corridor.'
+        },
+        {
+          heading: '2. Live Connecting Train Location: Know Exactly Where Your Next Train Is Before It Reaches the Platform',
+          text: 'Standing on a crowded interchange platform at Majestic Platform 2 or Jayadeva Hospital Level 6 without knowing whether your connecting train is one stop away or still five stations back creates unnecessary rush and stress. NammaRide v2.0.0 solves this by parameterizing its deterministic BMRCL schedule engine and incoming train tracker by leg index. As soon as you confirm your transfer at Majestic, NammaRide queries the upcoming Purple Line departures in your exact travel direction, renders the incoming connecting train sprite on the desaturated upstream corridor above your interchange station, and displays its real-time station position in plain commuter language—such as "Stopped at Sir M. Visvesvaraya · 2 stops away · 10:52 PM". An adaptive 5-to-10 second refresh loop automatically prunes upstream stations as the connecting train crosses them, triggers a 30-second pre-boarding alert before doors open, and asks "Yes, I boarded" or "Missed · Next Train". If you tap "Missed · Next", NammaRide seamlessly rolls forward to the subsequent departure without losing your route or resetting your trip.'
+        },
+        {
+          heading: '3. Pixel-Centered Moving Train Sprite & Crossed-Station Auto-Pruning Timeline',
+          text: 'Visual clarity matters when glancing at your phone inside a moving metro coach. In NammaRide v2.0.0, the 3D stainless-steel metro train sprite glides smoothly along the vertical route line using hardware-accelerated CSS transforms and dynamically measured station-dot center coordinates. Rather than relying on fixed pixel offsets that can drift across different Android screen densities or viewport widths, the route renderer measures the exact horizontal center of the visible station dot relative to the timeline container and centers the train marker at zero-pixel offset directly over the 4-pixel colored corridor rail. As your train passes each previous station, crossed upstream approach stops smoothly collapse out of view and already-passed on-board stations tuck into a compact "crossed stops before you" pill, keeping your upcoming stops, interchange card, and destination firmly anchored at the top of your screen.'
+        },
+        {
+          heading: '4. Dual Destination Notifications: 30-Second Pre-Arrival Warning + Arrived at Destination Alert',
+          text: 'Whether you are reading, listening to podcasts, or commuting after a long workday in Whitefield or Electronic City, missing your destination stop—especially inside underground stretches between Cubbon Park, Vidhana Soudha, and Majestic—is frustrating. NammaRide v2.0.0 introduces a dual-stage multi-channel notification system engineered for both foreground and locked-screen Android delivery. First, 30 seconds before your train reaches your boarding platform, your interchange station, or your final destination, NammaRide fires a 30-second pre-arrival notification ("Arriving in 30s · Indiranagar — Keep your QR/card ready") accompanied by an optional two-tone BMRCL-style transit chime, haptic vibration, and a high-visibility HUD banner. Even if the app is backgrounded or Doze mode is active, pre-scheduled native Android local notifications fire reliably on time. Second, the moment you reach your final destination, NammaRide triggers a dedicated Arrived at Destination notification ("Arrived at Indiranagar! Tap to view exit gates & nearby places"), immediately opening the Station Exit Gates, BMTC feeder bus, and nearby landmark hub so you walk out of the correct gate on your very first step.'
+        },
+        {
+          heading: '5. Late-Night "Service Ended" State & Tomorrow\'s First Train Schedule Fallback',
+          text: 'BMRCL metro operations typically conclude between 11:05 PM and 11:30 PM IST depending on the corridor and terminal station. Previously, checking a late-night departure or missing the final train of the evening could leave commuters unsure about when morning service resumes. In NammaRide v2.0.0, whenever all remaining departures for the current day have passed—whether at your origin station or at an interchange station like Majestic—the boarding HUD transitions cleanly into a dedicated NO_SERVICE state card titled "Service ended for tonight". Directly below that notice, NammaRide queries tomorrow\'s IST timetable and displays a highlighted "First train tomorrow" card showing the exact morning departure time (for example, 05:00 AM Monday through Saturday or 07:00 AM on Sundays) and the exact platform number, along with a one-tap "Exit Journey" action.'
+        },
+        {
+          heading: '6. 4-Tier Offline Cache Architecture & Zero-Data Reliability Across Bengaluru',
+          text: 'Underground metro tunnels, dense peak-hour crowds, and basement concourses frequently cause cellular data dropouts. NammaRide v2.0.0 is built around a 4-tier cache management architecture so route planning, timetable lookups, and live train tracking never stall offline: Tier 1 uses a bounded in-memory LRU cache in the schedule engine to keep daily trip expansion instantaneous without memory bloat; Tier 2 uses StorageManager with schema-versioned migration (v2.0.0), separating permanent user favorites, theme, and language preferences from TTL-wrapped live overrides while preserving expired data whenever the device is offline; Tier 3 uses a complete Service Worker pre-cache (nammaride-offline-v2.0.0) covering every UI, logic, dataset, and sprite asset with Stale-While-Revalidate for shell files and Network-First with a 2.5-second timeout for live timetable overrides; and Tier 4 enforces versioned asset integrity across web and Capacitor Android builds. Combined with adaptive 5-to-10 second GPS polling and zero external telemetry, NammaRide delivers fast, private, and dependable Bengaluru Metro navigation on every ride.'
+        },
+        {
+          heading: '7. Real-World Commuter Walkthroughs: Majestic, RV Road & Jayadeva Interchange Scenarios',
+          text: 'To see how NammaRide v2.0.0 helps on everyday Bengaluru commutes, consider three high-traffic multi-line journeys. First, an IT engineer traveling from Electronic City Phase 1 on the Yellow Line to Indiranagar on the Purple Line transfers at RV Road (Yellow to Green) and Majestic (Green to Purple): at each interchange, NammaRide pauses, confirms the transfer, displays the exact platform and direction, and shows where the incoming connecting train is currently stopped before firing a 30-second boarding alert. Second, a student traveling from Kalena Agrahara on the elevated Pink Line to Central Silk Board transfers at the six-level Jayadeva Hospital interchange, receiving a 30-second pre-arrival warning before Jayadeva, live Yellow Line connecting train updates on Level 5, and a destination arrival alert with exit gate directions at Silk Board. Third, a late-evening shopper returning from MG Road toward Banashankari after 11:00 PM immediately sees whether a final Green Line train is still reachable at Majestic or whether service has ended for tonight alongside tomorrow morning\'s 05:00 AM first departure.'
+        },
+        {
+          heading: '8. Built for Speed, Privacy & Multilingual Accessibility in English and Kannada',
+          text: 'Every feature in NammaRide v2.0.0—from the Smart Card 5% fare calculator and nearest station radar to live interchange tracking and dual arrival notifications—runs 100% locally on your device without user accounts, phone-number signups, or intrusive location tracking. Commuters can switch effortlessly between English, Kannada (ಕನ್ನಡ), and Hindi across station names, platform instructions, and route cards. Whether you use the progressive web simulator at www.nammaride.site/simulator or the native Android app on Google Play, NammaRide gives you dependable, zero-data Bengaluru Namma Metro intelligence every single day.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Launch Live Route Simulator', to: '/simulator' },
+        { label: 'Check First & Last Train Timings', to: '/timings' },
+        { label: 'Calculate Smart Card Fare', to: '/fare-calculator' },
+        { label: 'Download NammaRide Android App', to: '/download' }
+      ]
+    },
+    {
+      id: 10,
+      slug: 'nammaride-v2-kannada-interchange-alerts-offline-guide',
+      title: 'ನಮ್ಮರೈಡ್ v2.0.0 ಕನ್ನಡ ಮಾರ್ಗದರ್ಶಿ: ಮೆಜೆಸ್ಟಿಕ್ ಮತ್ತು ಜಯದೇವ ಇಂಟರ್‌ಚೇಂಜ್ ಲೈವ್ ಟ್ರ್ಯಾಕಿಂಗ್, 30 ಸೆಕೆಂಡ್ ಹಾಗೂ ತಲುಪಿದ ಎಚ್ಚರಿಕೆಗಳು ಮತ್ತು ಆಫ್‌ಲೈನ್ ಕ್ಯಾಶ್ ವ್ಯವಸ್ಥೆ',
+      category: 'kannada',
+      categoryLabel: 'ಕನ್ನಡ ಮಾಹಿತಿ (v2.0.0)',
+      readTime: '15 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/logo_app.png',
+      summary: 'ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋ ಪ್ರಯಾಣಿಕರಿಗಾಗಿ ನಮ್ಮರೈಡ್ v2.0.0 ಹೊಸ ವೈಶಿಷ್ಟ್ಯಗಳ ಸಂಪೂರ್ಣ ಕನ್ನಡ ವಿವರಣೆ: ಮೆಜೆಸ್ಟಿಕ್ ಮತ್ತು ಜಯದೇವ ಇಂಟರ್‌ಚೇಂಜ್ ನಿಲ್ದಾಣಗಳಲ್ಲಿ ರೈಲು ಬದಲಾವಣೆ ದೃಢೀಕರಣ, ಮುಂದಿನ ರೈಲಿನ ಲೈವ್ ಸ್ಥಳ, 30 ಸೆಕೆಂಡ್ ಮುಂಚಿತ ಮತ್ತು ನಿಲ್ದಾಣ ತಲುಪಿದ ನೋಟಿಫಿಕೇಶನ್‌ಗಳು ಹಾಗೂ ರಾತ್ರಿ ಕೊನೆಯ ರೈಲಿನ ನಂತರದ ಮರುದಿನದ ಮೊದಲ ರೈಲು ಮಾಹಿತಿ.',
+      snippet: 'ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋದಲ್ಲಿ ಪ್ರತಿದಿನ ಲಕ್ಷಾಂತರ ಪ್ರಯಾಣಿಕರು ಗ್ರೀನ್ ಲೈನ್, ಪರ್ಪಲ್ ಲೈನ್, ಯೆಲ್ಲೋ ಲೈನ್ ಮತ್ತು ಪಿಂಕ್ ಲೈನ್ ನಡುವೆ ಇಂಟರ್‌ಚೇಂಜ್ ಮಾಡಿ ಪ್ರಯಾಣಿಸುತ್ತಾರೆ. ನಮ್ಮರೈಡ್ v2.0.0 ಅಪ್‌ಡೇಟ್ ನಿಮ್ಮ ಮೆಟ್ರೋ ಪ್ರಯಾಣವನ್ನು ಇನ್ನಷ್ಟು ಸುಲಭ, ನಿಖರ ಮತ್ತು ಸಂಪೂರ್ಣ ಆಫ್‌ಲೈನ್‌ ಸ್ನೇಹಿಯನ್ನಾಗಿ ಮಾಡಿದೆ. ರೈಲು ಬದಲಾವಣೆಯಿಂದ ಹಿಡಿದು ಗಮ್ಯಸ್ಥಾನ ತಲುಪುವವರೆಗಿನ ಪ್ರತಿಯೊಂದು ಹಂತದಲ್ಲೂ ನಮ್ಮರೈಡ್ ನಿಮಗೆ ನಿಖರ ಮಾರ್ಗದರ್ಶನ ನೀಡುತ್ತದೆ.',
+      sections: [
+        {
+          heading: '1. ಮೆಜೆಸ್ಟಿಕ್, ಆರ್.ವಿ. ರೋಡ್ ಮತ್ತು ಜಯದೇವ ಇಂಟರ್‌ಚೇಂಜ್ ನಿಲ್ದಾಣಗಳಲ್ಲಿ "ನೀವು ರೈಲು ಬದಲಾಯಿಸಿದಿರಾ?" ಲೈವ್ ಮಾರ್ಗದರ್ಶನ',
+          text: 'ಬೆಂಗಳೂರಿನ ಪ್ರಮುಖ ಇಂಟರ್‌ಚೇಂಜ್ ನಿಲ್ದಾಣಗಳಾದ ನಾಡಪ್ರಭು ಕೆಂಪೇಗೌಡ ನಿಲ್ದಾಣ ಮೆಜೆಸ್ಟಿಕ್ (ಪರ್ಪಲ್ ಮತ್ತು ಗ್ರೀನ್ ಲೈನ್), ಆರ್.ವಿ. ರೋಡ್ (ಗ್ರೀನ್ ಮತ್ತು ಯೆಲ್ಲೋ ಲೈನ್) ಹಾಗೂ ಜಯದೇವ ಆಸ್ಪತ್ರೆ (ಯೆಲ್ಲೋ ಮತ್ತು ಪಿಂಕ್ ಲೈನ್) ಗಳಲ್ಲಿ ಒಂದು ಮಾರ್ಗದಿಂದ ಇನ್ನೊಂದು ಮಾರ್ಗಕ್ಕೆ ಬದಲಾಯಿಸುವಾಗ ಪ್ರಯಾಣಿಕರಿಗೆ ಸರಿಯಾದ ಸಮಯ ಮತ್ತು ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ಮಾಹಿತಿ ಅತ್ಯಗತ್ಯವಾಗಿರುತ್ತದೆ. ಉದಾಹರಣೆಗೆ, ನೀವು ನ್ಯಾಷನಲ್ ಕಾಲೇಜಿನಿಂದ ಗ್ರೀನ್ ಲೈನ್ ಮೆಟ್ರೋ ಹತ್ತಿ ಮೆಜೆಸ್ಟಿಕ್ ತಲುಪಿದ ತಕ್ಷಣ, ನಮ್ಮರೈಡ್ v2.0.0 ಪರದೆಯ ಮೇಲೆ "ಮೆಜೆಸ್ಟಿಕ್ ತಲುಪಿದ್ದೀರಿ · ನೀವು ರೈಲು ಬದಲಾಯಿಸಿದಿರಾ?" ಎಂಬ ಸ್ಪಷ್ಟ ಕಾರ್ಡ್ ತೋರಿಸುತ್ತದೆ. ಅಲ್ಲಿ ಪರ್ಪಲ್ ಲೈನ್ ಮುಂದಿನ ರೈಲು ಎಷ್ಟು ನಿಮಿಷದಲ್ಲಿ ಬರುತ್ತದೆ ಮತ್ತು ಯಾವ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗೆ ಹೋಗಬೇಕು ಎಂಬ ಮಾಹಿತಿ ಕಾಣಿಸುತ್ತದೆ. ಒಂದು ವೇಳೆ ನಿಮ್ಮ ಮೊದಲ ರೈಲು ಇನ್ನೂ ಮೆಜೆಸ್ಟಿಕ್ ತಲುಪಿಲ್ಲದಿದ್ದರೆ "ಇನ್ನೂ ರೈಲಿನಲ್ಲಿದ್ದೇನೆ" ಬಟನ್ ಒತ್ತಿ ಹಿಂದಿನ ಹಂತಕ್ಕೆ ಮರಳಬಹುದು. ನೀವು ರೈಲಿನಿಂದ ಇಳಿದು "ಹೌದು, ಪರ್ಪಲ್ ಲೈನ್‌ಗೆ ಬದಲಾಯಿಸುತ್ತಿದ್ದೇನೆ" ಎಂದು ಒತ್ತಿದ ತಕ್ಷಣ, ಆಪ್ ಮುಂದಿನ ಸಂಪರ್ಕ ರೈಲಿನ ಲೈವ್ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸುತ್ತದೆ.'
+        },
+        {
+          heading: '2. ಮುಂದಿನ ಸಂಪರ್ಕ ರೈಲು ಪ್ರಸ್ತುತ ಯಾವ ನಿಲ್ದಾಣದಲ್ಲಿದೆ ಎಂಬ ಲೈವ್ ಮಾಹಿತಿ ಮತ್ತು ಬೋರ್ಡಿಂಗ್ ದೃಢೀಕರಣ',
+          text: 'ಮೆಜೆಸ್ಟಿಕ್ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ನಲ್ಲಿ ಕಾಯುತ್ತಿರುವಾಗ ಮುಂದಿನ ಪರ್ಪಲ್ ಲೈನ್ ರೈಲು ಈಗ ಎಲ್ಲಿ ಬಂದಿದೆ ಎಂದು ತಿಳಿಯುವುದು ಬಹಳ ಉಪಯುಕ್ತವಾಗಿದೆ. ನಮ್ಮರೈಡ್ v2.0.0 ತನ್ನ ವೇಳಾಪಟ್ಟಿ ಎಂಜಿನ್ ಮತ್ತು ರೈಲು ಟ್ರ್ಯಾಕರ್ ಅನ್ನು ಪ್ರತಿ ಪ್ರಯಾಣದ ಹಂತಕ್ಕೆ ತಕ್ಕಂತೆ ವಿನ್ಯಾಸಗೊಳಿಸಿದೆ. ನೀವು ಇಂಟರ್‌ಚೇಂಜ್ ದೃಢೀಕರಿಸಿದ ತಕ್ಷಣ, ನಿಮ್ಮ ದಿಕ್ಕಿಗೆ ಬರುವ ಮುಂದಿನ ರೈಲು ಪ್ರಸ್ತುತ ಯಾವ ನಿಲ್ದಾಣದಲ್ಲಿದೆ—ಉದಾಹರಣೆಗೆ "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ ನಿಲ್ದಾಣದಲ್ಲಿದೆ · 2 ನಿಲ್ದಾಣಗಳ ದೂರ · ರಾತ್ರಿ 10:52" ಎಂಬ ಸರಳ ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸುತ್ತದೆ. ಪ್ರತಿ 5 ರಿಂದ 10 ಸೆಕೆಂಡುಗಳಿಗೆ ರೈಲಿನ ಸ್ಥಾನ ಅಪ್‌ಡೇಟ್ ಆಗುತ್ತದೆ ಮತ್ತು ರೈಲು ಹಿಂದಿನ ನಿಲ್ದಾಣಗಳನ್ನು ದಾಟಿದಂತೆ ಅವು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪಟ್ಟಿಯಿಂದ ಮರೆಯಾಗುತ್ತವೆ. ರೈಲು ನಿಮ್ಮ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗೆ ಬರುವ 30 ಸೆಕೆಂಡ್ ಮುಂಚೆಯೇ ಎಚ್ಚರಿಕೆ ನೀಡಲಾಗುತ್ತದೆ ಮತ್ತು "ಹೌದು, ಹತ್ತಿದ್ದೇನೆ" ಅಥವಾ ರೈಲು ತಪ್ಪಿದರೆ "ತಪ್ಪಿತು · ಮುಂದಿನ ರೈಲು" ಆಯ್ಕೆಯನ್ನು ಬಳಸಬಹುದು.'
+        },
+        {
+          heading: '3. ಮಾರ್ಗದ ರೇಖೆಯ ಮಧ್ಯದಲ್ಲಿ ನಿಖರವಾಗಿ ಚಲಿಸುವ ಮೆಟ್ರೋ ರೈಲು ಚಿಹ್ನೆ ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ನಿಲ್ದಾಣ ನಿರ್ವಹಣೆ',
+          text: 'ಚಲಿಸುತ್ತಿರುವ ಮೆಟ್ರೋ ರೈಲಿನಲ್ಲಿ ಮೊಬೈಲ್ ಪರದೆಯನ್ನು ನೋಡುವಾಗ ವಿನ್ಯಾಸ ಸ್ಪಷ್ಟವಾಗಿರಬೇಕು. ನಮ್ಮರೈಡ್ v2.0.0 ನಲ್ಲಿ ಮೆಟ್ರೋ ರೈಲಿನ ಚಿಹ್ನೆಯು ನಿಲ್ದಾಣದ ವೃತ್ತಾಕಾರದ ಬಿಂದುವಿನ ನಿಖರವಾದ ಮಧ್ಯಭಾಗವನ್ನು ಅಳತೆ ಮಾಡಿ ಲಂಬವಾದ ಮೆಟ್ರೋ ರೇಖೆಯ ನೇರ ಮಧ್ಯದಲ್ಲೇ ಚಲಿಸುವಂತೆ ಸರಿಪಡಿಸಲಾಗಿದೆ. ಇದರಿಂದ ಯಾವುದೇ ಗಾತ್ರದ ಆಂಡ್ರಾಯ್ಡ್ ಫೋನ್‌ನಲ್ಲಿಯೂ ರೈಲು ರೇಖೆಯಿಂದ ಪಕ್ಕಕ್ಕೆ ಸರಿಯದೆ ನಿಖರವಾಗಿ ಕಾಣಿಸುತ್ತದೆ. ಅಲ್ಲದೆ, ರೈಲು ಹಿಂದಿನ ನಿಲ್ದಾಣಗಳನ್ನು ದಾಟಿದಂತೆ ಅವು ನಯವಾಗಿ ಮುಚ್ಚಿಕೊಳ್ಳುತ್ತವೆ ಮತ್ತು ನಿಮ್ಮ ಮುಂದಿನ ನಿಲ್ದಾಣಗಳು, ಇಂಟರ್‌ಚೇಂಜ್ ವಿವರಗಳು ಹಾಗೂ ಗಮ್ಯಸ್ಥಾನವು ಯಾವಾಗಲೂ ಪರದೆಯ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಸ್ಪಷ್ಟವಾಗಿ ಕಾಣಿಸುತ್ತವೆ.'
+        },
+        {
+          heading: '4. ಎರಡು ಹಂತದ ಗಮ್ಯಸ್ಥಾನ ನೋಟಿಫಿಕೇಶನ್: 30 ಸೆಕೆಂಡ್ ಮುಂಚಿತ ಎಚ್ಚರಿಕೆ ಮತ್ತು ನಿಲ್ದಾಣ ತಲುಪಿದ ತಕ್ಷಣದ ಸಂದೇಶ',
+          text: 'ನೆಲದಡಿಯ ಸುರಂಗ ಮಾರ್ಗಗಳಾದ ಕಬ್ಬನ್ ಪಾರ್ಕ್, ವಿಧಾನಸೌಧ, ಸೆಂಟ್ರಲ್ ಕಾಲೇಜು ಮತ್ತು ಮೆಜೆಸ್ಟಿಕ್ ನಡುವೆ ಪ್ರಯಾಣಿಸುವಾಗ ಅಥವಾ ಕೆಲಸದ ನಂತರ ದಣಿವಿನಿಂದ ಕುಳಿತಿರುವಾಗ ನಿಲ್ದಾಣ ತಪ್ಪಿಹೋಗುವ ಆತಂಕವಿರುತ್ತದೆ. ಇದನ್ನು ತಪ್ಪಿಸಲು ನಮ್ಮರೈಡ್ v2.0.0 ಎರಡು ಹಂತದ ಬಹು-ಮಾಧ್ಯಮ ನೋಟಿಫಿಕೇಶನ್ ವ್ಯವಸ್ಥೆಯನ್ನು ಹೊಂದಿದೆ. ಮೊದಲನೆಯದಾಗಿ, ನೀವು ಹತ್ತಬೇಕಾದ ರೈಲು, ಇಂಟರ್‌ಚೇಂಜ್ ನಿಲ್ದಾಣ ಅಥವಾ ನಿಮ್ಮ ಅಂತಿಮ ಗಮ್ಯಸ್ಥಾನವನ್ನು ತಲುಪಲು ಕೇವಲ 30 ಸೆಕೆಂಡುಗಳು ಬಾಕಿ ಇರುವಾಗ ಆಂಡ್ರಾಯ್ಡ್ ಲೋಕಲ್ ನೋಟಿಫಿಕೇಶನ್, ಮೃದುವಾದ ಮೆಟ್ರೋ ಚೈಮ್ ಧ್ವನಿ ಮತ್ತು ವೈಬ್ರೇಶನ್ ಮೂಲಕ "30 ಸೆಕೆಂಡ್‌ಗಳಲ್ಲಿ ತಲುಪಲಿದೆ · ಇಂದಿರಾನಗರ — ನಿಮ್ಮ ಕ್ಯೂಆರ್ ಅಥವಾ ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ಸಿದ್ಧವಾಗಿಡಿ" ಎಂಬ ಎಚ್ಚರಿಕೆ ಬರುತ್ತದೆ. ಫೋನ್ ಲಾಕ್ ಆಗಿದ್ದರೂ ಅಥವಾ ಬ್ಯಾಕ್‌ಗ್ರೌಂಡ್‌ನಲ್ಲಿದ್ದರೂ ಈ ಎಚ್ಚರಿಕೆ ನಿಖರ ಸಮಯಕ್ಕೆ ತಲುಪುತ್ತದೆ. ಎರಡನೆಯದಾಗಿ, ನೀವು ನಿಮ್ಮ ಗಮ್ಯಸ್ಥಾನವನ್ನು ತಲುಪಿದ ತಕ್ಷಣ "ನೀವು ಇಂದಿರಾನಗರ ತಲುಪಿದ್ದೀರಿ!" ಎಂಬ ವಿಶೇಷ ನೋಟಿಫಿಕೇಶನ್ ಬಂದು, ಆ ನಿಲ್ದಾಣದ ನಿರ್ಗಮನ ದ್ವಾರಗಳು, ಬಿಎಂಟಿಸಿ ಫೀಡರ್ ಬಸ್ ಮಾರ್ಗಗಳು ಮತ್ತು ಸಮೀಪದ ಪ್ರಮುಖ ಸ್ಥಳಗಳ ಮಾಹಿತಿಯನ್ನು ತೆರೆಯುತ್ತದೆ.'
+        },
+        {
+          heading: '5. ರಾತ್ರಿ ಕೊನೆಯ ರೈಲು ಮುಗಿದ ನಂತರದ ಸ್ಥಿತಿ ಮತ್ತು ಮರುದಿನ ಬೆಳಿಗ್ಗೆಯ ಮೊದಲ ರೈಲಿನ ಸಮಯ',
+          text: 'ನಮ್ಮ ಮೆಟ್ರೋ ಸೇವೆಗಳು ಸಾಮಾನ್ಯವಾಗಿ ರಾತ್ರಿ 11:05 ರಿಂದ 11:30 ರ ನಡುವೆ ಕೊನೆಗೊಳ್ಳುತ್ತವೆ. ರಾತ್ರಿ ತಡವಾಗಿ ಆಪ್ ತೆರೆದಾಗ ಅಥವಾ ದಿನದ ಕೊನೆಯ ರೈಲು ತಪ್ಪಿದಾಗ ಪ್ರಯಾಣಿಕರು ಗೊಂದಲಕ್ಕೀಡಾಗಬಾರದು ಎಂಬ ಉದ್ದೇಶದಿಂದ ನಮ್ಮರೈಡ್ v2.0.0 ನಲ್ಲಿ ವಿಶೇಷ "ಇಂದಿನ ಸೇವೆ ಮುಗಿದಿದೆ" (Service ended for tonight) ಕಾರ್ಡ್ ಸೇರಿಸಲಾಗಿದೆ. ಇಂದಿನ ಕೊನೆಯ ರೈಲು ಹೊರಟುಹೋಗಿದ್ದರೆ, ಆಪ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಮರುದಿನದ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಪರಿಶೀಲಿಸಿ, ನಿಮ್ಮ ನಿಲ್ದಾಣದಿಂದ ಮರುದಿನ ಬೆಳಿಗ್ಗೆಯ ಮೊದಲ ರೈಲು ಎಷ್ಟು ಗಂಟೆಗೆ (ಸೋಮವಾರದಿಂದ ಶನಿವಾರ ಬೆಳಿಗ್ಗೆ 05:00 ಗಂಟೆ, ಭಾನುವಾರ ಬೆಳಿಗ್ಗೆ 07:00 ಗಂಟೆ) ಮತ್ತು ಯಾವ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ನಿಂದ ಹೊರಡುತ್ತದೆ ಎಂಬುದನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ತೋರಿಸುತ್ತದೆ.'
+        },
+        {
+          heading: '6. ನಾಲ್ಕು ಹಂತದ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಶ್ ವ್ಯವಸ್ಥೆ ಮತ್ತು ಬ್ಯಾಟರಿ ಉಳಿತಾಯದ ಜಿಪಿಎಸ್ ತಂತ್ರಜ್ಞಾನ',
+          text: 'ಭೂಗತ ಮೆಟ್ರೋ ಸುರಂಗಗಳಲ್ಲಿ ಮೊಬೈಲ್ ಇಂಟರ್‌ನೆಟ್ ಸಂಪರ್ಕ ಕಡಿತಗೊಂಡರೂ ನಮ್ಮರೈಡ್ ಯಾವುದೇ ಅಡೆತಡೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ. ಇದಕ್ಕಾಗಿ ಆಪ್‌ನಲ್ಲಿ 4-ಹಂತದ ಕ್ಯಾಶ್ ನಿರ್ವಹಣಾ ವ್ಯವಸ್ಥೆಯನ್ನು ಅಳವಡಿಸಲಾಗಿದೆ: ಮೊದಲ ಹಂತದಲ್ಲಿ ವೇಗದ ಮೆಮೊರಿ ಕ್ಯಾಶ್, ಎರಡನೇ ಹಂತದಲ್ಲಿ ನಿಮ್ಮ ನೆಚ್ಚಿನ ಮಾರ್ಗಗಳು ಮತ್ತು ಕನ್ನಡ ಭಾಷಾ ಆಯ್ಕೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಉಳಿಸುವ ಸ್ಟೋರೇಜ್ ಮ್ಯಾನೇಜರ್, ಮೂರನೇ ಹಂತದಲ್ಲಿ ಸಂಪೂರ್ಣ ಆಫ್‌ಲೈನ್ ಸೇವಾ ವರ್ಕರ್ ಕ್ಯಾಶ್ (nammaride-offline-v2.0.0) ಹಾಗೂ ನಾಲ್ಕನೇ ಹಂತದಲ್ಲಿ ವೆಬ್ ಮತ್ತು ಆಂಡ್ರಾಯ್ಡ್ ಆವೃತ್ತಿಗಳ ನಿಖರ ಸಮನ್ವಯತೆ. ಜೊತೆಗೆ ಅಡಾಪ್ಟಿವ್ 5–10 ಸೆಕೆಂಡ್ ರಿಫ್ರೆಶ್ ಮತ್ತು ಶೂನ್ಯ ಡೇಟಾ ಟ್ರ್ಯಾಕಿಂಗ್ ಮೂಲಕ ನಿಮ್ಮ ಬ್ಯಾಟರಿ ಮತ್ತು ಗೌಪ್ಯತೆ ಎರಡನ್ನೂ ರಕ್ಷಿಸಲಾಗುತ್ತದೆ. ಇಂದೇ www.nammaride.site ಗೆ ಭೇಟಿ ನೀಡಿ ಅಥವಾ ಗೂಗಲ್ ಪ್ಲೇ ಸ್ಟೋರ್‌ನಿಂದ ನಮ್ಮರೈಡ್ ಆಂಡ್ರಾಯ್ಡ್ ಆಪ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.'
+        }
+      ],
+      quickLinks: [
+        { label: 'ಲೈವ್ ಸಿಮ್ಯುಲೇಟರ್ ಬಳಸಿ', to: '/simulator' },
+        { label: 'ಮೊದಲ ಮತ್ತು ಕೊನೆಯ ರೈಲು ಸಮಯ', to: '/timings' },
+        { label: 'ಮೆಟ್ರೋ ದರ ಲೆಕ್ಕಾಚಾರ', to: '/fare-calculator' },
+        { label: 'ಆಂಡ್ರಾಯ್ಡ್ ಆಪ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ', to: '/download' }
+      ]
     }
   ];
 

@@ -462,10 +462,24 @@ export default function HomePage() {
     },
     {
       q: "How do I switch lines at Majestic and Jayadeva interchange stations?",
-      a: "At Nadaprabhu Kempegowda Station Majestic, transfer between Purple Line (Level 2) and Green Line (Level 3) via central concourse escalators in under 3 minutes. At Jayadeva Hospital, transfer between Yellow Line (Level 5) and Pink Line (Level 6) without exiting through fare turnstiles.",
+      a: "At Nadaprabhu Kempegowda Station Majestic, transfer between Purple Line (Level 2) and Green Line (Level 3) via central concourse escalators in under 3 minutes. At Jayadeva Hospital, transfer between Yellow Line (Level 5) and Pink Line (Level 6) without exiting through fare turnstiles. NammaRide also asks 'Did you change?' on arrival and shows the live incoming connecting train's station location and countdown.",
       tag: "Interchange Guide",
       link: "/pink-line",
       linkText: "Jayadeva Interchange Guide"
+    },
+    {
+      q: "Does NammaRide alert me both 30 seconds before arrival and when I reach my destination?",
+      a: "Yes! NammaRide provides dual multi-channel arrival alerts: a 30-second pre-arrival warning before your train reaches your boarding platform, interchange, or final stop, plus an 'Arrived at Destination' notification with exit gate and nearby landmark guidance—working across Android notifications, sound chime, and vibration.",
+      tag: "30s & Arrival Alerts",
+      link: "/simulator",
+      linkText: "Try Live Trip Alerts"
+    },
+    {
+      q: "What if I miss the last metro train at night? How do I see tomorrow's first train?",
+      a: "If all metro services for the night have ended, NammaRide automatically switches to the 'Service ended for tonight' view and displays the exact departure time and platform number for tomorrow's first train from your origin or interchange station.",
+      tag: "First & Last Train",
+      link: "/timings",
+      linkText: "Check First Train Tomorrow"
     }
   ];
 
