@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * NammaRide Real-Time Train Location Refresh & Crossed-Station Pruning Engine
  *

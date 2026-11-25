@@ -20,7 +20,7 @@
   [![Offline Availability](https://img.shields.io/badge/Offline-100%25_Satellite_GPS-emerald?style=flat-square)](https://www.nammaride.site/)
   [![Zero Tracking](https://img.shields.io/badge/Privacy-Zero_Data_Tracking-black?style=flat-square)](https://www.nammaride.site/privacy)
   [![Languages](https://img.shields.io/badge/Languages-English_%7C_%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1_%7C_%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80-orange?style=flat-square)](https://www.nammaride.site/blog)
-  [![License](https://img.shields.io/badge/License-MIT-gray?style=flat-square)](LICENSE)
+  [![License](https://img.shields.io/badge/License-Personal_%26_Non--Commercial_Only-red?style=flat-square)](LICENSE)
 
   <br/><br/>
 
@@ -178,13 +178,14 @@ NammaRide is engineered for top-tier discoverability across traditional search e
 - **Zero Remote Tracking**: User coordinates are never transmitted or saved to external servers.
 - **No Binaries or Secrets in Git**: Keystores (`*.keystore`, `*.jks`), binaries (`*.apk`, `*.aab`), and local environment variables (`.env`) are strictly excluded via `.gitignore`.
 - **Offline Reliability**: The full metro network graph, transfer matrices, and coordinates are bundled locally within the app.
+- **Personal & Non-Commercial Use Only**: This codebase is licensed strictly for personal, educational, non-commercial use ([LICENSE](LICENSE) | [NOTICE](NOTICE.md) | [TERMS OF USE](TERMS_OF_USE.md)). Commercial use, app store redistribution, or republication is prohibited without written permission from **Tushar Jain**.
 
 ---
 
 ## 👨‍💻 Developer & Attribution
 
 - **Creator & Lead Developer**: **Tushar Jain** ([Portfolio](https://www.tusharjain.in/) | [GitHub](https://github.com/Tusharjain-19))
-- **Official Support Email**: `support@nammaride.site` / `jaint0910@gmail.com`
+- **Official Support Email**: `jaint0910@gmail.com`
 - **Google Play Store**: [Get NammaRide on Google Play](https://play.google.com/store/apps/details?id=site.nammaride.app)
 
 *Disclaimer: NammaRide is an independently developed transit guide and route navigation system. It references public transit data provided by Bangalore Metro Rail Corporation Limited (BMRCL).*

@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 
 // Automatic origin sanitation: purge foreign project keys (JaipurRide) on localhost
 (function purgeForeignArtifacts() {

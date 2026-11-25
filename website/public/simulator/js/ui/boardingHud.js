@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * NammaRide Sticky Live Simulation HUD & Floating Resume Bar
  * Uses keyed structural mounting + targeted DOM text/class patching so 1s countdowns

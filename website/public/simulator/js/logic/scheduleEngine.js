@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * NammaRide Deterministic BMRCL Schedule & Live Train Engine (Zero-Server)
  * Computes next-train departures, short-loop filtering, holiday/Sunday shifts,

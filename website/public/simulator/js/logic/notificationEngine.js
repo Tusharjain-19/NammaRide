@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * NammaRide Multi-Channel 30-Second Arrival Notification Engine
  *

@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 import { T, T_STATION, formatTime } from '../utils/helpers.js';
 import { stationPlaces } from '../data/stationPlaces.js';
 import { getIncomingTrainContext } from '../logic/scheduleEngine.js';

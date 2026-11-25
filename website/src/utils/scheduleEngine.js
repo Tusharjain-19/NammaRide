@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * Website ESM Wrapper around BMRCL Deterministic Schedule & Crowd Engine
  * Imports bundled Vite JSON/JS data modules directly without touching /public.

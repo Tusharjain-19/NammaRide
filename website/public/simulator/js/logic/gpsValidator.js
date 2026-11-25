@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 /**
  * NammaRide GNSS Speed Validator & Adaptive Location Tracker
  * Validates live metro speed using GNSS Doppler velocity prioritized with

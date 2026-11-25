@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 const CACHE_NAME = 'nammaride-offline-v2.0.0';
 const ASSETS_TO_CACHE = [
   './',

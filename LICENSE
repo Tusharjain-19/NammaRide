@@ -1,28 +1,27 @@
-# Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+# NammaRide Personal & Non-Commercial Use Only License
 
-Copyright (c) 2026 Tushar Jain — NammaRide
+Copyright (c) 2026 **Tushar Jain** (`jaint0910@gmail.com`) — NammaRide (https://www.nammaride.site/)
 
----
-
-### STRICT NON-COMMERCIAL USE ONLY LICENSE
-
-By exercising the Licensed Rights, You accept and agree to be bound by the terms and conditions of this License.
-
-#### 1. Rights Granted:
-- **Share**: You are free to copy, distribute, and transmit the work in any medium or format.
-- **Adapt**: You are free to remix, transform, and build upon the material for personal, educational, or non-commercial research purposes.
-
-#### 2. License Conditions:
-- **Attribution**: You must give appropriate credit to the author (**Tushar Jain — NammaRide**), provide a link to the license, and indicate if changes were made.
-- **NON-COMMERCIAL USE ONLY**: **You MAY NOT use this codebase, assets, mobile app builds, design systems, or data for commercial purposes.** Commercial use includes, but is not limited to:
-  - Selling the software or derived mobile applications on Google Play Store, Apple App Store, or any third-party app marketplace.
-  - Monetizing the software through paid subscriptions, advertisements, or paid API wrappers.
-  - Using the code or brand within a commercial company or revenue-generating entity.
+All Rights Reserved, subject to the limited Personal Use grant below.
 
 ---
 
-### DISCLAIMER OF WARRANTY & LIABILITY
+## 1. Permitted Use (Personal & Educational Only)
+Subject to full compliance with this License, **Tushar Jain** grants individual natural persons a limited, non-exclusive, non-transferable, revocable permission to:
+- View, download, and run the source code locally on a personal computer or personal device **solely for personal, non-commercial study, learning, or personal commute use**.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## 2. Prohibited Uses (Strictly Forbidden)
+Without prior **written permission** signed by **Tushar Jain**, you **MAY NOT**:
+1. **Commercial Use**: Use any part of this codebase, UI/UX design, datasets, assets, icons, or build outputs for any commercial, revenue-generating, or business purpose.
+2. **App Store / Play Store / Public Hosting Redistribution**: Compile, repackage, white-label, rebrand, or publish this app or any derivative work to Google Play Store, Apple App Store, third-party APK stores, or public web hosting.
+3. **Monetization**: Embed advertisements, paid subscriptions, paywalls, analytics trackers, or paid APIs into any copy or derivative of this project.
+4. **Removal of Watermarks or Notices**: Remove, obscure, or alter any copyright notice, author watermark (`Tushar Jain — NammaRide`), `LICENSE`, or `NOTICE.md` file.
 
-*NammaRide is an independent, open community project and is not affiliated with or endorsed by BMRCL (Bangalore Metro Rail Corporation Limited).*
+## 3. Intellectual Property & Trademarks
+- The **NammaRide** name, logo (`logo_app.png`), custom train marker artwork (`metro_train_marker.png`), domain (`nammaride.site`), and original code architecture remain the exclusive intellectual property of **Tushar Jain**.
+- **BMRCL Disclaimer**: NammaRide is an independent transit companion and is not affiliated with, sponsored by, or endorsed by Bangalore Metro Rail Corporation Limited (BMRCL).
+
+## 4. Disclaimer of Warranty & Limitation of Liability
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT HOLDER (**TUSHAR JAIN**) BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+For licensing inquiries or written commercial permission requests, contact: `jaint0910@gmail.com`.

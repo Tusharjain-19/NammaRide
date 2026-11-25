@@ -1,3 +1,4 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 import React from 'react';
 import { ShieldAlert, BookOpen } from 'lucide-react';
 import MetaSEO from '../components/MetaSEO';
