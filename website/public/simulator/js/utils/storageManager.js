@@ -14,6 +14,8 @@ const PERMANENT_KEYS = new Set([
 
 const CACHE_PREFIX = 'nammaride_cache_';
 const DEFAULT_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const SCHEMA_VERSION_KEY = 'nammaride_schema_version';
+const CURRENT_SCHEMA_VERSION = '2.0.0';
 
 export const StorageManager = {
     /**
@@ -35,9 +37,16 @@ export const StorageManager = {
 
             if (parsed && typeof parsed === 'object' && parsed.__nammaride_wrapped) {
                 if (parsed.expiry && Date.now() > parsed.expiry) {
+                    // Never discard expired data while offline so cached schedules keep working
+                    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+                        return parsed.data !== undefined ? parsed.data : defaultValue;
+                    }
                     localStorage.removeItem(key);
                     return defaultValue;
                 }
+                return parsed.data !== undefined ? parsed.data : defaultValue;
+            }
+            if (parsed && typeof parsed === 'object' && parsed.__nammaride_soft_cache) {
                 return parsed.data !== undefined ? parsed.data : defaultValue;
             }
 
@@ -97,6 +106,7 @@ export const StorageManager = {
      */
     cleanExpiredEntries() {
         try {
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
             const now = Date.now();
             const keysToRemove = [];
 
@@ -110,6 +120,7 @@ export const StorageManager = {
                     const raw = localStorage.getItem(key);
                     if (!raw) continue;
                     const parsed = JSON.parse(raw);
+                    if (parsed && parsed.__nammaride_soft_cache) continue;
                     if (parsed && parsed.__nammaride_wrapped && parsed.expiry && now > parsed.expiry) {
                         keysToRemove.push(key);
                     }
@@ -269,10 +280,66 @@ export const StorageManager = {
     },
 
     /**
+     * Save Soft-TTL cached data that always remains readable offline even past softExpiry.
+     */
+    setSoftCache(key, data, softTtlMs = 21600000) {
+        try {
+            const payload = {
+                __nammaride_soft_cache: true,
+                savedAt: Date.now(),
+                softExpiry: Date.now() + softTtlMs,
+                data
+            };
+            localStorage.setItem(key, JSON.stringify(payload));
+            return true;
+        } catch (err) {
+            console.warn('[StorageManager] setSoftCache error:', key, err);
+            return false;
+        }
+    },
+
+    /**
+     * Read Soft-TTL cached data without deleting stale entries; includes human age label.
+     */
+    getWithStaleFallback(key, defaultValue = null) {
+        try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return { data: defaultValue, isStale: true, savedAt: null, ageLabel: 'Cached' };
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && parsed.__nammaride_soft_cache) {
+                const savedAt = parsed.savedAt || Date.now();
+                const ageMs = Math.max(0, Date.now() - savedAt);
+                const mins = Math.floor(ageMs / 60000);
+                let ageLabel = 'just now';
+                if (mins >= 1440) ageLabel = `${Math.floor(mins / 1440)}d ago`;
+                else if (mins >= 60) ageLabel = `${Math.floor(mins / 60)}h ago`;
+                else if (mins >= 1) ageLabel = `${mins}m ago`;
+                return {
+                    data: parsed.data !== undefined ? parsed.data : defaultValue,
+                    isStale: parsed.softExpiry ? Date.now() > parsed.softExpiry : false,
+                    savedAt,
+                    ageLabel
+                };
+            }
+            return { data: parsed ?? defaultValue, isStale: false, savedAt: null, ageLabel: 'Cached' };
+        } catch (err) {
+            return { data: defaultValue, isStale: true, savedAt: null, ageLabel: 'Cached' };
+        }
+    },
+
+    /**
      * Migrate older storage schemas seamlessly on startup.
      */
     migrateExistingData() {
         try {
+            const prevVersion = localStorage.getItem(SCHEMA_VERSION_KEY);
+            if (prevVersion !== CURRENT_SCHEMA_VERSION) {
+                if (typeof navigator === 'undefined' || navigator.onLine !== false) {
+                    StorageManager.clearTemporaryCache?.();
+                }
+                localStorage.setItem(SCHEMA_VERSION_KEY, CURRENT_SCHEMA_VERSION);
+            }
+
             // Clean any expired entries automatically
             StorageManager.cleanExpiredEntries();
 

@@ -542,3 +542,163 @@ body.dark-mode .line-yellow .platform-pill {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
 }
+
+/* ============================================================
+   Unified Approach + Ride Vertical Timeline (v1.9.0)
+   ============================================================ */
+.route-timeline {
+    padding-left: 1.65rem;
+    padding-right: 1.1rem;
+}
+
+.station-item {
+    padding-left: 2.25rem;
+}
+
+/* Smooth animated pruning when an approaching train crosses a previous stop */
+.station-item.station-pruning {
+    opacity: 0 !important;
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.22s ease,
+                padding 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.station-item.onboard-passed-collapsed {
+    display: none !important;
+}
+
+.passed-stops-pill {
+    position: relative;
+    padding-left: 2.25rem;
+    padding-bottom: 1rem;
+}
+
+.passed-stops-pill::before {
+    content: '';
+    position: absolute;
+    left: 6.5px;
+    top: 0;
+    bottom: 0;
+    border-left: 3px dashed rgba(148, 163, 184, 0.45);
+}
+
+/* Colorless / Desaturated Upstream Approach Track (before boarding station) */
+.station-item.upstream-approach {
+    padding-bottom: 2rem;
+    opacity: 0.85;
+}
+
+.station-item.upstream-approach::before {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    width: 0 !important;
+    left: 6.5px !important;
+    border-left: 3px dashed rgba(148, 163, 184, 0.6) !important;
+}
+
+.station-item.upstream-approach .station-dot {
+    width: 11px !important;
+    height: 11px !important;
+    left: 2.5px !important;
+    top: 3px !important;
+    border-width: 2px !important;
+    border-color: rgba(148, 163, 184, 0.78) !important;
+    background-color: var(--bg-card) !important;
+    box-shadow: none !important;
+}
+
+.station-item.upstream-approach .station-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.upstream-approach-hidden .station-item.upstream-approach {
+    display: none !important;
+}
+
+.upstream-summary-node {
+    position: relative;
+    padding-left: 2.25rem;
+    padding-bottom: 1.35rem;
+}
+
+.upstream-summary-node::before {
+    content: '';
+    position: absolute;
+    left: 6.5px;
+    top: 14px;
+    bottom: 0;
+    border-left: 3px dashed rgba(148, 163, 184, 0.55);
+}
+
+/* Floating Realistic 3D Metro Train Sprite aligned exactly along the 8px rail center */
+.timeline-train-cursor {
+    position: absolute;
+    left: calc(1.5rem + 8px);
+    top: 0;
+    z-index: 35;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+    transition: transform 0.85s linear, opacity 0.25s ease;
+}
+
+@keyframes nrPulseSubtle {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.08); }
+}
+
+.animate-pulse-subtle {
+    animation: nrPulseSubtle 1.5s ease-in-out infinite;
+}
+
+.timeline-train-sprite-wrap {
+    position: relative;
+    width: 30px;
+    height: 44px;
+    margin-top: -22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.timeline-train-sprite {
+    width: 30px;
+    height: 44px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    transition: filter 0.3s ease;
+}
+
+.timeline-train-aura {
+    position: absolute;
+    inset: 4px;
+    border-radius: 999px;
+    opacity: 0.42;
+    filter: blur(8px);
+    z-index: -1;
+}
+
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Floating Persistent Active Ride Bar above Bottom Nav */
+.floating-live-ride-bar {
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: calc(max(0.85rem, env(safe-area-inset-bottom, 14px)) + 4.35rem);
+    z-index: 9990;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+}

@@ -2,5 +2,11 @@
   "appId": "site.nammaride.app",
   "appName": "NammaRide",
   "webDir": "mobile-web",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_namma_train",
+      "iconColor": "#10B981"
+    }
+  }
 }

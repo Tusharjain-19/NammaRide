@@ -5,16 +5,33 @@
     <meta charset="UTF-8">
     <script>
         (function() {
-            function getSavedTheme() {
+            var MANUAL_KEY = 'nammaride_theme_manual';
+            var THEME_KEY = 'nammaride_theme';
+            var wipeInFlight = false;
+
+            function getSystemTheme() {
                 try {
-                    var saved = localStorage.getItem('nammaride_theme');
-                    if (saved === 'dark' || saved === 'light') return saved;
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        return 'dark';
+                    }
                 } catch(e) {}
                 return 'light';
             }
 
-            window.applyNammaTheme = function(theme) {
-                var isDark = theme === 'dark';
+            function getSavedTheme() {
+                try {
+                    var isManual = localStorage.getItem(MANUAL_KEY) === '1';
+                    var saved = localStorage.getItem(THEME_KEY)
+                        || localStorage.getItem('nammaride_app_theme')
+                        || localStorage.getItem('appTheme');
+                    if (isManual && (saved === 'dark' || saved === 'light')) {
+                        return saved;
+                    }
+                } catch(e) {}
+                return getSystemTheme();
+            }
+
+            function commitDomTheme(isDark) {
                 var doc = document.documentElement;
                 var body = document.body;
 
@@ -41,46 +58,148 @@
                     metaThemeColor.setAttribute('content', isDark ? '#000000' : '#E8EDF5');
                 }
 
-                try {
-                    localStorage.setItem('nammaride_theme', isDark ? 'dark' : 'light');
-                } catch(e) {}
-
                 // Sync toggle button icon visibility
                 var sunIcon = document.getElementById('theme-icon-sun');
                 var moonIcon = document.getElementById('theme-icon-moon');
                 if (sunIcon && moonIcon) {
-                    if (isDark) {
-                        sunIcon.style.display = 'block';
-                        moonIcon.style.display = 'none';
-                    } else {
-                        sunIcon.style.display = 'none';
-                        moonIcon.style.display = 'block';
-                    }
+                    sunIcon.style.display = isDark ? 'block' : 'none';
+                    moonIcon.style.display = isDark ? 'none' : 'block';
+                }
+            }
+
+            function runTopDownSweepBeam(isDark) {
+                try {
+                    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                    var existing = document.getElementById('nr-theme-sweep-beam');
+                    if (existing) existing.remove();
+                    var beam = document.createElement('div');
+                    beam.id = 'nr-theme-sweep-beam';
+                    beam.setAttribute('aria-hidden', 'true');
+                    beam.className = isDark ? 'nr-sweep-beam nr-sweep-to-dark' : 'nr-sweep-beam nr-sweep-to-light';
+                    (document.body || document.documentElement).appendChild(beam);
+                    setTimeout(function() { if (beam.parentNode) beam.parentNode.removeChild(beam); }, 480);
+                } catch(e) {}
+            }
+
+            function runFallbackTopDownCurtain(isDark, onMidpoint) {
+                try {
+                    var existing = document.getElementById('nr-theme-curtain');
+                    if (existing) existing.remove();
+                    var curtain = document.createElement('div');
+                    curtain.id = 'nr-theme-curtain';
+                    curtain.setAttribute('aria-hidden', 'true');
+                    curtain.style.cssText = 'position:fixed;inset:0;z-index:99998;pointer-events:none;will-change:transform,opacity;transform:translate3d(0,-100%,0);background:' + (isDark ? 'linear-gradient(180deg,#05080f 0%,#0b1322 92%,rgba(16,185,129,0.45) 100%)' : 'linear-gradient(180deg,#E8EDF5 0%,#ffffff 92%,rgba(16,185,129,0.35) 100%)') + ';transition:transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 200ms ease;';
+                    (document.body || document.documentElement).appendChild(curtain);
+                    requestAnimationFrame(function() {
+                        curtain.style.transform = 'translate3d(0,0,0)';
+                        setTimeout(function() {
+                            onMidpoint();
+                            curtain.style.opacity = '0';
+                            setTimeout(function() { if (curtain.parentNode) curtain.parentNode.removeChild(curtain); }, 220);
+                        }, 210);
+                    });
+                } catch(e) {
+                    onMidpoint();
+                }
+            }
+
+            window.applyNammaTheme = function(theme, options) {
+                var opts = options || {};
+                var isDark = theme === 'dark';
+                var current = document.documentElement.getAttribute('data-theme');
+                var themeStr = isDark ? 'dark' : 'light';
+
+                if (opts.isUserToggle) {
+                    try {
+                        localStorage.setItem(MANUAL_KEY, '1');
+                        localStorage.setItem(THEME_KEY, themeStr);
+                        localStorage.setItem('nammaride_app_theme', themeStr);
+                        localStorage.setItem('appTheme', themeStr);
+                    } catch(e) {}
                 }
 
-                // Sync theme back to parent website
-                try {
-                    if (window.parent && window.parent !== window) {
-                        window.parent.postMessage({ type: 'NAMMARIDE_THEME_SYNC', theme: isDark ? 'dark' : 'light' }, '*');
+                // Sync theme back to parent website when changed via user toggle
+                if (opts.syncParent !== false) {
+                    try {
+                        if (window.parent && window.parent !== window) {
+                            window.parent.postMessage({ type: 'NAMMARIDE_THEME_SYNC', theme: themeStr, manual: !!opts.isUserToggle }, '*');
+                        }
+                    } catch(e) {}
+                }
+
+                var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (!opts.animate || reduceMotion || current === themeStr || !document.body) {
+                    commitDomTheme(isDark);
+                    return;
+                }
+
+                if (wipeInFlight) {
+                    commitDomTheme(isDark);
+                    return;
+                }
+
+                if (typeof document.startViewTransition === 'function') {
+                    wipeInFlight = true;
+                    document.documentElement.classList.add('nr-theme-wiping');
+                    runTopDownSweepBeam(isDark);
+                    try {
+                        var transition = document.startViewTransition(function() {
+                            commitDomTheme(isDark);
+                        });
+                        transition.finished.finally(function() {
+                            document.documentElement.classList.remove('nr-theme-wiping');
+                            wipeInFlight = false;
+                        });
+                    } catch(e) {
+                        document.documentElement.classList.remove('nr-theme-wiping');
+                        wipeInFlight = false;
+                        commitDomTheme(isDark);
                     }
-                } catch(e) {}
+                } else {
+                    wipeInFlight = true;
+                    document.documentElement.classList.add('nr-theme-wiping');
+                    runFallbackTopDownCurtain(isDark, function() {
+                        commitDomTheme(isDark);
+                        document.documentElement.classList.remove('nr-theme-wiping');
+                        wipeInFlight = false;
+                    });
+                }
             };
 
             window.toggleNammaTheme = function() {
                 var doc = document.documentElement;
                 var isDark = doc.getAttribute('data-theme') === 'dark';
-                window.applyNammaTheme(isDark ? 'light' : 'dark');
+                window.applyNammaTheme(isDark ? 'light' : 'dark', { animate: true, isUserToggle: true });
             };
 
             // Listen for theme changes pushed from parent website
             window.addEventListener('message', function(event) {
                 if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED' && event.data.theme) {
-                    window.applyNammaTheme(event.data.theme === 'dark' ? 'dark' : 'light');
+                    var next = event.data.theme === 'dark' ? 'dark' : 'light';
+                    window.applyNammaTheme(next, {
+                        animate: !!event.data.animate,
+                        isUserToggle: !!event.data.manual,
+                        syncParent: false
+                    });
                 }
             });
 
+            // Follow mobile phone / OS light-dark switch automatically if user hasn't manually overridden
+            try {
+                if (window.matchMedia) {
+                    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                    var onOsThemeChange = function(e) {
+                        if (localStorage.getItem(MANUAL_KEY) !== '1') {
+                            window.applyNammaTheme(e.matches ? 'dark' : 'light', { animate: true, syncParent: false });
+                        }
+                    };
+                    if (mq.addEventListener) mq.addEventListener('change', onOsThemeChange);
+                    else if (mq.addListener) mq.addListener(onOsThemeChange);
+                }
+            } catch(e) {}
+
             var initialTheme = getSavedTheme();
-            window.applyNammaTheme(initialTheme);
+            window.applyNammaTheme(initialTheme, { animate: false, syncParent: false });
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -206,11 +325,11 @@
     <meta http-equiv="Expires" content="0" />
 
     <!-- CSS Structure -->
-    <link rel="stylesheet" href="css/base.css?v=1.6.0">
-    <link rel="stylesheet" href="css/layout.css?v=1.6.0">
-    <link rel="stylesheet" href="css/metro-route.css?v=1.6.0">
-    <link rel="stylesheet" href="css/components.css?v=1.6.0">
-    <link rel="stylesheet" href="css/sections.css?v=1.6.0">
+    <link rel="stylesheet" href="css/base.css?v=2.0.0">
+    <link rel="stylesheet" href="css/layout.css?v=2.0.0">
+    <link rel="stylesheet" href="css/metro-route.css?v=2.0.0">
+    <link rel="stylesheet" href="css/components.css?v=2.0.0">
+    <link rel="stylesheet" href="css/sections.css?v=2.0.0">
 
     <!-- External Libs (Local for 100% Offline & Instant Loading) -->
     <script src="js/libs/lucide.min.js" defer></script>
@@ -242,24 +361,56 @@
     </script>
 
     <!-- Main Module -->
-    <script type="module" src="js/main.js?v=1.6.0" defer></script>
+    <script type="module" src="js/main.js?v=2.0.0" defer></script>
 </head>
 
 
 <body>
 
-    <!-- PREMIUM FIXED LOADING SCREEN (outside app-container to cover full viewport) -->
-    <div id="splash-screen" style="position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#E8EDF5;transition:opacity 0.5s ease-out;">
-        <div style="display:flex;flex-direction:column;align-items:center;">
-            <div style="width:64px;height:64px;border-radius:16px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 25px rgba(16,185,129,0.15);">
-                <img src="assets/images/logo_app.png" alt="NammaRide Logo" style="width: 42px; height: 42px; object-fit: contain;">
+    <!-- METRO ARRIVAL OPENING SPLASH SCREEN (Theme-Synced, GPU-Only 60/120/400fps Ready) -->
+    <div id="splash-screen" role="status" aria-label="Loading NammaRide">
+        <div class="nr-splash-stage">
+            <div class="nr-splash-emblem">
+                <img src="assets/images/logo_app.png" alt="NammaRide Logo" width="46" height="46" style="width:46px;height:46px;object-fit:contain;border-radius:12px;">
             </div>
-            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.025em;margin-bottom:4px;color:#0F172A;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">NammaRide</h1>
-            <p style="color:#059669;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-size:10px;margin-bottom:32px;opacity:0.9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">Bengaluru Transit</p>
-            <div class="splash-dots">
-                <span class="splash-dot dot-purple"></span>
-                <span class="splash-dot dot-green"></span>
-                <span class="splash-dot dot-yellow"></span>
+
+            <div class="nr-metro-corridor">
+                <!-- Train glides Left -> Right and reveals NammaRide in its wake -->
+                <div class="nr-splash-wordmark">
+                    <span class="nr-brand-text">Namma<span class="nr-brand-accent">Ride</span></span>
+                    <span class="nr-brand-sub">BENGALURU METRO</span>
+                </div>
+
+                <!-- 4-Corridor Metro Rail Track -->
+                <div class="nr-rail-track" aria-hidden="true">
+                    <span class="nr-rail-seg" style="background:#A855F7"></span>
+                    <span class="nr-rail-seg" style="background:#10B981"></span>
+                    <span class="nr-rail-seg" style="background:#EAB308"></span>
+                    <span class="nr-rail-seg" style="background:#EC4899"></span>
+                </div>
+
+                <!-- Streamlined 3-Coach Metro Train (Left -> Right) -->
+                <div class="nr-metro-train" aria-hidden="true">
+                    <svg width="118" height="28" viewBox="0 0 118 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="5" width="32" height="18" rx="4" fill="#1E293B" stroke="#475569" stroke-width="0.7"/>
+                        <rect x="2" y="16.5" width="32" height="2.8" fill="#A855F7"/>
+                        <rect x="6" y="8" width="8.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                        <rect x="17.5" y="8" width="8.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                        <rect x="34" y="10" width="3" height="8" fill="#64748B"/>
+                        <rect x="37" y="5" width="34" height="18" rx="4" fill="#1E293B" stroke="#475569" stroke-width="0.7"/>
+                        <rect x="37" y="16.5" width="34" height="2.8" fill="#10B981"/>
+                        <rect x="42" y="8" width="9" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                        <rect x="55" y="8" width="9" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                        <rect x="71" y="10" width="3" height="8" fill="#64748B"/>
+                        <path d="M74 5H100C107.8 5 113.8 11.8 115.6 18.2C116.2 20.5 114.2 23 111.5 23H74V5Z" fill="#0F172A" stroke="#475569" stroke-width="0.7"/>
+                        <path d="M74 16.5H114.8L114 19.3H74V16.5Z" fill="#10B981"/>
+                        <path d="M97 8H105.2C108.4 8 110.8 10.6 111.8 13.5H97V8Z" fill="#38BDF8" fill-opacity="0.95"/>
+                        <rect x="79.5" y="8" width="12.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                        <circle cx="113" cy="20.4" r="1.8" fill="#FDE047"/>
+                        <rect x="10" y="3" width="15" height="2" rx="1" fill="#64748B"/>
+                        <rect x="47" y="3" width="14" height="2" rx="1" fill="#64748B"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
@@ -268,36 +419,129 @@
 
         <style>
             img { max-width: 100%; }
-            .splash-dots { display: flex; align-items: center; justify-content: center; gap: 12px; height: 32px; }
-            .splash-dot {
-                width: 10px; height: 10px; border-radius: 50%;
+            #splash-screen {
+                position: fixed;
+                inset: 0;
+                z-index: 99999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: #E8EDF5;
+                color: #0F172A;
+                transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+                will-change: opacity, transform;
+                contain: layout style paint;
             }
-            .dot-purple { 
-                background: #A855F7; 
-                box-shadow: 0 0 12px rgba(168, 85, 247, 0.7); 
-                animation: purpleBounce 1.3s ease-in-out infinite; 
+            html.dark #splash-screen, html[data-theme="dark"] #splash-screen {
+                background: #06090F;
+                color: #F8FAFC;
             }
-            .dot-green { 
-                background: #10B981; 
-                box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); 
-                animation: greenPulse 1.3s ease-in-out infinite; 
+            #splash-screen.nr-splash-exit {
+                opacity: 0;
+                transform: scale(1.03);
+                pointer-events: none;
             }
-            .dot-yellow { 
-                background: #EAB308; 
-                box-shadow: 0 0 12px rgba(234, 179, 8, 0.7); 
-                animation: yellowFloat 1.3s ease-in-out infinite; 
+            .nr-splash-stage {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+                padding: 0 24px;
             }
-            @keyframes purpleBounce {
-                0%, 100% { transform: translateY(0) scale(0.9); opacity: 0.5; }
-                50% { transform: translateY(-8px) scale(1.3); opacity: 1; box-shadow: 0 0 20px rgba(168, 85, 247, 1); }
+            .nr-splash-emblem {
+                width: 68px;
+                height: 68px;
+                border-radius: 20px;
+                background: rgba(16, 185, 129, 0.12);
+                border: 1px solid rgba(16, 185, 129, 0.25);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                will-change: transform, opacity;
+                animation: nrEmblemIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
             }
-            @keyframes greenPulse {
-                0%, 100% { transform: scale(0.7); opacity: 0.4; }
-                50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 22px rgba(16, 185, 129, 1); }
+            .nr-metro-corridor {
+                position: relative;
+                width: 268px;
+                padding-top: 2px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                overflow: hidden;
             }
-            @keyframes yellowFloat {
-                0%, 100% { transform: translateY(0) scale(0.9); opacity: 0.5; }
-                50% { transform: translateY(8px) scale(1.3); opacity: 1; box-shadow: 0 0 20px rgba(234, 179, 8, 1); }
+            .nr-splash-wordmark {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 12px;
+                will-change: clip-path, transform, opacity;
+                animation: nrRevealTextLtr 0.92s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+            }
+            .nr-brand-text {
+                font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+                font-size: 1.75rem;
+                font-weight: 800;
+                letter-spacing: -0.03em;
+                line-height: 1.1;
+            }
+            .nr-brand-accent { color: #10B981; }
+            .nr-brand-sub {
+                margin-top: 4px;
+                font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+                font-size: 10px;
+                font-weight: 800;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: #059669;
+                opacity: 0.92;
+            }
+            html.dark .nr-brand-sub, html[data-theme="dark"] .nr-brand-sub {
+                color: #34D399;
+            }
+            .nr-rail-track {
+                width: 100%;
+                height: 4px;
+                border-radius: 999px;
+                overflow: hidden;
+                display: flex;
+                opacity: 0.9;
+                transform-origin: left center;
+                will-change: transform, opacity;
+                animation: nrTrackDraw 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+            }
+            .nr-rail-seg { flex: 1; height: 100%; }
+            .nr-metro-train {
+                position: absolute;
+                left: 0;
+                bottom: 5px;
+                pointer-events: none;
+                will-change: transform, opacity;
+                animation: nrMetroPassLtr 1.02s cubic-bezier(0.25, 0.85, 0.35, 1) 0.04s both;
+            }
+            @keyframes nrEmblemIn {
+                0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.88); }
+                100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+            }
+            @keyframes nrTrackDraw {
+                0% { opacity: 0.2; transform: scaleX(0.15); }
+                100% { opacity: 0.95; transform: scaleX(1); }
+            }
+            @keyframes nrMetroPassLtr {
+                0% { opacity: 0; transform: translate3d(-132px, 0, 0); }
+                12% { opacity: 1; }
+                78% { opacity: 1; }
+                100% { opacity: 0; transform: translate3d(276px, 0, 0); }
+            }
+            @keyframes nrRevealTextLtr {
+                0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-8px, 0, 0); }
+                22% { opacity: 1; }
+                72% { opacity: 1; clip-path: inset(0 0% 0 0); transform: translate3d(0, 0, 0); }
+                100% { opacity: 1; clip-path: inset(0 0% 0 0); transform: translate3d(0, 0, 0); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .nr-splash-emblem, .nr-rail-track, .nr-splash-wordmark { animation: none !important; clip-path: none !important; opacity: 1 !important; transform: none !important; }
+                .nr-metro-train { display: none !important; }
             }
         </style>
 
@@ -576,6 +820,23 @@
 
         </div>
 
+        <!-- PERSISTENT FLOATING LIVE RIDE BAR (Allows browsing other tabs during active trip) -->
+        <div id="floating-live-ride-bar" class="floating-live-ride-bar hidden">
+            <div class="flex items-center justify-between gap-2 p-2 pl-3 pr-2 rounded-2xl bg-card/95 backdrop-blur-xl border border-emerald-500/35 shadow-xl">
+                <button id="floating-ride-resume-btn" type="button" class="flex-1 flex items-center gap-2.5 min-w-0 text-left cursor-pointer">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <div class="min-w-0 flex-1">
+                        <div id="floating-ride-title" class="text-xs font-extrabold text-primary truncate">Live Ride</div>
+                        <div id="floating-ride-sub" class="text-[10px] text-secondary font-semibold truncate">Tap to return to live route</div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-xl bg-emerald-500 text-white text-[10px] font-black shrink-0">Resume</span>
+                </button>
+                <button id="floating-ride-end-btn" type="button" class="w-8 h-8 rounded-xl bg-card-subtle hover:bg-red-500/15 text-secondary hover:text-red-500 border border-subtle flex items-center justify-center shrink-0 cursor-pointer" title="End Ride">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- BOTTOM NAVIGATION BAR -->
         <nav id="bottom-nav" class="bottom-nav">
             <div id="nav-indicator" class="nav-indicator"></div>
@@ -824,22 +1085,51 @@
 
 
     <script>
-        // Instant & Fallback Loading Screen Dismissal for Smooth Mobile Feel
+        // Synchronized Metro Arrival Splash Dismissal (ensures left->right train + NammaRide reveal finishes cleanly)
         (function() {
-            function dismissSplash() {
-                const splash = document.getElementById('splash-screen');
-                if (splash && splash.style.opacity !== '0') {
-                    splash.style.opacity = '0';
-                    setTimeout(function() { splash.style.display = 'none'; }, 400);
-                }
+            var startTs = Date.now();
+            var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var MIN_PLAY_MS = reduceMotion ? 160 : 1120;
+            var MAX_WAIT_MS = 2200;
+            var appReady = false;
+            var dismissed = false;
+
+            function performDismiss() {
+                if (dismissed) return;
+                dismissed = true;
+                var splash = document.getElementById('splash-screen');
+                if (!splash) return;
+                splash.classList.add('nr-splash-exit');
+                var removed = false;
+                var cleanup = function() {
+                    if (removed) return;
+                    removed = true;
+                    splash.style.display = 'none';
+                    if (splash.parentNode) splash.parentNode.removeChild(splash);
+                };
+                splash.addEventListener('transitionend', cleanup, { once: true });
+                setTimeout(cleanup, 380);
             }
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                setTimeout(dismissSplash, 150);
-            } else {
-                document.addEventListener('DOMContentLoaded', function() { setTimeout(dismissSplash, 150); });
+
+            function scheduleCheck() {
+                if (!appReady) return;
+                var elapsed = Date.now() - startTs;
+                var remaining = Math.max(0, MIN_PLAY_MS - elapsed);
+                setTimeout(performDismiss, remaining);
             }
-            window.addEventListener('load', dismissSplash);
-            setTimeout(dismissSplash, 600);
+
+            window.__nammaRideReady = function() {
+                appReady = true;
+                scheduleCheck();
+            };
+
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    appReady = true;
+                    scheduleCheck();
+                }, 80);
+            });
+            setTimeout(performDismiss, MAX_WAIT_MS);
         })();
 
         // Register Offline PWA Service Worker

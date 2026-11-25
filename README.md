@@ -48,8 +48,9 @@
 | Feature | Description |
 | :--- | :--- |
 | 🛰️ **100% Offline Geo GPS Auto-Tracking** | Uses hardware satellite geolocation to auto-detect nearest stations, live speed, and distance to your destination with 0 KB mobile data consumed. |
-| 📳 **Underground Proximity Vibration Radar** | Triggers silent hardware vibration alerts 1 to 2 stations before arrival so passengers sleeping or reading never miss their stop. |
-| 🔀 **Step-by-Step Platform Interchange Navigator** | Guides commuters directly to Platform 1/2 or Platform 3/4 at Majestic and RV Road, detailing level changes and escalator shortcuts. |
+| 🚆 **Live Moving Train & Auto-Pruning Timeline** | Centered 3D train sprite glides along the vertical track, automatically collapsing crossed upstream stops with adaptive 5–10s refresh. |
+| 🔔 **Dual Arrival Alerts (30s Warning + Arrived)** | Fires native Android notifications, chime, and haptic alerts 30 seconds before boarding/interchange/destination AND on arrival (`DEST_ARRIVED`). |
+| 🔀 **Interactive Interchange & Late-Night Fallback** | Asks *"Did you change?"* at interchange stations (e.g. Majestic), tracks the live incoming connecting train, and shows tomorrow's first train when service ends (`NO_SERVICE`). |
 | 💰 **Smart Card 5% Discount Engine** | Calculates official BMRCL token fares (₹10 to ₹65) and displays exact Varshik Smart Card savings on every route. |
 | ⏱️ **First & Last Train Timetable Schedules** | Exact departure schedules for Monday–Saturday (05:00 AM – 11:05 PM) and Sundays (07:00 AM – 11:05 PM), including peak headway frequencies (3–5 mins). |
 | 🌐 **Complete Trilingual Localization** | 1-tap language switcher for English, Kannada (ಕನ್ನಡ), and Hindi (हिन्दी) across stations, timings, blogs, and fare tools. |

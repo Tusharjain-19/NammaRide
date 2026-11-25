@@ -5,13 +5,14 @@
       // Prevent flash of wrong theme - runs before React
       (function() {
         try {
+          var isManual = localStorage.getItem('nammaride_theme_manual') === '1';
           var t = localStorage.getItem('nammaride_theme')
             || localStorage.getItem('nammaride_app_theme')
             || localStorage.getItem('appTheme');
-          if (t === 'dark') {
+          if (isManual && t === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.setAttribute('data-theme', 'dark');
-          } else if (t === 'light') {
+          } else if (isManual && t === 'light') {
             document.documentElement.classList.add('light');
             document.documentElement.setAttribute('data-theme', 'light');
           } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -470,18 +471,53 @@
     </noscript>
 
     <div id="root">
-      <div id="app-loading-screen" style="min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #ffffff; color: #111827; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; transition: opacity 0.3s ease;">
-        
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
-          <img src="/assets/images/logo_app.png" alt="NammaRide" style="width: 56px; height: 56px; object-fit: contain; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
-          <div style="font-size: 20px; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 4px;">
-            <span>Namma<span style="color: #10b981;">Ride</span></span>
-          </div>
-          <div style="display: flex; gap: 8px; margin-top: 4px;">
-            <span class="nr-dot" style="background-color: #8b5cf6; animation-delay: 0s;"></span>
-            <span class="nr-dot" style="background-color: #10b981; animation-delay: 0.2s;"></span>
-            <span class="nr-dot" style="background-color: #eab308; animation-delay: 0.4s;"></span>
-            <span class="nr-dot" style="background-color: #ec4899; animation-delay: 0.6s;"></span>
+      <div id="app-loading-screen" style="min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; transition: opacity 0.32s ease;">
+        <style>
+          #app-loading-screen { background-color: #ffffff; color: #0f172a; }
+          html.dark #app-loading-screen, html[data-theme="dark"] #app-loading-screen { background-color: #050505 !important; color: #f8fafc !important; }
+          .nr-web-corridor { position: relative; width: 256px; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 2px; }
+          .nr-web-wordmark { display: flex; flex-direction: column; align-items: center; padding-bottom: 10px; will-change: clip-path, transform, opacity; animation: nrWebRevealLtr 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both; }
+          .nr-web-rail { width: 100%; height: 4px; border-radius: 999px; display: flex; overflow: hidden; transform-origin: left center; animation: nrWebRailDraw 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+          .nr-web-train { position: absolute; left: 0; bottom: 5px; pointer-events: none; will-change: transform, opacity; animation: nrWebMetroLtr 1s cubic-bezier(0.25, 0.85, 0.35, 1) 0.04s both; }
+          @keyframes nrWebRailDraw { 0% { opacity: 0.2; transform: scaleX(0.15); } 100% { opacity: 0.95; transform: scaleX(1); } }
+          @keyframes nrWebMetroLtr { 0% { opacity: 0; transform: translate3d(-128px,0,0); } 14% { opacity: 1; } 78% { opacity: 1; } 100% { opacity: 0; transform: translate3d(268px,0,0); } }
+          @keyframes nrWebRevealLtr { 0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-6px,0,0); } 25% { opacity: 1; } 100% { opacity: 1; clip-path: inset(0 0% 0 0); transform: translate3d(0,0,0); } }
+          @media (prefers-reduced-motion: reduce) { .nr-web-wordmark, .nr-web-rail { animation: none !important; clip-path: none !important; opacity: 1 !important; transform: none !important; } .nr-web-train { display: none !important; } }
+        </style>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+          <img src="/assets/images/logo_app.png" alt="NammaRide" style="width: 56px; height: 56px; object-fit: contain; border-radius: 14px;" onerror="this.style.display='none'">
+          <div class="nr-web-corridor">
+            <div class="nr-web-wordmark">
+              <div style="font-size: 26px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;">
+                <span>Namma<span style="color: #10b981;">Ride</span></span>
+              </div>
+              <span style="margin-top: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.22em; color: #10b981;">BENGALURU METRO</span>
+            </div>
+            <div class="nr-web-rail" aria-hidden="true">
+              <span style="flex:1;background:#A855F7"></span>
+              <span style="flex:1;background:#10B981"></span>
+              <span style="flex:1;background:#EAB308"></span>
+              <span style="flex:1;background:#EC4899"></span>
+            </div>
+            <div class="nr-web-train" aria-hidden="true">
+              <svg width="112" height="26" viewBox="0 0 118 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="5" width="32" height="18" rx="4" fill="#1E293B" stroke="#475569" stroke-width="0.7"/>
+                <rect x="2" y="16.5" width="32" height="2.8" fill="#A855F7"/>
+                <rect x="6" y="8" width="8.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                <rect x="17.5" y="8" width="8.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                <rect x="34" y="10" width="3" height="8" fill="#64748B"/>
+                <rect x="37" y="5" width="34" height="18" rx="4" fill="#1E293B" stroke="#475569" stroke-width="0.7"/>
+                <rect x="37" y="16.5" width="34" height="2.8" fill="#10B981"/>
+                <rect x="42" y="8" width="9" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                <rect x="55" y="8" width="9" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                <rect x="71" y="10" width="3" height="8" fill="#64748B"/>
+                <path d="M74 5H100C107.8 5 113.8 11.8 115.6 18.2C116.2 20.5 114.2 23 111.5 23H74V5Z" fill="#0F172A" stroke="#475569" stroke-width="0.7"/>
+                <path d="M74 16.5H114.8L114 19.3H74V16.5Z" fill="#10B981"/>
+                <path d="M97 8H105.2C108.4 8 110.8 10.6 111.8 13.5H97V8Z" fill="#38BDF8" fill-opacity="0.95"/>
+                <rect x="79.5" y="8" width="12.5" height="5.5" rx="1.4" fill="#BAE6FD" fill-opacity="0.9"/>
+                <circle cx="113" cy="20.4" r="1.8" fill="#FDE047"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>

@@ -285,3 +285,70 @@ html.dark, html[data-theme="dark"], body.dark-mode {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
 }
+
+/* ─── Ultra-Smooth GPU-Composited Top-to-Down Theme Wipe ─── */
+html.nr-theme-wiping,
+html.nr-theme-wiping * {
+    transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2;
+    will-change: clip-path;
+    animation: nrThemeWipeDown 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nrThemeWipeDown {
+    0% {
+        clip-path: inset(0 0 100% 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.nr-sweep-beam {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+    z-index: 2147483647;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: nrSweepBeamDown 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.nr-sweep-to-dark {
+    background: linear-gradient(90deg, rgba(168,85,247,0.9), rgba(16,185,129,0.95), rgba(234,179,8,0.9), rgba(236,72,153,0.9));
+    box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
+}
+
+.nr-sweep-to-light {
+    background: linear-gradient(90deg, rgba(16,185,129,0.95), rgba(56,189,248,0.9), rgba(168,85,247,0.85));
+    box-shadow: 0 4px 18px rgba(56, 189, 248, 0.45);
+}
+
+@keyframes nrSweepBeamDown {
+    0% {
+        opacity: 0.95;
+        transform: translate3d(0, -4px, 0);
+    }
+    85% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 100vh, 0);
+    }
+}

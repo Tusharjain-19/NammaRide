@@ -1,3 +1,13 @@
+import { stationsMeta } from '../data/stationsMeta.js';
+import { stationPlaces } from '../data/stationPlaces.js';
+import { safetyData } from '../data/safety.js';
+import { timingsData } from '../data/timings.js';
+import { metroData, stationTranslations } from '../data/stations.js';
+import { stationBoardImages } from '../data/stationBoardImages.js';
+import { getStationGates } from '../data/stationGates.js';
+import { matchStation } from '../utils/fuzzySearch.js';
+import { getNextTrainsAtStation, getActiveTrainsOnLine } from '../logic/scheduleEngine.js';
+
 // Smooth Momentum & Drag Horizontal Scroll Helper
 function makeSmoothScrollable(el) {
     if (!el || el._smoothScrollEnabled) return;
@@ -188,15 +198,6 @@ function getStationPlatformLayout(station) {
 // ============================================================
 // NammaRide - Section Views (Stations, Timings, Safety, Explore)
 // ============================================================
-
-import { stationsMeta } from '../data/stationsMeta.js';
-import { stationPlaces } from '../data/stationPlaces.js';
-import { safetyData } from '../data/safety.js';
-import { timingsData } from '../data/timings.js';
-import { metroData, stationTranslations } from '../data/stations.js';
-import { stationBoardImages } from '../data/stationBoardImages.js';
-import { getStationGates } from '../data/stationGates.js';
-import { matchStation } from '../utils/fuzzySearch.js';
 
 let currentLangGetter = () => 'en';
 let T_fn = (k) => k;
@@ -601,7 +602,7 @@ export function renderTimings(container) {
 
         let html = `<div class="section-header">
             <h2 class="section-title">${T_fn('timings') || 'Timings'}</h2>
-            <p class="section-subtitle">Official BMRCL Schedule • 2025-26</p>
+            <p class="section-subtitle">Official BMRCL Schedule • 2026 Timetable</p>
             <div class="flex gap-2.5 mt-3 mb-2 overflow-x-auto py-1 px-1 smooth-pill-scroll" id="timing-line-filters">
                 <button class="timing-line-btn ${activeTimingLine === 'all' ? 'active' : ''}" data-line="all">${T_fn('lineAll') || 'All Lines'}</button>
                 <button class="timing-line-btn ${activeTimingLine === 'pink' ? 'active' : ''}" data-line="pink">${T_fn('linePink') || 'Pink Line'}</button>
@@ -628,6 +629,12 @@ export function renderTimings(container) {
         </div>`;
 
         Object.entries(timingsData || {}).forEach(([key, line]) => {
+            const lineFirstIds = { purple: 'P01', green: 'G01', yellow: 'Y01', pink: 'PK01' };
+            const activeCountOnLine = getActiveTrainsOnLine(key, new Date()).length;
+            const liveSample = getNextTrainsAtStation({ lineKey: key, stationId: lineFirstIds[key] || 'P01', directionSign: 1, limit: 1 });
+            const nextTrainStr = liveSample?.trains?.[0]
+                ? `${liveSample.trains[0].countdownLabel} (${liveSample.trains[0].departureFormatted})`
+                : 'Off Hours';
             const primarySched = line.schedules?.mon_fri || line.schedules?.mon_sat || (line.schedules ? Object.values(line.schedules)[0] : null);
             
             let firstTrainStart = '05:00 AM';
@@ -663,6 +670,10 @@ export function renderTimings(container) {
                         <h4 class="timing-line-name">${T_STATION_fn(line.name)}</h4>
                         <p class="timing-route">${line.route || ''}</p>
                         <p class="timing-stations">${line.stations || 0} stations</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-[10px] font-extrabold">${activeCountOnLine} Active Now</span>
+                        <div class="text-[10px] text-secondary font-bold mt-1">Next: ${nextTrainStr}</div>
                     </div>
                 </div>
 

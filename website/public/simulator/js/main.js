@@ -28,6 +28,7 @@ import { metroData, translations, stationTranslations, lineNameMap } from './dat
 import { stationsMeta } from './data/stationsMeta.js';
 import { CustomDropdown } from './ui/dropdown.js';
 import { renderLiveRoute, updateRouteVisuals } from './ui/route.js';
+import { getJourneyNextDepartures, getNextTrainsAtStation, formatCountdownLabel, getISTParts, getTomorrowFirstTrain, getIncomingTrainContext } from './logic/scheduleEngine.js';
 import { calculateFare, calculateFareByHops, countStationHops } from './logic/pricing.js';
 import { initSections, renderStationsList, renderStationDetail, renderTimings, renderSafety, renderExplore, renderExploreStation, renderPlaceDetail } from './ui/sections.js';
 import { T, T_STATION, CONFIG, formatTime, getCurrentLang, setCurrentLang } from './utils/helpers.js';
@@ -35,9 +36,28 @@ import { stationPlaces } from './data/stationPlaces.js';
 import { getStationGates } from './data/stationGates.js';
 import { matchStation, scoreStation } from './utils/fuzzySearch.js';
 import { StorageManager } from './utils/storageManager.js';
+import { TrainLocationRefresher, reconcileActiveTrainCandidate } from './logic/trainTrackerEngine.js';
+import { notificationController, evaluateThirtySecondAlert, ALERT_THRESHOLD_SEC } from './logic/notificationEngine.js';
+import {
+    getDistanceFromLatLonInKm,
+    getRoadRouteDistanceInKm,
+    computeEstimatedTrainSpeedKmh,
+    clearActiveGPSWatch,
+    configureAdaptiveGPS,
+    processGPSUpdate,
+} from './logic/gpsValidator.js';
+import { bindBoardingHudActions, renderBoardingHud, renderFloatingLiveRideBar } from './ui/boardingHud.js';
+import {
+    getActiveTicketData,
+    setActiveTicketData,
+    openPassAdvisorModal,
+    closePassAdvisorModal,
+    initTicketModule,
+} from './ui/ticketModals.js';
 window.matchStation = matchStation;
 window.scoreStation = scoreStation;
 window.StorageManager = StorageManager;
+export { getActiveTicketData, setActiveTicketData };
 // Standalone simulation module
 
 // --- App State ---
@@ -75,20 +95,105 @@ window.addEventListener('offline', () => {
 });
 
 // Tracks the status of the live journey simulation
-const simulationState = { 
-    isActive: false, 
-    journeyId: null, 
-    startTime: null, 
-    lastLocationUpdateTime: 0, 
-    locationWatcherId: null, 
-    timeline: [], 
-    animationFrameId: null, 
+const simulationState = {
+    isActive: false,
+    journeyId: null,
+    startTime: null,
+    lastLocationUpdateTime: 0,
+    lastLocationSyncMs: 0,
+    locationWatcherId: null,
+    timeline: [],
+    timerId: null,
     lastStationIndex: -1,
     useGPS: false,
     gpsAccuracy: null,
     currentStationIndex: 0,
-    arrivedAtDestination: false
+    manualOverrideIndex: undefined,
+    arrivedAtDestination: false,
+    boardingState: 'ON_BOARD', // 'WAITING_AT_PLATFORM' | 'ARRIVAL_CHECK' | 'ON_BOARD' | 'INTERCHANGE_CHECK' | 'INTERCHANGE_WAITING' | 'INTERCHANGE_ARRIVAL' | 'NO_SERVICE' | 'ARRIVED'
+    activeLegIndex: 0,
+    interchangeTimelineIndex: null,
+    confirmedInterchangeLegs: [],
+    waitingTargetDate: null,
+    waitingTrainIndex: 0,
+    candidateTrains: [],
+    alarmedCandidateIdx: -1,
+    gpsMode: 'OFF',
+    visibilityBound: false,
+    speedHudEnabled: (typeof localStorage !== 'undefined' && localStorage.getItem('nammaride_speed_hud') !== '0'),
+    speedMutedByUser: false,
+    currentSpeedKmh: null,
+    isSpeedEstimated: false,
+    speedSource: 'Timetable',
+    lastGpsFix: null,
+    gpsHistory: [],
+    speedSamples: [],
+    gpsRouteFloatIdx: null,
+    wasNearOrigin: false,
+    fastPingStreak: 0,
+    wasMovingFast: false,
+    usingCapacitorGeo: false,
+    showUpstreamManual: false,
+    showPassedManual: false,
 };
+
+// Zero-Server Connectivity & Soft-TTL Live Overrides Manager
+let liveOverrides = null;
+
+function updateFloatingLiveRideBar() {
+    renderFloatingLiveRideBar({ simulationState, currentJourney, currentVisibleViewId });
+}
+
+async function fetchLiveOverrides() {
+    const cached = StorageManager.getWithStaleFallback('nammaride_live_overrides', null);
+    if (cached?.data) liveOverrides = cached.data;
+
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        return liveOverrides;
+    }
+
+    const isHttpWeb = typeof window !== 'undefined' &&
+        (window.location.protocol === 'http:' || window.location.protocol === 'https:') &&
+        !window.location.hostname.includes('localhost');
+    const urls = isHttpWeb
+        ? ['../live-overrides.json', '/live-overrides.json']
+        : ['../live-overrides.json', 'https://www.nammaride.site/live-overrides.json'];
+
+    for (const url of urls) {
+        try {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), 3200);
+            const res = await fetch(`${url}?t=${Date.now()}`, { signal: ctrl.signal, cache: 'no-store' });
+            clearTimeout(timer);
+            if (!res.ok) continue;
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+                liveOverrides = data;
+                StorageManager.setSoftCache('nammaride_live_overrides', data, 6 * 3600 * 1000);
+                if (currentJourney) displayJourneyResult(currentJourney);
+                return liveOverrides;
+            }
+        } catch (e) {}
+    }
+
+    return liveOverrides;
+}
+
+function initConnectivityMonitor() {
+    const cached = StorageManager.getWithStaleFallback('nammaride_live_overrides', null);
+    if (cached?.data) liveOverrides = cached.data;
+
+    window.addEventListener('online', () => {
+        fetchLiveOverrides();
+        if (simulationState.isActive) updateSimulationUI();
+    });
+    window.addEventListener('offline', () => {
+        if (currentJourney) displayJourneyResult(currentJourney);
+        if (simulationState.isActive) updateSimulationUI();
+    });
+
+    fetchLiveOverrides();
+}
 
 // --- Theme Management ---
 let currentThemeState = 'light';
@@ -102,11 +207,15 @@ function getLineColor(lineName) {
 
 function getInitialTheme() {
     try {
+        const isManual = localStorage.getItem('nammaride_theme_manual') === '1';
         const saved = localStorage.getItem('nammaride_theme')
             || localStorage.getItem('nammaride_app_theme')
             || localStorage.getItem('appTheme');
-        if (saved === 'dark' || saved === 'light') {
+        if (isManual && (saved === 'dark' || saved === 'light')) {
             return saved;
+        }
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
         }
     } catch (e) {}
 
@@ -115,23 +224,27 @@ function getInitialTheme() {
 
 function initTheme() {
     currentThemeState = getInitialTheme();
-    applyTheme(currentThemeState);
+    applyTheme(currentThemeState, { animate: false, syncParent: false });
 
     // Sync theme from React parent message updates
     window.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'NAMMARIDE_THEME_CHANGED' && event.data.theme) {
             currentThemeState = event.data.theme === 'dark' ? 'dark' : 'light';
-            applyTheme(currentThemeState);
+            applyTheme(currentThemeState, {
+                animate: !!event.data.animate,
+                isUserToggle: !!event.data.manual,
+                syncParent: false
+            });
         }
     });
 }
 
-function applyTheme(theme) {
+function applyTheme(theme, options = {}) {
     const isLight = theme === 'light';
     currentThemeState = isLight ? 'light' : 'dark';
     
     if (typeof window.applyNammaTheme === 'function') {
-        window.applyNammaTheme(currentThemeState);
+        window.applyNammaTheme(currentThemeState, options);
     } else {
         const doc = document.documentElement;
         const body = document.body;
@@ -161,15 +274,23 @@ function applyTheme(theme) {
         metaThemeColor.setAttribute('content', isLight ? '#E8EDF5' : '#000000');
     }
 
-    // Non-blocking storage & postMessage sync across all keys
-    try {
-        localStorage.setItem('nammaride_theme', isLight ? 'light' : 'dark');
-        localStorage.setItem('nammaride_app_theme', isLight ? 'light' : 'dark');
-        localStorage.setItem('appTheme', isLight ? 'light' : 'dark');
-        if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'NAMMARIDE_THEME_SYNC', theme: isLight ? 'light' : 'dark' }, '*');
-        }
-    } catch (e) {}
+    // Persist ONLY when user explicitly toggled theme (keeps mobile OS default active on fresh open)
+    if (options.isUserToggle) {
+        try {
+            localStorage.setItem('nammaride_theme_manual', '1');
+            localStorage.setItem('nammaride_theme', currentThemeState);
+            localStorage.setItem('nammaride_app_theme', currentThemeState);
+            localStorage.setItem('appTheme', currentThemeState);
+        } catch (e) {}
+    }
+
+    if (options.syncParent !== false) {
+        try {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'NAMMARIDE_THEME_SYNC', theme: currentThemeState, manual: !!options.isUserToggle }, '*');
+            }
+        } catch (e) {}
+    }
 }
 
 // Cache for station lookup and routing graph
@@ -241,27 +362,10 @@ function setLanguage(lang) {
         displayJourneyResult(currentJourney);
 
         if (simulationState.isActive) {
-            renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
-
-            const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
-            const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
-            const totalMinutes = currentJourney.totalTime ? Math.ceil(currentJourney.totalTime / 60) : 0;
-
+            renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState, liveOverrides);
             const simStatus = document.getElementById('simulation-status');
-            simStatus.innerHTML = `
-                <div class="w-full flex justify-between items-start bg-card-subtle p-3 rounded-xl border border-subtle shadow-sm">
-                    <div class="flex flex-col gap-0.5">
-                        <p class="font-bold text-primary text-sm flex items-center gap-2">
-                            <i data-lucide="activity" class="w-3.5 h-3.5 text-green-400"></i>
-                            ${T('liveJourney') || 'Live Journey'}
-                        </p>
-                        <p class="text-xs text-secondary font-medium">${T('towards')} ${destinationName}</p>
-                        <p class="text-[10px] text-secondary opacity-70">${totalMinutes} ${T('minRemaining')}</p>
-                    </div>
-                    <button id="exit-journey-btn" class="bg-transparent border-0 shadow-none text-secondary hover:text-emerald-500 font-bold px-2 py-1 text-xs transition-colors mt-0.5 flex items-center gap-1 cursor-pointer"><i data-lucide="arrow-left" class="w-3.5 h-3.5 text-emerald-500"></i><span>${T('exitJourney')}</span></button>
-                </div>`;
-            document.getElementById('exit-journey-btn').addEventListener('click', stopSimulation);
-            if (window.lucide) window.lucide.createIcons();
+            if (simStatus) delete simStatus.dataset.mountedStructKey;
+            updateSimulationUI();
         }
     }
 }
@@ -390,14 +494,19 @@ function calculateJourney(startId, endId) {
     // Count station hops (actual stations traversed, not counting origin)
     const stationHops = countStationHops(startId, endId, metroData);
 
-    const departureTime = getDepartureTime();
+    const preliminaryJourney = { id: `${startId}-${endId}`, parts: parts, totalTime: distances[endId] };
+    const scheduleInfo = getJourneyNextDepartures(preliminaryJourney, new Date(), liveOverrides);
+    const firstTrain = scheduleInfo?.trains?.[0];
+    const departureTime = firstTrain?.departureDate || getDepartureTime();
     const fareDetails = calculateFareByHops(stationHops, departureTime, 'TOKEN');
 
     return {
         id: `${startId}-${endId}`, parts: parts, totalTime: distances[endId],
         fare: fareDetails.finalFare, baseFare: fareDetails.baseFare,
         stationHops: stationHops,
-        distanceKm: totalDistanceKm.toFixed(2), fareDetails: fareDetails, departureTime: departureTime
+        distanceKm: totalDistanceKm.toFixed(2), fareDetails: fareDetails,
+        departureTime: departureTime,
+        scheduleInfo: scheduleInfo
     };
 }
 
@@ -577,19 +686,6 @@ function openRushScheduleModal() {
 
 function closeRushScheduleModal() {
     const modal = document.getElementById('rush-schedule-modal');
-    if (modal) modal.classList.add('hidden');
-}
-
-function openPassAdvisorModal() {
-    const modal = document.getElementById('pass-advisor-modal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        if (window.lucide) window.lucide.createIcons();
-    }
-}
-
-function closePassAdvisorModal() {
-    const modal = document.getElementById('pass-advisor-modal');
     if (modal) modal.classList.add('hidden');
 }
 
@@ -921,18 +1017,42 @@ window.scrollToRouteLine = function(partIndex) {
 
             ${renderCurvedLineWorkflow(parts, journey, transferNotice)}
 
-            <!-- Boarding Platform & Next Train Strip (Platform Box Longer, Next Train Box Compact) -->
-            <div class="flex gap-2 mb-2">
-                <div class="flex-[3] flex flex-col bg-[var(--bg-card-hover)] p-2 rounded-xl border border-[var(--border-color)] justify-between overflow-hidden">
-                    <span class="text-[9px] text-secondary uppercase tracking-wider font-bold truncate">Platform & Direction</span>
-                    <div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap overflow-hidden">
+            <!-- Platform & Next Train Strip (Balanced 50/50 cards, zero clipping) -->
+            <div class="grid grid-cols-2 gap-2 mb-2">
+                <div class="min-w-0 flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)] justify-between">
+                    <div class="flex items-center justify-between gap-1">
+                        <span class="text-[9px] text-secondary uppercase tracking-wider font-bold">Platform</span>
+                        ${(() => {
+                            const c = journey.scheduleInfo?.crowd;
+                            if (!c) return '';
+                            return `<span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-card border border-subtle shrink-0" style="color:${c.hex};">${c.shortLabel}</span>`;
+                        })()}
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1 min-w-0">
                         <span class="platform-pill text-[9px] py-0.5 px-1.5 font-black shrink-0">P${startPlatform}</span>
                         <span class="text-xs font-bold text-primary truncate" title="${journeyDir}">${journeyDir}</span>
                     </div>
                 </div>
-                <div class="flex-[1.3] flex flex-col bg-[var(--bg-card-hover)] p-2 rounded-xl border border-[var(--border-color)] justify-between overflow-hidden shrink-0 text-center">
-                    <span class="text-[9px] text-secondary uppercase tracking-wider font-bold truncate">${T('nextTrain')}</span>
-                    <span class="text-xs font-black text-emerald-500 dark:text-emerald-400 mt-0.5 whitespace-nowrap">${formatTime(journey.departureTime)}</span>
+                <div class="min-w-0 flex flex-col bg-[var(--bg-card-hover)] p-2.5 rounded-xl border border-[var(--border-color)] justify-between text-right">
+                    <span class="text-[9px] text-secondary uppercase tracking-wider font-bold">${T('nextTrain')}</span>
+                    ${(() => {
+                        const trains = journey.scheduleInfo?.trains || [];
+                        const firstT = trains[0];
+                        const isOffline = typeof navigator !== 'undefined' && !navigator.onLine;
+                        if (!firstT) {
+                            return `<span class="text-xs font-black text-emerald-500 mt-1 truncate">${formatTime(journey.departureTime)}</span>`;
+                        }
+                        const badgeText = firstT.isDue ? 'Arriving now' : `${isOffline ? '~' : 'In '}${firstT.countdownLabel}`;
+                        const subLine = trains[1]
+                            ? `${firstT.departureFormatted} · next ${trains[1].countdownLabel}`
+                            : firstT.departureFormatted;
+                        return `
+                            <div class="flex flex-col items-end mt-0.5 min-w-0">
+                                <span class="w-full text-xs font-black ${firstT.isDue ? 'text-emerald-400 animate-pulse' : 'text-emerald-500 dark:text-emerald-400'} truncate">${badgeText}</span>
+                                <span class="w-full text-[9.5px] text-secondary font-semibold truncate">${subLine}</span>
+                            </div>
+                        `;
+                    })()}
                 </div>
             </div>
 
@@ -1097,7 +1217,7 @@ function switchView(viewId) {
 
     currentVisibleViewId = viewId;
 
-    // Handle map-view simulation bottom nav visibility
+    // Handle map-view simulation bottom nav visibility without destroying active ride
     const bottomNav = document.getElementById('bottom-nav');
     if (viewId === 'map-view') {
         if (bottomNav) bottomNav.style.display = 'none';
@@ -1108,10 +1228,7 @@ function switchView(viewId) {
         }
     }
 
-    if (viewId === 'planner-view') {
-        simulationState.isActive = false;
-        if (simulationState.animationFrameId) cancelAnimationFrame(simulationState.animationFrameId);
-    }
+    updateFloatingLiveRideBar();
 }
 
 // ─── Instant Bottom Navigation (Fast Click & Drag/Slide to Select) ───
@@ -1123,6 +1240,12 @@ function updateNavIndicator() {
     const left = activeBtn.offsetLeft;
     const width = activeBtn.offsetWidth;
 
+    if (!width || width <= 0) {
+        indicator.style.opacity = '0';
+        return;
+    }
+
+    indicator.style.opacity = '1';
     indicator.style.transform = `translateX(${left}px)`;
     indicator.style.width = `${width}px`;
 }
@@ -1395,164 +1518,428 @@ function generateTimeline(journey) {
     return timeline;
 }
 
-function startSimulation(journey, useLiveLocation, startTimeOverride) {
+const locationRefresher = new TrainLocationRefresher({
+    onRefresh: ({ nowMs }) => {
+        if (!simulationState.isActive) return;
+        simulationState.lastLocationSyncMs = nowMs;
+        const journey = currentJourney || (() => {
+            try { return JSON.parse(sessionStorage.getItem('activeJourney')); } catch (e) { return null; }
+        })();
+
+        if (
+            journey &&
+            (
+                simulationState.boardingState === 'WAITING_AT_PLATFORM' ||
+                simulationState.boardingState === 'ARRIVAL_CHECK' ||
+                simulationState.boardingState === 'INTERCHANGE_WAITING' ||
+                simulationState.boardingState === 'INTERCHANGE_ARRIVAL'
+            )
+        ) {
+            const legIdx = simulationState.activeLegIndex || 0;
+            const rec = reconcileActiveTrainCandidate({
+                journey,
+                legIndex: legIdx,
+                candidates: simulationState.candidateTrains,
+                waitingTrainIndex: simulationState.waitingTrainIndex,
+                waitingTargetDate: simulationState.waitingTargetDate,
+                nowMs,
+                overrides: liveOverrides,
+                getNextDeparturesFn: getJourneyNextDepartures,
+            });
+            if (rec.rolledOver && rec.candidate) {
+                simulationState.candidateTrains = rec.candidates;
+                simulationState.waitingTrainIndex = rec.waitingTrainIndex;
+                simulationState.waitingTargetDate = rec.waitingTargetDate;
+                simulationState.startTime = rec.waitingTargetDate.getTime();
+                simulationState.boardingState = legIdx > 0 ? 'INTERCHANGE_WAITING' : 'WAITING_AT_PLATFORM';
+                const legPart = journey.parts?.[legIdx] || journey.parts?.[0];
+                notificationController.schedulePreBoardThirtySecondReminder({
+                    targetMs: rec.waitingTargetDate.getTime(),
+                    originName: legPart?.stations?.[0] ? T_STATION(legPart.stations[0].name) : 'Station',
+                    platform: legPart?.startPlatform || 1,
+                    direction: legPart?.journeyDirectionName || '',
+                    tripKey: rec.candidate.tripId || String(rec.waitingTrainIndex),
+                });
+                renderLiveRoute(journey, document.getElementById('route-list'), simulationState, liveOverrides);
+                showToast(`<div class="font-bold text-emerald-400 text-xs">Now tracking next train · ${rec.candidate.departureFormatted}</div>`, 3200);
+            }
+        }
+
+        updateSimulationUI();
+    },
+    onTick1s: () => {
+        if (!simulationState.isActive) return;
+        updateSimulationUI();
+    },
+});
+
+function showToast(html, durationMs = 3500) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.innerHTML = html;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, durationMs);
+}
+
+function stopSimulationTimers() {
+    locationRefresher.stop();
+    if (simulationState.timerId) {
+        clearTimeout(simulationState.timerId);
+        simulationState.timerId = null;
+    }
+    clearActiveGPSWatch(simulationState);
+    simulationState.gpsMode = 'OFF';
+}
+
+function saveActiveSession(journey) {
+    try {
+        if (journey) sessionStorage.setItem('activeJourney', JSON.stringify(journey));
+        sessionStorage.setItem('simulationState', JSON.stringify({
+            isActive: simulationState.isActive,
+            journeyId: simulationState.journeyId,
+            startTime: simulationState.startTime,
+            useGPS: simulationState.useGPS,
+            boardingState: simulationState.boardingState,
+            activeLegIndex: simulationState.activeLegIndex || 0,
+            interchangeTimelineIndex: simulationState.interchangeTimelineIndex ?? null,
+            confirmedInterchangeLegs: simulationState.confirmedInterchangeLegs || [],
+            waitingTargetDate: simulationState.waitingTargetDate ? new Date(simulationState.waitingTargetDate).getTime() : null,
+            waitingTrainIndex: simulationState.waitingTrainIndex,
+        }));
+    } catch (e) {}
+}
+
+function runAdaptiveGPSConfig() {
+    configureAdaptiveGPS(simulationState, {
+        onStatusUpdate: () => updateSimulationUI(),
+        onAutoBoarded: () => {
+            simulationState.boardingState = 'ON_BOARD';
+            simulationState.startTime = Date.now();
+            if (!simulationState.speedMutedByUser) simulationState.speedHudEnabled = true;
+            notificationController.cancelPendingAlerts([1001]);
+            showToast(`<div class="font-bold text-emerald-400 text-xs">Train motion verified · Live speed & ride active</div>`, 3500);
+            saveActiveSession(currentJourney);
+            scheduleNextSimTick();
+            updateSimulationUI();
+        },
+        onNearDestination: (destStationName, isUnderground) => {
+            triggerStationAlarm(T_STATION(destStationName), isUnderground);
+        },
+    });
+}
+
+function scheduleNextSimTick() {
+    if (!simulationState.isActive || (typeof document !== 'undefined' && document.hidden)) {
+        locationRefresher.stop();
+        return;
+    }
+    if (!locationRefresher.running) {
+        locationRefresher.start(() => {
+            const targetMs = simulationState.waitingTargetDate ? new Date(simulationState.waitingTargetDate).getTime() : 0;
+            const waitSecLeft = targetMs ? Math.max(0, Math.round((targetMs - Date.now()) / 1000)) : 0;
+            return { boardingState: simulationState.boardingState, waitSecLeft };
+        });
+    }
+}
+
+function startSimulation(journey, useLiveLocation, startTimeOverride, restoredState = null) {
     if (!journey) return;
     activeView = 'map';
     switchView('map-view');
+    stopSimulationTimers();
+    notificationController.resetAll();
+    notificationController.unlockAudioContext();
+    notificationController.ensureReadyAndRequestPermission();
 
     const simStatus = document.getElementById('simulation-status');
     if (simStatus) {
         simStatus.className = 'sticky top-0 z-40 w-full';
         simStatus.classList.remove('hidden');
+        delete simStatus.dataset.mountedStructKey;
     }
 
     simulationState.isActive = true;
     simulationState.journeyId = journey.id;
     simulationState.timeline = generateTimeline(journey);
-    simulationState.startTime = startTimeOverride || Date.now();
     simulationState.currentStationIndex = 0;
     simulationState.arrivedAtDestination = false;
-    simulationState.gpsAccuracy = null;
-    simulationState.useGPS = false;
+    simulationState.alarmTriggered = false;
+    simulationState.alarmedCandidateIdx = -1;
+    simulationState.lastLocationSyncMs = Date.now();
+    resetRuntimeTrackingState();
 
-    sessionStorage.setItem('activeJourney', JSON.stringify(journey));
-    sessionStorage.setItem('simulationState', JSON.stringify({
-        isActive: simulationState.isActive,
-        journeyId: simulationState.journeyId,
-        startTime: simulationState.startTime,
-        useGPS: simulationState.useGPS
-    }));
+    const schedInfo = getJourneyNextDepartures(journey, new Date(), liveOverrides);
+    const activeCandidates = (schedInfo?.trains || []).filter((t) => !t.isTomorrow);
+    simulationState.candidateTrains = activeCandidates;
 
-    renderLiveRoute(journey, document.getElementById('route-list'), simulationState);
-    updateSimulationUI();
-
-    // Geolocation high-accuracy watch position
-    if (navigator.geolocation) {
-        simulationState.locationWatcherId = navigator.geolocation.watchPosition(
-            (position) => {
-                onGPSUpdate(position);
-            },
-            (error) => {
-                console.warn("GPS simulation watch error:", error);
-                simulationState.useGPS = false;
-                updateSimulationUI();
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
+    if (restoredState?.boardingState) {
+        simulationState.boardingState = restoredState.boardingState;
+        simulationState.startTime = startTimeOverride || Date.now();
+        simulationState.activeLegIndex = restoredState.activeLegIndex || 0;
+        simulationState.interchangeTimelineIndex = restoredState.interchangeTimelineIndex ?? null;
+        simulationState.confirmedInterchangeLegs = Array.isArray(restoredState.confirmedInterchangeLegs)
+            ? restoredState.confirmedInterchangeLegs
+            : [];
+        simulationState.waitingTargetDate = restoredState.waitingTargetDate ? new Date(restoredState.waitingTargetDate) : null;
+        simulationState.waitingTrainIndex = restoredState.waitingTrainIndex || 0;
+    } else if (startTimeOverride) {
+        simulationState.boardingState = 'ON_BOARD';
+        simulationState.startTime = startTimeOverride;
+        simulationState.waitingTargetDate = null;
+    } else if (activeCandidates.length > 0 && activeCandidates[0].secUntil <= 2400) {
+        simulationState.waitingTrainIndex = 0;
+        simulationState.waitingTargetDate = activeCandidates[0].departureDate;
+        simulationState.boardingState = activeCandidates[0].secUntil <= ALERT_THRESHOLD_SEC ? 'ARRIVAL_CHECK' : 'WAITING_AT_PLATFORM';
+        simulationState.startTime = activeCandidates[0].departureDate.getTime();
     } else {
-        simulationState.useGPS = false;
+        simulationState.boardingState = 'NO_SERVICE';
+        simulationState.startTime = Date.now();
+        simulationState.waitingTargetDate = null;
     }
 
-    // Animation loop heartbeat to keep times and views synchronized
-    if (simulationState.animationFrameId) cancelAnimationFrame(simulationState.animationFrameId);
-
-    function tick() {
-        if (!simulationState.isActive) return;
-        updateSimulationUI();
-        simulationState.animationFrameId = requestAnimationFrame(tick);
+    if (simulationState.boardingState === 'WAITING_AT_PLATFORM' && simulationState.waitingTargetDate) {
+        const p0 = journey.parts?.[0];
+        const cand = simulationState.candidateTrains?.[simulationState.waitingTrainIndex || 0];
+        notificationController.schedulePreBoardThirtySecondReminder({
+            targetMs: new Date(simulationState.waitingTargetDate).getTime(),
+            originName: p0?.stations?.[0] ? T_STATION(p0.stations[0].name) : 'Station',
+            platform: p0?.startPlatform || 1,
+            direction: p0?.journeyDirectionName || '',
+            tripKey: cand?.tripId || String(simulationState.waitingTrainIndex || 0),
+        });
     }
-    simulationState.animationFrameId = requestAnimationFrame(tick);
+
+    saveActiveSession(journey);
+    renderLiveRoute(journey, document.getElementById('route-list'), simulationState, liveOverrides);
+    updateSimulationUI();
+    runAdaptiveGPSConfig();
+    updateFloatingLiveRideBar();
+
+    if (!simulationState.visibilityBound && typeof document !== 'undefined') {
+        simulationState.visibilityBound = true;
+        document.addEventListener('visibilitychange', () => {
+            if (!simulationState.isActive) return;
+            if (document.hidden) {
+                locationRefresher.stop();
+            } else {
+                scheduleNextSimTick();
+                locationRefresher.forceSync();
+            }
+        });
+    }
+
+    scheduleNextSimTick();
 }
 
 function triggerStationAlarm(stationName, isUnderground) {
     if (simulationState.alarmTriggered) return;
     simulationState.alarmTriggered = true;
 
-    // Vibration feedback only (800ms pulse, 300ms pause, 800ms pulse)
     if (navigator.vibrate) {
         try { navigator.vibrate([800, 300, 800, 300, 800]); } catch (e) {}
     }
 
-    // Banner toast notification
-    const toast = document.getElementById('toast');
-    if (toast) {
-        let msg = `Arriving at ${stationName} soon!`;
-        if (isUnderground) {
-            msg += ` (Note: Underground section ahead - GPS signal may drop)`;
-        }
-        toast.innerHTML = `<div class="font-bold text-amber-400 text-xs">${msg}</div>`;
-        toast.style.opacity = '1';
-        setTimeout(() => { toast.style.opacity = '0'; }, 6000);
+    let msg = `Arriving at ${stationName} soon!`;
+    if (isUnderground) {
+        msg += ` (Underground section ahead)`;
     }
+    showToast(`<div class="font-bold text-amber-400 text-xs">${msg}</div>`, 6000);
 }
 
-function onGPSUpdate(position) {
-    if (!simulationState.isActive) return;
+function resetRuntimeTrackingState() {
+    simulationState.gpsAccuracy = null;
+    simulationState.useGPS = false;
+    simulationState.currentSpeedKmh = null;
+    simulationState.isSpeedEstimated = false;
+    simulationState.speedSource = 'Timetable';
+    simulationState.lastGpsFix = null;
+    simulationState.gpsHistory = [];
+    simulationState.speedSamples = [];
+    simulationState.gpsRouteFloatIdx = null;
+    simulationState.wasNearOrigin = false;
+    simulationState.fastPingStreak = 0;
+    simulationState.wasMovingFast = false;
+    simulationState.usingCapacitorGeo = false;
+    simulationState.showUpstreamManual = false;
+    simulationState.showPassedManual = false;
+    simulationState.activeLegIndex = 0;
+    simulationState.interchangeTimelineIndex = null;
+    simulationState.confirmedInterchangeLegs = [];
+}
 
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    const accuracy = position.coords.accuracy;
+function computeJourneyEtaTelemetry(timeline, journey) {
+    if (!timeline || timeline.length < 2) return { etaToDestSec: null, etaToInterchangeSec: null, interchangeName: '', nextLineName: '', nextPlatform: 1 };
+    let elapsedSec = 0;
+    if (simulationState.useGPS && simulationState.gpsRouteFloatIdx !== null && simulationState.gpsRouteFloatIdx !== undefined) {
+        const f = Math.max(0, Math.min(timeline.length - 1, simulationState.gpsRouteFloatIdx));
+        const idx = Math.floor(f);
+        const frac = f - idx;
+        const curr = timeline[idx];
+        const next = timeline[idx + 1];
+        elapsedSec = next ? (curr.departureTime + frac * (next.arrivalTime - curr.departureTime)) : curr.arrivalTime;
+    } else {
+        elapsedSec = Math.max(0, (Date.now() - simulationState.startTime) / 1000);
+    }
 
-    simulationState.useGPS = true;
-    simulationState.gpsAccuracy = accuracy;
+    const destNode = timeline[timeline.length - 1];
+    const etaToDestSec = destNode ? Math.max(0, Math.round(destNode.arrivalTime - elapsedSec)) : null;
 
-    const timeline = simulationState.timeline;
-    let closestIndex = simulationState.currentStationIndex;
-    let minDistance = Infinity;
-
-    // Match closest next station coordinates
-    for (let i = simulationState.currentStationIndex; i < timeline.length; i++) {
-        const station = stationsMeta.find(s => s.id === timeline[i].stationId);
-        if (station) {
-            const loc = station.location || station;
-            if (loc.lat && loc.lon) {
-                const dist = getDistanceFromLatLonInKm(lat, lon, loc.lat, loc.lon);
-                if (dist < minDistance) {
-                    minDistance = dist;
-                    closestIndex = i;
-                }
-            }
+    let etaToInterchangeSec = null;
+    let interchangeName = '';
+    let nextLineName = '';
+    let nextPlatform = 1;
+    if (journey?.parts?.length > 1 && journey.parts[0]?.stations?.length) {
+        const xferSt = journey.parts[0].stations[journey.parts[0].stations.length - 1];
+        const xferIdx = timeline.findIndex((n, i) => i > 0 && n.stationId === xferSt.id);
+        if (xferIdx !== -1 && (simulationState.currentStationIndex || 0) < xferIdx) {
+            etaToInterchangeSec = Math.max(0, Math.round(timeline[xferIdx].arrivalTime - elapsedSec));
+            interchangeName = T_STATION(xferSt.name);
+            nextLineName = T_STATION(journey.parts[1]?.stations?.[0]?.lineName || '');
+            nextPlatform = journey.parts[1]?.startPlatform || 1;
         }
     }
+    return { etaToDestSec, etaToInterchangeSec, interchangeName, nextLineName, nextPlatform };
+}
 
-    // Check target destination alarm (1-2 stations before arrival or ~5 min before)
-    const destIndex = timeline.length - 1;
-    const destNode = timeline[destIndex];
-    const destStation = stationsMeta.find(s => s.id === destNode.stationId);
-
-    if (destIndex - closestIndex <= 2 && closestIndex < destIndex) {
-        const isUnderground = destStation && destStation.type === 'Underground';
-        triggerStationAlarm(T_STATION(destNode.stationName), isUnderground);
-    }
-
-    // Auto arrival: if within 500m of destination
-    if (destStation) {
-        const loc = destStation.location || destStation;
-        if (loc.lat && loc.lon) {
-            const destDist = getDistanceFromLatLonInKm(lat, lon, loc.lat, loc.lon);
-            if (destDist <= 0.5) {
-                closestIndex = destIndex;
-            }
-        }
-    }
-
-    if (closestIndex > simulationState.currentStationIndex) {
-        simulationState.currentStationIndex = closestIndex;
-    }
-
-    updateSimulationUI();
+function getActiveInterchangeStep(journey, timeline, currentIdx) {
+    if (!journey?.parts || journey.parts.length < 2) return null;
+    const legIdx = simulationState.activeLegIndex || 0;
+    if (legIdx >= journey.parts.length - 1) return null;
+    if ((simulationState.confirmedInterchangeLegs || []).includes(legIdx)) return null;
+    const legSts = journey.parts[legIdx]?.stations || [];
+    const xferSt = legSts[legSts.length - 1];
+    if (!xferSt) return null;
+    const xferTimelineIdx = timeline.findIndex((n, i) => i > 0 && n.stationId === xferSt.id);
+    if (xferTimelineIdx === -1 || currentIdx < xferTimelineIdx) return null;
+    const nextPart = journey.parts[legIdx + 1];
+    return {
+        legIdx,
+        xferTimelineIdx,
+        stationName: T_STATION(xferSt.name),
+        nextPart,
+        nextLineName: T_STATION(nextPart?.stations?.[0]?.lineName || 'Connecting Line'),
+        nextPlatform: nextPart?.startPlatform || 1,
+        nextDirection: nextPart?.journeyDirectionName || '',
+    };
 }
 
 function updateSimulationUI() {
     if (!simulationState.isActive) return;
 
-    const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
+    const journey = currentJourney || JSON.parse(sessionStorage.getItem('activeJourney'));
     if (!journey) return;
 
+    const activeLegIdx = simulationState.activeLegIndex || 0;
+    const activeLegPart = journey.parts?.[activeLegIdx] || journey.parts?.[0];
+    const firstNode = simulationState.timeline?.[0];
+    const originName = activeLegIdx > 0 && activeLegPart?.stations?.[0]
+        ? T_STATION(activeLegPart.stations[0].name)
+        : (firstNode ? firstNode.stationName : 'Station');
     const lastPart = journey.parts[journey.parts.length - 1];
     const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
 
-    const status = updateRouteVisuals(simulationState);
+    let waitSecLeft = 0;
+    const activeCand = simulationState.candidateTrains?.[simulationState.waitingTrainIndex || 0];
+    if (
+        simulationState.boardingState === 'WAITING_AT_PLATFORM' ||
+        simulationState.boardingState === 'ARRIVAL_CHECK' ||
+        simulationState.boardingState === 'INTERCHANGE_WAITING' ||
+        simulationState.boardingState === 'INTERCHANGE_ARRIVAL'
+    ) {
+        const targetMs = simulationState.waitingTargetDate ? new Date(simulationState.waitingTargetDate).getTime() : Date.now();
+        waitSecLeft = Math.max(0, Math.round((targetMs - Date.now()) / 1000));
+        if (waitSecLeft <= ALERT_THRESHOLD_SEC) {
+            if (simulationState.boardingState === 'WAITING_AT_PLATFORM') {
+                simulationState.boardingState = 'ARRIVAL_CHECK';
+            } else if (simulationState.boardingState === 'INTERCHANGE_WAITING') {
+                simulationState.boardingState = 'INTERCHANGE_ARRIVAL';
+            }
+        }
+    }
 
-    if (status.arrived && !simulationState.arrivedAtDestination) {
+    // Check 30-second arrival notification triggers (Pre-board <= 30s, Interchange <= 30s, Destination <= 30s)
+    const timeline = simulationState.timeline || [];
+    const etaTelemetry = simulationState.boardingState === 'ON_BOARD'
+        ? computeJourneyEtaTelemetry(timeline, journey)
+        : { etaToDestSec: null, etaToInterchangeSec: null, interchangeName: '', nextLineName: '', nextPlatform: 1 };
+
+    if (
+        simulationState.boardingState === 'ON_BOARD' &&
+        activeLegIdx >= (journey.parts?.length || 1) - 1 &&
+        typeof etaTelemetry.etaToDestSec === 'number' &&
+        etaTelemetry.etaToDestSec > ALERT_THRESHOLD_SEC
+    ) {
+        notificationController.scheduleDestinationThirtySecondReminder({
+            targetMs: Date.now() + etaTelemetry.etaToDestSec * 1000,
+            destName: destinationName,
+            journeyId: simulationState.journeyId || journey.id || 'trip',
+        });
+    }
+
+    const pending30sAlert = evaluateThirtySecondAlert({
+        boardingState: simulationState.boardingState,
+        waitSecLeft,
+        originName,
+        platform: activeLegPart?.startPlatform || 1,
+        direction: activeLegPart?.journeyDirectionName || '',
+        tripKey: activeCand?.tripId || `${activeLegIdx}_${simulationState.waitingTrainIndex || 0}`,
+        etaToDestSec: etaTelemetry.etaToDestSec,
+        destName: destinationName,
+        etaToInterchangeSec: etaTelemetry.etaToInterchangeSec,
+        interchangeName: etaTelemetry.interchangeName,
+        nextLineName: etaTelemetry.nextLineName,
+        nextPlatform: etaTelemetry.nextPlatform,
+        journeyId: simulationState.journeyId || journey.id || 'trip',
+        alertedKeys: notificationController.alertedKeys,
+    });
+    if (pending30sAlert) {
+        notificationController.fireAlert(pending30sAlert);
+    }
+
+    // Honest underground tunnel fallback ONLY if user was ALREADY moving fast before signal drop
+    if (simulationState.speedHudEnabled && simulationState.boardingState === 'ON_BOARD') {
+        const curNode = timeline[simulationState.currentStationIndex || 0];
+        const meta = curNode ? stationsMeta.find((s) => s.id === curNode.stationId) : null;
+        const staleGps = !simulationState.lastGpsFix || (Date.now() - simulationState.lastGpsFix.ts > 20000);
+        const poorLock = !simulationState.useGPS || (simulationState.gpsAccuracy !== null && simulationState.gpsAccuracy > 120) || staleGps;
+
+        if (meta?.type === 'Underground' && simulationState.wasMovingFast && poorLock) {
+            simulationState.currentSpeedKmh = computeEstimatedTrainSpeedKmh(timeline, simulationState.currentStationIndex || 0);
+            simulationState.isSpeedEstimated = true;
+            simulationState.speedSource = 'Underground Tunnel Est.';
+        } else if (poorLock) {
+            simulationState.currentSpeedKmh = null;
+            simulationState.isSpeedEstimated = false;
+            simulationState.speedSource = simulationState.gpsAccuracy && simulationState.gpsAccuracy > 65
+                ? `Weak GPS (±${Math.round(simulationState.gpsAccuracy)}m)`
+                : 'Waiting for GPS lock...';
+        }
+    }
+
+    const status = updateRouteVisuals(simulationState, journey, liveOverrides);
+
+    // Pause at interchange station and ask user if they changed to the connecting line
+    if (simulationState.boardingState === 'ON_BOARD') {
+        const xferStep = getActiveInterchangeStep(journey, timeline, simulationState.currentStationIndex || 0);
+        if (xferStep) {
+            simulationState.boardingState = 'INTERCHANGE_CHECK';
+            simulationState.interchangeTimelineIndex = xferStep.xferTimelineIdx;
+            saveActiveSession(journey);
+        }
+    }
+
+    updateFloatingLiveRideBar();
+
+    if (status?.arrived && !simulationState.arrivedAtDestination) {
         simulationState.arrivedAtDestination = true;
         showJourneyComplete(destinationName);
         return;
     }
 
     let remainingMinutes = 0;
-    const timeline = simulationState.timeline;
-    if (simulationState.useGPS) {
+    if (simulationState.boardingState === 'WAITING_AT_PLATFORM' || simulationState.boardingState === 'ARRIVAL_CHECK') {
+        remainingMinutes = Math.max(1, Math.ceil((journey.totalTime || 0) / 60));
+    } else if (simulationState.useGPS) {
         const stationsLeft = (timeline.length - 1) - simulationState.currentStationIndex;
         remainingMinutes = Math.max(0, stationsLeft * 2);
     } else {
@@ -1561,10 +1948,8 @@ function updateSimulationUI() {
         remainingMinutes = Math.max(0, Math.ceil((totalSeconds - elapsedTime) / 60));
     }
 
-    // GPS indicator color state
     let gpsClass = 'red';
     let gpsTitle = T('locationDenied') || 'GPS Off';
-
     if (simulationState.useGPS && simulationState.gpsAccuracy !== null) {
         if (simulationState.gpsAccuracy < 100) {
             gpsClass = 'green';
@@ -1583,104 +1968,252 @@ function updateSimulationUI() {
     simStatus.className = 'sticky top-0 z-40 w-full';
     simStatus.classList.remove('hidden');
 
-    // Bind event delegation ONCE for bulletproof click handler support
-    if (!simStatus.dataset.listenersBound) {
-        simStatus.dataset.listenersBound = 'true';
-        simStatus.addEventListener('click', (e) => {
-            const finishBtn = e.target.closest('#manual-finish-btn');
-            const exitBtn = e.target.closest('#exit-journey-btn, #map-back-home-btn, #map-end-trip-btn');
-            const doneBtn = e.target.closest('#done-celebrate-btn');
-            const exploreBtn = e.target.closest('#explore-nearby-celebrate-btn');
+    bindBoardingHudActions(simStatus, {
+        onToggleSpeed: () => {
+            simulationState.speedHudEnabled = !simulationState.speedHudEnabled;
+            simulationState.speedMutedByUser = !simulationState.speedHudEnabled;
+            try { localStorage.setItem('nammaride_speed_hud', simulationState.speedHudEnabled ? '1' : '0'); } catch (err) {}
+            if (!simulationState.speedHudEnabled) {
+                simulationState.currentSpeedKmh = null;
+                simulationState.isSpeedEstimated = false;
+            }
+            delete simStatus.dataset.mountedStructKey;
+            runAdaptiveGPSConfig();
+            updateSimulationUI();
+            scheduleNextSimTick();
+        },
+        onToggleSound: () => {
+            notificationController.unlockAudioContext();
+            const enabled = notificationController.toggleSoundEnabled();
+            if (enabled) notificationController.playTransitChime();
+            delete simStatus.dataset.mountedStructKey;
+            showToast(`<div class="font-bold text-xs text-primary">${enabled ? '30s arrival chime enabled' : '30s arrival chime muted'}</div>`, 2200);
+            updateSimulationUI();
+        },
+        onConfirmBoard: () => {
+            notificationController.unlockAudioContext();
+            notificationController.cancelPendingAlerts([1001]);
+            const legIdx = simulationState.activeLegIndex || 0;
+            simulationState.boardingState = 'ON_BOARD';
+            if (legIdx > 0 && Number.isInteger(simulationState.interchangeTimelineIndex)) {
+                const idx = simulationState.interchangeTimelineIndex;
+                simulationState.currentStationIndex = idx;
+                simulationState.gpsRouteFloatIdx = idx;
+                const depOffset = timeline[idx]?.departureTime || timeline[idx]?.arrivalTime || 0;
+                simulationState.startTime = Date.now() - depOffset * 1000;
+            } else {
+                simulationState.startTime = Date.now();
+                simulationState.currentStationIndex = 0;
+                simulationState.gpsRouteFloatIdx = 0;
+            }
+            if (!simulationState.speedMutedByUser) simulationState.speedHudEnabled = true;
+            delete simStatus.dataset.mountedStructKey;
+            renderLiveRoute(journey, document.getElementById('route-list'), simulationState, liveOverrides);
+            saveActiveSession(currentJourney);
+            runAdaptiveGPSConfig();
+            updateSimulationUI();
+            scheduleNextSimTick();
+        },
+        onConfirmInterchange: () => {
+            notificationController.unlockAudioContext();
+            notificationController.cancelPendingAlerts([1002]);
+            const prevLeg = simulationState.activeLegIndex || 0;
+            if (!Array.isArray(simulationState.confirmedInterchangeLegs)) {
+                simulationState.confirmedInterchangeLegs = [];
+            }
+            if (!simulationState.confirmedInterchangeLegs.includes(prevLeg)) {
+                simulationState.confirmedInterchangeLegs.push(prevLeg);
+            }
+            const nextLeg = Math.min((journey.parts?.length || 1) - 1, prevLeg + 1);
+            simulationState.activeLegIndex = nextLeg;
 
-            if (finishBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
-                const lastPart = journey?.parts[journey.parts.length - 1];
-                const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
-                simulationState.currentStationIndex = simulationState.timeline.length - 1;
-                simulationState.arrivedAtDestination = true;
-                showJourneyComplete(destinationName);
-            } else if (exitBtn || doneBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                resetPlannerToHome();
-            } else if (exploreBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const journey = JSON.parse(sessionStorage.getItem('activeJourney'));
-                const lastPart = journey?.parts[journey.parts.length - 1];
-                const destinationName = lastPart ? T_STATION(lastPart.stations[lastPart.stations.length - 1].name) : '';
-                if (window.showNearbyAttractions) {
-                    window.showNearbyAttractions(destinationName);
+            const schedInfo = getJourneyNextDepartures(journey, new Date(), liveOverrides, nextLeg);
+            const activeCandidates = (schedInfo?.trains || []).filter((t) => !t.isTomorrow);
+            simulationState.candidateTrains = activeCandidates;
+            simulationState.waitingTrainIndex = 0;
+
+            if (activeCandidates.length > 0) {
+                const firstCand = activeCandidates[0];
+                simulationState.waitingTargetDate = firstCand.departureDate;
+                simulationState.boardingState = firstCand.secUntil <= ALERT_THRESHOLD_SEC ? 'INTERCHANGE_ARRIVAL' : 'INTERCHANGE_WAITING';
+                const nextPart = journey.parts?.[nextLeg];
+                notificationController.schedulePreBoardThirtySecondReminder({
+                    targetMs: new Date(firstCand.departureDate).getTime(),
+                    originName: nextPart?.stations?.[0] ? T_STATION(nextPart.stations[0].name) : originName,
+                    platform: nextPart?.startPlatform || 1,
+                    direction: nextPart?.journeyDirectionName || '',
+                    tripKey: firstCand.tripId || `${nextLeg}_0`,
+                });
+            } else {
+                simulationState.boardingState = 'NO_SERVICE';
+                simulationState.waitingTargetDate = null;
+            }
+            delete simStatus.dataset.mountedStructKey;
+            renderLiveRoute(journey, document.getElementById('route-list'), simulationState, liveOverrides);
+            saveActiveSession(currentJourney);
+            updateSimulationUI();
+            scheduleNextSimTick();
+        },
+        onStillOnPrevTrain: () => {
+            const xferIdx = Number.isInteger(simulationState.interchangeTimelineIndex)
+                ? simulationState.interchangeTimelineIndex
+                : (simulationState.currentStationIndex || 1);
+            const stepBackIdx = Math.max(0, xferIdx - 1);
+            simulationState.boardingState = 'ON_BOARD';
+            simulationState.currentStationIndex = stepBackIdx;
+            simulationState.gpsRouteFloatIdx = stepBackIdx;
+            const prevArrival = timeline[stepBackIdx]?.arrivalTime || 0;
+            simulationState.startTime = Date.now() - prevArrival * 1000;
+            delete simStatus.dataset.mountedStructKey;
+            saveActiveSession(currentJourney);
+            updateSimulationUI();
+            scheduleNextSimTick();
+        },
+        onSkipNextTrain: () => {
+            notificationController.cancelPendingAlerts([1001]);
+            const legIdx = simulationState.activeLegIndex || 0;
+            simulationState.waitingTrainIndex += 1;
+            let nextCandidate = simulationState.candidateTrains?.[simulationState.waitingTrainIndex];
+            if (!nextCandidate) {
+                const fresh = getJourneyNextDepartures(journey, new Date(Date.now() + 90000), liveOverrides, legIdx);
+                const list = (fresh?.trains || []).filter((t) => !t.isTomorrow);
+                if (list.length) {
+                    simulationState.candidateTrains = list;
+                    simulationState.waitingTrainIndex = 0;
+                    nextCandidate = list[0];
                 }
             }
-        });
+            if (nextCandidate) {
+                simulationState.waitingTargetDate = nextCandidate.departureDate;
+                simulationState.boardingState = legIdx > 0 ? 'INTERCHANGE_WAITING' : 'WAITING_AT_PLATFORM';
+                if (legIdx === 0) simulationState.startTime = new Date(nextCandidate.departureDate).getTime();
+                const legPart = journey.parts?.[legIdx] || journey.parts?.[0];
+                notificationController.schedulePreBoardThirtySecondReminder({
+                    targetMs: new Date(nextCandidate.departureDate).getTime(),
+                    originName: legPart?.stations?.[0] ? T_STATION(legPart.stations[0].name) : 'Station',
+                    platform: legPart?.startPlatform || 1,
+                    direction: legPart?.journeyDirectionName || '',
+                    tripKey: nextCandidate.tripId || `${legIdx}_${simulationState.waitingTrainIndex}`,
+                });
+                renderLiveRoute(journey, document.getElementById('route-list'), simulationState, liveOverrides);
+                showToast(`<div class="font-bold text-amber-400 text-xs">Switched to next train · ${nextCandidate.departureFormatted} (${nextCandidate.countdownLabel})</div>`, 3500);
+            } else {
+                simulationState.boardingState = 'NO_SERVICE';
+                simulationState.startTime = Date.now();
+                simulationState.waitingTargetDate = null;
+            }
+            delete simStatus.dataset.mountedStructKey;
+            saveActiveSession(currentJourney);
+            updateSimulationUI();
+            scheduleNextSimTick();
+        },
+        onStepStop: (delta) => {
+            const tl = simulationState.timeline || [];
+            const nextIdx = Math.max(0, Math.min(tl.length - 1, (simulationState.currentStationIndex || 0) + delta));
+            simulationState.useGPS = false;
+            simulationState.currentStationIndex = nextIdx;
+            simulationState.startTime = Date.now() - ((tl[nextIdx]?.arrivalTime || 0) + 5) * 1000;
+            delete simStatus.dataset.mountedStructKey;
+            saveActiveSession(currentJourney);
+            updateSimulationUI();
+        },
+        onMinimize: () => navigateToView('plan'),
+        onFinish: () => {
+            const activeJ = JSON.parse(sessionStorage.getItem('activeJourney')) || currentJourney;
+            const lp = activeJ?.parts[activeJ.parts.length - 1];
+            const dName = lp ? T_STATION(lp.stations[lp.stations.length - 1].name) : destinationName;
+            simulationState.currentStationIndex = simulationState.timeline.length - 1;
+            simulationState.arrivedAtDestination = true;
+            notificationController.resetAll();
+            showJourneyComplete(dName);
+        },
+        onExit: () => {
+            notificationController.resetAll();
+            resetPlannerToHome();
+        },
+        onExploreNearby: () => {
+            const activeJ = JSON.parse(sessionStorage.getItem('activeJourney')) || currentJourney;
+            const lp = activeJ?.parts[activeJ.parts.length - 1];
+            const dName = lp ? T_STATION(lp.stations[lp.stations.length - 1].name) : destinationName;
+            if (window.showNearbyAttractions) window.showNearbyAttractions(dName);
+        },
+    });
+
+    const isOnline = typeof navigator === 'undefined' ? true : navigator.onLine;
+    const tomorrowFirstTrain = simulationState.boardingState === 'NO_SERVICE'
+        ? getTomorrowFirstTrain(journey, liveOverrides, activeLegIdx)
+        : null;
+
+    let interchangeMeta = null;
+    if (
+        simulationState.boardingState === 'INTERCHANGE_CHECK' ||
+        simulationState.boardingState === 'INTERCHANGE_WAITING' ||
+        simulationState.boardingState === 'INTERCHANGE_ARRIVAL'
+    ) {
+        const targetLeg = simulationState.boardingState === 'INTERCHANGE_CHECK'
+            ? Math.min((journey.parts?.length || 1) - 1, activeLegIdx + 1)
+            : activeLegIdx;
+        const targetPart = journey.parts?.[targetLeg];
+        const nextLineName = T_STATION(targetPart?.stations?.[0]?.lineName || 'Connecting Line');
+        const nextPlatform = targetPart?.startPlatform || 1;
+        const nextDirection = targetPart?.journeyDirectionName || '';
+
+        let previewText = `Platform ${nextPlatform}${nextDirection ? ` towards ${nextDirection}` : ''}`;
+        let incomingStatusText = '';
+        if (simulationState.boardingState === 'INTERCHANGE_CHECK') {
+            const connSched = getJourneyNextDepartures(journey, new Date(), liveOverrides, targetLeg);
+            const firstConn = (connSched?.trains || []).find((t) => !t.isTomorrow);
+            previewText = firstConn
+                ? `Next ${nextLineName} in ${firstConn.countdownLabel} (${firstConn.departureFormatted}) · P${nextPlatform}`
+                : `Check ${nextLineName} at Platform ${nextPlatform}`;
+        } else {
+            const connCtx = getIncomingTrainContext({
+                journey,
+                legIndex: targetLeg,
+                trainCandidate: activeCand,
+                date: new Date(),
+                overrides: liveOverrides,
+                upstreamDepth: 3,
+            });
+            incomingStatusText = connCtx?.statusText || `Approaching ${originName}`;
+        }
+
+        interchangeMeta = {
+            nextLineName,
+            nextPlatform,
+            nextDirection,
+            previewText,
+            incomingStatusText,
+        };
     }
 
-    // Skip DOM recreation if values haven't changed
-    const stateKey = `${simulationState.currentStationIndex}_${remainingMinutes}_${gpsClass}_${destinationName}_${simulationState.arrivedAtDestination}`;
-    if (simStatus.dataset.lastStateKey === stateKey) {
-        return;
-    }
-    simStatus.dataset.lastStateKey = stateKey;
-
-    const showManualFinish = !simulationState.useGPS || (simulationState.gpsAccuracy !== null && simulationState.gpsAccuracy > 500);
-
-    let gpsWarningHtml = '';
-    if (showManualFinish) {
-        gpsWarningHtml = `
-            <div class="gps-warning-banner py-1 px-3 text-[10px] bg-amber-500/10 border-b border-amber-500/20 text-amber-500 flex items-center justify-center gap-1.5">
-                <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-500 shrink-0"></i>
-                <span>${T('gpsWeak') || 'GPS signal is weak. Manual override available.'}</span>
-            </div>
-        `;
-    }
-
-    simStatus.innerHTML = `
-        <div class="w-full flex items-center justify-between py-2 pl-2 pr-3 bg-card/95 backdrop-blur-md border-b border-subtle shadow-sm gap-1.5">
-            <!-- Left: Home / Exit Button (Shifted left, transparent background, no box) -->
-            <button id="exit-journey-btn" type="button" class="flex items-center gap-1 py-1 pl-0 pr-1.5 bg-transparent border-0 shadow-none text-primary hover:text-emerald-500 font-extrabold text-xs active:scale-95 transition-all shrink-0 cursor-pointer" title="Exit Trip & Back to Home">
-                <i data-lucide="arrow-left" class="w-4 h-4 text-emerald-500 shrink-0"></i>
-                <span class="whitespace-nowrap font-bold">${T('homeExit') || 'Home / Exit'}</span>
-            </button>
-
-            <!-- Center: Live Destination & Minutes (Full width flex-1, fully visible) -->
-            <div class="flex-1 min-w-0 px-1 text-center flex flex-col items-center justify-center">
-                <div class="flex items-center gap-1 min-w-0 max-w-full justify-center">
-                    <span class="text-xs sm:text-sm font-black uppercase tracking-tight text-primary truncate leading-tight">${destinationName}</span>
-                    <span class="gps-signal-dot ${gpsClass} shrink-0" title="${gpsTitle}"></span>
-                </div>
-                <div class="flex items-center gap-1 text-[10.5px] text-secondary font-semibold justify-center leading-tight mt-0.5">
-                    <i data-lucide="clock" class="w-3 h-3 text-emerald-500 shrink-0"></i>
-                    <span class="whitespace-nowrap">${remainingMinutes} ${T('minRemaining') || 'min remaining'}</span>
-                </div>
-            </div>
-
-            <!-- Right: Finish Button -->
-            <button id="manual-finish-btn" type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md shadow-emerald-500/25 transition-all shrink-0 cursor-pointer" title="Complete Trip & View Gates">
-                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                <span>${T('finish') || 'Finish'}</span>
-            </button>
-        </div>
-        ${gpsWarningHtml}
-    `;
-
-    if (window.lucide) window.lucide.createIcons();
+    renderBoardingHud({
+        simStatus,
+        simulationState,
+        journey,
+        originName,
+        destinationName,
+        waitSecLeft,
+        remainingMinutes,
+        gpsClass,
+        gpsTitle,
+        isOnline,
+        bannerAlert: notificationController.getVisibleBannerAlert(),
+        tomorrowFirstTrain,
+        interchangeMeta,
+    });
 }
 
 function showJourneyComplete(destinationName) {
     if (navigator.vibrate) {
         try { navigator.vibrate([1000, 500, 1000, 500, 1000]); } catch (e) {}
     }
-    if (simulationState.locationWatcherId) {
-        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
-        simulationState.locationWatcherId = null;
-    }
-    if (simulationState.animationFrameId) {
-        cancelAnimationFrame(simulationState.animationFrameId);
-        simulationState.animationFrameId = null;
-    }
+    notificationController.triggerDestinationArrived({
+        destName: destinationName,
+        journeyId: simulationState.journeyId || currentJourney?.id || 'trip',
+    });
+    simulationState.boardingState = 'ARRIVED';
+    stopSimulationTimers();
 
     let destinationId = '';
     if (currentJourney && currentJourney.parts && currentJourney.parts.length > 0) {
@@ -1929,45 +2462,10 @@ function createConfettiEffect() {
     }
 }
 
-function stopSimulation() {
-    simulationState.isActive = false;
-    if (simulationState.animationFrameId) {
-        cancelAnimationFrame(simulationState.animationFrameId);
-        simulationState.animationFrameId = null;
-    }
-    if (simulationState.locationWatcherId) {
-        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
-        simulationState.locationWatcherId = null;
-    }
-    const simStatus = document.getElementById('simulation-status');
-    if (simStatus) {
-        simStatus.className = 'sticky top-0 z-40 w-full hidden';
-        simStatus.innerHTML = '';
-        delete simStatus.dataset.lastStateKey;
-    }
-    const routeList = document.getElementById('route-list');
-    if (routeList) routeList.innerHTML = '';
-
-    sessionStorage.removeItem('activeJourney');
-    sessionStorage.removeItem('simulationState');
-    localStorage.removeItem('activeJourney');
-    localStorage.removeItem('simulationState');
-
-    activeView = null;
-    switchView('planner-view');
-    navigateToView('plan');
-}
-
 export function resetPlannerToHome() {
     simulationState.isActive = false;
-    if (simulationState.animationFrameId) {
-        cancelAnimationFrame(simulationState.animationFrameId);
-        simulationState.animationFrameId = null;
-    }
-    if (simulationState.locationWatcherId) {
-        navigator.geolocation.clearWatch(simulationState.locationWatcherId);
-        simulationState.locationWatcherId = null;
-    }
+    stopSimulationTimers();
+    updateFloatingLiveRideBar();
     const modal = document.getElementById('station-gates-modal');
     if (modal) modal.classList.add('hidden');
     if (window.closeQRFullscreen) window.closeQRFullscreen();
@@ -2035,31 +2533,6 @@ function handleJourneyUpdate() {
     } else {
         displayJourneyResult(null);
     }
-}
-
-// Calculate aerial distance between two coordinates in km
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-}
-
-// Google Maps-Style Urban Road Route Distance Algorithm
-function getRoadRouteDistanceInKm(lat1, lon1, lat2, lon2) {
-    const haversineDist = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
-    
-    // Calculate Manhattan Grid metric for city road topology
-    const latRad = lat1 * (Math.PI / 180);
-    const dLatKm = Math.abs(lat2 - lat1) * 111.13;
-    const dLonKm = Math.abs(lon2 - lon1) * 111.13 * Math.cos(latRad);
-    const manhattanDist = dLatKm + dLonKm;
-    
-    // Urban Road Circuity Factor (C = 1.35 for Bengaluru street network)
-    const roadRouteDist = Math.max(haversineDist * 1.35, manhattanDist * 1.08);
-    return Number(roadRouteDist.toFixed(2));
 }
 
 function initializeApp() {
@@ -2176,10 +2649,16 @@ function initializeApp() {
 
     document.getElementById('board-train-btn').addEventListener('click', () => {
         if (!currentJourney) return;
+        notificationController.unlockAudioContext();
         startSimulation(currentJourney, false);
     });
 
-    initTicketModule();
+    initTicketModule({
+        getCurrentJourney: () => currentJourney,
+        getSimulationState: () => simulationState,
+        onStartWithoutOrWithTicket: (j) => startSimulation(j, false),
+        onRerenderRoute: (j) => renderLiveRoute(j, document.getElementById('route-list'), simulationState, liveOverrides),
+    });
 
     const findNearestBtn = document.getElementById('find-nearest-btn');
     if (findNearestBtn) {
@@ -2348,7 +2827,7 @@ function initializeApp() {
             const endId = savedJourney.id.split('-')[1];
             startDropdown.selectById(startId);
             endDropdown.selectById(endId);
-            startSimulation(savedJourney, savedSimState.useLiveLocation, savedSimState.startTime);
+            startSimulation(savedJourney, savedSimState.useGPS || savedSimState.useLiveLocation, savedSimState.startTime, savedSimState);
         } catch (e) { console.error("Restore failed", e); }
     } else {
         switchView('planner-view');
@@ -2385,18 +2864,31 @@ function initializeApp() {
     document.addEventListener('touchmove', scrollFix, { passive: false });
 
     initTheme();
+    initConnectivityMonitor();
+    document.getElementById('floating-ride-resume-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!simulationState.isActive) return;
+        activeView = 'map';
+        switchView('map-view');
+        updateSimulationUI();
+        scheduleNextSimTick();
+    });
+    document.getElementById('floating-ride-end-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetPlannerToHome();
+    });
     if (window.lucide) window.lucide.createIcons();
 
-    // Hide Splash Screen fast
-    setTimeout(() => {
+    // Signal splash controller that app DOM & UI are completely ready
+    if (typeof window.__nammaRideReady === 'function') {
+        window.__nammaRideReady();
+    } else {
         const splash = document.getElementById('splash-screen');
         if (splash) {
-            splash.classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 500);
+            splash.classList.add('nr-splash-exit');
+            setTimeout(() => { splash.style.display = 'none'; }, 350);
         }
-    }, 300);
+    }
 }
 
 // --- Nearby Attractions Bottom Sheet and Modals for Live Journey ---
@@ -2547,318 +3039,6 @@ window.showNearbyPlaceDetail = function(stationName, placeId) {
     appContainer.appendChild(detailModal);
     if (window.lucide) window.lucide.createIcons();
 };
-
-// --- QR Ticket Vault & Gate Scanner Module ---
-let pendingTicketFile = null;
-
-export function getActiveTicketData() {
-    try {
-        return sessionStorage.getItem('activeJourneyTicketImage') || localStorage.getItem('nammaride_active_ticket') || null;
-    } catch (e) {
-        return null;
-    }
-}
-
-export function setActiveTicketData(data) {
-    try {
-        if (data) {
-            sessionStorage.setItem('activeJourneyTicketImage', data);
-            localStorage.setItem('nammaride_active_ticket', data);
-        } else {
-            sessionStorage.removeItem('activeJourneyTicketImage');
-            localStorage.removeItem('nammaride_active_ticket');
-        }
-    } catch (e) {
-        console.warn('[TicketStorage] Storage quota/write error:', e);
-    }
-    const dot = document.getElementById('qr-pill-dot');
-    if (dot) {
-        if (data) dot.classList.remove('hidden');
-        else dot.classList.add('hidden');
-    }
-}
-
-function initTicketModule() {
-    const uploadModal = document.getElementById('ticket-upload-modal');
-    const dropzone = document.getElementById('ticket-dropzone');
-    const fileInput = document.getElementById('ticket-file-input');
-    const previewContainer = document.getElementById('ticket-preview-container');
-    const previewImg = document.getElementById('ticket-preview-img');
-    const dropzonePrompt = document.getElementById('ticket-dropzone-prompt');
-    const confirmBtn = document.getElementById('ticket-upload-confirm');
-    const skipBtn = document.getElementById('ticket-upload-skip');
-    const closeUploadBtn = document.getElementById('ticket-upload-close');
-
-    const qrScannerModal = document.getElementById('qr-scanner-modal');
-    const qrCloseBtn = document.getElementById('qr-scanner-close');
-    const qrModalImg = document.getElementById('qr-modal-img');
-    const qrEmptyState = document.getElementById('qr-modal-empty-state');
-    const qrReuploadBtn = document.getElementById('qr-modal-reupload-btn');
-    const qrRemoveBtn = document.getElementById('qr-modal-remove-btn');
-    const floatingQrBtn = document.getElementById('floating-qr-btn');
-
-    if (dropzone && fileInput) {
-        dropzone.addEventListener('click', () => fileInput.click());
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.add('drag-over');
-            }, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dropzone.classList.remove('drag-over');
-            }, false);
-        });
-
-        dropzone.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            if (dt && dt.files && dt.files[0]) {
-                handleTicketFileSelect(dt.files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files && e.target.files[0]) {
-                handleTicketFileSelect(e.target.files[0]);
-            }
-        });
-    }
-
-    function handleTicketFileSelect(file) {
-        if (!file || !file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            pendingTicketFile = e.target.result;
-            if (previewImg) previewImg.src = pendingTicketFile;
-            if (previewContainer) previewContainer.classList.remove('hidden');
-            if (dropzonePrompt) dropzonePrompt.classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-    }
-
-    window.openTicketUploadModal = function() {
-        if (!uploadModal) return;
-        const currentSaved = getActiveTicketData();
-        if (currentSaved && !pendingTicketFile) {
-            pendingTicketFile = currentSaved;
-            if (previewImg) previewImg.src = currentSaved;
-            if (previewContainer) previewContainer.classList.remove('hidden');
-            if (dropzonePrompt) dropzonePrompt.classList.add('hidden');
-        }
-        uploadModal.classList.add('modal-active');
-        if (window.lucide) window.lucide.createIcons();
-    };
-
-    window.closeTicketUploadModal = function() {
-        if (!uploadModal) return;
-        uploadModal.classList.remove('modal-active');
-    };
-
-    if (closeUploadBtn) closeUploadBtn.addEventListener('click', window.closeTicketUploadModal);
-    if (skipBtn) {
-        skipBtn.addEventListener('click', () => {
-            window.closeTicketUploadModal();
-            if (currentJourney && !simulationState.isActive && !simulationState.arrivedAtDestination) {
-                startSimulation(currentJourney, false);
-            }
-        });
-    }
-
-    if (confirmBtn) {
-        confirmBtn.addEventListener('click', () => {
-            if (pendingTicketFile) {
-                setActiveTicketData(pendingTicketFile);
-            }
-            window.closeTicketUploadModal();
-            if (simulationState.arrivedAtDestination) {
-                window.openQRScannerModal();
-            } else if (currentJourney && !simulationState.isActive) {
-                startSimulation(currentJourney, false);
-            } else if (currentJourney) {
-                renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
-            }
-        });
-    }
-
-    // Gate Scanner View Modal
-    window.openQRScannerModal = function() {
-        if (!qrScannerModal) return;
-        const ticketData = getActiveTicketData();
-        const routeSubEl = document.getElementById('qr-modal-route-sub');
-
-        if (currentJourney) {
-            const startPart = currentJourney.parts[0]?.stations[0];
-            const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
-            const endStation = lastPart?.stations[lastPart.stations.length - 1];
-            if (startPart && endStation && routeSubEl) {
-                routeSubEl.innerText = `${T_STATION(startPart.name)} -> ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
-            }
-        }
-
-        if (ticketData) {
-            if (qrModalImg) {
-                qrModalImg.src = ticketData;
-                qrModalImg.classList.remove('hidden');
-            }
-            if (qrEmptyState) qrEmptyState.classList.add('hidden');
-            if (openFsBtn) openFsBtn.classList.remove('hidden');
-        } else {
-            if (qrModalImg) qrModalImg.classList.add('hidden');
-            if (qrEmptyState) qrEmptyState.classList.remove('hidden');
-            if (openFsBtn) openFsBtn.classList.add('hidden');
-        }
-
-        qrScannerModal.classList.add('modal-active');
-        if (window.lucide) window.lucide.createIcons();
-    };
-
-    window.closeQRScannerModal = function() {
-        if (!qrScannerModal) return;
-        qrScannerModal.classList.remove('modal-active');
-        window.closeQRFullscreen();
-    };
-
-    if (qrCloseBtn) {
-        qrCloseBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.closeQRScannerModal();
-        });
-    }
-
-    if (qrScannerModal) {
-        qrScannerModal.addEventListener('click', (e) => {
-            if (e.target === qrScannerModal) {
-                e.preventDefault();
-                e.stopPropagation();
-                window.closeQRScannerModal();
-            }
-        });
-    }
-
-    const qrEmptyUploadBtn = document.getElementById('qr-empty-upload-btn');
-    if (qrEmptyUploadBtn) {
-        qrEmptyUploadBtn.addEventListener('click', () => {
-            window.closeQRScannerModal();
-            window.openTicketUploadModal();
-        });
-    }
-
-    if (qrReuploadBtn) {
-        qrReuploadBtn.addEventListener('click', () => {
-            window.closeQRScannerModal();
-            window.openTicketUploadModal();
-        });
-    }
-
-    if (qrRemoveBtn) {
-        qrRemoveBtn.addEventListener('click', () => {
-            setActiveTicketData(null);
-            pendingTicketFile = null;
-            if (previewImg) previewImg.src = '';
-            if (previewContainer) previewContainer.classList.add('hidden');
-            if (dropzonePrompt) dropzonePrompt.classList.remove('hidden');
-            window.closeQRScannerModal();
-            if (currentJourney) renderLiveRoute(currentJourney, document.getElementById('route-list'), simulationState);
-        });
-    }
-
-    // Fullscreen QR Gate Mode logic
-    const qrFullscreenOverlay = document.getElementById('qr-fullscreen-overlay');
-    const qrFsImg = document.getElementById('qr-fs-img');
-    const qrFsCloseBtn = document.getElementById('qr-fullscreen-close');
-    const openFsBtn = document.getElementById('open-qr-fullscreen-btn');
-    const imgWrapper = document.getElementById('qr-modal-img-wrapper');
-    let wakeLockSentinel = null;
-
-    async function requestScreenWakeLock() {
-        if ('wakeLock' in navigator) {
-            try {
-                wakeLockSentinel = await navigator.wakeLock.request('screen');
-            } catch (err) {}
-        }
-    }
-
-    function releaseScreenWakeLock() {
-        if (wakeLockSentinel) {
-            try { wakeLockSentinel.release(); } catch(e){}
-            wakeLockSentinel = null;
-        }
-    }
-
-    window.openQRFullscreen = function() {
-        const ticketData = getActiveTicketData();
-        if (!ticketData || !qrFullscreenOverlay) return;
-
-        if (qrFsImg) qrFsImg.src = ticketData;
-
-        const routeTitleEl = document.getElementById('qr-fs-route-title');
-        if (currentJourney && routeTitleEl) {
-            const startPart = currentJourney.parts[0]?.stations[0];
-            const lastPart = currentJourney.parts[currentJourney.parts.length - 1];
-            const endStation = lastPart?.stations[lastPart.stations.length - 1];
-            if (startPart && endStation) {
-                routeTitleEl.innerText = `${T_STATION(startPart.name)} -> ${T_STATION(endStation.name)} • Platform ${currentJourney.parts[0]?.startPlatform || 1}`;
-            }
-        }
-
-        qrFullscreenOverlay.classList.add('modal-active');
-        requestScreenWakeLock();
-        if (window.lucide) window.lucide.createIcons();
-    };
-
-    window.closeQRFullscreen = function() {
-        if (!qrFullscreenOverlay) return;
-        qrFullscreenOverlay.classList.remove('modal-active');
-        releaseScreenWakeLock();
-    };
-
-    if (openFsBtn) openFsBtn.addEventListener('click', window.openQRFullscreen);
-    if (imgWrapper) imgWrapper.addEventListener('click', window.openQRFullscreen);
-    if (qrFsCloseBtn) {
-        qrFsCloseBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.closeQRFullscreen();
-        });
-    }
-    if (qrFullscreenOverlay) {
-        qrFullscreenOverlay.addEventListener('click', (e) => {
-            if (e.target === qrFullscreenOverlay) {
-                e.preventDefault();
-                e.stopPropagation();
-                window.closeQRFullscreen();
-            }
-        });
-    }
-
-    // Floating QR Button Click
-    if (floatingQrBtn) {
-        floatingQrBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const ticketData = getActiveTicketData();
-            if (ticketData) {
-                window.openQRScannerModal();
-            } else {
-                window.openTicketUploadModal();
-            }
-        });
-    }
-
-    // Initialize floating QR dot state
-    const currentTicketData = getActiveTicketData();
-    const qrDot = document.getElementById('qr-pill-dot');
-    if (qrDot) {
-        if (currentTicketData) qrDot.classList.remove('hidden');
-        else qrDot.classList.add('hidden');
-    }
-}
 
 // Start Application
 if (document.readyState === 'loading') {

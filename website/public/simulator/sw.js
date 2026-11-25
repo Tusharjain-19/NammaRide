@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nammaride-offline-v1.6.0';
+const CACHE_NAME = 'nammaride-offline-v2.0.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -16,24 +16,34 @@ const ASSETS_TO_CACHE = [
   './js/data/timings.js',
   './js/data/safety.js',
   './js/data/stationBoardImages.js',
+  './js/data/scheduleData.js',
+  './js/data/crowdHourly.js',
+  './js/logic/scheduleEngine.js',
+  './js/logic/pricing.js',
+  './js/logic/trainTrackerEngine.js',
+  './js/logic/notificationEngine.js',
+  './js/logic/gpsValidator.js',
   './js/ui/dropdown.js',
   './js/ui/route.js',
   './js/ui/sections.js',
+  './js/ui/boardingHud.js',
+  './js/ui/ticketModals.js',
+  './js/utils/helpers.js',
   './js/utils/fuzzySearch.js',
   './js/utils/i18n.js',
   './js/utils/storageManager.js',
   './assets/images/train.jpg',
   './assets/images/station.jpg',
   './assets/images/logo.png',
-  './assets/images/logo_app.png'
+  './assets/images/logo_app.png',
+  './assets/images/metro_train_marker.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[NammaRide SW v1.5.3] Pre-caching core offline assets');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
-        console.warn('[NammaRide SW] Partial pre-cache error:', err);
+        console.warn('[NammaRide SW v1.8.0] Partial pre-cache error:', err);
       });
     })
   );
@@ -42,16 +52,11 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('[NammaRide SW] Removing old cache:', key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : Promise.resolve()))
+      )
+    )
   );
   self.clients.claim();
 });
@@ -60,44 +65,75 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // Network-First for HTML, JS, CSS to guarantee fresh code without stale cache
-  const isCodeAsset = url.pathname.endsWith('.html') || 
-                      url.pathname.endsWith('.js') || 
-                      url.pathname.endsWith('.css') ||
-                      url.pathname === '/' ||
-                      url.pathname.endsWith('/simulator/');
-
-  if (isCodeAsset) {
+  // Network-First with fast 2.5s timeout + Cache fallback for small live overrides
+  if (url.pathname.endsWith('live-overrides.json')) {
     event.respondWith(
-      fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const resClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+      Promise.race([
+        fetch(event.request).then((res) => {
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
           }
-          return networkResponse;
-        })
-        .catch(() => caches.match(event.request))
+          return res;
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2500))
+      ]).catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // Cache-First for static images and fonts
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+  // Static data modules & binary media: Cache-First (never wipe offline)
+  const isDataOrMedia =
+    url.pathname.includes('/js/data/') ||
+    url.pathname.includes('/assets/') ||
+    url.pathname.endsWith('.json');
+
+  if (isDataOrMedia) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) return cachedResponse;
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          }
           return networkResponse;
-        }
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
         });
-        return networkResponse;
-      });
-    })
+      })
+    );
+    return;
+  }
+
+  // App shell (HTML, JS, CSS): Stale-While-Revalidate for instant cold boot + silent background refresh
+  const isShellAsset =
+    url.pathname.endsWith('.html') ||
+    url.pathname.endsWith('.js') ||
+    url.pathname.endsWith('.css') ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('/simulator/');
+
+  if (isShellAsset) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) =>
+        cache.match(event.request).then((cachedResponse) => {
+          const networkPromise = fetch(event.request)
+            .then((networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                cache.put(event.request, networkResponse.clone());
+              }
+              return networkResponse;
+            })
+            .catch(() => cachedResponse);
+
+          return cachedResponse || networkPromise;
+        })
+      )
+    );
+    return;
+  }
+
+  // Default fallback: Cache-First
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => cachedResponse || fetch(event.request))
   );
 });

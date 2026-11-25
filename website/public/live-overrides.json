@@ -1,0 +1,15 @@
+{
+  "version": "1.8.0",
+  "updatedAt": "2026-11-25T15:02:39.692Z",
+  "pinkLinePhase1Active": true,
+  "holidayOverrides": [],
+  "extendedHours": [],
+  "serviceAdvisories": [
+    {
+      "line": "pink",
+      "level": "info",
+      "title": "Pink Line Phase 1 Active",
+      "message": "6 elevated stations operating between Kalena Agrahara and Tavarekere (8-10 min peak)."
+    }
+  ]
+}

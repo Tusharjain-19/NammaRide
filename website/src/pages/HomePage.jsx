@@ -12,14 +12,46 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import GooglePreferredSourceCard from '../components/GooglePreferredSourceCard';
 import MetaSEO from '../components/MetaSEO';
+import { getNextTrainsAtStation, getActiveTrainsOnLine } from '../utils/scheduleEngine';
 import googlePlayImg from '../../assets/images/google play.svg';
 
 function HeroSimulation() {
   const [activeStep, setActiveStep] = useState(0);
   const [timingLine, setTimingLine] = useState('Purple');
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [liveNow, setLiveNow] = useState(() => new Date());
   const { theme } = useTheme();
   const isLight = theme === 'light';
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!document.hidden) setLiveNow(new Date());
+    }, 5000);
+    return () => clearInterval(id);
+  }, []);
+
+  const heroNextTrain = getNextTrainsAtStation({
+    lineKey: 'purple',
+    stationId: 'P28',
+    directionSign: -1,
+    date: liveNow,
+    limit: 1,
+  });
+  const nextAtAttiguppe = heroNextTrain?.trains?.[0];
+  const heroNextText = nextAtAttiguppe
+    ? `${nextAtAttiguppe.isDue ? 'Arriving' : `In ${nextAtAttiguppe.countdownLabel}`} · ${nextAtAttiguppe.departureFormatted} (Platform 2)`
+    : 'First Train 05:00 AM (Platform 2)';
+
+  const selectedLineKey = timingLine.toLowerCase();
+  const activeCountForTiming = getActiveTrainsOnLine(selectedLineKey, liveNow).length;
+  const lineStartIds = { purple: 'P01', green: 'G01', yellow: 'Y01', pink: 'PK01' };
+  const timingLineNext = getNextTrainsAtStation({
+    lineKey: selectedLineKey,
+    stationId: lineStartIds[selectedLineKey] || 'P01',
+    directionSign: 1,
+    date: liveNow,
+    limit: 1,
+  })?.trains?.[0];
 
   useEffect(() => {
     if (isUserInteracting) return;
@@ -178,8 +210,8 @@ function HeroSimulation() {
               </div>
             </div>
             <div className="flex items-center gap-2 p-2.5 rounded-xl text-[11px] font-medium" style={{ background: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)', color: t.textSec }}>
-              <Clock className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Next Train: 03:05 PM (Platform 2)</span>
+              <Clock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span className="truncate">Next Train: {heroNextText}</span>
             </div>
           </div>
 
@@ -279,7 +311,10 @@ function HeroSimulation() {
               {timingLine} Line
             </span>
           </div>
-          <p className="text-[10px] font-medium mb-3" style={{ color: t.textSec }}>First & last train schedule · 2026 Timetable</p>
+          <p className="text-[10px] font-medium mb-3 flex items-center justify-between gap-2" style={{ color: t.textSec }}>
+            <span>{activeCountForTiming} active · Next {timingLineNext ? timingLineNext.countdownLabel : '05:00 AM'}</span>
+            <span className="text-emerald-500 font-bold">2026 GTFS</span>
+          </p>
 
           {/* Line Selector Pills */}
           <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1 no-scrollbar">

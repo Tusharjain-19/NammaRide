@@ -4,6 +4,8 @@ import { Clock, Zap, Info, Calendar, ArrowRight, ShieldCheck, CheckCircle2, Aler
 import { useLanguage } from '../context/LanguageContext';
 import { timingsData } from '../data/timingsData';
 import MetaSEO from '../components/MetaSEO';
+import RidershipStatsCard from '../components/RidershipStatsCard';
+import { getActiveTrainsOnLine, getNextTrainsAtStation } from '../utils/scheduleEngine';
 
 export default function TimingsPage() {
   const { lang, t } = useLanguage();
@@ -47,7 +49,7 @@ export default function TimingsPage() {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
             <Clock className="w-4 h-4" />
-            <span>Official BMRCL Metro Timetable 2025</span>
+            <span>Official BMRCL Metro Timetable 2026</span>
           </div>
           <h1 className="font-heading font-black text-4xl sm:text-6xl text-gray-900 dark:text-white tracking-tight">
             {t('timings')}
@@ -157,6 +159,9 @@ export default function TimingsPage() {
             const firstTrainStart = line.weekday?.firstTrain?.from_start || '05:00 AM';
             const lastTrainEnd = line.weekday?.lastTrain?.from_end || '11:00 PM';
             const peakFreq = line.weekday?.peakFrequency || '8-10 min';
+            const startIds = { purple: 'P01', green: 'G01', yellow: 'Y01', pink: 'PK01' };
+            const activeTrainsNow = getActiveTrainsOnLine(key, new Date()).length;
+            const liveNext = getNextTrainsAtStation({ lineKey: key, stationId: startIds[key] || 'P01', directionSign: 1, limit: 1 })?.trains?.[0];
 
             return (
               <motion.div
@@ -191,9 +196,14 @@ export default function TimingsPage() {
                         {line.route}
                       </p>
                     </div>
-                    <span className="px-3 py-1 rounded-none bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-[11px] font-bold text-gray-700 dark:text-gray-300 shrink-0">
-                      {line.stations} Stations
-                    </span>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="px-3 py-1 rounded-none bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-[11px] font-bold text-gray-700 dark:text-gray-300">
+                        {line.stations} Stations
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-none bg-emerald-500/10 border border-emerald-500/25 text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400">
+                        {activeTrainsNow} Active · {liveNext ? `Next ${liveNext.countdownLabel}` : 'Off Hours'}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Summary Highlights Cards (Uniform Heights) */}
@@ -358,6 +368,9 @@ export default function TimingsPage() {
             </div>
           </div>
         </motion.div>
+
+        {/* Web-Exclusive Daily Ridership & Demand Curve */}
+        <RidershipStatsCard />
 
       </div>
     </div>

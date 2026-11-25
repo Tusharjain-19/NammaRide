@@ -1,13 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ZoomIn, ZoomOut, Maximize2, MapPin, Zap, Clock, Bus, Accessibility, Building2, Banknote, Wifi, Utensils, Search, X } from 'lucide-react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import { ZoomIn, ZoomOut, Maximize2, MapPin, Zap, Clock, Bus, Accessibility, Building2, Banknote, Wifi, Utensils, Search, X, Radio, Map as MapIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { stationsData } from '../data/stationsData';
 import MetaSEO from '../components/MetaSEO';
+import RidershipStatsCard from '../components/RidershipStatsCard';
 import { scoreStation } from '../utils/fuzzySearch';
+
+const LiveMetroMap = lazy(() => import('../components/LiveMetroMap'));
 
 export default function MetroMapPage() {
   const { lang, t } = useLanguage();
+  const [mapMode, setMapMode] = useState('live');
   const [zoomLevel, setZoomLevel] = useState(0.75);
   const [activeStation, setActiveStation] = useState(null);
   const [imageError, setImageError] = useState(false);
@@ -226,72 +230,127 @@ export default function MetroMapPage() {
         {/* MAP CONTAINER & TOOLBAR */}
         <div className="rounded-3xl p-3 sm:p-6 relative overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-neutral-800 shadow-xl space-y-3">
           
-          {/* Mobile & Desktop Line Legend Bar */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar border-b border-gray-100 dark:border-neutral-900 text-[11px] font-bold">
-            <span className="text-gray-400 text-[10px] uppercase font-mono shrink-0">Lines:</span>
-            <span className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500"></span> Purple Line</span>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Green Line</span>
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Yellow Line</span>
-            <span className="px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-500 border border-dashed border-pink-500/40 whitespace-nowrap shrink-0 italic flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-pink-400"></span> Pink (Upcoming)</span>
-            <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-500 border border-dashed border-sky-500/40 whitespace-nowrap shrink-0 italic flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-sky-400"></span> Blue (Airport)</span>
-          </div>
-
-          <div className="relative">
-            {/* Map Zoom Controls (Touch Friendly) */}
-            <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 bg-white/95 dark:bg-neutral-900/95 p-2 rounded-2xl border border-gray-200 dark:border-neutral-800 backdrop-blur-md shadow-xl">
+          {/* Map Mode Toggle + Mobile & Desktop Line Legend Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-gray-100 dark:border-neutral-900">
+            <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-neutral-900 p-1 rounded-xl border border-gray-200 dark:border-neutral-800">
               <button
-                onClick={() => setZoomLevel((z) => Math.min(z + 0.25, 2.8))}
-                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
-                title="Zoom In"
+                type="button"
+                onClick={() => setMapMode('live')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  mapMode === 'live'
+                    ? 'bg-emerald-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                }`}
               >
-                <ZoomIn className="w-5 h-5 text-emerald-500" />
+                <Radio className="w-3.5 h-3.5" />
+                <span>Live Track Map</span>
               </button>
               <button
-                onClick={() => setZoomLevel((z) => Math.max(z - 0.25, 0.4))}
-                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
-                title="Zoom Out"
+                type="button"
+                onClick={() => setMapMode('classic')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  mapMode === 'classic'
+                    ? 'bg-emerald-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                }`}
               >
-                <ZoomOut className="w-5 h-5 text-emerald-500" />
-              </button>
-              <button
-                onClick={() => setZoomLevel(typeof window !== 'undefined' && window.innerWidth < 640 ? 0.85 : 0.75)}
-                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
-                title="Fit Screen"
-              >
-                <Maximize2 className="w-5 h-5 text-emerald-500" />
+                <MapIcon className="w-3.5 h-3.5" />
+                <span>Classic Network Map</span>
               </button>
             </div>
 
-            {/* MAP CANVAS VIEW (EXPANDED SCROLL CONTAINER WITH DEFAULTS ZOOMED OUT) */}
-          <div 
-            ref={containerRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            onTouchStart={handleMouseDown}
-            onTouchMove={handleMouseMove}
-            onTouchEnd={handleMouseUpOrLeave}
-            className={`w-full h-[65vh] sm:h-[840px] overflow-auto flex items-center justify-center bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-neutral-800 p-2 sm:p-4 custom-scrollbar ${
-              isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
-            }`}
-          >
-            <div
-              style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.3s ease-out' }}
-              className="origin-center transition-all duration-300 flex items-center justify-center min-w-full min-h-full"
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 custom-scrollbar text-[11px] font-bold">
+              <span className="text-gray-400 text-[10px] uppercase font-mono shrink-0">Lines:</span>
+              <span className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500"></span> Purple Line</span>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Green Line</span>
+              <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Yellow Line</span>
+              <span className="px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-pink-500"></span> Pink Line (Phase 1)</span>
+              <span className="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-500 border border-dashed border-sky-500/40 whitespace-nowrap shrink-0 italic flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-sky-400"></span> Blue (Airport)</span>
+            </div>
+          </div>
+
+          {mapMode === 'live' ? (
+            <Suspense
+              fallback={
+                <div className="w-full h-[65vh] sm:h-[620px] rounded-2xl bg-gray-100 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 flex flex-col items-center justify-center gap-3 text-sm font-bold text-gray-500">
+                  <Radio className="w-7 h-7 text-emerald-500 animate-spin" />
+                  <span>Loading Live Track Map (OpenFreeMap + BMRCL GTFS)...</span>
+                </div>
+              }
             >
-              {/* Official BMRCL 2025 Map PNG (Extracted from PDF with pitch-black dark mode inversion) */}
-              <img
-                src="/assets/images/metro_map_2025.png"
-                alt="Official BMRCL Metro Map 2025"
-                className="max-w-none w-[1050px] sm:w-[1250px] h-auto object-contain transition-all duration-500 dark:invert dark:hue-rotate-180 dark:contrast-125 dark:brightness-95 select-none rounded-xl"
-                draggable={false}
+              <LiveMetroMap
+                onSelectStationByName={(name) => {
+                  const found = stationsData.find((s) =>
+                    s.name_en.toLowerCase().includes(String(name).toLowerCase()) ||
+                    String(name).toLowerCase().includes(s.name_en.toLowerCase())
+                  );
+                  if (found) {
+                    setImageError(false);
+                    setActiveStation(found);
+                  }
+                }}
               />
+            </Suspense>
+          ) : (
+            <div className="relative">
+              {/* Map Zoom Controls (Touch Friendly) */}
+              <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 bg-white/95 dark:bg-neutral-900/95 p-2 rounded-2xl border border-gray-200 dark:border-neutral-800 backdrop-blur-md shadow-xl">
+                <button
+                  onClick={() => setZoomLevel((z) => Math.min(z + 0.25, 2.8))}
+                  className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                  title="Zoom In"
+                >
+                  <ZoomIn className="w-5 h-5 text-emerald-500" />
+                </button>
+                <button
+                  onClick={() => setZoomLevel((z) => Math.max(z - 0.25, 0.4))}
+                  className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                  title="Zoom Out"
+                >
+                  <ZoomOut className="w-5 h-5 text-emerald-500" />
+                </button>
+                <button
+                  onClick={() => setZoomLevel(typeof window !== 'undefined' && window.innerWidth < 640 ? 0.85 : 0.75)}
+                  className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-emerald-500/10 text-gray-700 dark:text-gray-200 flex items-center justify-center transition-all active:scale-90"
+                  title="Fit Screen"
+                >
+                  <Maximize2 className="w-5 h-5 text-emerald-500" />
+                </button>
+              </div>
+
+              {/* MAP CANVAS VIEW (EXPANDED SCROLL CONTAINER WITH DEFAULTS ZOOMED OUT) */}
+              <div 
+                ref={containerRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUpOrLeave}
+                onMouseLeave={handleMouseUpOrLeave}
+                onTouchStart={handleMouseDown}
+                onTouchMove={handleMouseMove}
+                onTouchEnd={handleMouseUpOrLeave}
+                className={`w-full h-[65vh] sm:h-[840px] overflow-auto flex items-center justify-center bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-neutral-800 p-2 sm:p-4 custom-scrollbar ${
+                  isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
+                }`}
+              >
+                <div
+                  style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.3s ease-out' }}
+                  className="origin-center transition-all duration-300 flex items-center justify-center min-w-full min-h-full"
+                >
+                  {/* Official BMRCL 2025 Map PNG (Extracted from PDF with pitch-black dark mode inversion) */}
+                  <img
+                    src="/assets/images/metro_map_2025.png"
+                    alt="Official BMRCL Metro Map 2025"
+                    className="max-w-none w-[1050px] sm:w-[1250px] h-auto object-contain transition-all duration-500 dark:invert dark:hue-rotate-180 dark:contrast-125 dark:brightness-95 select-none rounded-xl"
+                    draggable={false}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-      </div>
+        {/* Web-Exclusive Daily Ridership & Ticket Breakdown */}
+        <RidershipStatsCard />
 
       {/* DETAILED STATION MODAL */}
       {activeStation && (

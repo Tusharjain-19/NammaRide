@@ -18,6 +18,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 1.5rem;
     padding: 0.35rem 0.35rem;
+    overflow: hidden;
     z-index: 9999 !important;
     pointer-events: auto !important;
     touch-action: pan-x manipulation;
@@ -39,28 +40,28 @@ body.light-mode .bottom-nav {
     pointer-events: none;
 }
 
-/* Sliding Spring Glass Indicator */
+/* Sliding Glass Active Pill (borderless to prevent 1px hairline line on load) */
 .nav-indicator {
     position: absolute;
     top: 0.35rem;
     bottom: 0.35rem;
     left: 0;
     width: 0;
-    background: rgba(16, 185, 129, 0.18);
-    border: 1px solid rgba(16, 185, 129, 0.4);
+    opacity: 0;
+    background: rgba(16, 185, 129, 0.12);
+    border: none;
     border-radius: 1rem;
-    box-shadow: 0 0 16px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), width 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
     z-index: 1;
     pointer-events: none;
 }
 
 body.light-mode .nav-indicator {
-    background: rgba(16, 185, 129, 0.14);
-    border-color: rgba(16, 185, 129, 0.35);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+    background: rgba(16, 185, 129, 0.11);
+    border: none;
+    box-shadow: none;
 }
 
 .nav-item {

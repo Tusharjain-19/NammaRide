@@ -72,7 +72,7 @@ export default function SimulatorPage() {
   useEffect(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       try {
-        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_THEME_CHANGED', theme: theme }, '*');
+        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_THEME_CHANGED', theme: theme, animate: false, manual: false }, '*');
         iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_LANG_CHANGED', lang: lang }, '*');
       } catch (e) {
         // Safe fallback
@@ -138,7 +138,7 @@ export default function SimulatorPage() {
           iframeRef.current.contentWindow.navigateToView(viewName);
         }
         // Send theme configuration
-        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_THEME_CHANGED', theme: theme }, '*');
+        iframeRef.current.contentWindow.postMessage({ type: 'NAMMARIDE_THEME_CHANGED', theme: theme, animate: false, manual: false }, '*');
       } catch (e) {
         // Safe fallback
       }
