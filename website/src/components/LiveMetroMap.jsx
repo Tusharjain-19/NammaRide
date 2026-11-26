@@ -1,11 +1,13 @@
+/* @copyright 2026 Tushar Jain — NammaRide (https://www.nammaride.site/) — Personal & Non-Commercial Use Only */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as maplibregl from 'maplibre-gl';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { Radio, Clock, Users, Navigation, RotateCcw, X, Layers, ArrowRight } from 'lucide-react';
+import { Radio, Clock, Users, Navigation, RotateCcw, X, Layers, ArrowRight, Gauge, TrainFront } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import metroPolylines from '../data/metroPolylines.json';
+import scheduleData from '../data/scheduleData.json';
 import {
   getActiveTrainsAllLines,
   getNextTrainsAtStation,
@@ -24,9 +26,19 @@ const LINE_CONFIG = [
 
 const BENGALURU_CENTER = [77.5946, 12.9716];
 
-function interpolatePointOnLine(coords, frac) {
-  if (!coords || coords.length === 0) return BENGALURU_CENTER;
-  if (coords.length === 1) return coords[0];
+function haversineKm(lon1, lat1, lon2, lat2) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function interpolatePointAndBearing(coords, frac) {
+  if (!coords || coords.length === 0) return { coords: BENGALURU_CENTER, bearing: 0 };
+  if (coords.length === 1) return { coords: coords[0], bearing: 0 };
   const clamped = Math.max(0, Math.min(1, frac));
   const segLens = [];
   let total = 0;
@@ -43,12 +55,47 @@ function interpolatePointOnLine(coords, frac) {
       const t = len > 0 ? Math.max(0, Math.min(1, (target - acc) / len)) : 0;
       const a = coords[i];
       const b = coords[i + 1];
-      return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      const dx = b[0] - a[0];
+      const dy = b[1] - a[1];
+      // Clockwise degrees from North (0 = up)
+      const bearing = (Math.atan2(dx, dy) * 180) / Math.PI;
+      return {
+        coords: [a[0] + dx * t, a[1] + dy * t],
+        bearing,
+      };
     }
     acc += len;
   }
-  return coords[coords.length - 1];
+  return { coords: coords[coords.length - 1], bearing: 0 };
 }
+
+function normalizeStationKey(name) {
+  const s = String(name || '').toLowerCase();
+  if (s.includes('majestic') || s.includes('kempegowda')) return 'majestic';
+  if (s.includes('rashtreeya vidyalaya') || s.includes('rv road')) return 'rv_road';
+  if (s.includes('jayadeva')) return 'jayadeva';
+  if (s.includes('silk board')) return 'silk_board';
+  if (s.includes('kr pura')) return 'kr_pura';
+  if (s.includes('mg road')) return 'mg_road';
+  if (s.includes('nagawara')) return 'nagawara';
+  return s.replace(/[^a-z0-9]/g, '');
+}
+
+function buildInterchangeLookup() {
+  const groups = new Map();
+  for (const lineKey of ['purple', 'green', 'yellow', 'pink']) {
+    const lineData = metroPolylines.lines?.[lineKey];
+    if (!lineData) continue;
+    for (const st of lineData.stations || []) {
+      const key = normalizeStationKey(st.name);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ lineKey, color: lineData.color, name: st.name });
+    }
+  }
+  return groups;
+}
+
+const INTERCHANGE_GROUPS = buildInterchangeLookup();
 
 function buildTrainGeoJson(lineFilter, nowDate) {
   const all = getActiveTrainsAllLines(nowDate);
@@ -59,6 +106,7 @@ function buildTrainGeoJson(lineFilter, nowDate) {
     const lineData = metroPolylines.lines?.[lineKey];
     if (!lineData) continue;
     const stations = lineData.stations || [];
+    const cumSec = scheduleData.lines?.[lineKey]?.cumSec || [];
     const trains = all[lineKey] || [];
 
     for (const tr of trains) {
@@ -68,7 +116,19 @@ function buildTrainGeoJson(lineFilter, nowDate) {
       const fLo = stations[loIdx]?.frac ?? 0;
       const fHi = stations[hiIdx]?.frac ?? fLo;
       const polyFrac = fLo + (fHi - fLo) * subT;
-      const coords = interpolatePointOnLine(lineData.coords, polyFrac);
+      const { coords, bearing } = interpolatePointAndBearing(lineData.coords, polyFrac);
+      const directedBearing = tr.dir === -1 ? (bearing + 180) % 360 : bearing;
+
+      const curSt = stations[tr.currentIdx];
+      const nxtSt = stations[tr.nextIdx];
+      let speedKmh = 0;
+      if (!tr.isDwelling && curSt && nxtSt && tr.currentIdx !== tr.nextIdx) {
+        const distKm = haversineKm(curSt.lon, curSt.lat, nxtSt.lon, nxtSt.lat);
+        const segSec = Math.abs((cumSec[tr.nextIdx] || 0) - (cumSec[tr.currentIdx] || 0));
+        const runSec = Math.max(35, segSec - 22);
+        const rawKmh = Math.round((distKm / (runSec / 3600)));
+        speedKmh = Math.max(26, Math.min(68, rawKmh || 42));
+      }
 
       features.push({
         type: 'Feature',
@@ -78,7 +138,11 @@ function buildTrainGeoJson(lineFilter, nowDate) {
           lineKey,
           color: lineData.color,
           dir: tr.dir,
-          label: tr.dir === 1 ? '▶' : '◀',
+          bearing: directedBearing,
+          speedKmh,
+          currentStation: curSt?.name || '',
+          nextStation: nxtSt?.name || '',
+          secToNextStation: tr.secToNextStation || 0,
           terminalName: tr.terminalName,
           isDwelling: tr.isDwelling ? 1 : 0,
         },
@@ -113,12 +177,34 @@ function buildLinesGeoJson(lineFilter) {
 
 function buildStationsGeoJson(lineFilter) {
   const features = [];
+  const seenInterchanges = new Set();
+
   for (const lineKey of ['purple', 'green', 'yellow', 'pink']) {
     if (lineFilter !== 'all' && lineFilter !== lineKey) continue;
     const lineData = metroPolylines.lines?.[lineKey];
     if (!lineData) continue;
     for (let i = 0; i < (lineData.stations || []).length; i++) {
       const st = lineData.stations[i];
+      const normKey = normalizeStationKey(st.name);
+      const group = INTERCHANGE_GROUPS.get(normKey) || [];
+      const uniqueLines = [];
+      const seenLk = new Set();
+      for (const g of group) {
+        if (!seenLk.has(g.lineKey)) {
+          seenLk.add(g.lineKey);
+          uniqueLines.push(g);
+        }
+      }
+      const isInterchange = uniqueLines.length >= 2;
+      if (isInterchange && lineFilter === 'all') {
+        if (seenInterchanges.has(normKey)) continue;
+        seenInterchanges.add(normKey);
+      }
+
+      const line1 = uniqueLines[0] || { lineKey, color: lineData.color };
+      const line2 = uniqueLines[1] || line1;
+      const xferIcon = isInterchange ? `xfer-${line1.lineKey}-${line2.lineKey}` : '';
+
       features.push({
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [st.lon, st.lat] },
@@ -127,6 +213,11 @@ function buildStationsGeoJson(lineFilter) {
           name: st.name,
           lineKey,
           color: lineData.color,
+          isInterchange: isInterchange ? 1 : 0,
+          color1: line1.color,
+          color2: line2.color,
+          servedLines: uniqueLines.map((u) => u.lineKey).join(','),
+          xferIcon,
           idx: i,
           firstName: lineData.stations[0]?.name || '',
           lastName: lineData.stations[lineData.stations.length - 1]?.name || '',
@@ -135,6 +226,127 @@ function buildStationsGeoJson(lineFilter) {
     }
   }
   return { type: 'FeatureCollection', features };
+}
+
+function createTrainSpriteImage(colorHex) {
+  const w = 44;
+  const h = 72;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  // Drop shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.32)';
+  ctx.beginPath();
+  ctx.roundRect(9, 7, 28, 60, 9);
+  ctx.fill();
+
+  // Stainless steel coach body
+  const grad = ctx.createLinearGradient(8, 0, 36, 0);
+  grad.addColorStop(0, '#cbd5e1');
+  grad.addColorStop(0.5, '#f8fafc');
+  grad.addColorStop(1, '#94a3b8');
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(8, 4, 28, 62, 9);
+  ctx.fill();
+  ctx.stroke();
+
+  // Line color roof stripe
+  ctx.fillStyle = colorHex;
+  ctx.beginPath();
+  ctx.roundRect(12, 18, 20, 36, 4);
+  ctx.fill();
+
+  // Front windshield (top = direction 0 deg North)
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.roundRect(12, 7, 20, 9, 4);
+  ctx.fill();
+
+  // Twin warm headlights at front nose
+  ctx.fillStyle = '#fef08a';
+  ctx.beginPath();
+  ctx.arc(14, 7, 2.2, 0, Math.PI * 2);
+  ctx.arc(30, 7, 2.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  return ctx.getImageData(0, 0, w, h);
+}
+
+function createInterchangeSpriteImage(color1, color2) {
+  const size = 36;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 13;
+
+  // Left half = color1
+  ctx.fillStyle = color1;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, Math.PI / 2, (3 * Math.PI) / 2);
+  ctx.closePath();
+  ctx.fill();
+
+  // Right half = color2
+  ctx.fillStyle = color2;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2);
+  ctx.closePath();
+  ctx.fill();
+
+  // Outer crisp white ring
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Inner cutout dot
+  ctx.fillStyle = '#09090b';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  return ctx.getImageData(0, 0, size, size);
+}
+
+function registerMapSprites(map) {
+  const lineColors = {
+    purple: '#9333EA',
+    green: '#10B981',
+    yellow: '#EAB308',
+    pink: '#EC4899',
+  };
+  for (const [lk, hex] of Object.entries(lineColors)) {
+    const id = `train-sprite-${lk}`;
+    if (!map.hasImage(id)) {
+      const img = createTrainSpriteImage(hex);
+      if (img) map.addImage(id, img, { pixelRatio: 2 });
+    }
+  }
+  const keys = Object.keys(lineColors);
+  for (const k1 of keys) {
+    for (const k2 of keys) {
+      if (k1 === k2) continue;
+      const id = `xfer-${k1}-${k2}`;
+      if (!map.hasImage(id)) {
+        const img = createInterchangeSpriteImage(lineColors[k1], lineColors[k2]);
+        if (img) map.addImage(id, img, { pixelRatio: 2 });
+      }
+    }
+  }
 }
 
 function applyDarkBaseStyling(map, isDark) {
@@ -169,12 +381,14 @@ export default function LiveMetroMap({ onSelectStationByName }) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const mapContainerRef = useRef(null);
+  const labelCanvasRef = useRef(null);
   const mapRef = useRef(null);
   const mapReadyRef = useRef(false);
 
   const [lineFilter, setLineFilter] = useState('all');
   const [tickNow, setTickNow] = useState(() => new Date());
   const [selectedStation, setSelectedStation] = useState(null);
+  const [selectedTrain, setSelectedTrain] = useState(null);
   const [mapError, setMapError] = useState(false);
 
   const lineFilterRef = useRef(lineFilter);
@@ -182,6 +396,65 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
   const isDarkRef = useRef(isDark);
   isDarkRef.current = isDark;
+
+  const drawStationLabelsOverlay = () => {
+    const map = mapRef.current;
+    const canvas = labelCanvasRef.current;
+    if (!map || !canvas || !mapReadyRef.current) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, rect.width, rect.height);
+
+    const zoom = map.getZoom();
+    const stations = buildStationsGeoJson(lineFilterRef.current).features;
+    const placedBoxes = [];
+    const dark = isDarkRef.current;
+
+    // Sort interchanges first so they always win label placement
+    stations.sort((a, b) => (b.properties.isInterchange || 0) - (a.properties.isInterchange || 0));
+
+    for (const st of stations) {
+      const isXfer = st.properties.isInterchange === 1;
+      if (!isXfer && zoom < 10.6 && st.properties.idx % 2 === 1) continue;
+
+      const pt = map.project(st.geometry.coordinates);
+      if (pt.x < 10 || pt.x > rect.width - 10 || pt.y < 10 || pt.y > rect.height - 10) continue;
+
+      const label = st.properties.name
+        .replace('Nadaprabhu Kempegowda Station, ', '')
+        .replace('Rashtreeya Vidyalaya Road', 'RV Road');
+
+      ctx.font = isXfer ? '700 11px Inter, system-ui, sans-serif' : '600 9.5px Inter, system-ui, sans-serif';
+      const tw = ctx.measureText(label).width;
+      const box = {
+        x1: pt.x + 8,
+        y1: pt.y - 7,
+        x2: pt.x + 12 + tw,
+        y2: pt.y + 7,
+      };
+
+      const collides = placedBoxes.some(
+        (b) => !(box.x2 < b.x1 || box.x1 > b.x2 || box.y2 < b.y1 || box.y1 > b.y2)
+      );
+      if (collides) continue;
+      placedBoxes.push(box);
+
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = dark ? 'rgba(9, 9, 11, 0.92)' : 'rgba(255, 255, 255, 0.94)';
+      ctx.strokeText(label, pt.x + 9, pt.y + 3);
+      ctx.fillStyle = isXfer
+        ? (dark ? '#ffffff' : '#0f172a')
+        : (dark ? '#cbd5e1' : '#334155');
+      ctx.fillText(label, pt.x + 9, pt.y + 3);
+    }
+  };
 
   // Update simulation positions every 1.5s while visible
   useEffect(() => {
@@ -244,14 +517,21 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
     if (typeof ResizeObserver !== 'undefined' && mapContainerRef.current) {
       resizeObs = new ResizeObserver(() => {
-        try { map.resize(); } catch (e) {}
+        try {
+          map.resize();
+          drawStationLabelsOverlay();
+        } catch (e) {}
       });
       resizeObs.observe(mapContainerRef.current);
     }
 
     const ensureSourcesAndLayers = () => {
       applyDarkBaseStyling(map, isDarkRef.current);
-      if (map.getSource('nr-lines')) return;
+      registerMapSprites(map);
+      if (map.getSource('nr-lines')) {
+        drawStationLabelsOverlay();
+        return;
+      }
 
       map.addSource('nr-lines', { type: 'geojson', data: buildLinesGeoJson(lineFilterRef.current) });
       map.addSource('nr-stations', { type: 'geojson', data: buildStationsGeoJson(lineFilterRef.current) });
@@ -297,11 +577,12 @@ export default function LiveMetroMap({ onSelectStationByName }) {
         },
       });
 
-      // Station circles
+      // Regular station circles
       map.addLayer({
         id: 'nr-stations-circle',
         type: 'circle',
         source: 'nr-stations',
+        filter: ['==', ['get', 'isInterchange'], 0],
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 3.5, 14, 6.5],
           'circle-color': isDarkRef.current ? '#09090b' : '#ffffff',
@@ -310,48 +591,67 @@ export default function LiveMetroMap({ onSelectStationByName }) {
         },
       });
 
-      // Live trains halo + marker
+      // Dual-color split-ring interchange markers
       map.addLayer({
-        id: 'nr-trains-halo',
-        type: 'circle',
-        source: 'nr-trains',
-        paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 14, 12],
-          'circle-color': ['get', 'color'],
-          'circle-opacity': 0.28,
+        id: 'nr-stations-interchange',
+        type: 'symbol',
+        source: 'nr-stations',
+        filter: ['==', ['get', 'isInterchange'], 1],
+        layout: {
+          'icon-image': ['get', 'xferIcon'],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.85, 14, 1.2],
+          'icon-allow-overlap': true,
         },
       });
 
+      // Live trains as rotated Metro Train sprites (not plain dots)
       map.addLayer({
-        id: 'nr-trains-dot',
-        type: 'circle',
+        id: 'nr-trains-icon',
+        type: 'symbol',
         source: 'nr-trains',
-        paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 14, 7.5],
-          'circle-color': ['get', 'color'],
-          'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 1.8,
+        layout: {
+          'icon-image': ['concat', 'train-sprite-', ['get', 'lineKey']],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.58, 14, 0.85],
+          'icon-rotate': ['get', 'bearing'],
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true,
         },
       });
 
-      map.on('click', 'nr-stations-circle', (e) => {
+      const onStationClick = (e) => {
         const feat = e.features?.[0];
         if (!feat) return;
+        setSelectedTrain(null);
         setSelectedStation({ ...feat.properties });
+      };
+      map.on('click', 'nr-stations-circle', onStationClick);
+      map.on('click', 'nr-stations-interchange', onStationClick);
+
+      map.on('click', 'nr-trains-icon', (e) => {
+        const feat = e.features?.[0];
+        if (!feat) return;
+        setSelectedStation(null);
+        setSelectedTrain({ ...feat.properties });
       });
 
-      map.on('mouseenter', 'nr-stations-circle', () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', 'nr-stations-circle', () => {
-        map.getCanvas().style.cursor = '';
-      });
+      for (const layerId of ['nr-stations-circle', 'nr-stations-interchange', 'nr-trains-icon']) {
+        map.on('mouseenter', layerId, () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', layerId, () => {
+          map.getCanvas().style.cursor = '';
+        });
+      }
 
       mapReadyRef.current = true;
+      drawStationLabelsOverlay();
     };
 
     map.on('load', ensureSourcesAndLayers);
     map.on('style.load', ensureSourcesAndLayers);
+    map.on('move', drawStationLabelsOverlay);
+    map.on('zoom', drawStationLabelsOverlay);
     map.on('error', (e) => {
       const msg = String(e?.error?.message || e?.message || '');
       if (!mapReadyRef.current || /worker/i.test(msg)) {
@@ -401,6 +701,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
       if (map.getLayer('nr-stations-circle')) {
         map.setPaintProperty('nr-stations-circle', 'circle-color', isDark ? '#09090b' : '#ffffff');
       }
+      drawStationLabelsOverlay();
     } catch (e) {}
   }, [isDark]);
 
@@ -414,6 +715,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
     if (linesSrc) linesSrc.setData(buildLinesGeoJson(lineFilter));
     if (stSrc) stSrc.setData(buildStationsGeoJson(lineFilter));
     if (trSrc) trSrc.setData(buildTrainGeoJson(lineFilter, tickNow));
+    drawStationLabelsOverlay();
   }, [lineFilter, tickNow]);
 
   const activeCounts = useMemo(() => {
@@ -432,12 +734,20 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
   const selectedStationDetails = useMemo(() => {
     if (!selectedStation) return null;
-    const { id, lineKey, name, firstName, lastName } = selectedStation;
+    const { id, lineKey, name, firstName, lastName, servedLines } = selectedStation;
     const dirForward = getNextTrainsAtStation({ lineKey, stationId: id, directionSign: 1, date: tickNow, limit: 2 });
     const dirReverse = getNextTrainsAtStation({ lineKey, stationId: id, directionSign: -1, date: tickNow, limit: 2 });
     const crowd = getStationCrowd(id, tickNow);
-    return { id, lineKey, name, firstName, lastName, dirForward, dirReverse, crowd };
+    return { id, lineKey, name, firstName, lastName, servedLines, dirForward, dirReverse, crowd };
   }, [selectedStation, tickNow]);
+
+  // Keep selected train telemetry live on each 1.5s tick
+  const liveSelectedTrain = useMemo(() => {
+    if (!selectedTrain) return null;
+    const currentFeatures = buildTrainGeoJson('all', tickNow).features;
+    const match = currentFeatures.find((f) => f.properties.id === selectedTrain.id);
+    return match ? match.properties : selectedTrain;
+  }, [selectedTrain, tickNow]);
 
   const resetViewport = () => {
     mapRef.current?.flyTo({ center: BENGALURU_CENTER, zoom: 11.2, duration: 700 });
@@ -448,7 +758,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
     const lines = buildLinesGeoJson(lineFilter).features;
     const stations = buildStationsGeoJson(lineFilter).features;
     const trains = buildTrainGeoJson(lineFilter, tickNow).features;
-    let minLon = 77.45, maxLon = 77.78, minLat = 12.80, maxLat = 13.09;
+    const minLon = 77.45, maxLon = 77.78, minLat = 12.80, maxLat = 13.09;
     const project = ([lon, lat]) => [
       ((lon - minLon) / (maxLon - minLon)) * 800,
       600 - ((lat - minLat) / (maxLat - minLat)) * 600,
@@ -502,7 +812,10 @@ export default function LiveMetroMap({ onSelectStationByName }) {
       {/* Interactive Map Container */}
       <div className="relative w-full h-[58vh] min-h-[380px] sm:h-[620px] rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-950">
         {!mapError ? (
-          <div ref={mapContainerRef} className="w-full h-full" />
+          <>
+            <div ref={mapContainerRef} className="w-full h-full" />
+            <canvas ref={labelCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />
+          </>
         ) : svgFallbackData && (
           <svg viewBox="0 0 800 600" className="w-full h-full select-none" preserveAspectRatio="xMidYMid meet">
             {svgFallbackData.lines.map((f, idx) => {
@@ -523,30 +836,126 @@ export default function LiveMetroMap({ onSelectStationByName }) {
             })}
             {svgFallbackData.stations.map((st) => {
               const [cx, cy] = svgFallbackData.project(st.geometry.coordinates);
+              const isXfer = st.properties.isInterchange === 1;
+              const shortName = st.properties.name
+                .replace('Nadaprabhu Kempegowda Station, ', '')
+                .replace('Rashtreeya Vidyalaya Road', 'RV Road');
               return (
-                <circle
+                <g
                   key={`${st.properties.lineKey}-${st.properties.id}`}
-                  cx={cx}
-                  cy={cy}
-                  r={4.5}
-                  fill={isDark ? '#09090b' : '#ffffff'}
-                  stroke={st.properties.color}
-                  strokeWidth={2}
                   className="cursor-pointer"
-                  onClick={() => setSelectedStation({ ...st.properties })}
-                />
+                  onClick={() => {
+                    setSelectedTrain(null);
+                    setSelectedStation({ ...st.properties });
+                  }}
+                >
+                  {isXfer ? (
+                    <>
+                      <path
+                        d={`M ${cx} ${cy - 7} A 7 7 0 0 0 ${cx} ${cy + 7} Z`}
+                        fill={st.properties.color1}
+                      />
+                      <path
+                        d={`M ${cx} ${cy - 7} A 7 7 0 0 1 ${cx} ${cy + 7} Z`}
+                        fill={st.properties.color2}
+                      />
+                      <circle cx={cx} cy={cy} r={3} fill={isDark ? '#09090b' : '#ffffff'} />
+                    </>
+                  ) : (
+                    <circle
+                      cx={cx}
+                      cy={cy}
+                      r={4}
+                      fill={isDark ? '#09090b' : '#ffffff'}
+                      stroke={st.properties.color}
+                      strokeWidth={2}
+                    />
+                  )}
+                  {(isXfer || st.properties.idx % 3 === 0) && (
+                    <text
+                      x={cx + 8}
+                      y={cy + 3}
+                      fontSize={isXfer ? 10 : 8}
+                      fontWeight={isXfer ? 800 : 600}
+                      fill={isDark ? '#e2e8f0' : '#1e293b'}
+                      stroke={isDark ? '#09090b' : '#ffffff'}
+                      strokeWidth={2.5}
+                      paintOrder="stroke"
+                    >
+                      {shortName}
+                    </text>
+                  )}
+                </g>
               );
             })}
             {svgFallbackData.trains.map((tr) => {
               const [cx, cy] = svgFallbackData.project(tr.geometry.coordinates);
               return (
-                <g key={tr.properties.id}>
-                  <circle cx={cx} cy={cy} r={10} fill={tr.properties.color} fillOpacity={0.28} />
-                  <circle cx={cx} cy={cy} r={5.5} fill={tr.properties.color} stroke="#ffffff" strokeWidth={1.8} />
+                <g
+                  key={tr.properties.id}
+                  transform={`translate(${cx}, ${cy}) rotate(${tr.properties.bearing || 0})`}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSelectedStation(null);
+                    setSelectedTrain({ ...tr.properties });
+                  }}
+                >
+                  <rect x={-5.5} y={-9.5} width={11} height={19} rx={3.5} fill="#f8fafc" stroke="#0f172a" strokeWidth={1.2} />
+                  <rect x={-3.5} y={-5} width={7} height={10} rx={1.5} fill={tr.properties.color} />
+                  <rect x={-3.5} y={-8} width={7} height={2.5} rx={1} fill="#0f172a" />
                 </g>
               );
             })}
           </svg>
+        )}
+
+        {/* Selected Train Speed & Telemetry Popover Card */}
+        {liveSelectedTrain && (
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-4 sm:left-4 sm:right-auto sm:w-88 z-20 p-3.5 sm:p-4 rounded-2xl bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xl border border-gray-200 dark:border-neutral-800 shadow-2xl space-y-2.5">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span
+                    className="px-2 py-0.5 rounded text-[10px] font-black uppercase text-white"
+                    style={{ background: liveSelectedTrain.color }}
+                  >
+                    <TrainFront className="w-3 h-3 inline mr-1 -mt-0.5" />
+                    {liveSelectedTrain.lineKey} Line Train
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[10px] font-black tabular-nums">
+                    <Gauge className="w-3 h-3 inline mr-1 -mt-0.5" />
+                    {liveSelectedTrain.speedKmh > 0 ? `${liveSelectedTrain.speedKmh} km/h` : 'Stopped (0 km/h)'}
+                  </span>
+                </div>
+                <h4 className="font-heading font-extrabold text-sm sm:text-base text-gray-900 dark:text-white truncate">
+                  Towards {liveSelectedTrain.terminalName}
+                </h4>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedTrain(null)}
+                className="p-1.5 rounded-full bg-gray-100 dark:bg-neutral-900 text-gray-500 hover:text-gray-900 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs space-y-1">
+              {liveSelectedTrain.isDwelling ? (
+                <div className="font-bold text-gray-800 dark:text-gray-200">
+                  Doors open at <span className="text-emerald-500">{liveSelectedTrain.currentStation}</span>
+                </div>
+              ) : (
+                <div className="font-bold text-gray-800 dark:text-gray-200">
+                  {liveSelectedTrain.currentStation} → <span className="text-emerald-500">{liveSelectedTrain.nextStation}</span>
+                </div>
+              )}
+              <div className="text-[11px] text-gray-500 dark:text-gray-400 tabular-nums">
+                {liveSelectedTrain.isDwelling
+                  ? 'Departing shortly'
+                  : `Reaching next stop in ~${liveSelectedTrain.secToNextStation}s · ${liveSelectedTrain.speedKmh} km/h`}
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Selected Station Popover Card */}
@@ -554,10 +963,12 @@ export default function LiveMetroMap({ onSelectStationByName }) {
           <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-4 sm:left-4 sm:right-auto sm:w-96 max-h-[62%] overflow-y-auto z-20 p-3.5 sm:p-4 rounded-2xl bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xl border border-gray-200 dark:border-neutral-800 shadow-2xl space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black capitalize">
-                    {selectedStationDetails.lineKey} Line
-                  </span>
+                <div className="flex items-center flex-wrap gap-1.5 mb-1">
+                  {(selectedStationDetails.servedLines ? selectedStationDetails.servedLines.split(',') : [selectedStationDetails.lineKey]).map((lk) => (
+                    <span key={lk} className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black capitalize">
+                      {lk} Line
+                    </span>
+                  ))}
                   <span
                     className="px-2 py-0.5 rounded text-[10px] font-extrabold text-white"
                     style={{ background: selectedStationDetails.crowd.hex }}
@@ -635,11 +1046,11 @@ export default function LiveMetroMap({ onSelectStationByName }) {
           </div>
         )}
 
-        {/* Tap Station Hint Pill */}
-        {!selectedStationDetails && (
+        {/* Tap Station or Train Hint Pill */}
+        {!selectedStationDetails && !liveSelectedTrain && (
           <div className="absolute bottom-3 left-3 z-10 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-md border border-gray-200 dark:border-neutral-800 text-[11px] font-semibold text-gray-700 dark:text-gray-300 shadow-sm pointer-events-none flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Tap any station for next train ETA & crowd level ({dayType} timetable)</span>
+            <span>Tap any train for live speed or any station for ETA ({dayType})</span>
           </div>
         )}
       </div>
@@ -648,7 +1059,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
       <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-500 dark:text-gray-400 px-1">
         <span className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-emerald-500" />
-          <span>Schedule-based live simulation (not official BMRCL train telemetry){mapError ? ' · Fallback grid active' : ''}</span>
+          <span>Schedule-based live simulation (not official BMRCL train telemetry){mapError ? ' · Interactive SVG mode' : ''}</span>
         </span>
         <span>
           Timetable & Crowd: <a href="https://github.com/Vonter/bmrcl-gtfs" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-500">Vonter (ODbL-1.0)</a> · Map: <a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-500">OpenFreeMap / OSM</a>
