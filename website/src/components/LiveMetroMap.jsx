@@ -205,9 +205,14 @@ function buildStationsGeoJson(lineFilter) {
       const line2 = uniqueLines[1] || line1;
       const xferIcon = isInterchange ? `xfer-${line1.lineKey}-${line2.lineKey}` : '';
 
+      const stationCoords =
+        typeof st.frac === 'number' && lineData.coords?.length > 1
+          ? interpolatePointAndBearing(lineData.coords, st.frac).coords
+          : [st.lon, st.lat];
+
       features.push({
         type: 'Feature',
-        geometry: { type: 'Point', coordinates: [st.lon, st.lat] },
+        geometry: { type: 'Point', coordinates: stationCoords },
         properties: {
           id: st.id,
           name: st.name,
