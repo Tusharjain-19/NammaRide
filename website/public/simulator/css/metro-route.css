@@ -159,13 +159,51 @@
     box-shadow: 0 0 12px rgba(168, 85, 247, 0.4), 0 0 12px rgba(234, 179, 8, 0.4);
 }
 
+/* Dual-Line Interchange Node (Yellow <-> Pink, e.g. Jayadeva Hospital) */
+.station-item.interchange-yellow-pink .station-dot,
+.station-item.interchange-pink-yellow .station-dot {
+    background: conic-gradient(var(--line-yellow) 0deg 180deg, var(--line-pink) 180deg 360deg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(234, 179, 8, 0.4), 0 0 12px rgba(236, 72, 153, 0.4);
+}
+
+/* Dual-Line Interchange Node (Green <-> Pink) */
+.station-item.interchange-green-pink .station-dot,
+.station-item.interchange-pink-green .station-dot {
+    background: conic-gradient(var(--line-green) 0deg 180deg, var(--line-pink) 180deg 360deg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4), 0 0 12px rgba(236, 72, 153, 0.4);
+}
+
+/* Dual-Line Interchange Node (Purple <-> Pink) */
+.station-item.interchange-purple-pink .station-dot,
+.station-item.interchange-pink-purple .station-dot {
+    background: conic-gradient(var(--line-purple) 0deg 180deg, var(--line-pink) 180deg 360deg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.4), 0 0 12px rgba(236, 72, 153, 0.4);
+}
 /* Inner hole for split ring effect */
 .station-item.interchange-purple-green .station-dot::after,
 .station-item.interchange-green-purple .station-dot::after,
 .station-item.interchange-green-yellow .station-dot::after,
 .station-item.interchange-yellow-green .station-dot::after,
 .station-item.interchange-purple-yellow .station-dot::after,
-.station-item.interchange-yellow-purple .station-dot::after {
+.station-item.interchange-yellow-purple .station-dot::after,
+.station-item.interchange-yellow-pink .station-dot::after,
+.station-item.interchange-pink-yellow .station-dot::after,
+.station-item.interchange-green-pink .station-dot::after,
+.station-item.interchange-pink-green .station-dot::after,
+.station-item.interchange-purple-pink .station-dot::after,
+.station-item.interchange-pink-purple .station-dot::after {
     content: '';
     width: 14px;
     height: 14px;
@@ -199,6 +237,23 @@
     border-left-color: var(--line-purple);
 }
 
+.station-item.interchange-yellow-pink .interchange-info,
+.station-item.interchange-green-pink .interchange-info,
+.station-item.interchange-purple-pink .interchange-info {
+    border-left-color: var(--line-pink);
+}
+
+.station-item.interchange-pink-yellow .interchange-info {
+    border-left-color: var(--line-yellow);
+}
+
+.station-item.interchange-pink-green .interchange-info {
+    border-left-color: var(--line-green);
+}
+
+.station-item.interchange-pink-purple .interchange-info {
+    border-left-color: var(--line-purple);
+}
 /* Station Content - text area beside the dot */
 .station-content {
     width: 100%;

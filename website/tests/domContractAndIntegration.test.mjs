@@ -272,3 +272,10 @@ test('getIncomingTrainContext supports legIndex=1 for connecting line at Majesti
     assert.equal(ctx.lineKey, 'purple');
     assert.ok(ctx.upstreamStations.length > 0);
 });
+
+test('metro-route.css styles Yellow-Pink split interchange dot for Jayadeva Hospital', () => {
+    const css = fs.readFileSync(path.resolve('public/simulator/css/metro-route.css'), 'utf8');
+    assert.match(css, /interchange-yellow-pink/);
+    assert.match(css, /interchange-pink-yellow/);
+    assert.match(css, /conic-gradient\(var\(--line-yellow\) 0deg 180deg, var\(--line-pink\) 180deg 360deg\)/);
+});
