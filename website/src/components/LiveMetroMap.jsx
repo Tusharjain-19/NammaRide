@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as maplibregl from 'maplibre-gl';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Radio, Clock, Users, Navigation, RotateCcw, X, Layers, ArrowRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -196,9 +197,13 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
     const MapCtor = maplibregl?.Map || maplibregl?.default?.Map;
     const NavCtrlCtor = maplibregl?.NavigationControl || maplibregl?.default?.NavigationControl;
+    const setWorker = maplibregl?.setWorkerUrl || maplibregl?.default?.setWorkerUrl;
     if (!MapCtor) {
       setMapError(true);
       return;
+    }
+    if (typeof setWorker === 'function' && maplibreWorkerUrl) {
+      try { setWorker(maplibreWorkerUrl); } catch (e) {}
     }
 
     const fallbackBlankStyle = {
@@ -347,11 +352,19 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
     map.on('load', ensureSourcesAndLayers);
     map.on('style.load', ensureSourcesAndLayers);
-    map.on('error', () => {
-      if (!mapReadyRef.current) {
+    map.on('error', (e) => {
+      const msg = String(e?.error?.message || e?.message || '');
+      if (!mapReadyRef.current || /worker/i.test(msg)) {
         setMapError(true);
       }
     });
+
+    // Safety watchdog: if MapLibre worker/WebGL fails silently, switch to interactive SVG map
+    const readyWatchdog = setTimeout(() => {
+      if (!cancelled && !mapReadyRef.current) {
+        setMapError(true);
+      }
+    }, 1800);
 
     // Upgrade to OpenFreeMap street basemap only if reachable within 2.5s
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -369,6 +382,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
 
     return () => {
       cancelled = true;
+      clearTimeout(readyWatchdog);
       if (timer) clearTimeout(timer);
       if (controller) controller.abort();
       if (resizeObs) resizeObs.disconnect();

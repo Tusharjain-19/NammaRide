@@ -482,6 +482,156 @@ export default function BlogPage() {
         { label: 'ಮೆಟ್ರೋ ದರ ಲೆಕ್ಕಾಚಾರ', to: '/fare-calculator' },
         { label: 'ಆಂಡ್ರಾಯ್ಡ್ ಆಪ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ', to: '/download' }
       ]
+    },
+    {
+      id: 11,
+      slug: 'electronic-city-bommasandra-yellow-line-commute-guide-2026',
+      title: 'Electronic City & Bommasandra Yellow Line Commute Guide 2026: Timings, Fares & RV Road Interchange',
+      category: 'guide',
+      categoryLabel: 'Yellow Line Guide',
+      readTime: '6 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/metro_map_2025.png',
+      summary: 'Complete commuter handbook for the 18.82 km Yellow Line connecting RV Road to Electronic City Phase 1, Phase 2, and Bommasandra.',
+      snippet: 'Silk Board junction and Hosur Road bottlenecks once forced IT employees in Electronic City to spend two hours each way in bumper-to-bumper traffic. The Namma Metro Yellow Line transforms South-East Bengaluru with 16 elevated stations linking Rashtreeya Vidyalaya (RV) Road directly to Bommasandra in 34 minutes.',
+      sections: [
+        {
+          heading: '1. Complete Yellow Line Station Sequence & Key Tech Stops',
+          text: 'Starting at Rashtreeya Vidyalaya Road (interchange with the Green Line), the Yellow Line serves Ragigudda, Jayadeva Hospital (interchange with the Pink Line), BTM Layout, Central Silk Board (future interchange with the Blue Airport Line), Bommanahalli, Hongasandra, Kudlu Gate, Singasandra, Hosa Road, Beratena Agrahara, Electronic City Phase 1, Electronic City Phase 2, Huskur Road, Hebbagodi, and Bommasandra.'
+        },
+        {
+          heading: '2. Seamless Interchanges at RV Road & Jayadeva Hospital',
+          text: 'Commuters traveling from Majestic, Jayanagar, or Peenya transfer at RV Road from Green Line to Yellow Line Platform 3 toward Bommasandra. Travelers from Bannerghatta Road and IIM Bangalore switch at Jayadeva Hospital Level 6 down to Level 5. With NammaRide v2.0.0, the app confirms your interchange and tracks the incoming Yellow Line train live.'
+        },
+        {
+          heading: '3. Ticket Fares, Smart Card Savings & Peak Headway',
+          text: 'Single-journey fares from RV Road to Electronic City Phase 1 cost ₹40 (₹38 with a Varshik Smart Card), while end-to-end travel to Bommasandra is ₹45. Morning and evening peak trains run every 5 to 7 minutes from 05:00 AM through 11:05 PM.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Calculate Yellow Line Fare', to: '/fare-calculator' },
+        { label: 'Track Live Yellow Line Trains', to: '/map' }
+      ]
+    },
+    {
+      id: 12,
+      slug: 'bengaluru-airport-blue-line-kr-puram-silk-board-connectivity-guide',
+      title: 'Bengaluru Airport (KIAL) Blue Line & KR Puram Multimodal Connectivity Guide',
+      category: 'news',
+      categoryLabel: 'Airport Metro Guide',
+      readTime: '6 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/logo_app.png',
+      summary: 'Everything travelers need to know about the Outer Ring Road & Kempegowda International Airport (KIAL) Blue Line corridor.',
+      snippet: 'Connecting Central Silk Board through Bellandur, Marathahalli, KR Puram, Nagawara, and Yelahanka straight to Kempegowda International Airport (KIAL), the Blue Line (Phase 2A and 2B) is Bengaluru\'s most anticipated airport rail link.',
+      sections: [
+        {
+          heading: '1. Outer Ring Road (ORR) IT Corridor Relief',
+          text: 'Phase 2A spans 19.75 km along the Outer Ring Road from Central Silk Board to KR Puram, directly serving HSR Layout, Agara, Iblur, Bellandur, Kadubeesanahalli, Marathahalli, ISRO, Doddanekundi, and Mahadevapura—home to Ecospace, Cessna Business Park, and Bagmane Constellation.'
+        },
+        {
+          heading: '2. Direct Airport Express Integration via KR Puram & Nagawara',
+          text: 'Phase 2B extends 38.44 km north from KR Puram through Hennur, Horamavu, Nagawara (Pink Line interchange), Hebbal, Jakkur, and Yelahanka directly into KIAL Terminals 1 and 2 with luggage-friendly coaches and high-speed 80 km/h operation.'
+        },
+        {
+          heading: '3. Plan Feeder & Interchange Routes Today on NammaRide',
+          text: 'While Blue Line commissioning progresses, commuters can already use KR Puram on the Purple Line and Central Silk Board on the Yellow Line with BMTC Vayu Vajra airport shuttle connections listed inside NammaRide Explore.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Explore Airport & ORR Stations', to: '/stations' },
+        { label: 'View Network Map', to: '/map' }
+      ]
+    },
+    {
+      id: 13,
+      slug: 'namma-metro-smart-card-varshik-ncmc-day-pass-savings-guide',
+      title: 'Namma Metro Smart Card vs Varshik vs NCMC vs Day Pass: 2026 Money-Saving Guide',
+      category: 'guide',
+      categoryLabel: 'Fare & Pass Guide',
+      readTime: '6 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/logo_app.png',
+      summary: 'Side-by-side comparison of BMRCL cash tokens, WhatsApp QR, Varshik Smart Card, NCMC RuPay cards, and 1-Day / 3-Day unlimited tourist passes.',
+      snippet: 'Choosing the right BMRCL ticket medium can save a regular Bengaluru commuter ₹400 to ₹900 every month while skipping long ticket counter queues at Majestic, Indiranagar, and Whitefield.',
+      sections: [
+        {
+          heading: '1. Varshik Smart Card & NCMC 5% Automatic Discount',
+          text: 'Both the classic BMRCL Varshik Smart Card (₹50 refundable deposit + ₹50 minimum recharge) and National Common Mobility Card (NCMC) deduct 5% less than token or WhatsApp QR rates on every ride. For a ₹50 daily one-way trip, you save ₹5 per day—over ₹1,300 annually.'
+        },
+        {
+          heading: '2. When the ₹70 1-Day Pass & ₹140 3-Day Pass Beat Smart Cards',
+          text: 'If you plan 3 or more long metro trips in a single day—such as Whitefield to Majestic, Majestic to Banashankari, and back—the ₹70 1-Day Unlimited Pass (plus ₹50 refundable card security) delivers unlimited rides across Purple, Green, Yellow, and Pink lines.'
+        },
+        {
+          heading: '3. Store Your QR Ticket Offline Inside NammaRide',
+          text: 'Using WhatsApp QR or Namma Metro app QR tickets? Upload your QR screenshot inside NammaRide\'s offline Ticket Vault so you can flash it at AFC turnstiles instantly even when cellular signal drops underground.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Compare Token vs Smart Card Fares', to: '/fare-calculator' },
+        { label: 'Open Simulator & QR Vault', to: '/simulator' }
+      ]
+    },
+    {
+      id: 14,
+      slug: 'top-15-it-parks-tech-campuses-connected-by-namma-metro',
+      title: 'Top 15 IT Parks & Tech Campuses Connected by Bengaluru Namma Metro in 2026',
+      category: 'tech',
+      categoryLabel: 'Tech Commute Guide',
+      readTime: '7 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/metro_map_2025.png',
+      summary: 'Nearest metro stations, exit gates, and walking times for ITPL, Bagmane Tech Park, Kalyani Magnum, World Trade Center, and Electronic City.',
+      snippet: 'Bengaluru\'s tech workforce relies on Namma Metro to bypass Outer Ring Road, Whitefield, and Bannerghatta Road gridlock. Here is your station-by-station cheat sheet to major IT parks and corporate campuses.',
+      sections: [
+        {
+          heading: '1. Whitefield & East Bengaluru Tech Hubs (Purple Line)',
+          text: 'Pattandur Agrahara (ITPL) connects directly via skywalk to International Tech Park Bangalore (ITPL), TCS, and Ascendas Park Square. Hoodi and Garudacharpalya serve Brigade Metropolis, SAP Labs, and Phoenix Marketcity, while Baiyappanahalli and Swami Vivekananda Road connect Bagmane Tech Park via short 5-minute feeder shuttles.'
+        },
+        {
+          heading: '2. North-West & Central Business Corridors (Green & Purple Lines)',
+          text: 'Sandal Soap Factory station provides direct access to World Trade Center (WTC) Bengaluru, Orion Mall, and Brigade Gateway. MG Road, Cubbon Park, and Trinity serve central business towers along Kasturba Road, Lavelle Road, and Ulsoor.'
+        },
+        {
+          heading: '3. South Bengaluru & Electronic City Tech Clusters (Yellow & Pink Lines)',
+          text: 'IIM Bangalore station on the Pink Line sits minutes from Kalyani Magnum Tech Park (Oracle, Accenture, VMware) in Bilekahalli, while Electronic City Phase 1 and Phase 2 on the Yellow Line directly serve Infosys, Wipro, Tech Mahindra, and Biocon campuses.'
+        }
+      ],
+      quickLinks: [
+        { label: 'Explore Tech Parks Near Stations', to: '/explore' },
+        { label: 'Plan Your Office Commute', to: '/simulator' }
+      ]
+    },
+    {
+      id: 15,
+      slug: 'bengaluru-metro-smart-card-tunnel-gps-kannada-guide-2026',
+      title: 'ಬೆಂಗಳೂರು ಮೆಟ್ರೋ ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್, ದೈನಂದಿನ ಪಾಸ್ ಮತ್ತು ಆಫ್‌ಲೈನ್ ಸುರಂಗ ನ್ಯಾವಿಗೇಷನ್ ಕನ್ನಡ ಮಾರ್ಗದರ್ಶಿ 2026',
+      category: 'kannada',
+      categoryLabel: 'ಕನ್ನಡ ಪ್ರಯಾಣಿಕರ ಮಾರ್ಗದರ್ಶಿ',
+      readTime: '6 min read',
+      date: 'Nov 26, 2026',
+      image: '/assets/images/logo_app.png',
+      summary: 'ಬೆಂಗಳೂರು ಮೆಟ್ರೋ ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ 5% ರಿಯಾಯಿತಿ, ₹70 1-ದಿನದ ಪಾಸ್, ಯೆಲ್ಲೋ ಲೈನ್ ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ ಪ್ರಯಾಣ ಮತ್ತು ಆಫ್‌ಲೈನ್ ಸುರಂಗ ಜಿಪಿಎಸ್ ಬಳಕೆಯ ಸಂಪೂರ್ಣ ಕನ್ನಡ ಮಾಹಿತಿ.',
+      snippet: 'ಬೆಂಗಳೂರು ನಮ್ಮ ಮೆಟ್ರೋದಲ್ಲಿ ಪ್ರತಿದಿನ ಕಚೇರಿ, ಕಾಲೇಜು ಅಥವಾ ವಿಮಾನ ನಿಲ್ದಾಣಕ್ಕೆ ಪ್ರಯಾಣಿಸುವವರು ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ಮತ್ತು ಆಫ್‌ಲೈನ್ ಜಿಪಿಎಸ್ ಬಳಸುವ ಮೂಲಕ ಸಮಯ ಮತ್ತು ಹಣ ಎರಡನ್ನೂ ಉಳಿಸಬಹುದು.',
+      sections: [
+        {
+          heading: '1. ವರ್ಷಿಕ್ ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ಮತ್ತು ₹70 ದೈನಂದಿನ ಪಾಸ್ ಲಾಭಗಳು',
+          text: 'ಟೋಕನ್ ಅಥವಾ ವಾಟ್ಸಾಪ್ ಕ್ಯೂಆರ್ ಟಿಕೆಟ್‌ಗೆ ಹೋಲಿಸಿದರೆ ಬಿಎಂಆರ್‌ಸಿಎಲ್ ವರ್ಷಿಕ್ ಸ್ಮಾರ್ಟ್ ಕಾರ್ಡ್ ಮತ್ತು ಎನ್‌ಸಿಎಂಸಿ (NCMC) ಕಾರ್ಡ್ ಬಳಸುವವರಿಗೆ ಪ್ರತಿ ಪ್ರಯಾಣದಲ್ಲೂ 5% ನೇರ ರಿಯಾಯಿತಿ ಸಿಗುತ್ತದೆ. ನೀವು ಒಂದೇ ದಿನದಲ್ಲಿ 3 ಕ್ಕೂ ಹೆಚ್ಚು ದೂರದ ಪ್ರಯಾಣ ಮಾಡುವುದಾದರೆ ₹70 ರ 1-ದಿನದ ಅನ್‌ಲಿಮಿಟೆಡ್ ಪಾಸ್ ಅತ್ಯಂತ ಲಾಭದಾಯಕವಾಗಿದೆ.'
+        },
+        {
+          heading: '2. ಮೆಜೆಸ್ಟಿಕ್ ಮತ್ತು ಕಬ್ಬನ್ ಪಾರ್ಕ್ ಸುರಂಗ ಮಾರ್ಗಗಳಲ್ಲಿ ಆಫ್‌ಲೈನ್ ಜಿಪಿಎಸ್',
+          text: 'ನೆಲದಡಿಯ ನಿಲ್ದಾಣಗಳಲ್ಲಿ ಮೊಬೈಲ್ ಇಂಟರ್‌ನೆಟ್ ಸಿಗದಿದ್ದರೂ ನಮ್ಮರೈಡ್ ಆಪ್‌ನ 4-ಹಂತದ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಶ್ ಮತ್ತು ಸ್ಯಾಟಲೈಟ್ ಜಿಪಿಎಸ್ ಎಂಜಿನ್ ನಿಮ್ಮ ನಿಲ್ದಾಣ, ಇಂಟರ್‌ಚೇಂಜ್ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ಮತ್ತು ಗಮ್ಯಸ್ಥಾನವನ್ನು ನಿಖರವಾಗಿ ತೋರಿಸುತ್ತದೆ.'
+        },
+        {
+          heading: '3. ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ, ವೈಟ್‌ಫೀಲ್ಡ್ ಮತ್ತು ಬನ್ನೇರುಘಟ್ಟ ರಸ್ತೆ ಸಂಪರ್ಕ',
+          text: 'ಪರ್ಪಲ್ ಲೈನ್ (ವೈಟ್‌ಫೀಲ್ಡ್ – ಚಲ್ಲಘಟ್ಟ), ಗ್ರೀನ್ ಲೈನ್ (ಮಾದಾವರ – ಸಿಲ್ಕ್ ಇನ್‌ಸ್ಟಿಟ್ಯೂಟ್), ಯೆಲ್ಲೋ ಲೈನ್ (ಆರ್.ವಿ. ರೋಡ್ – ಬೊಮ್ಮಸಂದ್ರ) ಮತ್ತು ಪಿಂಕ್ ಲೈನ್ (ಕಾಳೇನ ಅಗ್ರಹಾರ – ತಾವರೆಕೆರೆ) ಎಲ್ಲಾ ಮಾರ್ಗಗಳ ವೇಳಾಪಟ್ಟಿ ಮತ್ತು ದರವನ್ನು ನಮ್ಮರೈಡ್‌ನಲ್ಲಿ ಕನ್ನಡದಲ್ಲೇ ಪರಿಶೀಲಿಸಿ.'
+        }
+      ],
+      quickLinks: [
+        { label: 'ಮೆಟ್ರೋ ದರ ಲೆಕ್ಕಾಚಾರ', to: '/fare-calculator' },
+        { label: 'ಲೈವ್ ಮೆಟ್ರೋ ನಕ್ಷೆ ನೋಡಿ', to: '/map' }
+      ]
     }
   ];
 
