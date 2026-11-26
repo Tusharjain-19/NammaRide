@@ -111,7 +111,7 @@ export default function MetroMapPage() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-section-gap px-4 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-section-gap px-3 sm:px-6 lg:px-8 max-w-container-max mx-auto w-full relative z-10 flex flex-col overflow-x-hidden">
       <MetaSEO 
         title="Bengaluru Metro Route Map: High Resolution 2026 Interactive Network"
         description="Explore official Bengaluru Namma Metro map covering Purple, Green, Yellow, and Pink line corridors with interchange junctions and touch-friendly zoom."
@@ -228,38 +228,38 @@ export default function MetroMapPage() {
         </div>
 
         {/* MAP CONTAINER & TOOLBAR */}
-        <div className="rounded-3xl p-3 sm:p-6 relative overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-neutral-800 shadow-xl space-y-3">
+        <div className="rounded-3xl p-3 sm:p-6 relative overflow-hidden bg-white dark:bg-black border border-gray-200 dark:border-neutral-800 shadow-xl space-y-3 w-full min-w-0">
           
           {/* Map Mode Toggle + Mobile & Desktop Line Legend Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-gray-100 dark:border-neutral-900">
-            <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-neutral-900 p-1 rounded-xl border border-gray-200 dark:border-neutral-800">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 pb-2 border-b border-gray-100 dark:border-neutral-900 w-full min-w-0">
+            <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-neutral-900 p-1 rounded-xl border border-gray-200 dark:border-neutral-800 w-full lg:w-auto">
               <button
                 type="button"
                 onClick={() => setMapMode('live')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`flex-1 lg:flex-initial justify-center px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
                   mapMode === 'live'
                     ? 'bg-emerald-500 text-white shadow-sm'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                <Radio className="w-3.5 h-3.5" />
+                <Radio className="w-3.5 h-3.5 shrink-0" />
                 <span>Live Track Map</span>
               </button>
               <button
                 type="button"
                 onClick={() => setMapMode('classic')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`flex-1 lg:flex-initial justify-center px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
                   mapMode === 'classic'
                     ? 'bg-emerald-500 text-white shadow-sm'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                <MapIcon className="w-3.5 h-3.5" />
+                <MapIcon className="w-3.5 h-3.5 shrink-0" />
                 <span>Classic Network Map</span>
               </button>
             </div>
 
-            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 custom-scrollbar text-[11px] font-bold">
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 custom-scrollbar text-[11px] font-bold w-full lg:w-auto min-w-0">
               <span className="text-gray-400 text-[10px] uppercase font-mono shrink-0">Lines:</span>
               <span className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500"></span> Purple Line</span>
               <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap shrink-0 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Green Line</span>

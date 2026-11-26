@@ -190,9 +190,16 @@ export default function LiveMetroMap({ onSelectStationByName }) {
     return () => clearInterval(id);
   }, []);
 
-  // Initialize MapLibre once
+  // Initialize MapLibre once with fast local-first style + optional OpenFreeMap enhancement
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
+
+    const MapCtor = maplibregl?.Map || maplibregl?.default?.Map;
+    const NavCtrlCtor = maplibregl?.NavigationControl || maplibregl?.default?.NavigationControl;
+    if (!MapCtor) {
+      setMapError(true);
+      return;
+    }
 
     const fallbackBlankStyle = {
       version: 8,
@@ -206,18 +213,36 @@ export default function LiveMetroMap({ onSelectStationByName }) {
       ],
     };
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/positron',
-      center: BENGALURU_CENTER,
-      zoom: 11.2,
-      minZoom: 9.5,
-      maxZoom: 16.5,
-      attributionControl: false,
-    });
+    let map;
+    let resizeObs = null;
+    let cancelled = false;
 
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    try {
+      map = new MapCtor({
+        container: mapContainerRef.current,
+        style: fallbackBlankStyle,
+        center: BENGALURU_CENTER,
+        zoom: 11.2,
+        minZoom: 9.5,
+        maxZoom: 16.5,
+        attributionControl: false,
+      });
+    } catch (e) {
+      setMapError(true);
+      return;
+    }
+
+    if (NavCtrlCtor) {
+      map.addControl(new NavCtrlCtor({ showCompass: false }), 'top-right');
+    }
     mapRef.current = map;
+
+    if (typeof ResizeObserver !== 'undefined' && mapContainerRef.current) {
+      resizeObs = new ResizeObserver(() => {
+        try { map.resize(); } catch (e) {}
+      });
+      resizeObs.observe(mapContainerRef.current);
+    }
 
     const ensureSourcesAndLayers = () => {
       applyDarkBaseStyling(map, isDarkRef.current);
@@ -273,7 +298,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
         type: 'circle',
         source: 'nr-stations',
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 3.2, 14, 6],
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 3.5, 14, 6.5],
           'circle-color': isDarkRef.current ? '#09090b' : '#ffffff',
           'circle-stroke-color': ['get', 'color'],
           'circle-stroke-width': 2.2,
@@ -325,13 +350,28 @@ export default function LiveMetroMap({ onSelectStationByName }) {
     map.on('error', () => {
       if (!mapReadyRef.current) {
         setMapError(true);
-        try {
-          map.setStyle(fallbackBlankStyle);
-        } catch (e) {}
       }
     });
 
+    // Upgrade to OpenFreeMap street basemap only if reachable within 2.5s
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), 2500) : null;
+    fetch('https://tiles.openfreemap.org/styles/positron', { signal: controller?.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((styleJson) => {
+        if (cancelled || !styleJson || !mapRef.current) return;
+        map.setStyle(styleJson);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (timer) clearTimeout(timer);
+      });
+
     return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+      if (controller) controller.abort();
+      if (resizeObs) resizeObs.disconnect();
       mapReadyRef.current = false;
       map.remove();
       mapRef.current = null;
@@ -389,11 +429,24 @@ export default function LiveMetroMap({ onSelectStationByName }) {
     mapRef.current?.flyTo({ center: BENGALURU_CENTER, zoom: 11.2, duration: 700 });
   };
 
+  const svgFallbackData = useMemo(() => {
+    if (!mapError) return null;
+    const lines = buildLinesGeoJson(lineFilter).features;
+    const stations = buildStationsGeoJson(lineFilter).features;
+    const trains = buildTrainGeoJson(lineFilter, tickNow).features;
+    let minLon = 77.45, maxLon = 77.78, minLat = 12.80, maxLat = 13.09;
+    const project = ([lon, lat]) => [
+      ((lon - minLon) / (maxLon - minLon)) * 800,
+      600 - ((lat - minLat) / (maxLat - minLat)) * 600,
+    ];
+    return { lines, stations, trains, project };
+  }, [mapError, lineFilter, tickNow]);
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full min-w-0">
       {/* Top Control & Telemetry Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-1">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pb-1 w-full min-w-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full min-w-0">
           {LINE_CONFIG.map((l) => {
             const active = lineFilter === l.key;
             const count = l.key === 'all' ? activeCounts.total : activeCounts[l.key];
@@ -402,7 +455,7 @@ export default function LiveMetroMap({ onSelectStationByName }) {
                 key={l.key}
                 type="button"
                 onClick={() => setLineFilter(l.key)}
-                className={`px-3 py-1.5 rounded-full text-[11px] font-bold flex items-center gap-1.5 border transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full text-[11px] font-bold flex items-center gap-1.5 border transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                   active
                     ? 'bg-gray-900 dark:bg-white text-white dark:text-black border-transparent shadow-sm'
                     : 'bg-gray-100 dark:bg-neutral-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-neutral-800 hover:border-emerald-500/40'
@@ -416,15 +469,15 @@ export default function LiveMetroMap({ onSelectStationByName }) {
           })}
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] font-bold">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
-            <Radio className="w-3.5 h-3.5 animate-pulse" />
+        <div className="flex items-center justify-between md:justify-end gap-2 text-[11px] font-bold shrink-0">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 whitespace-nowrap">
+            <Radio className="w-3.5 h-3.5 animate-pulse shrink-0" />
             <span>{activeCounts.total} Active · {String(istParts.hour).padStart(2, '0')}:{String(istParts.minute).padStart(2, '0')} IST</span>
           </span>
           <button
             type="button"
             onClick={resetViewport}
-            className="p-2 rounded-xl bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 hover:text-emerald-500 cursor-pointer"
+            className="p-2 rounded-xl bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 hover:text-emerald-500 cursor-pointer shrink-0"
             title="Reset Map View"
           >
             <RotateCcw className="w-4 h-4" />
@@ -433,12 +486,58 @@ export default function LiveMetroMap({ onSelectStationByName }) {
       </div>
 
       {/* Interactive Map Container */}
-      <div className="relative w-full h-[65vh] sm:h-[620px] rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-950">
-        <div ref={mapContainerRef} className="w-full h-full" />
+      <div className="relative w-full h-[58vh] min-h-[380px] sm:h-[620px] rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-950">
+        {!mapError ? (
+          <div ref={mapContainerRef} className="w-full h-full" />
+        ) : svgFallbackData && (
+          <svg viewBox="0 0 800 600" className="w-full h-full select-none" preserveAspectRatio="xMidYMid meet">
+            {svgFallbackData.lines.map((f, idx) => {
+              const pts = f.geometry.coordinates.map(svgFallbackData.project).map((p) => p.join(',')).join(' ');
+              return (
+                <polyline
+                  key={idx}
+                  points={pts}
+                  fill="none"
+                  stroke={f.properties.color}
+                  strokeWidth={f.properties.future ? 3 : 5}
+                  strokeOpacity={f.properties.future ? 0.45 : 0.9}
+                  strokeDasharray={f.properties.future ? '6 6' : undefined}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              );
+            })}
+            {svgFallbackData.stations.map((st) => {
+              const [cx, cy] = svgFallbackData.project(st.geometry.coordinates);
+              return (
+                <circle
+                  key={`${st.properties.lineKey}-${st.properties.id}`}
+                  cx={cx}
+                  cy={cy}
+                  r={4.5}
+                  fill={isDark ? '#09090b' : '#ffffff'}
+                  stroke={st.properties.color}
+                  strokeWidth={2}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedStation({ ...st.properties })}
+                />
+              );
+            })}
+            {svgFallbackData.trains.map((tr) => {
+              const [cx, cy] = svgFallbackData.project(tr.geometry.coordinates);
+              return (
+                <g key={tr.properties.id}>
+                  <circle cx={cx} cy={cy} r={10} fill={tr.properties.color} fillOpacity={0.28} />
+                  <circle cx={cx} cy={cy} r={5.5} fill={tr.properties.color} stroke="#ffffff" strokeWidth={1.8} />
+                </g>
+              );
+            })}
+          </svg>
+        )}
 
         {/* Selected Station Popover Card */}
         {selectedStationDetails && (
-          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-96 z-20 p-4 rounded-2xl bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xl border border-gray-200 dark:border-neutral-800 shadow-2xl space-y-3">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-4 sm:left-4 sm:right-auto sm:w-96 max-h-[62%] overflow-y-auto z-20 p-3.5 sm:p-4 rounded-2xl bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xl border border-gray-200 dark:border-neutral-800 shadow-2xl space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
