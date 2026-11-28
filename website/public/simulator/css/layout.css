@@ -79,6 +79,17 @@
 
 /* Installed Standalone PWA (fills screen cleanly on mobile, tablet, and laptop) */
 @media (display-mode: standalone) {
+    html, body {
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .app-header, .bottom-nav, button, .nav-item {
+        -webkit-touch-callout: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
     .app-container {
         max-width: 100%;
         width: 100%;

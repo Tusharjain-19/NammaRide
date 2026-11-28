@@ -129,6 +129,10 @@ test('Web/PWA notifications use ServiceWorker showNotification + notificationcli
     assert.match(notifSrc, /showNotification/);
     assert.match(notifSrc, /scheduleCustomAlarm/);
 
+    const installPromptSrc = fs.readFileSync(path.resolve('public/simulator/js/pwa/installPrompt.js'), 'utf8');
+    assert.match(installPromptSrc, /navigator\.share\(/);
+    assert.match(installPromptSrc, /id="nr-pwa-share-now-btn"/);
+
     const { notificationController } = await import('../public/simulator/js/logic/notificationEngine.js');
     notificationController.resetAll();
     const scheduled = await notificationController.scheduleCustomAlarm({

@@ -134,6 +134,26 @@ export function initPwaInstallExperience({ isBusy } = {}) {
                 ? 'in Edge\'s bottom menu'
                 : 'at the bottom of Safari';
 
+        const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+        const getShareAppUrl = () => {
+            try {
+                if (window.location.origin && window.location.origin.startsWith('http')) {
+                    return `${window.location.origin}/app/`;
+                }
+            } catch (e) {}
+            return 'https://www.nammaride.site/app/';
+        };
+        const triggerNativeIosShare = () => {
+            if (!canNativeShare) return;
+            try {
+                // Pass only title + url (omitting text preserves "Add to Home Screen" in iOS Share Sheet)
+                Promise.resolve(navigator.share({
+                    title: 'NammaRide',
+                    url: getShareAppUrl(),
+                })).catch(() => {});
+            } catch (e) {}
+        };
+
         const promptBodyHtml = `
             <div class="flex items-start gap-3.5">
                 <img src="assets/icons/icon-192x192.png" alt="NammaRide" class="w-12 h-12 rounded-2xl shadow-md border border-white/15 shrink-0 object-cover">
@@ -205,8 +225,14 @@ export function initPwaInstallExperience({ isBusy } = {}) {
                     </div>
                 </div>
             </div>
-            <div class="mt-4">
-                <button type="button" id="nr-pwa-guide-done-btn" class="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all">
+            <div class="mt-4 flex flex-col gap-2">
+                ${canNativeShare ? `
+                    <button type="button" id="nr-pwa-share-now-btn" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-emerald-500 hover:from-purple-500 hover:to-emerald-400 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        ${getIosShareSvg().replace('text-sky-500', 'text-white')}
+                        <span>Open iOS Share Menu</span>
+                    </button>
+                ` : ''}
+                <button type="button" id="nr-pwa-guide-done-btn" class="w-full py-2.5 px-4 rounded-2xl ${canNativeShare ? 'bg-card-subtle hover:bg-card-hover text-primary border border-subtle' : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20'} font-extrabold text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
                     Got it
                 </button>
             </div>
@@ -240,6 +266,7 @@ export function initPwaInstallExperience({ isBusy } = {}) {
         const bindGuideHandlers = () => {
             document.getElementById('nr-pwa-close-guide-x')?.addEventListener('click', () => closeSheet(true));
             document.getElementById('nr-pwa-guide-done-btn')?.addEventListener('click', () => closeSheet(true));
+            document.getElementById('nr-pwa-share-now-btn')?.addEventListener('click', () => triggerNativeIosShare());
         };
 
         if (startInGuide) {
@@ -255,6 +282,7 @@ export function initPwaInstallExperience({ isBusy } = {}) {
                     body.innerHTML = guideBodyHtml;
                     bindGuideHandlers();
                 }
+                triggerNativeIosShare();
             });
         }
     };

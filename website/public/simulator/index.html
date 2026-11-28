@@ -39,6 +39,7 @@
                     doc.classList.remove('light', 'light-mode');
                     doc.classList.add('dark');
                     doc.setAttribute('data-theme', 'dark');
+                    doc.style.backgroundColor = '#06090F';
                     if (body) {
                         body.classList.remove('light-mode');
                         body.classList.add('dark-mode');
@@ -47,6 +48,7 @@
                     doc.classList.remove('dark');
                     doc.classList.add('light', 'light-mode');
                     doc.setAttribute('data-theme', 'light');
+                    doc.style.backgroundColor = '#E8EDF5';
                     if (body) {
                         body.classList.add('light-mode');
                         body.classList.remove('dark-mode');
