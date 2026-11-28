@@ -77,6 +77,20 @@
     }
 }
 
+/* Installed Standalone PWA (fills screen cleanly on mobile, tablet, and laptop) */
+@media (display-mode: standalone) {
+    .app-container {
+        max-width: 100%;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+}
+
 /* Ensure body centers the app seamlessly on larger screens */
 body {
     display: flex;

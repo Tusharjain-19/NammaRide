@@ -213,8 +213,8 @@ export function initPwaInstallExperience({ isBusy } = {}) {
         `;
 
         sheetRoot.innerHTML = `
-            <div class="fixed inset-0 z-[180] flex items-end sm:items-center justify-center p-3 sm:p-5 bg-black/55 backdrop-blur-sm transition-opacity duration-200" style="padding-bottom: max(0.85rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));">
-                <div data-pwa-card class="w-full max-w-md rounded-3xl bg-card border border-subtle shadow-2xl p-4 sm:p-5 relative transform translate-y-8 opacity-0 transition-all duration-300">
+            <div class="fixed inset-0 z-[180] flex items-end sm:items-center justify-center p-2.5 sm:p-5 bg-black/55 backdrop-blur-sm transition-opacity duration-200" style="padding-bottom: max(0.75rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));">
+                <div data-pwa-card class="w-full max-w-md max-h-[88dvh] overflow-y-auto custom-scrollbar rounded-3xl bg-card border border-subtle shadow-2xl p-3.5 sm:p-5 relative transform translate-y-8 opacity-0 transition-all duration-300">
                     ${startInGuide ? '' : `<button type="button" id="nr-pwa-close-x" class="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-card-subtle hover:bg-card-hover border border-subtle text-secondary hover:text-primary flex items-center justify-center" aria-label="Dismiss"><span class="text-sm font-bold leading-none">&times;</span></button>`}
                     <div id="nr-pwa-sheet-body">${startInGuide ? guideBodyHtml : promptBodyHtml}</div>
                 </div>

@@ -104,11 +104,14 @@ test('Platform detection distinguishes iOS Safari, iOS Chrome, Android (Play Sto
     assert.equal(desktopChrome.isAndroid, false);
 });
 
-test('Android web UX enforces Google Play only (never PWA install prompt)', () => {
+test('Android web UX enforces Google Play only and website banner is responsive across mobile, tablet, and laptop', () => {
     const installPromptSrc = fs.readFileSync(path.resolve('public/simulator/js/pwa/installPrompt.js'), 'utf8');
     const mobileBannerSrc = fs.readFileSync(path.resolve('src/components/MobileAppBanner.jsx'), 'utf8');
     assert.match(installPromptSrc, /play\.google\.com\/store\/apps\/details\?id=site\.nammaride\.app/);
     assert.match(installPromptSrc, /if \(plat\.isAndroid\)[\s\S]*PLAY_STORE_URL[\s\S]*return;/);
-    assert.match(mobileBannerSrc, /if \(!platform\.isAndroid\)[\s\S]*return null/);
+    assert.match(mobileBannerSrc, /if \(platform\.isAndroid\)/);
     assert.match(mobileBannerSrc, /if \(platform\.isIOS\)/);
+    assert.doesNotMatch(mobileBannerSrc, /\bmd:hidden\b/);
+    assert.match(mobileBannerSrc, /sm:max-w-md/);
+    assert.match(mobileBannerSrc, /lg:right-5/);
 });
