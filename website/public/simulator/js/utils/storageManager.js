@@ -8,9 +8,15 @@ const PERMANENT_KEYS = new Set([
     'nammaride_fav_routes',
     'nammaride_fav_stations',
     'nammaride_theme',
+    'nammaride_theme_manual',
     'nammaride_lang',
+    'appLang',
     'nammaride_app_theme',
-    'appTheme'
+    'appTheme',
+    'nammaride_speed_hud',
+    'nammaride_alert_sound',
+    'nammaride_active_ticket',
+    'nammaride_pwa_install_dismissed_at'
 ]);
 
 const CACHE_PREFIX = 'nammaride_cache_';

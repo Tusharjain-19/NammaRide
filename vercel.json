@@ -3,7 +3,30 @@
   "buildCommand": "cd website && npm install && npm run build",
   "outputDirectory": "website/dist",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/app",
+      "destination": "/app/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/app/",
+      "destination": "/simulator/index.html"
+    },
+    {
+      "source": "/app/((?:css|js|assets|data)/.*)",
+      "destination": "/simulator/$1"
+    },
+    {
+      "source": "/app/(manifest\\.webmanifest|manifest\\.json|sw\\.js|favicon\\.svg|404\\.html|dropdown\\.js)",
+      "destination": "/simulator/$1"
+    },
+    {
+      "source": "/app/(.*)",
+      "destination": "/simulator/index.html"
+    },
     {
       "source": "/simulator",
       "destination": "/simulator/index.html"
@@ -17,11 +40,23 @@
       "destination": "/simulator/$1"
     },
     {
-      "source": "/((?!simulator).*)",
+      "source": "/((?!app|simulator).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/(app|simulator)/manifest.webmanifest",
+      "headers": [
+        { "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/(app|simulator)/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
     {
       "source": "/simulator/(.*)",
       "headers": [

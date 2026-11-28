@@ -11,7 +11,7 @@ import { translations, stationTranslations, lineNameMap } from '../data/stations
 export const CONFIG = { INTERCHANGE_TIME_MINUTES: 5, AVERAGE_SPEED_KMPH: 35 };
 
 // --- Language State ---
-let currentLang = localStorage.getItem('appLang') || 'en';
+let currentLang = localStorage.getItem('appLang') || localStorage.getItem('nammaride_lang') || 'en';
 if (!['en', 'hi', 'kn'].includes(currentLang)) {
     currentLang = 'en';
 }
@@ -23,7 +23,10 @@ export function getCurrentLang() {
 export function setCurrentLang(lang) {
     if (['en', 'hi', 'kn'].includes(lang)) {
         currentLang = lang;
-        localStorage.setItem('appLang', lang);
+        try {
+            localStorage.setItem('appLang', lang);
+            localStorage.setItem('nammaride_lang', lang);
+        } catch (e) {}
     }
 }
 

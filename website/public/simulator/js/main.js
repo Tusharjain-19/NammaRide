@@ -55,6 +55,7 @@ import {
     closePassAdvisorModal,
     initTicketModule,
 } from './ui/ticketModals.js';
+import { initPwaInstallExperience } from './pwa/installPrompt.js';
 window.matchStation = matchStation;
 window.scoreStation = scoreStation;
 window.StorageManager = StorageManager;
@@ -305,35 +306,137 @@ window.T = T;
 window.CONFIG = CONFIG;
 window.navigateToView = navigateToView;
 
+function openExternalUrl(url) {
+    if (!url) return;
+    try {
+        const win = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!win) {
+            window.location.href = url;
+        }
+    } catch (e) {
+        window.location.href = url;
+    }
+}
+window.openExternalUrl = openExternalUrl;
+
+function shouldSyncAppHistory() {
+    try {
+        if (window.self !== window.top) return false;
+        if (window.Capacitor?.isNativePlatform?.()) return false;
+        const p = window.location.pathname || '';
+        return p.startsWith('/app') || p.startsWith('/simulator');
+    } catch (e) {
+        return false;
+    }
+}
+
+function getAppBasePath() {
+    const p = window.location.pathname || '';
+    if (p.startsWith('/app')) return '/app/';
+    if (p.startsWith('/simulator')) return '/simulator/';
+    return '/';
+}
+
+function pushAppRouteUrl(subPath = '', queryObj = null, replace = false) {
+    if (!shouldSyncAppHistory()) return;
+    try {
+        const base = getAppBasePath();
+        const cleanSub = subPath === 'plan' ? '' : subPath;
+        const params = new URLSearchParams();
+        if (queryObj) {
+            Object.entries(queryObj).forEach(([k, v]) => {
+                if (v !== undefined && v !== null && v !== '') params.set(k, String(v));
+            });
+        }
+        const qs = params.toString();
+        const nextUrl = `${base}${cleanSub}${qs ? `?${qs}` : ''}`;
+        const currentUrl = window.location.pathname + window.location.search;
+        if (nextUrl === currentUrl) return;
+        if (replace) {
+            window.history.replaceState({ view: subPath || 'plan', ...(queryObj || {}) }, '', nextUrl);
+        } else {
+            window.history.pushState({ view: subPath || 'plan', ...(queryObj || {}) }, '', nextUrl);
+        }
+    } catch (e) {}
+}
+
+function resolveRouteFromLocation() {
+    const pathname = window.location.pathname || '/';
+    const params = new URLSearchParams(window.location.search || '');
+    const viewParam = params.get('view');
+    const hash = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+
+    const validViews = new Set(['plan', 'stations', 'timings', 'explore', 'safety']);
+
+    let routePath = '';
+    if (pathname.startsWith('/app/')) routePath = pathname.slice('/app/'.length);
+    else if (pathname === '/app') routePath = '';
+    else if (pathname.startsWith('/simulator/')) routePath = pathname.slice('/simulator/'.length);
+    else if (pathname === '/simulator') routePath = '';
+
+    routePath = routePath.replace(/\/+$/, '').toLowerCase();
+
+    let view = 'plan';
+    if (routePath && routePath !== 'index.html') {
+        view = validViews.has(routePath) ? routePath : 'not-found';
+    } else if (viewParam) {
+        view = validViews.has(viewParam.toLowerCase()) ? viewParam.toLowerCase() : 'not-found';
+    } else if (hash && validViews.has(hash)) {
+        view = hash;
+    }
+
+    return {
+        view,
+        stationId: params.get('id') || null,
+        exploreStation: params.get('station') || null,
+        placeId: params.get('place') || null,
+    };
+}
+
 // --- Navigation Helpers for Sections ---
-window.showStationDetail = function(stationId) {
+window.showStationDetail = function(stationId, options = {}) {
     const container = document.getElementById('stations-view');
     renderStationDetail(container, stationId);
     container.scrollTop = 0;
+    if (!options.skipHistory) {
+        pushAppRouteUrl('stations', { id: stationId });
+    }
 };
 
-window.showStationsList = function() {
+window.showStationsList = function(options = {}) {
     const container = document.getElementById('stations-view');
     renderStationsList(container);
     container.scrollTop = 0;
+    if (!options.skipHistory) {
+        pushAppRouteUrl('stations');
+    }
 };
 
-window.showExplore = function() {
+window.showExplore = function(options = {}) {
     const container = document.getElementById('explore-view');
     renderExplore(container);
     container.scrollTop = 0;
+    if (!options.skipHistory) {
+        pushAppRouteUrl('explore');
+    }
 };
 
-window.showExploreStation = function(stationName) {
+window.showExploreStation = function(stationName, options = {}) {
     const container = document.getElementById('explore-view');
     renderExploreStation(container, stationName);
     container.scrollTop = 0;
+    if (!options.skipHistory) {
+        pushAppRouteUrl('explore', { station: stationName });
+    }
 };
 
-window.showPlaceDetail = function(stationName, placeId) {
+window.showPlaceDetail = function(stationName, placeId, options = {}) {
     const container = document.getElementById('explore-view');
     renderPlaceDetail(container, stationName, placeId);
     container.scrollTop = 0;
+    if (!options.skipHistory) {
+        pushAppRouteUrl('explore', { station: stationName, place: placeId });
+    }
 };
 
 // --- Core Logic ---
@@ -1172,7 +1275,7 @@ window.scrollToRouteLine = function(partIndex) {
                 const waMsg = `Hi, I would like to book a ticket from ${startClean} to ${endClean} for ${passengerCount} person(s).`;
                 const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`;
                 
-                window.open(waUrl, '_blank');
+                openExternalUrl(waUrl);
             });
         }
     };
@@ -1431,7 +1534,7 @@ function initBottomNav() {
     }, { passive: true });
 }
 
-function navigateToView(view) {
+function navigateToView(view, options = {}) {
     if (!view) return;
 
     const targetViewId = view === 'plan' ? 'planner-view' : `${view}-view`;
@@ -1447,6 +1550,10 @@ function navigateToView(view) {
     }
 
     activeView = view;
+
+    if (!options.skipHistory && view !== 'not-found') {
+        pushAppRouteUrl(view, null, !!options.replaceHistory);
+    }
 
     // Send view change notification to React parent page
     try {
@@ -2742,7 +2849,7 @@ function initializeApp() {
                                 document.getElementById('nearest-modal-cancel').onclick = closeModal;
                                 document.getElementById('nearest-modal-maps').onclick = () => {
                                     const loc = nearest.location || nearest;
-                                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lon}`, '_blank');
+                                    openExternalUrl(`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lon}`);
                                     closeModal();
                                 };
                                 if (window.lucide) window.lucide.createIcons();
@@ -2819,6 +2926,24 @@ function initializeApp() {
     // Restore state
     const savedJourneyJSON = sessionStorage.getItem('activeJourney');
     const savedSimStateJSON = sessionStorage.getItem('simulationState');
+    const applyResolvedRoute = (route, historyOpts = { skipHistory: true }) => {
+        if (route.view === 'stations') {
+            navigateToView('stations', historyOpts);
+            if (route.stationId) window.showStationDetail(route.stationId, historyOpts);
+        } else if (route.view === 'explore') {
+            navigateToView('explore', historyOpts);
+            if (route.exploreStation && route.placeId) {
+                window.showPlaceDetail(route.exploreStation, route.placeId, historyOpts);
+            } else if (route.exploreStation) {
+                window.showExploreStation(route.exploreStation, historyOpts);
+            }
+        } else if (route.view === 'timings' || route.view === 'safety' || route.view === 'not-found') {
+            navigateToView(route.view, historyOpts);
+        } else {
+            navigateToView('plan', historyOpts);
+        }
+    };
+
     if (savedJourneyJSON && savedSimStateJSON) {
         try {
             const savedJourney = JSON.parse(savedJourneyJSON);
@@ -2829,9 +2954,19 @@ function initializeApp() {
             startDropdown.selectById(startId);
             endDropdown.selectById(endId);
             startSimulation(savedJourney, savedSimState.useGPS || savedSimState.useLiveLocation, savedSimState.startTime, savedSimState);
-        } catch (e) { console.error("Restore failed", e); }
+        } catch (e) {
+            console.error("Restore failed", e);
+            applyResolvedRoute(resolveRouteFromLocation(), { skipHistory: true });
+        }
     } else {
-        switchView('planner-view');
+        applyResolvedRoute(resolveRouteFromLocation(), { skipHistory: true });
+    }
+
+    if (shouldSyncAppHistory()) {
+        window.addEventListener('popstate', () => {
+            if (simulationState.isActive) return;
+            applyResolvedRoute(resolveRouteFromLocation(), { skipHistory: true });
+        });
     }
 
     // --- Optimized Prevent Pull-to-Refresh JS Fix ---
@@ -2879,6 +3014,21 @@ function initializeApp() {
         resetPlannerToHome();
     });
     if (window.lucide) window.lucide.createIcons();
+
+    initPwaInstallExperience({
+        isBusy: () => {
+            if (simulationState.isActive) return true;
+            const startVal = document.getElementById('start-station')?.value;
+            const endVal = document.getElementById('end-station')?.value;
+            if (startVal && endVal) return true;
+            const blockingIds = ['station-gates-modal', 'pass-advisor-modal'];
+            if (blockingIds.some(id => {
+                const el = document.getElementById(id);
+                return el && !el.classList.contains('hidden');
+            })) return true;
+            return false;
+        },
+    });
 
     // Signal splash controller that app DOM & UI are completely ready
     if (typeof window.__nammaRideReady === 'function') {

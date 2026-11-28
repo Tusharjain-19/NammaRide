@@ -1,7 +1,8 @@
 /* Layout */
 .app-container {
     width: 100%;
-    max-width: 460px; /* Base Mobile Width */
+    max-width: 460px;
+    /* Base Mobile Width */
     height: 100vh;
     height: 100dvh;
     margin: auto;
@@ -41,7 +42,8 @@
         transform: translate3d(0, 0, 0);
     }
 
-    body, html {
+    body,
+    html {
         margin: 0;
         padding: 0;
         background-color: var(--bg-color);
@@ -95,6 +97,8 @@ body {
     z-index: 50;
     padding: 0.5rem 1rem !important;
     padding-top: max(1.8rem, calc(0.9rem + env(safe-area-inset-top, 24px))) !important;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(1rem, env(safe-area-inset-right, 0px)) !important;
     padding-bottom: 0.5rem !important;
     min-height: 68px;
     flex-shrink: 0;
@@ -237,13 +241,13 @@ body {
 /* Tighter spacing */
 
 /* Instant Interaction Feedback */
-button:active, 
+button:active,
 button.is-pressed,
-.nav-item:active, 
+.nav-item:active,
 .nav-item.is-pressed,
-.station-option:active, 
-.dropdown-trigger:active, 
-.explore-cat-btn:active, 
+.station-option:active,
+.dropdown-trigger:active,
+.explore-cat-btn:active,
 .explore-line-btn:active,
 .swap-btn:active,
 .quick-chip:active {
@@ -254,8 +258,12 @@ button.is-pressed,
 
 /* Increase touch targets for mobile */
 @media (max-width: 600px) {
-    button, .nav-item, .dropdown-trigger {
-        min-height: 44px; /* Apple/Google recommended min touch target */
+
+    button,
+    .nav-item,
+    .dropdown-trigger {
+        min-height: 44px;
+        /* Apple/Google recommended min touch target */
         touch-action: manipulation;
     }
-}
+}
