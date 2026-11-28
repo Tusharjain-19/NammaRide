@@ -137,6 +137,8 @@ const simulationState = {
     usingCapacitorGeo: false,
     showUpstreamManual: false,
     showPassedManual: false,
+    alarmArmed: false,
+    wakeLock: null,
 };
 
 // Zero-Server Connectivity & Soft-TTL Live Overrides Manager
@@ -1689,6 +1691,26 @@ function showToast(html, durationMs = 3500) {
     setTimeout(() => { toast.style.opacity = '0'; }, durationMs);
 }
 
+async function acquireScreenWakeLock() {
+    try {
+        if (typeof navigator === 'undefined' || !navigator.wakeLock?.request) return;
+        if (simulationState.wakeLock) return;
+        simulationState.wakeLock = await navigator.wakeLock.request('screen');
+        simulationState.wakeLock?.addEventListener?.('release', () => {
+            simulationState.wakeLock = null;
+        });
+    } catch (e) {}
+}
+
+function releaseScreenWakeLock() {
+    try {
+        if (simulationState.wakeLock) {
+            simulationState.wakeLock.release().catch(() => {});
+            simulationState.wakeLock = null;
+        }
+    } catch (e) {}
+}
+
 function stopSimulationTimers() {
     locationRefresher.stop();
     if (simulationState.timerId) {
@@ -1696,6 +1718,7 @@ function stopSimulationTimers() {
         simulationState.timerId = null;
     }
     clearActiveGPSWatch(simulationState);
+    releaseScreenWakeLock();
     simulationState.gpsMode = 'OFF';
 }
 
@@ -1830,6 +1853,7 @@ function startSimulation(journey, useLiveLocation, startTimeOverride, restoredSt
             if (document.hidden) {
                 locationRefresher.stop();
             } else {
+                if (simulationState.alarmArmed) acquireScreenWakeLock();
                 scheduleNextSimTick();
                 locationRefresher.forceSync();
             }
@@ -1843,15 +1867,21 @@ function triggerStationAlarm(stationName, isUnderground) {
     if (simulationState.alarmTriggered) return;
     simulationState.alarmTriggered = true;
 
-    if (navigator.vibrate) {
-        try { navigator.vibrate([800, 300, 800, 300, 800]); } catch (e) {}
-    }
-
     let msg = `Arriving at ${stationName} soon!`;
     if (isUnderground) {
         msg += ` (Underground section ahead)`;
     }
+    notificationController.fireAlert({
+        kind: 'DEST_30S',
+        id: 1003,
+        dedupKey: `gps_alarm_${simulationState.journeyId || 'trip'}_${stationName}`,
+        secondsLeft: 30,
+        title: `Approaching ${stationName}`,
+        body: isUnderground ? 'Underground section ahead — prepare to exit.' : 'Prepare to get down at your destination.',
+        isAlarm: true,
+    });
     showToast(`<div class="font-bold text-amber-400 text-xs">${msg}</div>`, 6000);
+    updateSimulationUI();
 }
 
 function resetRuntimeTrackingState() {
@@ -1873,6 +1903,7 @@ function resetRuntimeTrackingState() {
     simulationState.activeLegIndex = 0;
     simulationState.interchangeTimelineIndex = null;
     simulationState.confirmedInterchangeLegs = [];
+    simulationState.alarmArmed = false;
 }
 
 function computeJourneyEtaTelemetry(timeline, journey) {
@@ -1981,6 +2012,7 @@ function updateSimulationUI() {
             targetMs: Date.now() + etaTelemetry.etaToDestSec * 1000,
             destName: destinationName,
             journeyId: simulationState.journeyId || journey.id || 'trip',
+            isAlarm: Boolean(simulationState.alarmArmed),
         });
     }
 
@@ -2001,7 +2033,10 @@ function updateSimulationUI() {
         alertedKeys: notificationController.alertedKeys,
     });
     if (pending30sAlert) {
-        notificationController.fireAlert(pending30sAlert);
+        notificationController.fireAlert({
+            ...pending30sAlert,
+            isAlarm: Boolean(simulationState.alarmArmed),
+        });
     }
 
     // Honest underground tunnel fallback ONLY if user was ALREADY moving fast before signal drop
@@ -2090,12 +2125,93 @@ function updateSimulationUI() {
             updateSimulationUI();
             scheduleNextSimTick();
         },
-        onToggleSound: () => {
+        onToggleSound: async () => {
             notificationController.unlockAudioContext();
             const enabled = notificationController.toggleSoundEnabled();
-            if (enabled) notificationController.playTransitChime();
+            if (enabled) {
+                notificationController.playTransitChime();
+                await notificationController.ensureReadyAndRequestPermission();
+            }
             delete simStatus.dataset.mountedStructKey;
             showToast(`<div class="font-bold text-xs text-primary">${enabled ? '30s arrival chime enabled' : '30s arrival chime muted'}</div>`, 2200);
+            updateSimulationUI();
+        },
+        onSetAlarm: async () => {
+            notificationController.unlockAudioContext();
+            simulationState.alarmArmed = !simulationState.alarmArmed;
+            if (simulationState.alarmArmed) {
+                if (!notificationController.isSoundEnabled()) {
+                    notificationController.toggleSoundEnabled();
+                }
+                notificationController.playTransitChime(false);
+                const perm = await notificationController.ensureReadyAndRequestPermission();
+                await acquireScreenWakeLock();
+
+                if (simulationState.boardingState === 'ON_BOARD' && typeof etaTelemetry.etaToDestSec === 'number' && etaTelemetry.etaToDestSec > ALERT_THRESHOLD_SEC) {
+                    notificationController.scheduledDestKey = null;
+                    notificationController.scheduleDestinationThirtySecondReminder({
+                        targetMs: Date.now() + etaTelemetry.etaToDestSec * 1000,
+                        destName: destinationName,
+                        journeyId: simulationState.journeyId || journey.id || 'trip',
+                        isAlarm: true,
+                    });
+                } else if (simulationState.waitingTargetDate) {
+                    notificationController.scheduledBoardingKey = null;
+                    notificationController.schedulePreBoardThirtySecondReminder({
+                        targetMs: new Date(simulationState.waitingTargetDate).getTime(),
+                        originName,
+                        platform: activeLegPart?.startPlatform || 1,
+                        direction: activeLegPart?.journeyDirectionName || '',
+                        tripKey: activeCand?.tripId || `${activeLegIdx}_${simulationState.waitingTrainIndex || 0}`,
+                        isAlarm: true,
+                    });
+                }
+                const permNote = perm === 'denied'
+                    ? 'In-app sound alarm active (enable browser notifications for lock-screen alerts)'
+                    : 'Arrival alarm & notification set!';
+                showToast(`<div class="font-bold text-xs text-emerald-400">${permNote}</div>`, 3200);
+            } else {
+                notificationController.stopAlarmRing();
+                releaseScreenWakeLock();
+                showToast(`<div class="font-bold text-xs text-secondary">Station alarm turned off</div>`, 2200);
+            }
+            delete simStatus.dataset.mountedStructKey;
+            updateSimulationUI();
+        },
+        onSetTomorrowAlarm: async () => {
+            notificationController.unlockAudioContext();
+            if (!notificationController.isSoundEnabled()) {
+                notificationController.toggleSoundEnabled();
+            }
+            const perm = await notificationController.ensureReadyAndRequestPermission();
+            const tomorrowTrain = getTomorrowFirstTrain(journey, liveOverrides, activeLegIdx);
+            const secUntil = tomorrowTrain?.secUntil || 21600;
+            const reminderOffsetSec = secUntil > 300 ? secUntil - 300 : secUntil;
+            const targetMs = Date.now() + reminderOffsetSec * 1000;
+            const depLabel = tomorrowTrain?.departureFormatted || '05:00 AM';
+            const ok = await notificationController.scheduleCustomAlarm({
+                id: 1005,
+                dedupKey: `tomorrow_${simulationState.journeyId || 'trip'}_${depLabel}`,
+                targetMs,
+                title: `First metro soon (${depLabel}) · ${originName}`,
+                body: `Head to Platform ${tomorrowTrain?.platform || 1} for the first morning train.`,
+                repeatChime: true,
+            });
+            if (ok) {
+                simulationState.alarmArmed = true;
+                notificationController.playTransitChime(false);
+                await acquireScreenWakeLock();
+                const msg = perm === 'denied'
+                    ? `In-app alarm set before ${depLabel} (enable browser notifications for background alerts)`
+                    : `Alarm set for tomorrow's ${depLabel} train!`;
+                showToast(`<div class="font-bold text-xs text-emerald-400">${msg}</div>`, 3500);
+            }
+            delete simStatus.dataset.mountedStructKey;
+            updateSimulationUI();
+        },
+        onDismissAlarm: () => {
+            notificationController.dismissBannerAlert();
+            delete simStatus.dataset.mountedStructKey;
             updateSimulationUI();
         },
         onConfirmBoard: () => {
@@ -2319,6 +2435,7 @@ function showJourneyComplete(destinationName) {
     notificationController.triggerDestinationArrived({
         destName: destinationName,
         journeyId: simulationState.journeyId || currentJourney?.id || 'trip',
+        isAlarm: Boolean(simulationState.alarmArmed),
     });
     simulationState.boardingState = 'ARRIVED';
     stopSimulationTimers();

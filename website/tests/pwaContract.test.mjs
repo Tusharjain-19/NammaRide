@@ -115,3 +115,33 @@ test('Android web UX enforces Google Play only and website banner is responsive 
     assert.match(mobileBannerSrc, /sm:max-w-md/);
     assert.match(mobileBannerSrc, /lg:right-5/);
 });
+
+test('Web/PWA notifications use ServiceWorker showNotification + notificationclick and support web alarm timers', async () => {
+    const sw = fs.readFileSync(path.resolve('public/simulator/sw.js'), 'utf8');
+    assert.match(sw, /addEventListener\('notificationclick'/);
+
+    const hud = fs.readFileSync(path.resolve('public/simulator/js/ui/boardingHud.js'), 'utf8');
+    assert.match(hud, /id="set-alarm-btn"/);
+    assert.match(hud, /id="set-tomorrow-alarm-btn"/);
+    assert.match(hud, /id="dismiss-alarm-btn"/);
+
+    const notifSrc = fs.readFileSync(path.resolve('public/simulator/js/logic/notificationEngine.js'), 'utf8');
+    assert.match(notifSrc, /showNotification/);
+    assert.match(notifSrc, /scheduleCustomAlarm/);
+
+    const { notificationController } = await import('../public/simulator/js/logic/notificationEngine.js');
+    notificationController.resetAll();
+    const scheduled = await notificationController.scheduleCustomAlarm({
+        id: 1005,
+        dedupKey: 'test_web_alarm',
+        targetMs: Date.now() + 60000,
+        title: 'Test Station Alarm',
+        body: 'Arriving soon',
+        repeatChime: true,
+    });
+    assert.equal(scheduled, true);
+    assert.equal(notificationController.webTimers.has(1005), true);
+    await notificationController.cancelPendingAlerts([1005]);
+    assert.equal(notificationController.webTimers.has(1005), false);
+    notificationController.resetAll();
+});

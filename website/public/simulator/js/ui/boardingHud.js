@@ -18,6 +18,15 @@ export function bindBoardingHudActions(simStatus, handlers) {
         } else if (e.target.closest('#toggle-sound-btn')) {
             e.preventDefault(); e.stopPropagation();
             handlers.onToggleSound?.();
+        } else if (e.target.closest('#set-alarm-btn')) {
+            e.preventDefault(); e.stopPropagation();
+            handlers.onSetAlarm?.();
+        } else if (e.target.closest('#set-tomorrow-alarm-btn')) {
+            e.preventDefault(); e.stopPropagation();
+            handlers.onSetTomorrowAlarm?.();
+        } else if (e.target.closest('#dismiss-alarm-btn')) {
+            e.preventDefault(); e.stopPropagation();
+            handlers.onDismissAlarm?.();
         } else if (e.target.closest('#confirm-board-btn')) {
             e.preventDefault(); e.stopPropagation();
             handlers.onConfirmBoard?.();
@@ -166,6 +175,10 @@ export function renderBoardingHud({
 
     let alertBannerHtml = '';
     if (bannerAlert) {
+        const isAlarmBanner = Boolean(bannerAlert.isAlarm || notificationController.isAlarmRinging);
+        const badgeHtml = isAlarmBanner
+            ? `<button id="dismiss-alarm-btn" type="button" class="px-2.5 py-1 rounded-full bg-white text-emerald-700 text-[9.5px] font-black uppercase tracking-wider shrink-0 active:scale-95 cursor-pointer shadow-xs">Stop Alarm</button>`
+            : `<span class="px-2 py-0.5 rounded-full bg-white/20 text-[9px] font-black uppercase tracking-wider shrink-0">30s Alert</span>`;
         alertBannerHtml = `
             <div class="py-2 px-3 bg-emerald-500 text-white flex items-center justify-between gap-2 shadow-sm animate-pulse-subtle">
                 <div class="flex items-center gap-2 min-w-0">
@@ -175,7 +188,7 @@ export function renderBoardingHud({
                         <div id="hud-alert-banner-sub" class="text-[10px] font-semibold opacity-95 truncate">${bannerAlert.body}</div>
                     </div>
                 </div>
-                <span class="px-2 py-0.5 rounded-full bg-white/20 text-[9px] font-black uppercase tracking-wider shrink-0">30s Alert</span>
+                ${badgeHtml}
             </div>
         `;
     }
@@ -252,6 +265,10 @@ export function renderBoardingHud({
                     <button id="toggle-sound-btn" type="button" class="w-7 h-7 rounded-lg bg-card border border-subtle flex items-center justify-center text-secondary hover:text-emerald-500 cursor-pointer shrink-0" title="Toggle 30s Alert Chime">
                         <i data-lucide="${soundEnabled ? 'bell-ring' : 'bell-off'}" class="w-3.5 h-3.5"></i>
                     </button>
+                    <button id="set-alarm-btn" type="button" class="px-2 py-1.5 rounded-lg border text-[10px] font-extrabold active:scale-95 cursor-pointer shrink-0 flex items-center gap-1 ${simulationState.alarmArmed ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-500' : 'bg-card border-subtle text-secondary hover:text-primary'}" title="Set Boarding & Arrival Alarm">
+                        <i data-lucide="${simulationState.alarmArmed ? 'alarm-clock-check' : 'alarm-clock'}" class="w-3.5 h-3.5"></i>
+                        <span>${simulationState.alarmArmed ? 'Alarm On' : 'Set Alarm'}</span>
+                    </button>
                     <button id="confirm-board-btn" type="button" class="flex-1 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-[10.5px] active:scale-95 cursor-pointer">Yes, I boarded</button>
                     <button id="skip-next-train-btn" type="button" class="flex-1 py-1.5 rounded-lg bg-card border border-subtle text-secondary hover:text-primary font-bold text-[10px] active:scale-95 cursor-pointer whitespace-nowrap">Missed · Next${nextCandidate ? ` (${nextCandidate.departureFormatted})` : ''}</button>
                 </div>
@@ -280,6 +297,10 @@ export function renderBoardingHud({
                 <div class="flex items-center gap-1.5 shrink-0">
                     <button id="toggle-sound-btn" type="button" class="w-7 h-7 rounded-lg bg-card border border-subtle flex items-center justify-center text-secondary hover:text-emerald-500 cursor-pointer" title="Toggle 30s Arrival Chime">
                         <i data-lucide="${soundEnabled ? 'bell-ring' : 'bell-off'}" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button id="set-alarm-btn" type="button" class="flex items-center gap-1 px-2 py-1 rounded-xl border text-[10px] font-extrabold active:scale-95 transition-all cursor-pointer shrink-0 ${simulationState.alarmArmed ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-500' : 'bg-card border-subtle text-secondary hover:text-primary'}" title="Set Station Arrival Alarm">
+                        <i data-lucide="${simulationState.alarmArmed ? 'alarm-clock-check' : 'alarm-clock'}" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span>${simulationState.alarmArmed ? 'Alarm On' : 'Set Alarm'}</span>
                     </button>
                     <button id="toggle-speed-btn" type="button" class="flex items-center gap-1 px-2.5 py-1 rounded-xl border text-[10.5px] font-extrabold active:scale-95 transition-all cursor-pointer tabular-nums shrink-0 ${speedPillCls}" title="Toggle GPS Speed Validation">
                         <i data-lucide="gauge" class="w-3.5 h-3.5 shrink-0"></i>
@@ -316,7 +337,10 @@ export function renderBoardingHud({
                     <div class="text-[9.5px] text-indigo-400 font-bold bg-indigo-500/15 px-2 py-0.5 rounded-full shrink-0">Platform ${tomorrowPlatform}</div>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <button id="confirm-board-btn" type="button" class="flex-1 py-1.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold text-[10.5px] active:scale-95 cursor-pointer">Set Reminder</button>
+                    <button id="set-tomorrow-alarm-btn" type="button" class="flex-1 py-1.5 rounded-lg ${simulationState.alarmArmed ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-indigo-500 hover:bg-indigo-600'} text-white font-extrabold text-[10.5px] active:scale-95 cursor-pointer flex items-center justify-center gap-1">
+                        <i data-lucide="${simulationState.alarmArmed ? 'alarm-clock-check' : 'alarm-clock'}" class="w-3.5 h-3.5"></i>
+                        <span>${simulationState.alarmArmed ? 'Alarm Set' : 'Set Alarm'}</span>
+                    </button>
                     <button id="exit-journey-btn" type="button" class="flex-1 py-1.5 rounded-lg bg-card border border-subtle text-secondary hover:text-primary font-bold text-[10px] active:scale-95 cursor-pointer">Exit Journey</button>
                 </div>
             </div>
